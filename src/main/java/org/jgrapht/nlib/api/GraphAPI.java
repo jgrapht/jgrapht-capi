@@ -1,7 +1,6 @@
 package org.jgrapht.nlib.api;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
@@ -30,7 +29,7 @@ public class GraphAPI {
 	 * @param graphHandle the graph handle
 	 * @return the graph
 	 */
-	private static Graph<Long, Long> getGraph(ObjectHandle graphHandle) {
+	public static Graph<Long, Long> getGraph(ObjectHandle graphHandle) {
 		try {
 			Graph<Long, Long> g = globalHandles.get(graphHandle);
 			return g;
@@ -44,8 +43,7 @@ public class GraphAPI {
 	 * 
 	 * @return the graph handle
 	 */
-	private static ObjectHandle createGraph(boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges) {
+	public static ObjectHandle createGraph(boolean directed, boolean allowingSelfLoops, boolean allowingMultipleEdges) {
 		Graph<Long, Long> graph;
 		if (directed) {
 			graph = GraphTypeBuilder.directed().allowingMultipleEdges(allowingMultipleEdges)
@@ -57,19 +55,6 @@ public class GraphAPI {
 					.edgeSupplier(SupplierUtil.createLongSupplier()).buildGraph();
 		}
 		return globalHandles.create(graph);
-	}
-
-	/**
-	 * Destroy a graph
-	 * 
-	 * @param graphHandle the graph handle
-	 */
-	private static void destroyGraph(ObjectHandle graphHandle) {
-		try {
-			globalHandles.destroy(graphHandle);
-		} catch (Exception e) {
-			throw new GraphLookupException(e);
-		}
 	}
 
 	/**
@@ -86,23 +71,6 @@ public class GraphAPI {
 		} catch (Exception e) {
 			Errors.setError(Status.GRAPH_CREATION_ERROR);
 			return WordFactory.nullPointer();
-		}
-	}
-
-	/**
-	 * Release a graph
-	 * 
-	 * @param thread the thread isolate
-	 * @return the graph handle
-	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "destroy_graph")
-	public static void destroyGraph(IsolateThread thread, ObjectHandle graphHandle) {
-		try {
-			destroyGraph(graphHandle);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
-		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
 		}
 	}
 
@@ -438,45 +406,6 @@ public class GraphAPI {
 			Errors.setError(Status.GENERIC_ERROR);
 		}
 		return WordFactory.nullPointer();
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_it_next")
-	public static long iteratorNext(IsolateThread thread, ObjectHandle itHandle) {
-		try {
-			Iterator<Long> it = globalHandles.get(itHandle);
-			return it.next();
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE);
-		} catch (NoSuchElementException e) {
-			Errors.setError(Status.ITERATOR_NO_SUCH_ELEMENT);
-		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
-		}
-		return Constants.LONG_NO_RESULT;
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_it_hasnext")
-	public static boolean iteratorHasNext(IsolateThread thread, ObjectHandle itHandle) {
-		try {
-			Iterator<Long> it = globalHandles.get(itHandle);
-			return it.hasNext();
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE);
-		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
-		}
-		return false;
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_it_destroy")
-	public static void destroyIterator(IsolateThread thread, ObjectHandle itHandle) {
-		try {
-			globalHandles.destroy(itHandle);
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE);
-		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
-		}
 	}
 
 }
