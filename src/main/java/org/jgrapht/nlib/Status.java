@@ -23,6 +23,8 @@ public enum Status {
 	@CEnumConstant(value = "22")
 	INVALID_VERTEX,
 	@CEnumConstant(value = "23")
+	INVALID_EDGE,
+	@CEnumConstant(value = "50")
 	GRAPH_CREATION_ERROR;
 	// @formatter:on
 

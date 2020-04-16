@@ -1,22 +1,15 @@
-package org.jgrapht.nlib;
+package org.jgrapht.nlib.api;
 
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
+import org.jgrapht.nlib.Constants;
+import org.jgrapht.nlib.Errors;
+import org.jgrapht.nlib.Status;
 
 /**
  * Error handling
  */
-public class Error {
-
-	private static Status error = Status.SUCCESS;
-
-	public static void clearError() {
-		error = Status.SUCCESS;
-	}
-
-	public static void setError(Status newError) {
-		error = newError;
-	}
+public class ErrorAPI {
 
 	/**
 	 * Clear the global error status
@@ -25,7 +18,7 @@ public class Error {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + "clear_errno")
 	public static void clearError(IsolateThread thread) {
-		clearError();
+		Errors.clearError();
 	}
 
 	/**
@@ -35,7 +28,7 @@ public class Error {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + "get_errno")
 	public static Status getError(IsolateThread thread) {
-		return error;
+		return Errors.getError();
 	}
 
 }
