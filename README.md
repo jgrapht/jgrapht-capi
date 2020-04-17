@@ -1,5 +1,14 @@
 
 # JGraphT Native Library
 
-TODO
+JGraphT native C-style api.
+
+## Build
+
+```
+mkdir build/
+cd build/
+cmake ..
+make
+```
 
