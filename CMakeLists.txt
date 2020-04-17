@@ -36,7 +36,37 @@ add_library(
 )
 
 target_include_directories(jgrapht PUBLIC ${CMAKE_BINARY_DIR}/jgrapht-nlib)
-target_link_libraries(jgrapht PUBLIC ${CMAKE_BINARY_DIR}/jgrapht-nlib/libjgrapht_nlib.so)
+
+add_library(jgrapht_nlib SHARED IMPORTED)
+set_property(TARGET jgrapht_nlib PROPERTY IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/jgrapht-nlib/libjgrapht_nlib.so)
+target_link_libraries(jgrapht PUBLIC jgrapht_nlib)
+
+#[[ target_link_libraries(jgrapht PUBLIC ${CMAKE_BINARY_DIR}/jgrapht-nlib/libjgrapht_nlib.so) ]]
 
 add_dependencies(jgrapht jgraphtsharedlib)
+
+install(
+    TARGETS jgrapht 
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+install(
+    FILES 
+    jgrapht/jgrapht.h 
+    ${CMAKE_BINARY_DIR}/jgrapht-nlib/jgrapht_nlib.h 
+    ${CMAKE_BINARY_DIR}/jgrapht-nlib/jgrapht_nlib_dynamic.h
+    ${CMAKE_BINARY_DIR}/jgrapht-nlib/graal_isolate.h
+    ${CMAKE_BINARY_DIR}/jgrapht-nlib/graal_isolate_dynamic.h
+    DESTINATION 
+    ${CMAKE_INSTALL_INCLUDEDIR}/jgrapht
+)
+
+install(
+    FILES
+    ${CMAKE_BINARY_DIR}/jgrapht-nlib/libjgrapht_nlib.so
+    DESTINATION        
+    ${CMAKE_INSTALL_LIBDIR}
+)
 
