@@ -13,12 +13,31 @@ message(STATUS "native-image found at ${NativeImage}")
 
 include(GNUInstallDirs)
 
-execute_process(
-    COMMAND(${Maven} package)
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+add_custom_command(
+    OUTPUT target/jgrapht-nlib-1.4.0.jar
+    COMMAND cp ${CMAKE_SOURCE_DIR}/jgrapht-nlib/pom.xml ${CMAKE_BINARY_DIR}/
+    COMMAND cp -r ${CMAKE_SOURCE_DIR}/jgrapht-nlib/src ${CMAKE_BINARY_DIR}/
+    COMMAND mvn -f ${CMAKE_BINARY_DIR} package
+    COMMENT "Building jar file with C native scopes"
 )
 
-add_subdirectory(jgrapht-nlib)
+add_custom_command(
+    OUTPUT libjgrapht_nlib.so jgrapht_nlib.h jgrapht_nlib_dynamic.h graal_isolate.h graal_isolate_dynamic.h
+    COMMAND native-image -cp ${CMAKE_BINARY_DIR}/target/jgrapht-nlib-1.4.0.jar --no-server --shared
+    COMMAND cp ${CMAKE_BINARY_DIR}/jgrapht_nlib.so ${CMAKE_BINARY_DIR}/libjgrapht_nlib.so 
+    DEPENDS target/jgrapht-nlib-1.4.0.jar
+    COMMENT "Producing shared library from jar file"
+)
+
+add_custom_target(
+    buildjar 
+    SOURCES target/jgrapht-nlib-1.4.0.jar
+)
+
+add_custom_target(
+    jgraphtsharedlib
+    SOURCES libjgrapht_nlib.so
+)
 
 set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/jgrapht_nlib.h PROPERTY GENERATED 1)
 set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/jgrapht_nlib_dynamic.h PROPERTY GENERATED 1)
@@ -29,19 +48,17 @@ set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/libjgrapht_nlib.so PROPERTY
 add_library(
     jgrapht SHARED 
     jgrapht/jgrapht.c
-    ${CMAKE_BINARY_DIR}/jgrapht-nlib/jgrapht_nlib.h 
-    ${CMAKE_BINARY_DIR}/jgrapht-nlib/jgrapht_nlib_dynamic.h
-    ${CMAKE_BINARY_DIR}/jgrapht-nlib/graal_isolate.h
-    ${CMAKE_BINARY_DIR}/jgrapht-nlib/graal_isolate_dynamic.h
+    ${CMAKE_BINARY_DIR}/jgrapht_nlib.h 
+    ${CMAKE_BINARY_DIR}/jgrapht_nlib_dynamic.h
+    ${CMAKE_BINARY_DIR}/graal_isolate.h
+    ${CMAKE_BINARY_DIR}/graal_isolate_dynamic.h
 )
 
-target_include_directories(jgrapht PUBLIC ${CMAKE_BINARY_DIR}/jgrapht-nlib)
+target_include_directories(jgrapht PUBLIC ${CMAKE_BINARY_DIR})
 
 add_library(jgrapht_nlib SHARED IMPORTED)
-set_property(TARGET jgrapht_nlib PROPERTY IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/jgrapht-nlib/libjgrapht_nlib.so)
+set_property(TARGET jgrapht_nlib PROPERTY IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/libjgrapht_nlib.so)
 target_link_libraries(jgrapht PUBLIC jgrapht_nlib)
-
-#[[ target_link_libraries(jgrapht PUBLIC ${CMAKE_BINARY_DIR}/jgrapht-nlib/libjgrapht_nlib.so) ]]
 
 add_dependencies(jgrapht jgraphtsharedlib)
 
@@ -55,17 +72,17 @@ install(
 install(
     FILES 
     jgrapht/jgrapht.h 
-    ${CMAKE_BINARY_DIR}/jgrapht-nlib/jgrapht_nlib.h 
-    ${CMAKE_BINARY_DIR}/jgrapht-nlib/jgrapht_nlib_dynamic.h
-    ${CMAKE_BINARY_DIR}/jgrapht-nlib/graal_isolate.h
-    ${CMAKE_BINARY_DIR}/jgrapht-nlib/graal_isolate_dynamic.h
+    ${CMAKE_BINARY_DIR}/jgrapht_nlib.h 
+    ${CMAKE_BINARY_DIR}/jgrapht_nlib_dynamic.h
+    ${CMAKE_BINARY_DIR}/graal_isolate.h
+    ${CMAKE_BINARY_DIR}/graal_isolate_dynamic.h
     DESTINATION 
     ${CMAKE_INSTALL_INCLUDEDIR}/jgrapht
 )
 
 install(
     FILES
-    ${CMAKE_BINARY_DIR}/jgrapht-nlib/libjgrapht_nlib.so
+    ${CMAKE_BINARY_DIR}/libjgrapht_nlib.so
     DESTINATION        
     ${CMAKE_INSTALL_LIBDIR}
 )
