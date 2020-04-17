@@ -24,7 +24,7 @@ set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/jgrapht_nlib.h PROPERTY GEN
 set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/jgrapht_nlib_dynamic.h PROPERTY GENERATED 1)
 set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/graal_isolate.h PROPERTY GENERATED 1)
 set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/graal_isolate_dynamic.h PROPERTY GENERATED 1)
-
+set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/libjgrapht_nlib.so PROPERTY GENERATED 1)
 
 add_library(
     jgrapht SHARED 
@@ -36,6 +36,7 @@ add_library(
 )
 
 target_include_directories(jgrapht PUBLIC ${CMAKE_BINARY_DIR}/jgrapht-nlib)
+target_link_libraries(jgrapht PUBLIC ${CMAKE_BINARY_DIR}/jgrapht-nlib/libjgrapht_nlib.so)
 
 add_dependencies(jgrapht jgraphtsharedlib)
 

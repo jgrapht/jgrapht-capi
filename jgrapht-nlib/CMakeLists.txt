@@ -8,8 +8,9 @@ add_custom_command(
 )
 
 add_custom_command(
-    OUTPUT jgrapht_nlib.so jgrapht_nlib.h jgrapht_nlib_dynamic.h graal_isolate.h graal_isolate_dynamic.h
+    OUTPUT libjgrapht_nlib.so jgrapht_nlib.h jgrapht_nlib_dynamic.h graal_isolate.h graal_isolate_dynamic.h
     COMMAND native-image -cp ${CMAKE_CURRENT_BINARY_DIR}/target/jgrapht-nlib-1.4.0.jar --no-server --shared
+    COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/jgrapht_nlib.so ${CMAKE_CURRENT_BINARY_DIR}/libjgrapht_nlib.so 
     DEPENDS jgrapht-nlib/target/jgrapht-nlib-1.4.0.jar
     COMMENT "Producing shared library from jar file"
 )
@@ -21,5 +22,5 @@ add_custom_target(
 
 add_custom_target(
     jgraphtsharedlib
-    SOURCES jgrapht_nlib.so
+    SOURCES libjgrapht_nlib.so
 )
