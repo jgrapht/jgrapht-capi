@@ -75,7 +75,7 @@ public class MstAPI {
 			SpanningTree<Long> mst = globalHandles.get(mstHandle);
 			return mst.getWeight();
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE);
+			Errors.setError(Status.ILLEGAL_ARGUMENT);
 		} catch (Exception e) {
 			Errors.setError(Status.GENERIC_ERROR);
 		}
@@ -96,7 +96,7 @@ public class MstAPI {
 			Iterator<Long> it = mst.iterator();
 			return globalHandles.create(it);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE);
+			Errors.setError(Status.ILLEGAL_ARGUMENT);
 		} catch (Exception e) {
 			Errors.setError(Status.GENERIC_ERROR);
 		}

@@ -18,6 +18,8 @@ public enum Status {
 	GENERIC_ERROR,
 	@CEnumConstant(value = "2")
 	UNSUPPORTED_OPERATION,
+	@CEnumConstant(value = "3")
+	ILLEGAL_ARGUMENT,
 	@CEnumConstant(value = "20")
 	INVALID_REFERENCE,
 	@CEnumConstant(value = "21")
@@ -30,6 +32,8 @@ public enum Status {
 	GRAPH_CREATION_ERROR,
 	@CEnumConstant(value = "51")
 	GRAPH_IS_UNWEIGHTED,
+	@CEnumConstant(value = "52")
+	GRAPH_NOT_UNDIRECTED,
 	@CEnumConstant(value = "100")
 	ITERATOR_NO_SUCH_ELEMENT,
 	@CEnumConstant(value = "200")

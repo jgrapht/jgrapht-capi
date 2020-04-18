@@ -24,10 +24,16 @@ public class VertexCoverAPI {
 	public static ObjectHandle executeVertexCoverGreedyUniform(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
 			Graph<Long, Long> graph = GraphAPI.getGraph(graphHandle);
+			if (!graph.getType().isUndirected()) {
+				Errors.setError(Status.GRAPH_NOT_UNDIRECTED);
+				return WordFactory.nullPointer();
+			}
 			VertexCover<Long> vertexCover = new GreedyVCImpl<>(graph).getVertexCover();
 			return globalHandles.create(vertexCover);
 		} catch (GraphLookupException e) {
 			Errors.setError(Status.INVALID_GRAPH);
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT);
 		} catch (Exception e) {
 			Errors.setError(Status.GENERIC_ERROR);
 		}
@@ -40,12 +46,17 @@ public class VertexCoverAPI {
 		try {
 			Map<Long, Double> vertexWeights = globalHandles.get(mapHandle);
 			Graph<Long, Long> graph = GraphAPI.getGraph(graphHandle);
+			if (!graph.getType().isUndirected()) {
+				Errors.setError(Status.GRAPH_NOT_UNDIRECTED);
+				return WordFactory.nullPointer();
+			}
+
 			VertexCover<Long> vertexCover = new GreedyVCImpl<>(graph, vertexWeights).getVertexCover();
 			return globalHandles.create(vertexCover);
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE);
 		} catch (GraphLookupException e) {
 			Errors.setError(Status.INVALID_GRAPH);
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT);
 		} catch (Exception e) {
 			Errors.setError(Status.GENERIC_ERROR);
 		}
@@ -65,7 +76,7 @@ public class VertexCoverAPI {
 			VertexCover<Long> vc = globalHandles.get(vcHandle);
 			return vc.getWeight();
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE);
+			Errors.setError(Status.ILLEGAL_ARGUMENT);
 		} catch (Exception e) {
 			Errors.setError(Status.GENERIC_ERROR);
 		}
@@ -86,7 +97,7 @@ public class VertexCoverAPI {
 			Iterator<Long> it = vc.iterator();
 			return globalHandles.create(it);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE);
+			Errors.setError(Status.ILLEGAL_ARGUMENT);
 		} catch (Exception e) {
 			Errors.setError(Status.GENERIC_ERROR);
 		}
