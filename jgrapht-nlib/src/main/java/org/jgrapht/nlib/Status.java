@@ -31,7 +31,9 @@ public enum Status {
 	@CEnumConstant(value = "51")
 	GRAPH_IS_UNWEIGHTED,
 	@CEnumConstant(value = "100")
-	ITERATOR_NO_SUCH_ELEMENT
+	ITERATOR_NO_SUCH_ELEMENT,
+	@CEnumConstant(value = "200")
+	MAP_NO_SUCH_KEY
 	;
 	// @formatter:on
 

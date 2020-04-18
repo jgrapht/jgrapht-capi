@@ -1,12 +1,12 @@
 package org.jgrapht.nlib.api;
 
 import java.util.Iterator;
+import java.util.Set;
 
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
-import org.graalvm.word.WordBase;
 import org.graalvm.word.WordFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
@@ -63,8 +63,8 @@ public class GraphAPI {
 	 * @param thread the thread isolate
 	 * @return the graph handle
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "create_graph")
-	public static WordBase createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
+	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_create")
+	public static ObjectHandle createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
 			boolean allowingMultipleEdges, boolean weighted) {
 		try {
 			return createGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted);
@@ -166,6 +166,18 @@ public class GraphAPI {
 	public static boolean containsEdge(IsolateThread thread, ObjectHandle graphHandle, long edge) {
 		try {
 			return getGraph(graphHandle).containsEdge(edge);
+		} catch (GraphLookupException e) {
+			Errors.setError(Status.INVALID_GRAPH);
+		} catch (Exception e) {
+			Errors.setError(Status.GENERIC_ERROR);
+		}
+		return false;
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_contains_edge_between")
+	public static boolean containsEdgeBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target) {
+		try {
+			return getGraph(graphHandle).containsEdge(source, target);
 		} catch (GraphLookupException e) {
 			Errors.setError(Status.INVALID_GRAPH);
 		} catch (Exception e) {
@@ -350,6 +362,24 @@ public class GraphAPI {
 	public static ObjectHandle createAllEdgesIterator(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
 			Iterator<Long> it = getGraph(graphHandle).edgeSet().iterator();
+			return ObjectHandles.getGlobal().create(it);
+		} catch (GraphLookupException e) {
+			Errors.setError(Status.INVALID_GRAPH);
+		} catch (Exception e) {
+			Errors.setError(Status.GENERIC_ERROR);
+		}
+		return WordFactory.nullPointer();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_create_between_eit")
+	public static ObjectHandle createEdgesBetweenIterator(IsolateThread thread, ObjectHandle graphHandle, long source, long target) {
+		try {
+			Set<Long> edges = getGraph(graphHandle).getAllEdges(source, target);
+			if (edges == null) {
+				Errors.setError(Status.INVALID_VERTEX);
+				return WordFactory.nullPointer();
+			}
+			Iterator<Long> it = edges.iterator();
 			return ObjectHandles.getGlobal().create(it);
 		} catch (GraphLookupException e) {
 			Errors.setError(Status.INVALID_GRAPH);

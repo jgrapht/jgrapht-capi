@@ -49,8 +49,8 @@ int jgrapht_it_hasnext(void *itHandle) {
     return jgrapht_nlib_it_hasnext(thread, itHandle);
 }
 
-void * jgrapht_create_graph(int directed, int allowingSelfLoops, int allowingMultipleEdges, int weighted) { 
-    return jgrapht_nlib_create_graph(thread, directed, allowingSelfLoops, allowingMultipleEdges, weighted);
+void * jgrapht_graph_create(int directed, int allowingSelfLoops, int allowingMultipleEdges, int weighted) { 
+    return jgrapht_nlib_graph_create(thread, directed, allowingSelfLoops, allowingMultipleEdges, weighted);
 }
 
 long long int jgrapht_graph_vertices_count(void *gHandle) { 
@@ -83,6 +83,10 @@ int jgrapht_graph_remove_edge(void *gHandle, long long int edge) {
 
 int jgrapht_graph_contains_edge(void *gHandle, long long int edge) { 
     return jgrapht_nlib_graph_contains_edge(thread, gHandle, edge);
+}
+
+int jgrapht_graph_contains_edge_between(void *gHandle, long long int source, long long int target) { 
+    return jgrapht_nlib_graph_contains_edge_between(thread, gHandle, source, target);
 }
 
 long long int jgrapht_graph_degree_of(void *gHandle, long long int vertex) { 
@@ -141,6 +145,10 @@ void * jgrapht_graph_create_all_eit(void *gHandle) {
     return jgrapht_nlib_graph_create_all_eit(thread, gHandle);
 }
 
+void * jgrapht_graph_create_between_eit(void *gHandle, long long int source, long long target) { 
+    return jgrapht_nlib_graph_create_between_eit(thread, gHandle, source, target);
+}
+
 void * jgrapht_graph_vertex_create_eit(void *gHandle, long long int vertex) { 
     return jgrapht_nlib_graph_vertex_create_eit(thread, gHandle, vertex);
 }
@@ -152,6 +160,26 @@ void * jgrapht_graph_vertex_create_out_eit(void *gHandle, long long int vertex) 
 void * jgrapht_graph_vertex_create_in_eit(void *gHandle, long long int vertex) {
     return jgrapht_nlib_graph_vertex_create_in_eit(thread, gHandle, vertex);
 }
+
+// map
+
+void * jgrapht_map_create() { 
+    return jgrapht_nlib_map_create(thread);
+}
+
+void jgrapht_map_long_double_put(void *mapHandle, long long int key, double value) { 
+    return jgrapht_nlib_map_long_double_put(thread, mapHandle, key, value);
+}
+
+double jgrapht_map_long_double_get(void *mapHandle, long long int key) { 
+    return jgrapht_nlib_map_long_double_get(thread, mapHandle, key);
+}
+
+int jgrapht_map_long_double_contains_key(void *mapHandle, long long int key) { 
+    return jgrapht_nlib_map_long_double_contains_key(thread, mapHandle, key);
+}
+
+// mst
 
 void * jgrapht_mst_exec_kruskal(void *gHandle) { 
     return jgrapht_nlib_mst_exec_kruskal(thread, gHandle);

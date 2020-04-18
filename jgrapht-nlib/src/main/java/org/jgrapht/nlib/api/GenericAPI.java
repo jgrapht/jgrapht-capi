@@ -22,7 +22,7 @@ public class GenericAPI {
 	 * @param handle the handle
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + "destroy")
-	public static void destroyMST(IsolateThread thread, ObjectHandle handle) {
+	public static void destroy(IsolateThread thread, ObjectHandle handle) {
 		try {
 			globalHandles.destroy(handle);
 		} catch (IllegalArgumentException e) {
