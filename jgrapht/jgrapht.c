@@ -49,8 +49,8 @@ int jgrapht_it_hasnext(void *itHandle) {
     return jgrapht_nlib_it_hasnext(thread, itHandle);
 }
 
-void * jgrapht_create_graph(int directed, int allowingSelfLoops, int allowingMultipleEdges) { 
-    return jgrapht_nlib_create_graph(thread, directed, allowingSelfLoops, allowingMultipleEdges);
+void * jgrapht_create_graph(int directed, int allowingSelfLoops, int allowingMultipleEdges, int weighted) { 
+    return jgrapht_nlib_create_graph(thread, directed, allowingSelfLoops, allowingMultipleEdges, weighted);
 }
 
 long long int jgrapht_graph_vertices_count(void *gHandle) { 
