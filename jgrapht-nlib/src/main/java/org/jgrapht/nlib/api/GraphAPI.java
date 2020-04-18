@@ -101,7 +101,6 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_add_vertex")
 	public static long addVertex(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			System.out.println("Add vertex to graph " + graphHandle.rawValue());
 			return getGraph(graphHandle).addVertex();
 		} catch (GraphLookupException e) {
 			Errors.setError(Status.INVALID_GRAPH);
