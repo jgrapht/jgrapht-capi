@@ -43,14 +43,14 @@ public class GraphAPI {
 	 * 
 	 * @return the graph handle
 	 */
-	public static ObjectHandle createGraph(boolean directed, boolean allowingSelfLoops, boolean allowingMultipleEdges) {
+	public static ObjectHandle createGraph(boolean directed, boolean allowingSelfLoops, boolean allowingMultipleEdges, boolean weighted) {
 		Graph<Long, Long> graph;
 		if (directed) {
-			graph = GraphTypeBuilder.directed().allowingMultipleEdges(allowingMultipleEdges)
+			graph = GraphTypeBuilder.directed().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
 					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(SupplierUtil.createLongSupplier())
 					.edgeSupplier(SupplierUtil.createLongSupplier()).buildGraph();
 		} else {
-			graph = GraphTypeBuilder.directed().allowingMultipleEdges(allowingMultipleEdges)
+			graph = GraphTypeBuilder.undirected().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
 					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(SupplierUtil.createLongSupplier())
 					.edgeSupplier(SupplierUtil.createLongSupplier()).buildGraph();
 		}
@@ -65,9 +65,9 @@ public class GraphAPI {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + "create_graph")
 	public static WordBase createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges) {
+			boolean allowingMultipleEdges, boolean weighted) {
 		try {
-			return createGraph(directed, allowingSelfLoops, allowingMultipleEdges);
+			return createGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted);
 		} catch (Exception e) {
 			Errors.setError(Status.GRAPH_CREATION_ERROR);
 			return WordFactory.nullPointer();
