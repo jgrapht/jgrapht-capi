@@ -5,11 +5,13 @@
 static graal_isolate_t *isolate = NULL;
 static graal_isolatethread_t *thread = NULL;
 
-void jgrapht_thread_create() { 
-    if (graal_create_isolate(NULL, &isolate, &thread) != 0) {
-        fprintf(stderr, "graal_create_isolate error\n");
-        exit(EXIT_FAILURE);
-    }
+void jgrapht_thread_create() {
+    if (thread == NULL) { 
+        if (graal_create_isolate(NULL, &isolate, &thread) != 0) {
+            fprintf(stderr, "graal_create_isolate error\n");
+            exit(EXIT_FAILURE);
+        }
+    } 
 }
 
 void jgrapht_thread_destroy() { 
@@ -18,7 +20,13 @@ void jgrapht_thread_destroy() {
                 fprintf(stderr, "graal_detach_thread error\n");
                 exit(EXIT_FAILURE);
         }
+        thread  = NULL;
+        isolate = NULL;
     }
+}
+
+int jgrapht_is_thread_attached() {
+    return thread != NULL; 
 }
 
 int jgrapht_get_errno() { 

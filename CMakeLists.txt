@@ -48,6 +48,7 @@ set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/libjgrapht_nlib.so PROPERTY
 add_library(
     jgrapht SHARED 
     jgrapht/jgrapht.c
+    jgrapht/jgrapht.h
     ${CMAKE_BINARY_DIR}/jgrapht_nlib.h 
     ${CMAKE_BINARY_DIR}/jgrapht_nlib_dynamic.h
     ${CMAKE_BINARY_DIR}/graal_isolate.h
