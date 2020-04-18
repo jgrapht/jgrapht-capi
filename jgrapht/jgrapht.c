@@ -197,6 +197,26 @@ void * jgrapht_mst_create_eit(void *mstHandle) {
     return jgrapht_nlib_mst_create_eit(thread, mstHandle);
 }
 
+// vertex cover
+
+void * jgrapht_vertexcover_exec_greedy_uniform(void *gHandle) { 
+    return jgrapht_nlib_vertexcover_exec_greedy_uniform(thread, gHandle);
+}
+
+void * jgrapht_vertexcover_exec_greedy_weighted(void *gHandle, void *weightMapHandle) { 
+    return jgrapht_nlib_vertexcover_exec_greedy_weighted(thread, gHandle, weightMapHandle);
+}
+
+double jgrapht_vertexcover_get_weight(void *vcHandle) { 
+    return jgrapht_nlib_vertexcover_get_weight(thread, vcHandle);
+}
+
+void * jgrapht_vertexcover_create_vit(void *vcHandle) { 
+    return jgrapht_nlib_vertexcover_create_vit(thread, vcHandle);
+}
+
+// vm
+
 void jgrapht_vmLocatorSymbol() {
     vmLocatorSymbol(thread);
 }

@@ -107,6 +107,18 @@ double jgrapht_mst_get_weight(void *);
 
 void * jgrapht_mst_create_eit(void *);
 
+// vertex cover
+
+void * jgrapht_vertexcover_exec_greedy_uniform(void *);
+
+void * jgrapht_vertexcover_exec_greedy_weighted(void *, void *);
+
+double jgrapht_vertexcover_get_weight(void *);
+
+void * jgrapht_vertexcover_create_vit(void *);
+
+// vm
+
 void jgrapht_vmLocatorSymbol();
 
 #if defined(__cplusplus)

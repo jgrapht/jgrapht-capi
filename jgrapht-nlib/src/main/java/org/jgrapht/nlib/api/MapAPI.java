@@ -15,7 +15,7 @@ import org.jgrapht.nlib.Status;
 public class MapAPI {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
-
+	
 	/**
 	 * Create a map
 	 * 
