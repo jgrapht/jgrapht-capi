@@ -91,7 +91,13 @@ install(
 enable_testing()
 include(CTest)
 
-set(TEST_SOURCES "test_vertices.c" "test_directed_graph.c" "test_undirected_graph.c")
+set(
+    TEST_SOURCES 
+    "test_vertices.c"
+    "test_edges.c"
+    "test_directed_graph.c" 
+    "test_undirected_graph.c"
+)
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
     add_executable(${testname} test/${testsourcefile})
