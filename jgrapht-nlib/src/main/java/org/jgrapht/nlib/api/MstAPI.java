@@ -13,7 +13,6 @@ import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.spanning.PrimMinimumSpanningTree;
 import org.jgrapht.nlib.Constants;
 import org.jgrapht.nlib.Errors;
-import org.jgrapht.nlib.GraphLookupException;
 import org.jgrapht.nlib.Status;
 
 public class MstAPI {
@@ -30,13 +29,13 @@ public class MstAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "mst_exec_kruskal")
 	public static ObjectHandle executeMSTKruskal(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			Graph<Long, Long> graph = GraphAPI.getGraph(graphHandle);
-			SpanningTree<Long> mst = new KruskalMinimumSpanningTree<>(graph).getSpanningTree();
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			SpanningTree<Long> mst = new KruskalMinimumSpanningTree<>(g).getSpanningTree();
 			return globalHandles.create(mst);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -51,13 +50,13 @@ public class MstAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "mst_exec_prim")
 	public static ObjectHandle executeMSTPrim(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			Graph<Long, Long> graph = GraphAPI.getGraph(graphHandle);
-			SpanningTree<Long> mst = new PrimMinimumSpanningTree<>(graph).getSpanningTree();
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			SpanningTree<Long> mst = new PrimMinimumSpanningTree<>(g).getSpanningTree();
 			return globalHandles.create(mst);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -77,7 +76,7 @@ public class MstAPI {
 		} catch (IllegalArgumentException e) {
 			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return 0d;
 	}
@@ -98,7 +97,7 @@ public class MstAPI {
 		} catch (IllegalArgumentException e) {
 			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}

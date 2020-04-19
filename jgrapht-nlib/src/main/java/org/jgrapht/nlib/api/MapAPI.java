@@ -15,7 +15,7 @@ import org.jgrapht.nlib.Status;
 public class MapAPI {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
-	
+
 	/**
 	 * Create a map
 	 * 
@@ -27,9 +27,9 @@ public class MapAPI {
 		try {
 			return globalHandles.create(new HashMap<>());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
-			return WordFactory.nullPointer();
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
+		return WordFactory.nullPointer();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_double_put")
@@ -38,9 +38,9 @@ public class MapAPI {
 			Map<Long, Double> map = globalHandles.get(mapHandle);
 			map.put(key, value);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 	}
 
@@ -55,9 +55,9 @@ public class MapAPI {
 			}
 			return value;
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return 0d;
 	}
@@ -68,9 +68,9 @@ public class MapAPI {
 			Map<Long, Double> map = globalHandles.get(mapHandle);
 			return map.containsKey(key);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
 	}

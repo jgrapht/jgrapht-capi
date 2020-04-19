@@ -12,7 +12,6 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.nlib.Constants;
 import org.jgrapht.nlib.Errors;
-import org.jgrapht.nlib.GraphLookupException;
 import org.jgrapht.nlib.Status;
 import org.jgrapht.util.SupplierUtil;
 
@@ -24,40 +23,6 @@ public class GraphAPI {
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
 	/**
-	 * Lookup a graph from its handle.
-	 * 
-	 * @param graphHandle the graph handle
-	 * @return the graph
-	 */
-	public static Graph<Long, Long> getGraph(ObjectHandle graphHandle) {
-		try {
-			Graph<Long, Long> g = globalHandles.get(graphHandle);
-			return g;
-		} catch (Exception e) {
-			throw new GraphLookupException(e);
-		}
-	}
-
-	/**
-	 * Create a graph and return its handle.
-	 * 
-	 * @return the graph handle
-	 */
-	public static ObjectHandle createGraph(boolean directed, boolean allowingSelfLoops, boolean allowingMultipleEdges, boolean weighted) {
-		Graph<Long, Long> graph;
-		if (directed) {
-			graph = GraphTypeBuilder.directed().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
-					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(SupplierUtil.createLongSupplier())
-					.edgeSupplier(SupplierUtil.createLongSupplier()).buildGraph();
-		} else {
-			graph = GraphTypeBuilder.undirected().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
-					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(SupplierUtil.createLongSupplier())
-					.edgeSupplier(SupplierUtil.createLongSupplier()).buildGraph();
-		}
-		return globalHandles.create(graph);
-	}
-
-	/**
 	 * Create a graph and return its handle.
 	 *
 	 * @param thread the thread isolate
@@ -67,9 +32,19 @@ public class GraphAPI {
 	public static ObjectHandle createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
 			boolean allowingMultipleEdges, boolean weighted) {
 		try {
-			return createGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted);
+			Graph<Long, Long> graph;
+			if (directed) {
+				graph = GraphTypeBuilder.directed().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
+						.allowingSelfLoops(allowingSelfLoops).vertexSupplier(SupplierUtil.createLongSupplier())
+						.edgeSupplier(SupplierUtil.createLongSupplier()).buildGraph();
+			} else {
+				graph = GraphTypeBuilder.undirected().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
+						.allowingSelfLoops(allowingSelfLoops).vertexSupplier(SupplierUtil.createLongSupplier())
+						.edgeSupplier(SupplierUtil.createLongSupplier()).buildGraph();
+			}
+			return globalHandles.create(graph);
 		} catch (Exception e) {
-			Errors.setError(Status.GRAPH_CREATION_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 			return WordFactory.nullPointer();
 		}
 	}
@@ -77,11 +52,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_vertices_count")
 	public static long verticesCount(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			return getGraph(graphHandle).vertexSet().size();
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			g.vertexSet().size();
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -89,11 +65,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_edges_count")
 	public static long edgesCount(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			return getGraph(graphHandle).edgeSet().size();
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.edgeSet().size();
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -101,11 +78,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_add_vertex")
 	public static long addVertex(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			return getGraph(graphHandle).addVertex();
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.addVertex();
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -113,11 +91,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_remove_vertex")
 	public static boolean removeVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex) {
 		try {
-			return getGraph(graphHandle).removeVertex(vertex);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.removeVertex(vertex);
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -125,11 +104,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_contains_vertex")
 	public static boolean containsVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex) {
 		try {
-			return getGraph(graphHandle).containsVertex(vertex);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.containsVertex(vertex);
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -137,14 +117,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_add_edge")
 	public static long addEdge(IsolateThread thread, ObjectHandle graphHandle, long source, long target) {
 		try {
-			Graph<Long, Long> graph = getGraph(graphHandle);
-			return graph.addEdge(source, target);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.addEdge(source, target);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -152,12 +130,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_remove_edge")
 	public static boolean removeEdge(IsolateThread thread, ObjectHandle graphHandle, long edge) {
 		try {
-			Graph<Long, Long> graph = getGraph(graphHandle);
-			return graph.removeEdge(edge);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.removeEdge(edge);
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -165,23 +143,26 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_contains_edge")
 	public static boolean containsEdge(IsolateThread thread, ObjectHandle graphHandle, long edge) {
 		try {
-			return getGraph(graphHandle).containsEdge(edge);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.containsEdge(edge);
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_contains_edge_between")
-	public static boolean containsEdgeBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target) {
+	public static boolean containsEdgeBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
+			long target) {
 		try {
-			return getGraph(graphHandle).containsEdge(source, target);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.containsEdge(source, target);
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -189,13 +170,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_degree_of")
 	public static long degreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex) {
 		try {
-			return getGraph(graphHandle).degreeOf(vertex);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.degreeOf(vertex);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -203,13 +183,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_indegree_of")
 	public static long inDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex) {
 		try {
-			return getGraph(graphHandle).inDegreeOf(vertex);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.inDegreeOf(vertex);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -217,13 +196,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_outdegree_of")
 	public static long outDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex) {
 		try {
-			return getGraph(graphHandle).outDegreeOf(vertex);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.outDegreeOf(vertex);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -231,13 +209,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_edge_source")
 	public static long edgeSource(IsolateThread thread, ObjectHandle graphHandle, long edge) {
 		try {
-			return getGraph(graphHandle).getEdgeSource(edge);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.getEdgeSource(edge);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_EDGE, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -245,13 +222,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_edge_target")
 	public static long edgeTarget(IsolateThread thread, ObjectHandle graphHandle, long edge) {
 		try {
-			return getGraph(graphHandle).getEdgeTarget(edge);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.getEdgeTarget(edge);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_EDGE, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -259,11 +235,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_is_weighted")
 	public static boolean isWeighted(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			return getGraph(graphHandle).getType().isWeighted();
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.getType().isWeighted();
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -271,11 +248,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_is_directed")
 	public static boolean isDirected(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			return getGraph(graphHandle).getType().isDirected();
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.getType().isDirected();
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -283,11 +261,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_is_undirected")
 	public static boolean isUndirected(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			return getGraph(graphHandle).getType().isUndirected();
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.getType().isUndirected();
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -295,11 +274,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_is_allowing_selfloops")
 	public static boolean allowSelfLoops(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			return getGraph(graphHandle).getType().isAllowingSelfLoops();
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.getType().isAllowingSelfLoops();
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -307,11 +287,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_is_allowing_multipleedges")
 	public static boolean allowMultipleEdges(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			return getGraph(graphHandle).getType().isAllowingMultipleEdges();
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.getType().isAllowingMultipleEdges();
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -319,13 +300,12 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_get_edge_weight")
 	public static double allowMultipleEdges(IsolateThread thread, ObjectHandle graphHandle, long edge) {
 		try {
-			return getGraph(graphHandle).getEdgeWeight(edge);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			return g.getEdgeWeight(edge);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_EDGE, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return Graph.DEFAULT_EDGE_WEIGHT;
 	}
@@ -333,27 +313,27 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_set_edge_weight")
 	public static void allowMultipleEdges(IsolateThread thread, ObjectHandle graphHandle, long edge, double weight) {
 		try {
-			getGraph(graphHandle).setEdgeWeight(edge, weight);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			g.setEdgeWeight(edge, weight);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_EDGE, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (UnsupportedOperationException e) {
 			Errors.setError(Status.UNSUPPORTED_OPERATION, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_create_all_vit")
 	public static ObjectHandle createAllVerticesIterator(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			Iterator<Long> it = getGraph(graphHandle).vertexSet().iterator();
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			Iterator<Long> it = g.vertexSet().iterator();
 			return ObjectHandles.getGlobal().create(it);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -361,30 +341,33 @@ public class GraphAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_create_all_eit")
 	public static ObjectHandle createAllEdgesIterator(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			Iterator<Long> it = getGraph(graphHandle).edgeSet().iterator();
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			Iterator<Long> it = g.edgeSet().iterator();
 			return ObjectHandles.getGlobal().create(it);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_create_between_eit")
-	public static ObjectHandle createEdgesBetweenIterator(IsolateThread thread, ObjectHandle graphHandle, long source, long target) {
+	public static ObjectHandle createEdgesBetweenIterator(IsolateThread thread, ObjectHandle graphHandle, long source,
+			long target) {
 		try {
-			Set<Long> edges = getGraph(graphHandle).getAllEdges(source, target);
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			Set<Long> edges = g.getAllEdges(source, target);
 			if (edges == null) {
 				Errors.setError(Status.INVALID_VERTEX, "One or both source and target vertices are missing");
 				return WordFactory.nullPointer();
 			}
 			Iterator<Long> it = edges.iterator();
 			return ObjectHandles.getGlobal().create(it);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -393,14 +376,13 @@ public class GraphAPI {
 	public static ObjectHandle createVertexEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle,
 			long vertex) {
 		try {
-			Iterator<Long> it = getGraph(graphHandle).edgesOf(vertex).iterator();
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			Iterator<Long> it = g.edgesOf(vertex).iterator();
 			return ObjectHandles.getGlobal().create(it);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -409,14 +391,13 @@ public class GraphAPI {
 	public static ObjectHandle createVertexOutEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle,
 			long vertex) {
 		try {
-			Iterator<Long> it = getGraph(graphHandle).outgoingEdgesOf(vertex).iterator();
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			Iterator<Long> it = g.outgoingEdgesOf(vertex).iterator();
 			return ObjectHandles.getGlobal().create(it);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -425,14 +406,13 @@ public class GraphAPI {
 	public static ObjectHandle createVertexInEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle,
 			long vertex) {
 		try {
-			Iterator<Long> it = getGraph(graphHandle).incomingEdgesOf(vertex).iterator();
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			Iterator<Long> it = g.incomingEdgesOf(vertex).iterator();
 			return globalHandles.create(it);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}

@@ -15,27 +15,23 @@ public enum Status {
 	@CEnumConstant(value = "0")
 	SUCCESS, 
 	@CEnumConstant(value = "1")
-	GENERIC_ERROR,
+	ERROR,
 	@CEnumConstant(value = "2")
 	UNSUPPORTED_OPERATION,
 	@CEnumConstant(value = "3")
 	ILLEGAL_ARGUMENT,
 	@CEnumConstant(value = "20")
-	INVALID_REFERENCE,
-	@CEnumConstant(value = "21")
-	INVALID_GRAPH,
+	INVALID_HANDLE,
 	@CEnumConstant(value = "22")
 	INVALID_VERTEX,
 	@CEnumConstant(value = "23")
 	INVALID_EDGE,
-	@CEnumConstant(value = "50")
-	GRAPH_CREATION_ERROR,
 	@CEnumConstant(value = "51")
 	GRAPH_IS_UNWEIGHTED,
 	@CEnumConstant(value = "52")
 	GRAPH_NOT_UNDIRECTED,
 	@CEnumConstant(value = "100")
-	ITERATOR_NO_SUCH_ELEMENT,
+	NO_SUCH_ELEMENT,
 	@CEnumConstant(value = "200")
 	MAP_NO_SUCH_KEY
 	;
@@ -46,5 +42,5 @@ public enum Status {
 
 	@CEnumLookup
 	public static native Status toJavaEnum(int value);
-	
+
 }

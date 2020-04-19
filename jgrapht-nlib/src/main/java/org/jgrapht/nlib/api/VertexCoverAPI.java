@@ -13,7 +13,6 @@ import org.jgrapht.alg.interfaces.VertexCoverAlgorithm.VertexCover;
 import org.jgrapht.alg.vertexcover.GreedyVCImpl;
 import org.jgrapht.nlib.Constants;
 import org.jgrapht.nlib.Errors;
-import org.jgrapht.nlib.GraphLookupException;
 import org.jgrapht.nlib.Status;
 
 public class VertexCoverAPI {
@@ -23,19 +22,17 @@ public class VertexCoverAPI {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "vertexcover_exec_greedy_uniform")
 	public static ObjectHandle executeVertexCoverGreedyUniform(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
-			Graph<Long, Long> graph = GraphAPI.getGraph(graphHandle);
-			if (!graph.getType().isUndirected()) {
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
+			if (!g.getType().isUndirected()) {
 				Errors.setError(Status.GRAPH_NOT_UNDIRECTED, "Only undirected graph supported");
 				return WordFactory.nullPointer();
 			}
-			VertexCover<Long> vertexCover = new GreedyVCImpl<>(graph).getVertexCover();
+			VertexCover<Long> vertexCover = new GreedyVCImpl<>(g).getVertexCover();
 			return globalHandles.create(vertexCover);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
 			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -44,21 +41,19 @@ public class VertexCoverAPI {
 	public static ObjectHandle executeVertexCoverGreedyWeighted(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle mapHandle) {
 		try {
+			Graph<Long, Long> g = globalHandles.get(graphHandle);
 			Map<Long, Double> vertexWeights = globalHandles.get(mapHandle);
-			Graph<Long, Long> graph = GraphAPI.getGraph(graphHandle);
-			if (!graph.getType().isUndirected()) {
+			if (!g.getType().isUndirected()) {
 				Errors.setError(Status.GRAPH_NOT_UNDIRECTED, "Only undirected graph supported");
 				return WordFactory.nullPointer();
 			}
 
-			VertexCover<Long> vertexCover = new GreedyVCImpl<>(graph, vertexWeights).getVertexCover();
+			VertexCover<Long> vertexCover = new GreedyVCImpl<>(g, vertexWeights).getVertexCover();
 			return globalHandles.create(vertexCover);
-		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
 			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -78,7 +73,7 @@ public class VertexCoverAPI {
 		} catch (IllegalArgumentException e) {
 			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return 0d;
 	}
@@ -99,7 +94,7 @@ public class VertexCoverAPI {
 		} catch (IllegalArgumentException e) {
 			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}

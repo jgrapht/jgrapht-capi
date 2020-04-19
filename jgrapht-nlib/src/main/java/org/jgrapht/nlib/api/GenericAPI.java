@@ -26,9 +26,9 @@ public class GenericAPI {
 		try {
 			globalHandles.destroy(handle);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 	}
 
@@ -38,11 +38,11 @@ public class GenericAPI {
 			Iterator<Long> it = globalHandles.get(itHandle);
 			return it.next();
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (NoSuchElementException e) {
-			Errors.setError(Status.ITERATOR_NO_SUCH_ELEMENT, e.getMessage());
+			Errors.setError(Status.NO_SUCH_ELEMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -53,9 +53,9 @@ public class GenericAPI {
 			Iterator<Long> it = globalHandles.get(itHandle);
 			return it.hasNext();
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE, e.getMessage());
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
+			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
 	}
