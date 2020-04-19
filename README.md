@@ -5,7 +5,34 @@
 
 # JGraphT Native Library
 
-JGraphT native C-style api.
+This library provides a native C api to the JGraphT library. Since the JGraphT library is written in Java, we first 
+use [GraalVM](https://www.graalvm.org/) in order to build a shared library and then build a second shared library
+which also takes care of the initialization, i.e. attaching a thread, etc.
+
+## Build
+
+We use cmake to build the native library. 
+
+```
+mkdir build/
+cd build/
+cmake ..
+make
+make install
+```
+
+After a successful build, you should see the following files: 
+
+```
+jgrapht.h
+jgrapht_nlib.h
+jgrapht_nlib_dynamic.h
+graal_isolate.h
+graal_isolate_dynamic.h
+```
+
+and the shared libraries `jgrapht_nlib.so` and `jgrapht.so`.
+```
 
 ## License
 
@@ -28,16 +55,5 @@ Please refer to the license for details.
 
 SPDX-License-Identifier: LGPL-2.1-or-later OR EPL-2.0
 
-## Build
-
-We use cmake to build the native library. 
-
-```
-mkdir build/
-cd build/
-cmake ..
-make
-make install
-```
 
 Enjoy!
