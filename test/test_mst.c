@@ -2,70 +2,77 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include <jgrapht.h>
+#include <jgrapht_capi.h>
 
 #define ITERATOR_NO_SUCH_ELEMENT 100
 
-int main() { 
-    jgrapht_thread_create();
-    assert(jgrapht_is_thread_attached());
+int main() {
+    graal_isolate_t *isolate = NULL;
+    graal_isolatethread_t *thread = NULL;
 
-    assert(jgrapht_get_errno() == 0);
+    if (thread, graal_create_isolate(NULL, &isolate, &thread) != 0) {
+        fprintf(stderr, "graal_create_isolate error\n");
+        exit(EXIT_FAILURE);
+    }
 
-    void *g = jgrapht_graph_create(0, 0, 0, 1);
-    assert(jgrapht_get_errno() == 0);
+    assert(jgrapht_capi_get_errno(thread) == 0);
 
-    assert(!jgrapht_graph_is_directed(g));
-    assert(jgrapht_graph_is_undirected(g));
-    assert(jgrapht_graph_is_weighted(g));
-    assert(!jgrapht_graph_is_allowing_selfloops(g));
-    assert(!jgrapht_graph_is_allowing_multipleedges(g));
+    void *g = jgrapht_capi_graph_create(thread, 0, 0, 0, 1);
+    assert(jgrapht_capi_get_errno(thread) == 0);
 
-    assert(jgrapht_graph_add_vertex(g) == 0);
-    assert(jgrapht_graph_add_vertex(g) == 1);
-    assert(jgrapht_graph_add_vertex(g) == 2);
-    assert(jgrapht_graph_add_vertex(g) == 3);
-    assert(jgrapht_graph_add_vertex(g) == 4);
+    assert(!jgrapht_capi_graph_is_directed(thread, g));
+    assert(jgrapht_capi_graph_is_undirected(thread, g));
+    assert(jgrapht_capi_graph_is_weighted(thread, g));
+    assert(!jgrapht_capi_graph_is_allowing_selfloops(thread, g));
+    assert(!jgrapht_capi_graph_is_allowing_multipleedges(thread, g));
 
-    assert(jgrapht_graph_add_edge(g, 0, 1) == 0);
-    assert(jgrapht_graph_add_edge(g, 1, 2) == 1);
-    assert(jgrapht_graph_add_edge(g, 2, 3) == 2);
-    assert(jgrapht_graph_add_edge(g, 3, 4) == 3);
-    assert(jgrapht_graph_add_edge(g, 4, 0) == 4);
+    assert(jgrapht_capi_graph_add_vertex(thread, g) == 0);
+    assert(jgrapht_capi_graph_add_vertex(thread, g) == 1);
+    assert(jgrapht_capi_graph_add_vertex(thread, g) == 2);
+    assert(jgrapht_capi_graph_add_vertex(thread, g) == 3);
+    assert(jgrapht_capi_graph_add_vertex(thread, g) == 4);
 
-    jgrapht_graph_set_edge_weight(g, 0, 5.0);
-    jgrapht_graph_set_edge_weight(g, 1, 4.0);
-    jgrapht_graph_set_edge_weight(g, 2, 3.0);
-    jgrapht_graph_set_edge_weight(g, 3, 2.0);
-    jgrapht_graph_set_edge_weight(g, 4, 1.0);
+    assert(jgrapht_capi_graph_add_edge(thread, g, 0, 1) == 0);
+    assert(jgrapht_capi_graph_add_edge(thread, g, 1, 2) == 1);
+    assert(jgrapht_capi_graph_add_edge(thread, g, 2, 3) == 2);
+    assert(jgrapht_capi_graph_add_edge(thread, g, 3, 4) == 3);
+    assert(jgrapht_capi_graph_add_edge(thread, g, 4, 0) == 4);
+
+    jgrapht_capi_graph_set_edge_weight(thread, g, 0, 5.0);
+    jgrapht_capi_graph_set_edge_weight(thread, g, 1, 4.0);
+    jgrapht_capi_graph_set_edge_weight(thread, g, 2, 3.0);
+    jgrapht_capi_graph_set_edge_weight(thread, g, 3, 2.0);
+    jgrapht_capi_graph_set_edge_weight(thread, g, 4, 1.0);
 
     // run kruskal
-    void *mst = jgrapht_mst_exec_kruskal(g);
-    assert(jgrapht_mst_get_weight(mst) == 10.0);
-    void *eit = jgrapht_mst_create_eit(mst);
-    assert(jgrapht_it_next(eit) == 1);
-    assert(jgrapht_it_next(eit) == 2);
-    assert(jgrapht_it_next(eit) == 3);
-    assert(jgrapht_it_next(eit) == 4);
-    assert(!jgrapht_it_hasnext(eit));
-    jgrapht_destroy(eit);
-    jgrapht_destroy(mst);
+    void *mst = jgrapht_capi_mst_exec_kruskal(thread, g);
+    assert(jgrapht_capi_mst_get_weight(thread,  mst) == 10.0);
+    void *eit = jgrapht_capi_mst_create_eit(thread,  mst);
+    assert(jgrapht_capi_it_next(thread,  eit) == 1);
+    assert(jgrapht_capi_it_next(thread,  eit) == 2);
+    assert(jgrapht_capi_it_next(thread,  eit) == 3);
+    assert(jgrapht_capi_it_next(thread,  eit) == 4);
+    assert(!jgrapht_capi_it_hasnext(thread,  eit));
+    jgrapht_capi_destroy(thread,  eit);
+    jgrapht_capi_destroy(thread,  mst);
 
     // run prim
-    mst = jgrapht_mst_exec_prim(g);
-    assert(jgrapht_mst_get_weight(mst) == 10.0);
-    eit = jgrapht_mst_create_eit(mst);
-    assert(jgrapht_it_next(eit) == 1);
-    assert(jgrapht_it_next(eit) == 2);
-    assert(jgrapht_it_next(eit) == 3);
-    assert(jgrapht_it_next(eit) == 4);
-    assert(!jgrapht_it_hasnext(eit));
-    jgrapht_destroy(eit);
-    jgrapht_destroy(mst);
+    mst = jgrapht_capi_mst_exec_prim(thread, g);
+    assert(jgrapht_capi_mst_get_weight(thread,  mst) == 10.0);
+    eit = jgrapht_capi_mst_create_eit(thread,  mst);
+    assert(jgrapht_capi_it_next(thread,  eit) == 1);
+    assert(jgrapht_capi_it_next(thread,  eit) == 2);
+    assert(jgrapht_capi_it_next(thread,  eit) == 3);
+    assert(jgrapht_capi_it_next(thread,  eit) == 4);
+    assert(!jgrapht_capi_it_hasnext(thread,  eit));
+    jgrapht_capi_destroy(thread,  eit);
+    jgrapht_capi_destroy(thread,  mst);
 
-    jgrapht_destroy(g);
+    jgrapht_capi_destroy(thread, g);
 
-    jgrapht_thread_destroy();
-    assert(!jgrapht_is_thread_attached());
+    if (thread, graal_detach_thread(thread) != 0) {
+        fprintf(stderr, "graal_detach_thread error\n");
+        exit(EXIT_FAILURE);
+    }
 
 }

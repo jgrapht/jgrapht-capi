@@ -25,6 +25,7 @@ add_custom_command(
     OUTPUT libjgrapht_capi.so jgrapht_capi.h jgrapht_capi_dynamic.h graal_isolate.h graal_isolate_dynamic.h
     COMMAND native-image -cp ${CMAKE_BINARY_DIR}/target/jgrapht-capi-0.1.jar --no-fallback --initialize-at-build-time --no-server --shared
     COMMAND cp ${CMAKE_BINARY_DIR}/jgrapht_capi.so ${CMAKE_BINARY_DIR}/libjgrapht_capi.so 
+    COMMAND rm ${CMAKE_BINARY_DIR}/jgrapht_capi.so
     DEPENDS target/jgrapht-capi-0.1.jar
     COMMENT "Producing shared library from jar file"
 )
@@ -45,40 +46,19 @@ set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/graal_isolate.h PROPERTY GE
 set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/graal_isolate_dynamic.h PROPERTY GENERATED 1)
 set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/libjgrapht_capi.so PROPERTY GENERATED 1)
 
-add_library(
-    jgrapht SHARED 
-    jgrapht/jgrapht.c
-    jgrapht/jgrapht.h
-    ${CMAKE_BINARY_DIR}/jgrapht_capi.h 
-    ${CMAKE_BINARY_DIR}/jgrapht_capi_dynamic.h
-    ${CMAKE_BINARY_DIR}/graal_isolate.h
-    ${CMAKE_BINARY_DIR}/graal_isolate_dynamic.h
-)
-
-target_include_directories(jgrapht PUBLIC ${CMAKE_BINARY_DIR})
-
 add_library(jgrapht_capi SHARED IMPORTED)
 set_property(TARGET jgrapht_capi PROPERTY IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/libjgrapht_capi.so)
-target_link_libraries(jgrapht PUBLIC jgrapht_capi)
 
-add_dependencies(jgrapht jgraphtsharedlib)
-
-install(
-    TARGETS jgrapht 
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+add_dependencies(jgrapht_capi jgraphtsharedlib)
 
 install(
     FILES 
-    jgrapht/jgrapht.h 
     ${CMAKE_BINARY_DIR}/jgrapht_capi.h 
     ${CMAKE_BINARY_DIR}/jgrapht_capi_dynamic.h
     ${CMAKE_BINARY_DIR}/graal_isolate.h
     ${CMAKE_BINARY_DIR}/graal_isolate_dynamic.h
     DESTINATION 
-    ${CMAKE_INSTALL_INCLUDEDIR}/jgrapht
+    ${CMAKE_INSTALL_INCLUDEDIR}/jgrapht_capi
 )
 
 install(
@@ -103,9 +83,8 @@ set(
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
     add_executable(${testname} test/${testsourcefile})
-    target_include_directories(${testname} PUBLIC ${PROJECT_SOURCE_DIR}/jgrapht)
     target_include_directories(${testname} PUBLIC ${CMAKE_BINARY_DIR})
-    target_link_libraries(${testname} jgrapht_capi jgrapht)
+    target_link_libraries(${testname} jgrapht_capi)
     add_test(NAME ${testname} COMMAND ${testname})
 endforeach( testsourcefile ${APP_SOURCES} )
 
