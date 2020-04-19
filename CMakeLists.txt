@@ -90,9 +90,14 @@ install(
 
 enable_testing()
 include(CTest)
-add_executable(test_vertices ${PROJECT_SOURCE_DIR}/test/test_vertices.c)
-target_include_directories(test_vertices PUBLIC ${PROJECT_SOURCE_DIR}/jgrapht)
-target_include_directories(test_vertices PUBLIC ${CMAKE_BINARY_DIR})
-target_link_libraries(test_vertices jgrapht_nlib jgrapht)
-add_test(NAME Vertices COMMAND test_vertices)
+
+set(TEST_SOURCES "test_vertices.c" "test_directed_graph.c")
+foreach(testsourcefile ${TEST_SOURCES})
+    string(REPLACE ".c" "" testname ${testsourcefile})
+    add_executable(${testname} test/${testsourcefile})
+    target_include_directories(${testname} PUBLIC ${PROJECT_SOURCE_DIR}/jgrapht)
+    target_include_directories(${testname} PUBLIC ${CMAKE_BINARY_DIR})
+    target_link_libraries(${testname} jgrapht_nlib jgrapht)
+    add_test(NAME ${testname} COMMAND ${testname})
+endforeach( testsourcefile ${APP_SOURCES} )
 
