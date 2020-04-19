@@ -5,9 +5,8 @@
 
 # JGraphT Native Library
 
-This library provides a native C api to the JGraphT library. Since the JGraphT library is written in Java, we first 
-use [GraalVM](https://www.graalvm.org/) in order to build a shared library and then build a second shared library
-which also takes care of the initialization such as attaching a thread. Note that this library is not thread-safe.
+This library provides a native C api to the JGraphT library. Since the JGraphT library is written in Java, we
+use [GraalVM](https://www.graalvm.org/) in order to build a shared library.
 
 ## Build
 
@@ -24,14 +23,13 @@ make install
 After a successful build, you should see the following files: 
 
 ```
-jgrapht.h
 jgrapht_capi.h
 jgrapht_capi_dynamic.h
 graal_isolate.h
 graal_isolate_dynamic.h
 ```
 
-and the shared libraries `jgrapht_capi.so` and `jgrapht.so`.
+and the shared libraries `libjgrapht_capi.so`.
 ```
 
 ## Requirements 
