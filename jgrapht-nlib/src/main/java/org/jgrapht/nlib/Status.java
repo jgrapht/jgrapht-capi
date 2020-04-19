@@ -46,5 +46,5 @@ public enum Status {
 
 	@CEnumLookup
 	public static native Status toJavaEnum(int value);
-
+	
 }
