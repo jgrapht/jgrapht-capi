@@ -69,7 +69,7 @@ public class GraphAPI {
 		try {
 			return createGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted);
 		} catch (Exception e) {
-			Errors.setError(Status.GRAPH_CREATION_ERROR);
+			Errors.setError(Status.GRAPH_CREATION_ERROR, e.getMessage());
 			return WordFactory.nullPointer();
 		}
 	}
@@ -79,9 +79,9 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).vertexSet().size();
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -91,9 +91,9 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).edgeSet().size();
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -103,9 +103,9 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).addVertex();
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -115,9 +115,9 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).removeVertex(vertex);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -127,9 +127,9 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).containsVertex(vertex);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -140,11 +140,11 @@ public class GraphAPI {
 			Graph<Long, Long> graph = getGraph(graphHandle);
 			return graph.addEdge(source, target);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX);
+			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -155,9 +155,9 @@ public class GraphAPI {
 			Graph<Long, Long> graph = getGraph(graphHandle);
 			return graph.removeEdge(edge);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -167,9 +167,9 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).containsEdge(edge);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -179,9 +179,9 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).containsEdge(source, target);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -191,11 +191,11 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).degreeOf(vertex);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX);
+			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -205,11 +205,11 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).inDegreeOf(vertex);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX);
+			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -219,11 +219,11 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).outDegreeOf(vertex);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX);
+			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -233,11 +233,11 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).getEdgeSource(edge);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_EDGE);
+			Errors.setError(Status.INVALID_EDGE, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -247,11 +247,11 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).getEdgeTarget(edge);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_EDGE);
+			Errors.setError(Status.INVALID_EDGE, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return Constants.LONG_NO_RESULT;
 	}
@@ -261,9 +261,9 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).getType().isWeighted();
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -273,9 +273,9 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).getType().isDirected();
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -285,9 +285,9 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).getType().isUndirected();
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -297,9 +297,9 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).getType().isAllowingSelfLoops();
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -309,9 +309,9 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).getType().isAllowingMultipleEdges();
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return false;
 	}
@@ -321,11 +321,11 @@ public class GraphAPI {
 		try {
 			return getGraph(graphHandle).getEdgeWeight(edge);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_EDGE);
+			Errors.setError(Status.INVALID_EDGE, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return Graph.DEFAULT_EDGE_WEIGHT;
 	}
@@ -335,13 +335,13 @@ public class GraphAPI {
 		try {
 			getGraph(graphHandle).setEdgeWeight(edge, weight);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_EDGE);
+			Errors.setError(Status.INVALID_EDGE, e.getMessage());
 		} catch (UnsupportedOperationException e) {
-			Errors.setError(Status.UNSUPPORTED_OPERATION);
+			Errors.setError(Status.UNSUPPORTED_OPERATION, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 	}
 
@@ -351,9 +351,9 @@ public class GraphAPI {
 			Iterator<Long> it = getGraph(graphHandle).vertexSet().iterator();
 			return ObjectHandles.getGlobal().create(it);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -364,9 +364,9 @@ public class GraphAPI {
 			Iterator<Long> it = getGraph(graphHandle).edgeSet().iterator();
 			return ObjectHandles.getGlobal().create(it);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -376,15 +376,15 @@ public class GraphAPI {
 		try {
 			Set<Long> edges = getGraph(graphHandle).getAllEdges(source, target);
 			if (edges == null) {
-				Errors.setError(Status.INVALID_VERTEX);
+				Errors.setError(Status.INVALID_VERTEX, "One or both source and target vertices are missing");
 				return WordFactory.nullPointer();
 			}
 			Iterator<Long> it = edges.iterator();
 			return ObjectHandles.getGlobal().create(it);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -396,11 +396,11 @@ public class GraphAPI {
 			Iterator<Long> it = getGraph(graphHandle).edgesOf(vertex).iterator();
 			return ObjectHandles.getGlobal().create(it);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX);
+			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -412,11 +412,11 @@ public class GraphAPI {
 			Iterator<Long> it = getGraph(graphHandle).outgoingEdgesOf(vertex).iterator();
 			return ObjectHandles.getGlobal().create(it);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX);
+			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -428,11 +428,11 @@ public class GraphAPI {
 			Iterator<Long> it = getGraph(graphHandle).incomingEdgesOf(vertex).iterator();
 			return globalHandles.create(it);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_VERTEX);
+			Errors.setError(Status.INVALID_VERTEX, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}

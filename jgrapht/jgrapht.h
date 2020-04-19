@@ -19,6 +19,8 @@ int jgrapht_get_errno();
 
 void jgrapht_clear_errno();
 
+char *jgrapht_get_errno_msg();
+
 // cleanup
 
 void jgrapht_destroy(void *);

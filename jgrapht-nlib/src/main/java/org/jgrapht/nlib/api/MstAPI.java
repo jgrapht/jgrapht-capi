@@ -34,9 +34,9 @@ public class MstAPI {
 			SpanningTree<Long> mst = new KruskalMinimumSpanningTree<>(graph).getSpanningTree();
 			return globalHandles.create(mst);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -55,9 +55,9 @@ public class MstAPI {
 			SpanningTree<Long> mst = new PrimMinimumSpanningTree<>(graph).getSpanningTree();
 			return globalHandles.create(mst);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -75,9 +75,9 @@ public class MstAPI {
 			SpanningTree<Long> mst = globalHandles.get(mstHandle);
 			return mst.getWeight();
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT);
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return 0d;
 	}
@@ -96,9 +96,9 @@ public class MstAPI {
 			Iterator<Long> it = mst.iterator();
 			return globalHandles.create(it);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT);
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}

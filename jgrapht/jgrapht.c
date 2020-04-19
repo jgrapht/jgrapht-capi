@@ -33,6 +33,10 @@ int jgrapht_get_errno() {
     return jgrapht_nlib_get_errno(thread);
 }
 
+char * jgrapht_get_errno_msg() { 
+    return jgrapht_nlib_get_errno_msg(thread);
+}
+
 void jgrapht_clear_errno() { 
     jgrapht_nlib_clear_errno(thread);
 }

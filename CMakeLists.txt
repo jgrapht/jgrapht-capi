@@ -98,6 +98,7 @@ set(
     "test_directed_graph.c" 
     "test_undirected_graph.c"
     "test_mst.c"
+    "test_error.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})

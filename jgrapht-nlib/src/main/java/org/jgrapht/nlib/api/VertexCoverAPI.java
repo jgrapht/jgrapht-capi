@@ -25,17 +25,17 @@ public class VertexCoverAPI {
 		try {
 			Graph<Long, Long> graph = GraphAPI.getGraph(graphHandle);
 			if (!graph.getType().isUndirected()) {
-				Errors.setError(Status.GRAPH_NOT_UNDIRECTED);
+				Errors.setError(Status.GRAPH_NOT_UNDIRECTED, "Only undirected graph supported");
 				return WordFactory.nullPointer();
 			}
 			VertexCover<Long> vertexCover = new GreedyVCImpl<>(graph).getVertexCover();
 			return globalHandles.create(vertexCover);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT);
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -47,18 +47,18 @@ public class VertexCoverAPI {
 			Map<Long, Double> vertexWeights = globalHandles.get(mapHandle);
 			Graph<Long, Long> graph = GraphAPI.getGraph(graphHandle);
 			if (!graph.getType().isUndirected()) {
-				Errors.setError(Status.GRAPH_NOT_UNDIRECTED);
+				Errors.setError(Status.GRAPH_NOT_UNDIRECTED, "Only undirected graph supported");
 				return WordFactory.nullPointer();
 			}
 
 			VertexCover<Long> vertexCover = new GreedyVCImpl<>(graph, vertexWeights).getVertexCover();
 			return globalHandles.create(vertexCover);
 		} catch (GraphLookupException e) {
-			Errors.setError(Status.INVALID_GRAPH);
+			Errors.setError(Status.INVALID_GRAPH, e.getMessage());
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT);
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}
@@ -76,9 +76,9 @@ public class VertexCoverAPI {
 			VertexCover<Long> vc = globalHandles.get(vcHandle);
 			return vc.getWeight();
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT);
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return 0d;
 	}
@@ -97,9 +97,9 @@ public class VertexCoverAPI {
 			Iterator<Long> it = vc.iterator();
 			return globalHandles.create(it);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT);
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
 	}

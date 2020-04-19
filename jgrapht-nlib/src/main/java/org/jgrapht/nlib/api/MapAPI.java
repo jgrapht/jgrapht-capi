@@ -27,7 +27,7 @@ public class MapAPI {
 		try {
 			return globalHandles.create(new HashMap<>());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 			return WordFactory.nullPointer();
 		}
 	}
@@ -38,9 +38,9 @@ public class MapAPI {
 			Map<Long, Double> map = globalHandles.get(mapHandle);
 			map.put(key, value);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE);
+			Errors.setError(Status.INVALID_REFERENCE, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 	}
 
@@ -50,14 +50,14 @@ public class MapAPI {
 			Map<Long, Double> map = globalHandles.get(mapHandle);
 			Double value = map.get(key);
 			if (value == null) {
-				Errors.setError(Status.MAP_NO_SUCH_KEY);
+				Errors.setError(Status.MAP_NO_SUCH_KEY, "Key " + key + " not found in map");
 				return 0d;
 			}
 			return value;
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE);
+			Errors.setError(Status.INVALID_REFERENCE, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return 0d;
 	}
@@ -68,9 +68,9 @@ public class MapAPI {
 			Map<Long, Double> map = globalHandles.get(mapHandle);
 			return map.containsKey(key);
 		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.INVALID_REFERENCE);
+			Errors.setError(Status.INVALID_REFERENCE, e.getMessage());
 		} catch (Exception e) {
-			Errors.setError(Status.GENERIC_ERROR);
+			Errors.setError(Status.GENERIC_ERROR, e.getMessage());
 		}
 		return false;
 	}
