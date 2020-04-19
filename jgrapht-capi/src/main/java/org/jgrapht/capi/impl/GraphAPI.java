@@ -1,4 +1,4 @@
-package org.jgrapht.nlib.api;
+package org.jgrapht.capi.impl;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -9,10 +9,10 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.word.WordFactory;
 import org.jgrapht.Graph;
+import org.jgrapht.capi.Constants;
+import org.jgrapht.capi.Errors;
+import org.jgrapht.capi.Status;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.nlib.Constants;
-import org.jgrapht.nlib.Errors;
-import org.jgrapht.nlib.Status;
 import org.jgrapht.util.SupplierUtil;
 
 /**

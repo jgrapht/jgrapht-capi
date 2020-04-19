@@ -1,11 +1,11 @@
-package org.jgrapht.nlib.api;
+package org.jgrapht.capi.impl;
 
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointer;
-import org.jgrapht.nlib.Constants;
-import org.jgrapht.nlib.Errors;
-import org.jgrapht.nlib.Status;
+import org.jgrapht.capi.Constants;
+import org.jgrapht.capi.Errors;
+import org.jgrapht.capi.Status;
 
 /**
  * Error handling

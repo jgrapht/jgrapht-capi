@@ -1,4 +1,4 @@
-package org.jgrapht.nlib;
+package org.jgrapht.capi;
 
 import org.graalvm.nativeimage.c.constant.CEnum;
 import org.graalvm.nativeimage.c.constant.CEnumConstant;

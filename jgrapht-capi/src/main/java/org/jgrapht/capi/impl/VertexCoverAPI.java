@@ -1,4 +1,4 @@
-package org.jgrapht.nlib.api;
+package org.jgrapht.capi.impl;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -11,9 +11,9 @@ import org.graalvm.word.WordFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.VertexCoverAlgorithm.VertexCover;
 import org.jgrapht.alg.vertexcover.GreedyVCImpl;
-import org.jgrapht.nlib.Constants;
-import org.jgrapht.nlib.Errors;
-import org.jgrapht.nlib.Status;
+import org.jgrapht.capi.Constants;
+import org.jgrapht.capi.Errors;
+import org.jgrapht.capi.Status;
 
 public class VertexCoverAPI {
 

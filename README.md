@@ -25,13 +25,13 @@ After a successful build, you should see the following files:
 
 ```
 jgrapht.h
-jgrapht_nlib.h
-jgrapht_nlib_dynamic.h
+jgrapht_capi.h
+jgrapht_capi_dynamic.h
 graal_isolate.h
 graal_isolate_dynamic.h
 ```
 
-and the shared libraries `jgrapht_nlib.so` and `jgrapht.so`.
+and the shared libraries `jgrapht_capi.so` and `jgrapht.so`.
 ```
 
 ## Requirements 

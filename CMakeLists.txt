@@ -14,52 +14,52 @@ message(STATUS "native-image found at ${NativeImage}")
 include(GNUInstallDirs)
 
 add_custom_command(
-    OUTPUT target/jgrapht-nlib-0.1.jar
-    COMMAND cp ${CMAKE_SOURCE_DIR}/jgrapht-nlib/pom.xml ${CMAKE_BINARY_DIR}/
-    COMMAND cp -r ${CMAKE_SOURCE_DIR}/jgrapht-nlib/src ${CMAKE_BINARY_DIR}/
+    OUTPUT target/jgrapht-capi-0.1.jar
+    COMMAND cp ${CMAKE_SOURCE_DIR}/jgrapht-capi/pom.xml ${CMAKE_BINARY_DIR}/
+    COMMAND cp -r ${CMAKE_SOURCE_DIR}/jgrapht-capi/src ${CMAKE_BINARY_DIR}/
     COMMAND mvn -f ${CMAKE_BINARY_DIR} package
     COMMENT "Building jar file with C native scopes"
 )
 
 add_custom_command(
-    OUTPUT libjgrapht_nlib.so jgrapht_nlib.h jgrapht_nlib_dynamic.h graal_isolate.h graal_isolate_dynamic.h
-    COMMAND native-image -cp ${CMAKE_BINARY_DIR}/target/jgrapht-nlib-0.1.jar --no-fallback --initialize-at-build-time --no-server --shared
-    COMMAND cp ${CMAKE_BINARY_DIR}/jgrapht_nlib.so ${CMAKE_BINARY_DIR}/libjgrapht_nlib.so 
-    DEPENDS target/jgrapht-nlib-0.1.jar
+    OUTPUT libjgrapht_capi.so jgrapht_capi.h jgrapht_capi_dynamic.h graal_isolate.h graal_isolate_dynamic.h
+    COMMAND native-image -cp ${CMAKE_BINARY_DIR}/target/jgrapht-capi-0.1.jar --no-fallback --initialize-at-build-time --no-server --shared
+    COMMAND cp ${CMAKE_BINARY_DIR}/jgrapht_capi.so ${CMAKE_BINARY_DIR}/libjgrapht_capi.so 
+    DEPENDS target/jgrapht-capi-0.1.jar
     COMMENT "Producing shared library from jar file"
 )
 
 add_custom_target(
     buildjar 
-    SOURCES target/jgrapht-nlib-0.1.jar
+    SOURCES target/jgrapht-capi-0.1.jar
 )
 
 add_custom_target(
     jgraphtsharedlib
-    SOURCES libjgrapht_nlib.so
+    SOURCES libjgrapht_capi.so
 )
 
-set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/jgrapht_nlib.h PROPERTY GENERATED 1)
-set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/jgrapht_nlib_dynamic.h PROPERTY GENERATED 1)
-set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/graal_isolate.h PROPERTY GENERATED 1)
-set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/graal_isolate_dynamic.h PROPERTY GENERATED 1)
-set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-nlib/libjgrapht_nlib.so PROPERTY GENERATED 1)
+set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/jgrapht_capi.h PROPERTY GENERATED 1)
+set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/jgrapht_capi_dynamic.h PROPERTY GENERATED 1)
+set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/graal_isolate.h PROPERTY GENERATED 1)
+set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/graal_isolate_dynamic.h PROPERTY GENERATED 1)
+set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/libjgrapht_capi.so PROPERTY GENERATED 1)
 
 add_library(
     jgrapht SHARED 
     jgrapht/jgrapht.c
     jgrapht/jgrapht.h
-    ${CMAKE_BINARY_DIR}/jgrapht_nlib.h 
-    ${CMAKE_BINARY_DIR}/jgrapht_nlib_dynamic.h
+    ${CMAKE_BINARY_DIR}/jgrapht_capi.h 
+    ${CMAKE_BINARY_DIR}/jgrapht_capi_dynamic.h
     ${CMAKE_BINARY_DIR}/graal_isolate.h
     ${CMAKE_BINARY_DIR}/graal_isolate_dynamic.h
 )
 
 target_include_directories(jgrapht PUBLIC ${CMAKE_BINARY_DIR})
 
-add_library(jgrapht_nlib SHARED IMPORTED)
-set_property(TARGET jgrapht_nlib PROPERTY IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/libjgrapht_nlib.so)
-target_link_libraries(jgrapht PUBLIC jgrapht_nlib)
+add_library(jgrapht_capi SHARED IMPORTED)
+set_property(TARGET jgrapht_capi PROPERTY IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/libjgrapht_capi.so)
+target_link_libraries(jgrapht PUBLIC jgrapht_capi)
 
 add_dependencies(jgrapht jgraphtsharedlib)
 
@@ -73,8 +73,8 @@ install(
 install(
     FILES 
     jgrapht/jgrapht.h 
-    ${CMAKE_BINARY_DIR}/jgrapht_nlib.h 
-    ${CMAKE_BINARY_DIR}/jgrapht_nlib_dynamic.h
+    ${CMAKE_BINARY_DIR}/jgrapht_capi.h 
+    ${CMAKE_BINARY_DIR}/jgrapht_capi_dynamic.h
     ${CMAKE_BINARY_DIR}/graal_isolate.h
     ${CMAKE_BINARY_DIR}/graal_isolate_dynamic.h
     DESTINATION 
@@ -83,7 +83,7 @@ install(
 
 install(
     FILES
-    ${CMAKE_BINARY_DIR}/libjgrapht_nlib.so
+    ${CMAKE_BINARY_DIR}/libjgrapht_capi.so
     DESTINATION        
     ${CMAKE_INSTALL_LIBDIR}
 )
@@ -105,7 +105,7 @@ foreach(testsourcefile ${TEST_SOURCES})
     add_executable(${testname} test/${testsourcefile})
     target_include_directories(${testname} PUBLIC ${PROJECT_SOURCE_DIR}/jgrapht)
     target_include_directories(${testname} PUBLIC ${CMAKE_BINARY_DIR})
-    target_link_libraries(${testname} jgrapht_nlib jgrapht)
+    target_link_libraries(${testname} jgrapht_capi jgrapht)
     add_test(NAME ${testname} COMMAND ${testname})
 endforeach( testsourcefile ${APP_SOURCES} )
 

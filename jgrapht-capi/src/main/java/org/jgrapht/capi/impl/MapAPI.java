@@ -1,4 +1,4 @@
-package org.jgrapht.nlib.api;
+package org.jgrapht.capi.impl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,9 +8,9 @@ import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.word.WordFactory;
-import org.jgrapht.nlib.Constants;
-import org.jgrapht.nlib.Errors;
-import org.jgrapht.nlib.Status;
+import org.jgrapht.capi.Constants;
+import org.jgrapht.capi.Errors;
+import org.jgrapht.capi.Status;
 
 public class MapAPI {
 
