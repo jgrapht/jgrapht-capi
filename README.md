@@ -30,7 +30,6 @@ graal_isolate_dynamic.h
 ```
 
 and the shared libraries `libjgrapht_capi.so`.
-```
 
 ## Requirements 
 
