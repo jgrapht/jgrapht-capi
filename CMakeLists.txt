@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(jgrapht)
 
-list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
+list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/etc/cmake")
 
 find_package(Java 11 REQUIRED)
 find_package(JNI REQUIRED)

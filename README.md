@@ -34,6 +34,17 @@ graal_isolate_dynamic.h
 and the shared libraries `jgrapht_nlib.so` and `jgrapht.so`.
 ```
 
+## Requirements 
+
+The build will succeed only if you have the following piece of software installed:
+
+ * GraalVM 20.0 with Java 11 support
+ * Native Image component from GraalVM
+ * Maven build tool
+ * GNU C compiler or clang
+
+For now only linux has been tested.
+
 ## License
 
 This library may be used under the terms of either the
