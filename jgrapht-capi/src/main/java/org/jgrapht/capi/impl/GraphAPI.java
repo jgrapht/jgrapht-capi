@@ -53,7 +53,7 @@ public class GraphAPI {
 	public static long verticesCount(IsolateThread thread, ObjectHandle graphHandle) {
 		try {
 			Graph<Long, Long> g = globalHandles.get(graphHandle);
-			g.vertexSet().size();
+			return g.vertexSet().size();
 		} catch (IllegalArgumentException e) {
 			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
