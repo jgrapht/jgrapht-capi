@@ -88,3 +88,11 @@ install(
     ${CMAKE_INSTALL_LIBDIR}
 )
 
+enable_testing()
+include(CTest)
+add_executable(test_vertices ${PROJECT_SOURCE_DIR}/test/test_vertices.c)
+target_include_directories(test_vertices PUBLIC ${PROJECT_SOURCE_DIR}/jgrapht)
+target_include_directories(test_vertices PUBLIC ${CMAKE_BINARY_DIR})
+target_link_libraries(test_vertices jgrapht_nlib jgrapht)
+add_test(NAME Vertices COMMAND test_vertices)
+
