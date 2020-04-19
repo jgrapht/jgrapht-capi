@@ -171,6 +171,14 @@ void * jgrapht_map_create() {
     return jgrapht_nlib_map_create(thread);
 }
 
+void * jgrapht_map_keys_it_create(void *mapHandle) { 
+    return jgrapht_nlib_map_keys_it_create(thread, mapHandle);
+}
+
+void * jgrapht_map_values_it_create(void *mapHandle) { 
+    return jgrapht_nlib_map_values_it_create(thread, mapHandle);
+}
+
 void jgrapht_map_long_double_put(void *mapHandle, long long int key, double value) { 
     return jgrapht_nlib_map_long_double_put(thread, mapHandle, key, value);
 }
@@ -179,8 +187,8 @@ double jgrapht_map_long_double_get(void *mapHandle, long long int key) {
     return jgrapht_nlib_map_long_double_get(thread, mapHandle, key);
 }
 
-int jgrapht_map_long_double_contains_key(void *mapHandle, long long int key) { 
-    return jgrapht_nlib_map_long_double_contains_key(thread, mapHandle, key);
+int jgrapht_map_long_contains_key(void *mapHandle, long long int key) { 
+    return jgrapht_nlib_map_long_contains_key(thread, mapHandle, key);
 }
 
 // mst

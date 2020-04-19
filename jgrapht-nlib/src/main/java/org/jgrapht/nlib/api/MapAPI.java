@@ -84,10 +84,10 @@ public class MapAPI {
 		return 0d;
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_double_contains_key")
-	public static boolean mapLongDoubleContains(IsolateThread thread, ObjectHandle mapHandle, long key) {
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_contains_key")
+	public static boolean mapLongContains(IsolateThread thread, ObjectHandle mapHandle, long key) {
 		try {
-			Map<Long, Double> map = globalHandles.get(mapHandle);
+			Map<Long, ?> map = globalHandles.get(mapHandle);
 			return map.containsKey(key);
 		} catch (IllegalArgumentException e) {
 			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
