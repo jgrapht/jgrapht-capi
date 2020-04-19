@@ -32,6 +32,28 @@ public class MapAPI {
 		return WordFactory.nullPointer();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_keys_it_create")
+	public static ObjectHandle createMapKeysIterator(IsolateThread thread, ObjectHandle mapHandle) {
+		try {
+			Map<?, ?> map = globalHandles.get(mapHandle);
+			return globalHandles.create(map.keySet().iterator());
+		} catch (Exception e) {
+			Errors.setError(Status.ERROR, e.getMessage());
+		}
+		return WordFactory.nullPointer();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_values_it_create")
+	public static ObjectHandle createMapValuesIterator(IsolateThread thread, ObjectHandle mapHandle) {
+		try {
+			Map<?, ?> map = globalHandles.get(mapHandle);
+			return globalHandles.create(map.values().iterator());
+		} catch (Exception e) {
+			Errors.setError(Status.ERROR, e.getMessage());
+		}
+		return WordFactory.nullPointer();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_double_put")
 	public static void mapLongDoublePut(IsolateThread thread, ObjectHandle mapHandle, long key, double value) {
 		try {
