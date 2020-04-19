@@ -7,7 +7,7 @@
 
 This library provides a native C api to the JGraphT library. Since the JGraphT library is written in Java, we first 
 use [GraalVM](https://www.graalvm.org/) in order to build a shared library and then build a second shared library
-which also takes care of the initialization, i.e. attaching a thread, etc.
+which also takes care of the initialization such as attaching a thread. Note that this library is not thread-safe.
 
 ## Build
 
