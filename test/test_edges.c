@@ -62,12 +62,12 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0 && jgrapht_capi_graph_get_edge_weight(thread, g, 0) == 5.0);
 
     void *eit = jgrapht_capi_graph_create_all_eit(thread, g);
-    assert(jgrapht_capi_it_next(thread, eit) == 0);
-    assert(jgrapht_capi_it_next(thread, eit) == 1);
-    assert(jgrapht_capi_it_next(thread, eit) == 2);
-    assert(jgrapht_capi_it_next(thread, eit) == 3);
-    assert(jgrapht_capi_it_next(thread, eit) == 4);
-    assert(jgrapht_capi_it_next(thread, eit) == 5);
+    assert(jgrapht_capi_it_next_long(thread, eit) == 0);
+    assert(jgrapht_capi_it_next_long(thread, eit) == 1);
+    assert(jgrapht_capi_it_next_long(thread, eit) == 2);
+    assert(jgrapht_capi_it_next_long(thread, eit) == 3);
+    assert(jgrapht_capi_it_next_long(thread, eit) == 4);
+    assert(jgrapht_capi_it_next_long(thread, eit) == 5);
     assert(!jgrapht_capi_it_hasnext(thread, eit));
     jgrapht_capi_destroy(thread, eit);
 
@@ -82,9 +82,9 @@ int main() {
     assert(!jgrapht_capi_graph_contains_edge_between(thread, g, 2, 2));
 
     eit = jgrapht_capi_graph_create_between_eit(thread, g, 1 , 2);
-    assert(jgrapht_capi_it_next(thread, eit) == 3);
-    assert(jgrapht_capi_it_next(thread, eit) == 4);
-    assert(jgrapht_capi_it_next(thread, eit) == 5);
+    assert(jgrapht_capi_it_next_long(thread, eit) == 3);
+    assert(jgrapht_capi_it_next_long(thread, eit) == 4);
+    assert(jgrapht_capi_it_next_long(thread, eit) == 5);
     assert(!jgrapht_capi_it_hasnext(thread, eit));
     jgrapht_capi_destroy(thread, eit);
 

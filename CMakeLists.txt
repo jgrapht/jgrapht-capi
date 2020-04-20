@@ -77,6 +77,7 @@ set(
     "test_edges.c"
     "test_directed_graph.c" 
     "test_undirected_graph.c"
+    "test_map.c"
     "test_mst.c"
     "test_error.c"
 )

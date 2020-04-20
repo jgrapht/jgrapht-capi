@@ -59,7 +59,7 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
     long x = 0;
     while(jgrapht_capi_it_hasnext(thread,  vit)) { 
-        assert(jgrapht_capi_it_next(thread,  vit) == x++);
+        assert(jgrapht_capi_it_next_long(thread,  vit) == x++);
     }
     assert(jgrapht_capi_get_errno(thread) == 0);
     jgrapht_capi_destroy(thread,  vit);
@@ -70,7 +70,7 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
     x = 0;
     while(1) { 
-        long ret = jgrapht_capi_it_next(thread,  vit);
+        long ret = jgrapht_capi_it_next_long(thread,  vit);
         if (x < 1000) { 
             assert(ret == x);
             assert(jgrapht_capi_get_errno(thread) == 0);

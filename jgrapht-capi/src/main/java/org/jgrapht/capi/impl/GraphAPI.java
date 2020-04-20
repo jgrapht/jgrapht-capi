@@ -59,7 +59,7 @@ public class GraphAPI {
 		} catch (Exception e) {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
-		return Constants.LONG_NO_RESULT;
+		return 0L;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_edges_count")
@@ -72,7 +72,7 @@ public class GraphAPI {
 		} catch (Exception e) {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
-		return Constants.LONG_NO_RESULT;
+		return 0L;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_add_vertex")
@@ -85,7 +85,7 @@ public class GraphAPI {
 		} catch (Exception e) {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
-		return Constants.LONG_NO_RESULT;
+		return 0L;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_remove_vertex")
@@ -124,7 +124,7 @@ public class GraphAPI {
 		} catch (Exception e) {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
-		return Constants.LONG_NO_RESULT;
+		return 0L;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_remove_edge")
@@ -177,7 +177,7 @@ public class GraphAPI {
 		} catch (Exception e) {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
-		return Constants.LONG_NO_RESULT;
+		return 0L;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_indegree_of")
@@ -190,7 +190,7 @@ public class GraphAPI {
 		} catch (Exception e) {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
-		return Constants.LONG_NO_RESULT;
+		return 0L;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_outdegree_of")
@@ -203,7 +203,7 @@ public class GraphAPI {
 		} catch (Exception e) {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
-		return Constants.LONG_NO_RESULT;
+		return 0L;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_edge_source")
@@ -216,7 +216,7 @@ public class GraphAPI {
 		} catch (Exception e) {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
-		return Constants.LONG_NO_RESULT;
+		return 0L;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_edge_target")
@@ -229,7 +229,7 @@ public class GraphAPI {
 		} catch (Exception e) {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
-		return Constants.LONG_NO_RESULT;
+		return 0L;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_is_weighted")

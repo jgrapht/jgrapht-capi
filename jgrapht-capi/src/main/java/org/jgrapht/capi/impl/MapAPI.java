@@ -1,6 +1,7 @@
 package org.jgrapht.capi.impl;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.graalvm.nativeimage.IsolateThread;
@@ -16,16 +17,20 @@ public class MapAPI {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	/**
-	 * Create a map
-	 * 
-	 * @param thread the thread
-	 * @return the handle
-	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_create")
 	public static ObjectHandle createMap(IsolateThread thread) {
 		try {
 			return globalHandles.create(new HashMap<>());
+		} catch (Exception e) {
+			Errors.setError(Status.ERROR, e.getMessage());
+		}
+		return WordFactory.nullPointer();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_linked_create")
+	public static ObjectHandle createLinkedMap(IsolateThread thread) {
+		try {
+			return globalHandles.create(new LinkedHashMap<>());
 		} catch (Exception e) {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
@@ -41,6 +46,17 @@ public class MapAPI {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return WordFactory.nullPointer();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_size")
+	public static long mapSize(IsolateThread thread, ObjectHandle mapHandle) {
+		try {
+			Map<?, ?> map = globalHandles.get(mapHandle);
+			return map.size();
+		} catch (Exception e) {
+			Errors.setError(Status.ERROR, e.getMessage());
+		}
+		return 0L;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_values_it_create")
@@ -95,6 +111,16 @@ public class MapAPI {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return false;
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_clear")
+	public static void clearMap(IsolateThread thread, ObjectHandle mapHandle) {
+		try {
+			Map<?, ?> map = globalHandles.get(mapHandle);
+			map.clear();
+		} catch (Exception e) {
+			Errors.setError(Status.ERROR, e.getMessage());
+		}
 	}
 
 }

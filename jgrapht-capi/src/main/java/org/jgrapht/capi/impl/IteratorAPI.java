@@ -15,8 +15,8 @@ public class IteratorAPI {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next")
-	public static long iteratorNext(IsolateThread thread, ObjectHandle itHandle) {
+	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_long")
+	public static long iteratorNextLong(IsolateThread thread, ObjectHandle itHandle) {
 		try {
 			Iterator<Long> it = globalHandles.get(itHandle);
 			return it.next();
@@ -27,7 +27,22 @@ public class IteratorAPI {
 		} catch (Exception e) {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
-		return Constants.LONG_NO_RESULT;
+		return 0L;
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_double")
+	public static double iteratorNextDouble(IsolateThread thread, ObjectHandle itHandle) {
+		try {
+			Iterator<Double> it = globalHandles.get(itHandle);
+			return it.next();
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
+		} catch (NoSuchElementException e) {
+			Errors.setError(Status.NO_SUCH_ELEMENT, e.getMessage());
+		} catch (Exception e) {
+			Errors.setError(Status.ERROR, e.getMessage());
+		}
+		return 0d;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "it_hasnext")
