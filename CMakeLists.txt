@@ -82,6 +82,7 @@ set(
     "test_mst.c"
     "test_vertexcover.c"
     "test_clustering.c"
+    "test_coloring.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})

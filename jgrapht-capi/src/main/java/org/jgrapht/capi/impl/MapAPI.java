@@ -82,6 +82,18 @@ public class MapAPI {
 		}
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_long_put")
+	public static void mapLongLongPut(IsolateThread thread, ObjectHandle mapHandle, long key, long value) {
+		try {
+			Map<Long, Long> map = globalHandles.get(mapHandle);
+			map.put(key, value);
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
+		} catch (Exception e) {
+			Errors.setError(Status.ERROR, e.getMessage());
+		}
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_double_get")
 	public static double mapLongDoubleGet(IsolateThread thread, ObjectHandle mapHandle, long key) {
 		try {
@@ -98,6 +110,24 @@ public class MapAPI {
 			Errors.setError(Status.ERROR, e.getMessage());
 		}
 		return 0d;
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_long_get")
+	public static long mapLongLongGet(IsolateThread thread, ObjectHandle mapHandle, long key) {
+		try {
+			Map<Long, Long> map = globalHandles.get(mapHandle);
+			Long value = map.get(key);
+			if (value == null) {
+				Errors.setError(Status.MAP_NO_SUCH_KEY, "Key " + key + " not found in map");
+				return 0L;
+			}
+			return value;
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
+		} catch (Exception e) {
+			Errors.setError(Status.ERROR, e.getMessage());
+		}
+		return 0L;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_contains_key")
