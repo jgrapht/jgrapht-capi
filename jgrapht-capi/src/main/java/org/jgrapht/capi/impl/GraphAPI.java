@@ -12,6 +12,10 @@ import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.Errors;
 import org.jgrapht.capi.Status;
+import org.jgrapht.graph.AsUndirectedGraph;
+import org.jgrapht.graph.AsUnmodifiableGraph;
+import org.jgrapht.graph.AsUnweightedGraph;
+import org.jgrapht.graph.EdgeReversedGraph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.util.SupplierUtil;
 
@@ -409,6 +413,62 @@ public class GraphAPI {
 			Graph<Long, Long> g = globalHandles.get(graphHandle);
 			Iterator<Long> it = g.incomingEdgesOf(vertex).iterator();
 			return globalHandles.create(it);
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
+		} catch (Exception e) {
+			Errors.setError(Status.ERROR, e.getMessage());
+		}
+		return WordFactory.nullPointer();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_as_undirected")
+	public static ObjectHandle asUndirected(IsolateThread thread, ObjectHandle graphHandle) {
+		try {
+			Graph<Long, Long> gIn = globalHandles.get(graphHandle);
+			Graph<Long, Long> gOut = new AsUndirectedGraph<>(gIn);
+			return globalHandles.create(gOut);
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
+		} catch (Exception e) {
+			Errors.setError(Status.ERROR, e.getMessage());
+		}
+		return WordFactory.nullPointer();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_as_unmodifiable")
+	public static ObjectHandle asUnmodifiable(IsolateThread thread, ObjectHandle graphHandle) {
+		try {
+			Graph<Long, Long> gIn = globalHandles.get(graphHandle);
+			Graph<Long, Long> gOut = new AsUnmodifiableGraph<>(gIn);
+			return globalHandles.create(gOut);
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
+		} catch (Exception e) {
+			Errors.setError(Status.ERROR, e.getMessage());
+		}
+		return WordFactory.nullPointer();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_as_unweighted")
+	public static ObjectHandle asUnweighted(IsolateThread thread, ObjectHandle graphHandle) {
+		try {
+			Graph<Long, Long> gIn = globalHandles.get(graphHandle);
+			Graph<Long, Long> gOut = new AsUnweightedGraph<>(gIn);
+			return globalHandles.create(gOut);
+		} catch (IllegalArgumentException e) {
+			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
+		} catch (Exception e) {
+			Errors.setError(Status.ERROR, e.getMessage());
+		}
+		return WordFactory.nullPointer();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_as_edgereversed")
+	public static ObjectHandle asEdgeReversed(IsolateThread thread, ObjectHandle graphHandle) {
+		try {
+			Graph<Long, Long> gIn = globalHandles.get(graphHandle);
+			Graph<Long, Long> gOut = new EdgeReversedGraph<>(gIn);
+			return globalHandles.create(gOut);
 		} catch (IllegalArgumentException e) {
 			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
