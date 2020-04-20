@@ -20,6 +20,8 @@ public enum Status {
 	UNSUPPORTED_OPERATION,
 	@CEnumConstant(value = "3")
 	ILLEGAL_ARGUMENT,
+	@CEnumConstant(value = "4")
+	INDEX_OUT_OF_BOUNDS,
 	@CEnumConstant(value = "20")
 	INVALID_HANDLE,
 	@CEnumConstant(value = "22")

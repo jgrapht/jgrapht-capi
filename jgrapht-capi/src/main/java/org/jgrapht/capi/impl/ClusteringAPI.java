@@ -48,14 +48,13 @@ public class ClusteringAPI {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "clustering_ith_cluster_vit")
-	public static ObjectHandle getColorMap(IsolateThread thread, ObjectHandle cHandle, int i) {
+	public static ObjectHandle getClusterWithIndexVertexIterator(IsolateThread thread, ObjectHandle cHandle, int i) {
 		try {
 			Clustering<Long> c = globalHandles.get(cHandle);
-			if (i < 0 || i >= c.getNumberClusters()) {
-				throw new IllegalArgumentException("Cluster " + i + " does not exist");
-			}
 			Iterator<Long> it = c.getClusters().get(i).iterator();
 			return globalHandles.create(it);
+		} catch (IndexOutOfBoundsException e) {
+			Errors.setError(Status.INDEX_OUT_OF_BOUNDS, e.getMessage());
 		} catch (IllegalArgumentException e) {
 			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
 		} catch (Exception e) {
