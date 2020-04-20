@@ -77,9 +77,10 @@ set(
     "test_edges.c"
     "test_directed_graph.c" 
     "test_undirected_graph.c"
+    "test_error.c"
     "test_map.c"
     "test_mst.c"
-    "test_error.c"
+    "test_vertexcover.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
