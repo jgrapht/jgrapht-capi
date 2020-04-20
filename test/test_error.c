@@ -5,6 +5,7 @@
 
 #include <jgrapht_capi.h>
 
+#define UNSUPPORTED_OPERATION 2
 
 int main() {
     graal_isolate_t *isolate = NULL;
@@ -29,8 +30,17 @@ int main() {
     jgrapht_capi_graph_add_edge(thread, g, v0, v2);
     assert(jgrapht_capi_get_errno(thread) != 0);
     assert(strcmp("no such vertex in graph: 2", jgrapht_capi_get_errno_msg(thread)) == 0);
-
     jgrapht_capi_clear_errno(thread);
+    assert(jgrapht_capi_get_errno(thread) == 0);    
+
+    long e01 = jgrapht_capi_graph_add_edge(thread, g, v0, v1);
+    assert(jgrapht_capi_get_errno(thread) == 0);
+
+    jgrapht_capi_graph_set_edge_weight(thread, g, e01, 15.0);
+    assert(jgrapht_capi_get_errno(thread) == UNSUPPORTED_OPERATION);
+    assert(jgrapht_capi_get_errno_msg(thread) == NULL);
+    jgrapht_capi_clear_errno(thread);
+
     jgrapht_capi_destroy(thread, g);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
