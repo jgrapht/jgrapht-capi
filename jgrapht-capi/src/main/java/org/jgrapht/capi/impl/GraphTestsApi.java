@@ -66,7 +66,7 @@ public class GraphTestsApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_weekly_connected", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "graph_test_is_weakly_connected", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int isWeaklyConnected(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		if (res.isNonNull()) {
