@@ -48,7 +48,7 @@ int main() {
         assert(jgrapht_capi_get_errno(thread) == 0);
     }
 
-    long v;
+    long long v;
     jgrapht_capi_graph_add_vertex(thread,  g, &v);
     assert(jgrapht_capi_get_errno(thread) == 0);
     assert(v == NUM_VERTICES);
