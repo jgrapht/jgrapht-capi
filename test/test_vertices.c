@@ -20,18 +20,24 @@ int main() {
 
     void *g = jgrapht_capi_graph_create(thread, 1, 1, 1, 1);
     assert(jgrapht_capi_get_errno(thread) == 0);
-    assert(jgrapht_capi_graph_vertices_count(thread,  g) == 0);
+    long long vcount;
+    assert(jgrapht_capi_graph_vertices_count(thread,  g, &vcount) == 0);
     assert(jgrapht_capi_get_errno(thread) == 0);
-    assert(jgrapht_capi_graph_edges_count(thread,  g) == 0);
+    long long ecount;
+    assert(jgrapht_capi_graph_edges_count(thread,  g, &ecount) == 0);
     assert(jgrapht_capi_get_errno(thread) == 0);
     
     for(int i = 0; i < NUM_VERTICES; i++) {
-        assert(jgrapht_capi_graph_add_vertex(thread,  g) == i);
+        long long v;
+        assert(jgrapht_capi_graph_add_vertex(thread,  g, &v) == 0);
+        assert(v == i);
         assert(jgrapht_capi_get_errno(thread) == 0);
     }
-    assert(jgrapht_capi_graph_vertices_count(thread,  g) == NUM_VERTICES);
+    jgrapht_capi_graph_vertices_count(thread,  g, &vcount);
+    assert(vcount == NUM_VERTICES);
     assert(jgrapht_capi_get_errno(thread) == 0);
-    assert(jgrapht_capi_graph_edges_count(thread,  g) == 0);
+    jgrapht_capi_graph_edges_count(thread,  g, &ecount);
+    assert(ecount == 0);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     int flag;
@@ -41,10 +47,12 @@ int main() {
         assert(jgrapht_capi_get_errno(thread) == 0);
     }
 
-    long v = jgrapht_capi_graph_add_vertex(thread,  g);
+    long v;
+    jgrapht_capi_graph_add_vertex(thread,  g, &v);
     assert(jgrapht_capi_get_errno(thread) == 0);
     assert(v == NUM_VERTICES);
-    assert(jgrapht_capi_graph_vertices_count(thread,  g) == NUM_VERTICES+1);
+    jgrapht_capi_graph_vertices_count(thread,  g, &vcount);
+    assert(vcount == NUM_VERTICES+1);
     assert(jgrapht_capi_get_errno(thread) == 0);
     assert(jgrapht_capi_graph_contains_vertex(thread,  g, v, &flag) == 0);
     assert(flag);
@@ -55,7 +63,8 @@ int main() {
     assert(jgrapht_capi_graph_contains_vertex(thread,  g, v, &flag) == 0);
     assert(!flag);
     assert(jgrapht_capi_get_errno(thread) == 0);
-    assert(jgrapht_capi_graph_vertices_count(thread,  g) == NUM_VERTICES);
+    jgrapht_capi_graph_vertices_count(thread,  g, &vcount);
+    assert(vcount == NUM_VERTICES);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     // test vertex iterator

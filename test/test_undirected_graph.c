@@ -20,29 +20,50 @@ int main() {
     void *g = jgrapht_capi_graph_create(thread, 0, 1, 1, 1);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    long v1 = jgrapht_capi_graph_add_vertex(thread, g);
-    long v2 = jgrapht_capi_graph_add_vertex(thread, g);
-    long v3 = jgrapht_capi_graph_add_vertex(thread, g);
-    long v4 = jgrapht_capi_graph_add_vertex(thread, g);
-    long v5 = jgrapht_capi_graph_add_vertex(thread, g);
+    long long v1;
+    jgrapht_capi_graph_add_vertex(thread, g, &v1);
+    long long v2;
+    jgrapht_capi_graph_add_vertex(thread, g, &v2);
+    long long v3;
+    jgrapht_capi_graph_add_vertex(thread, g, &v3);
+    long long v4;
+    jgrapht_capi_graph_add_vertex(thread, g, &v4);
+    long long v5;
+    jgrapht_capi_graph_add_vertex(thread, g, &v5);
 
-    assert(jgrapht_capi_graph_vertices_count(thread, g) == 5);
+    long long vcount;
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 5);
 
-    long e12 = jgrapht_capi_graph_add_edge(thread, g, v1, v2);
-    long e23_1 = jgrapht_capi_graph_add_edge(thread, g, v2, v3);
-    long e23_2 = jgrapht_capi_graph_add_edge(thread, g, v2, v3);
-    long e24 = jgrapht_capi_graph_add_edge(thread, g, v2, v4);
-    long e44 = jgrapht_capi_graph_add_edge(thread, g, v4, v4);
-    long e55_1 = jgrapht_capi_graph_add_edge(thread, g, v5, v5);
-    long e52 = jgrapht_capi_graph_add_edge(thread, g, v5, v2);
-    long e55_2 = jgrapht_capi_graph_add_edge(thread, g, v5, v5);
+    long e12;
+    jgrapht_capi_graph_add_edge(thread, g, v1, v2, &e12);
+    long e23_1;
+    jgrapht_capi_graph_add_edge(thread, g, v2, v3, &e23_1);
+    long e23_2;
+    jgrapht_capi_graph_add_edge(thread, g, v2, v3, &e23_2);
+    long e24;
+    jgrapht_capi_graph_add_edge(thread, g, v2, v4, &e24);
+    long e44;
+    jgrapht_capi_graph_add_edge(thread, g, v4, v4, &e44);
+    long e55_1;
+    jgrapht_capi_graph_add_edge(thread, g, v5, v5, &e55_1);
+    long e52;
+    jgrapht_capi_graph_add_edge(thread, g, v5, v2, &e52);
+    long e55_2;
+    jgrapht_capi_graph_add_edge(thread, g, v5, v5, &e55_2);
 
     // inout
-    assert(jgrapht_capi_graph_degree_of(thread, g, v1) == 1);
-    assert(jgrapht_capi_graph_degree_of(thread, g, v2) == 5);
-    assert(jgrapht_capi_graph_degree_of(thread, g, v3) == 2);
-    assert(jgrapht_capi_graph_degree_of(thread, g, v4) == 3);
-    assert(jgrapht_capi_graph_degree_of(thread, g, v5) == 5);
+    long long d;
+    assert(jgrapht_capi_graph_degree_of(thread, g, v1, &d) == 0);
+    assert(d == 1);
+    assert(jgrapht_capi_graph_degree_of(thread, g, v2, &d) == 0);
+    assert(d == 5);
+    assert(jgrapht_capi_graph_degree_of(thread, g, v3, &d) == 0);
+    assert(d == 2);
+    assert(jgrapht_capi_graph_degree_of(thread, g, v4, &d) == 0);
+    assert(d == 3);
+    assert(jgrapht_capi_graph_degree_of(thread, g, v5, &d) == 0);
+    assert(d == 5);
 
     void *eit = jgrapht_capi_graph_vertex_create_eit(thread, g, v1);
     int hasnext;
@@ -94,11 +115,16 @@ int main() {
     jgrapht_capi_destroy(thread, eit);
 
     // incoming
-    assert(jgrapht_capi_graph_indegree_of(thread, g, v1) == 1);
-    assert(jgrapht_capi_graph_indegree_of(thread, g, v2) == 5);
-    assert(jgrapht_capi_graph_indegree_of(thread, g, v3) == 2);
-    assert(jgrapht_capi_graph_indegree_of(thread, g, v4) == 3);
-    assert(jgrapht_capi_graph_indegree_of(thread, g, v5) == 5);
+    assert(jgrapht_capi_graph_indegree_of(thread, g, v1, &d) == 0);
+    assert(d == 1);
+    assert(jgrapht_capi_graph_indegree_of(thread, g, v2, &d) == 0);
+    assert(d == 5);
+    assert(jgrapht_capi_graph_indegree_of(thread, g, v3, &d) == 0);
+    assert(d == 2);
+    assert(jgrapht_capi_graph_indegree_of(thread, g, v4, &d) == 0);
+    assert(d == 3);
+    assert(jgrapht_capi_graph_indegree_of(thread, g, v5, &d) == 0);
+    assert(d == 5);
 
     eit = jgrapht_capi_graph_vertex_create_in_eit(thread, g, v1);
     assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
@@ -147,11 +173,16 @@ int main() {
     jgrapht_capi_destroy(thread, eit);
 
     // outgoing
-    assert(jgrapht_capi_graph_outdegree_of(thread, g, v1) == 1);
-    assert(jgrapht_capi_graph_outdegree_of(thread, g, v2) == 5);
-    assert(jgrapht_capi_graph_outdegree_of(thread, g, v3) == 2);
-    assert(jgrapht_capi_graph_outdegree_of(thread, g, v4) == 3);
-    assert(jgrapht_capi_graph_outdegree_of(thread, g, v5) == 5);
+    assert(jgrapht_capi_graph_outdegree_of(thread, g, v1, &d) == 0);
+    assert(d == 1);
+    assert(jgrapht_capi_graph_outdegree_of(thread, g, v2, &d) == 0);
+    assert(d == 5);
+    assert(jgrapht_capi_graph_outdegree_of(thread, g, v3, &d) == 0);
+    assert(d == 2);
+    assert(jgrapht_capi_graph_outdegree_of(thread, g, v4, &d) == 0);
+    assert(d == 3);
+    assert(jgrapht_capi_graph_outdegree_of(thread, g, v5, &d) == 0);
+    assert(d == 5);
     
     eit = jgrapht_capi_graph_vertex_create_out_eit(thread, g, v1);
     assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);

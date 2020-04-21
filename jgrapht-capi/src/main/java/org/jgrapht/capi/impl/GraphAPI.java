@@ -7,15 +7,14 @@ import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
+import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
+import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.Status;
-import org.jgrapht.capi.error.DoubleExceptionHandler;
-import org.jgrapht.capi.error.LongExceptionHandler;
 import org.jgrapht.capi.error.ObjectHandleExceptionHandler;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
-import org.jgrapht.capi.error.VoidExceptionHandler;
 import org.jgrapht.graph.AsUndirectedGraph;
 import org.jgrapht.graph.AsUnmodifiableGraph;
 import org.jgrapht.graph.AsUnweightedGraph;
@@ -52,22 +51,37 @@ public class GraphAPI {
 		return globalHandles.create(graph);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_vertices_count", exceptionHandler = LongExceptionHandler.class)
-	public static long verticesCount(IsolateThread thread, ObjectHandle graphHandle) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_vertices_count", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int verticesCount(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.vertexSet().size();
+		long result = g.vertexSet().size();
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_edges_count", exceptionHandler = LongExceptionHandler.class)
-	public static long edgesCount(IsolateThread thread, ObjectHandle graphHandle) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_edges_count", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgesCount(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.edgeSet().size();
+		long result = g.edgeSet().size();
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_add_vertex", exceptionHandler = LongExceptionHandler.class)
-	public static long addVertex(IsolateThread thread, ObjectHandle graphHandle) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_add_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int addVertex(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.addVertex();
+		long result = g.addVertex();
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -92,10 +106,15 @@ public class GraphAPI {
 		return Status.SUCCESS.toCEnum();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_add_edge", exceptionHandler = LongExceptionHandler.class)
-	public static long addEdge(IsolateThread thread, ObjectHandle graphHandle, long source, long target) {
+	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_add_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int addEdge(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
+			CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.addEdge(source, target);
+		long result = g.addEdge(source, target);
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -132,34 +151,58 @@ public class GraphAPI {
 		return Status.SUCCESS.toCEnum();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_degree_of", exceptionHandler = LongExceptionHandler.class)
-	public static long degreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex) {
+	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_degree_of", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int degreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.degreeOf(vertex);
+		long result = g.degreeOf(vertex);
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_indegree_of", exceptionHandler = LongExceptionHandler.class)
-	public static long inDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_indegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int inDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.inDegreeOf(vertex);
+		long result = g.inDegreeOf(vertex);
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_outdegree_of", exceptionHandler = LongExceptionHandler.class)
-	public static long outDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_outdegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int outDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.outDegreeOf(vertex);
+		long result = g.outDegreeOf(vertex);
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_edge_source", exceptionHandler = LongExceptionHandler.class)
-	public static long edgeSource(IsolateThread thread, ObjectHandle graphHandle, long edge) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_edge_source", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgeSource(IsolateThread thread, ObjectHandle graphHandle, long edge, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.getEdgeSource(edge);
+		long result = g.getEdgeSource(edge);
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_edge_target", exceptionHandler = LongExceptionHandler.class)
-	public static long edgeTarget(IsolateThread thread, ObjectHandle graphHandle, long edge) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_edge_target", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgeTarget(IsolateThread thread, ObjectHandle graphHandle, long edge, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.getEdgeTarget(edge);
+		long result = g.getEdgeTarget(edge);
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -217,16 +260,24 @@ public class GraphAPI {
 		return Status.SUCCESS.toCEnum();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_get_edge_weight", exceptionHandler = DoubleExceptionHandler.class)
-	public static double allowMultipleEdges(IsolateThread thread, ObjectHandle graphHandle, long edge) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_get_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int allowMultipleEdges(IsolateThread thread, ObjectHandle graphHandle, long edge,
+			CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.getEdgeWeight(edge);
+		double result = g.getEdgeWeight(edge);
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_set_edge_weight", exceptionHandler = VoidExceptionHandler.class)
-	public static void allowMultipleEdges(IsolateThread thread, ObjectHandle graphHandle, long edge, double weight) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_set_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int allowMultipleEdges(IsolateThread thread, ObjectHandle graphHandle, long edge, double weight) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		g.setEdgeWeight(edge, weight);
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX

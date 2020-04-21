@@ -32,25 +32,22 @@ int main() {
     assert(jgrapht_capi_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
     assert(flag == 0);
 
-    assert(jgrapht_capi_graph_add_vertex(thread, g) == 0);
-    assert(jgrapht_capi_graph_add_vertex(thread, g) == 1);
-    assert(jgrapht_capi_graph_add_vertex(thread, g) == 2);
-    assert(jgrapht_capi_graph_add_vertex(thread, g) == 3);
-    assert(jgrapht_capi_graph_add_vertex(thread, g) == 4);
-    assert(jgrapht_capi_graph_add_vertex(thread, g) == 5);
-    assert(jgrapht_capi_graph_add_vertex(thread, g) == 6);
+    for(int i = 0; i < 7; i++) { 
+        jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    }
 
-    assert(jgrapht_capi_graph_add_edge(thread, g, 0, 1) == 0);
-    assert(jgrapht_capi_graph_add_edge(thread, g, 0, 2) == 1);
-    assert(jgrapht_capi_graph_add_edge(thread, g, 0, 3) == 2);
-    assert(jgrapht_capi_graph_add_edge(thread, g, 0, 4) == 3);
-    assert(jgrapht_capi_graph_add_edge(thread, g, 0, 5) == 4);
-    assert(jgrapht_capi_graph_add_edge(thread, g, 0, 6) == 5);
+    jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
+    jgrapht_capi_graph_add_edge(thread, g, 0, 2, NULL);
+    jgrapht_capi_graph_add_edge(thread, g, 0, 3, NULL);
+    jgrapht_capi_graph_add_edge(thread, g, 0, 4, NULL);
+    jgrapht_capi_graph_add_edge(thread, g, 0, 5, NULL);
+    jgrapht_capi_graph_add_edge(thread, g, 0, 6, NULL);
 
     // test the greedy for the API and the results
 
     void *vc = jgrapht_capi_vertexcover_exec_greedy(thread, g);
-    double vc_w = jgrapht_capi_vertexcover_get_weight(thread, vc);
+    double vc_w;
+    jgrapht_capi_vertexcover_get_weight(thread, vc, &vc_w);
     assert(vc_w == 1.0);
     void *vit = jgrapht_capi_vertexcover_create_vit(thread, vc);
 
@@ -75,7 +72,7 @@ int main() {
     jgrapht_capi_map_long_double_put(thread, map, 6, 2.0);
 
     vc = jgrapht_capi_vertexcover_exec_greedy_weighted(thread, g, map);
-    vc_w = jgrapht_capi_vertexcover_get_weight(thread, vc);
+    jgrapht_capi_vertexcover_get_weight(thread, vc, &vc_w);
     assert(vc_w == 12.0);
     vit = jgrapht_capi_vertexcover_create_vit(thread, vc);
 

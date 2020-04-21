@@ -9,6 +9,7 @@ import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
+import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.VertexCoverAlgorithm;
 import org.jgrapht.alg.interfaces.VertexCoverAlgorithm.VertexCover;
@@ -18,8 +19,9 @@ import org.jgrapht.alg.vertexcover.EdgeBasedTwoApproxVCImpl;
 import org.jgrapht.alg.vertexcover.GreedyVCImpl;
 import org.jgrapht.alg.vertexcover.RecursiveExactVCImpl;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.error.DoubleExceptionHandler;
+import org.jgrapht.capi.Status;
 import org.jgrapht.capi.error.ObjectHandleExceptionHandler;
+import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class VertexCoverAPI {
 
@@ -95,10 +97,14 @@ public class VertexCoverAPI {
 	 * @return the weight
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "vertexcover_get_weight", exceptionHandler = DoubleExceptionHandler.class)
-	public static double getVertexCoverWeight(IsolateThread thread, ObjectHandle vcHandle) {
+			+ "vertexcover_get_weight", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getVertexCoverWeight(IsolateThread thread, ObjectHandle vcHandle, CDoublePointer res) {
 		VertexCover<Long> vc = globalHandles.get(vcHandle);
-		return vc.getWeight();
+		double result = vc.getWeight();
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	/**

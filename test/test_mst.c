@@ -32,17 +32,19 @@ int main() {
     assert(jgrapht_capi_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
     assert(flag == 0);
 
-    assert(jgrapht_capi_graph_add_vertex(thread, g) == 0);
-    assert(jgrapht_capi_graph_add_vertex(thread, g) == 1);
-    assert(jgrapht_capi_graph_add_vertex(thread, g) == 2);
-    assert(jgrapht_capi_graph_add_vertex(thread, g) == 3);
-    assert(jgrapht_capi_graph_add_vertex(thread, g) == 4);
+    long long v;
+    long long e;
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
 
-    assert(jgrapht_capi_graph_add_edge(thread, g, 0, 1) == 0);
-    assert(jgrapht_capi_graph_add_edge(thread, g, 1, 2) == 1);
-    assert(jgrapht_capi_graph_add_edge(thread, g, 2, 3) == 2);
-    assert(jgrapht_capi_graph_add_edge(thread, g, 3, 4) == 3);
-    assert(jgrapht_capi_graph_add_edge(thread, g, 4, 0) == 4);
+    jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
+    jgrapht_capi_graph_add_edge(thread, g, 1, 2, NULL);
+    jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
+    jgrapht_capi_graph_add_edge(thread, g, 3, 4, NULL);
+    jgrapht_capi_graph_add_edge(thread, g, 4, 0, NULL);
 
     jgrapht_capi_graph_set_edge_weight(thread, g, 0, 5.0);
     jgrapht_capi_graph_set_edge_weight(thread, g, 1, 4.0);
@@ -59,7 +61,6 @@ int main() {
     void *eit;
     assert(jgrapht_capi_mst_create_eit(thread, mst, &eit) == 0);
 
-    long long v;
     assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
     assert(v == 1);
     assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
