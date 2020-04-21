@@ -12,7 +12,10 @@ void assert_coloring(graal_isolatethread_t *thread, void *g, void *c) {
         long e = jgrapht_capi_it_next_long(thread, eit);
         long s = jgrapht_capi_graph_edge_source(thread, g, e);
         long t = jgrapht_capi_graph_edge_target(thread, g, e);
-        assert(jgrapht_capi_map_long_long_get(thread, map, s) != jgrapht_capi_map_long_long_get(thread, map, t));
+        long source_color, target_color;
+        jgrapht_capi_map_long_long_get(thread, map, s, &source_color);
+        jgrapht_capi_map_long_long_get(thread, map, t, &target_color);
+        assert(source_color != target_color);
     }
     jgrapht_capi_destroy(thread, eit);
     jgrapht_capi_destroy(thread, map);

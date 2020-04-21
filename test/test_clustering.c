@@ -52,7 +52,7 @@ int main() {
     assert(jgrapht_capi_clustering_exec_k_spanning_tree(thread, g, k, &c) == 0);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    long num_clusters;
+    long long num_clusters;
     jgrapht_capi_clustering_get_number_clusters(thread, c, &num_clusters);
     assert(num_clusters == 2);
 

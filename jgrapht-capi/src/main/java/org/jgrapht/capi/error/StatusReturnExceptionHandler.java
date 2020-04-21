@@ -6,6 +6,7 @@ package org.jgrapht.capi.error;
 public class StatusReturnExceptionHandler {
 
 	public static int handle(Throwable e) {
+		Errors.setError(e);
 		return Errors.throwableToStatus(e).toCEnum();
 	}
 

@@ -17,16 +17,24 @@ int main() {
 
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    void * map = jgrapht_capi_map_linked_create(thread);
+    void * map;
+    jgrapht_capi_map_linked_create(thread, &map);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    assert(jgrapht_capi_map_long_contains_key(thread, map, 4) == 0);
-    assert(jgrapht_capi_map_long_contains_key(thread, map, 5) == 0);
-    assert(jgrapht_capi_map_size(thread, map) == 0);
+    int exists;
+    assert(jgrapht_capi_map_long_contains_key(thread, map, 4, &exists) == 0);
+    assert(exists == 0);
+    assert(jgrapht_capi_map_long_contains_key(thread, map, 5, &exists) == 0);
+    assert(exists == 0);
+    long long size;
+    assert(jgrapht_capi_map_size(thread, map, &size) == 0);
+    assert(size == 0);
 
-    jgrapht_capi_map_long_double_get(thread, map, 5);
+    double dvalue;
+    assert(jgrapht_capi_map_long_double_get(thread, map, 5, &dvalue) == ILLEGAL_ARGUMENT);
     assert(jgrapht_capi_get_errno(thread) == ILLEGAL_ARGUMENT);
     jgrapht_capi_clear_errno(thread);
+    assert(jgrapht_capi_get_errno(thread) == 0);
 
     for(int i = 0; i < 1000; i++) { 
         jgrapht_capi_map_long_double_put(thread, map, i, 1000+i);
@@ -34,14 +42,18 @@ int main() {
     }
 
     for(int i = 0; i < 1000; i++) { 
-        assert(jgrapht_capi_map_long_double_get(thread, map, i) == 1000+i);
+        assert(jgrapht_capi_map_long_double_get(thread, map, i, &dvalue) == 0);
+        assert(dvalue == 1000+i);
         assert(jgrapht_capi_get_errno(thread) == 0);
-        assert(jgrapht_capi_map_long_contains_key(thread, map, i) == 1);
+        int exists;
+        assert(jgrapht_capi_map_long_contains_key(thread, map, i, &exists) == 0);
+        assert(exists == 1);
         assert(jgrapht_capi_get_errno(thread) == 0);
     }
 
     long n = 0;
-    void * kit = jgrapht_capi_map_keys_it_create(thread, map);
+    void * kit;
+    jgrapht_capi_map_keys_it_create(thread, map, &kit);
     while(jgrapht_capi_it_hasnext(thread, kit)) { 
         long k = jgrapht_capi_it_next_long(thread, kit);
         assert(k == n);
@@ -50,7 +62,7 @@ int main() {
     jgrapht_capi_destroy(thread, kit);
 
     n = 0;
-    kit = jgrapht_capi_map_values_it_create(thread, map);
+    jgrapht_capi_map_values_it_create(thread, map, &kit);
     while(jgrapht_capi_it_hasnext(thread, kit)) { 
         double v = jgrapht_capi_it_next_double(thread, kit);
         assert(v == 1000+n);
@@ -58,11 +70,14 @@ int main() {
     }
     jgrapht_capi_destroy(thread, kit);
 
-    assert(jgrapht_capi_map_size(thread, map) == 1000);
+    long long map_size;
+    assert(jgrapht_capi_map_size(thread, map, &map_size) == 0);
+    assert(map_size == 1000);
 
     jgrapht_capi_map_clear(thread, map);
     assert(jgrapht_capi_get_errno(thread) == 0);
-    assert(jgrapht_capi_map_size(thread, map) == 0);
+    assert(jgrapht_capi_map_size(thread, map, &map_size) == 0);
+    assert(map_size == 0);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     jgrapht_capi_destroy(thread, map);

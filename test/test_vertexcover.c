@@ -52,7 +52,8 @@ int main() {
     jgrapht_capi_destroy(thread, vit);
     jgrapht_capi_destroy(thread, vc);
 
-    void * map = jgrapht_capi_map_linked_create(thread);
+    void * map;
+    jgrapht_capi_map_linked_create(thread, &map);
     jgrapht_capi_map_long_double_put(thread, map, 0, 1000.0);
     jgrapht_capi_map_long_double_put(thread, map, 1, 2.0);
     jgrapht_capi_map_long_double_put(thread, map, 2, 2.0);
