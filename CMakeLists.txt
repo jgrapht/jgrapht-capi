@@ -79,6 +79,7 @@ set(
     "test_undirected_graph.c"
     "test_error.c"
     "test_map.c"
+    "test_set.c"
     "test_mst.c"
     "test_vertexcover.c"
     "test_clustering.c"

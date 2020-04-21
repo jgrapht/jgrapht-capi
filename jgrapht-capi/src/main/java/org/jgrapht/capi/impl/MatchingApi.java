@@ -23,6 +23,9 @@ import org.jgrapht.alg.matching.KuhnMunkresMinimalWeightBipartitePerfectMatching
 import org.jgrapht.alg.matching.MaximumWeightBipartiteMatching;
 import org.jgrapht.alg.matching.PathGrowingWeightedMatching;
 import org.jgrapht.alg.matching.SparseEdmondsMaximumCardinalityMatching;
+import org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedMatching;
+import org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching;
+import org.jgrapht.alg.matching.blossom.v5.ObjectiveSense;
 import org.jgrapht.alg.partition.BipartitePartitioning;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.Status;
@@ -76,6 +79,32 @@ public class MatchingApi {
 	public static int executePathGrowingMaximumWeightedMatching(IsolateThread thread, ObjectHandle graphHandle,
 			WordPointer res) {
 		return exec(thread, graphHandle, res, (g) -> new PathGrowingWeightedMatching<>(g, true));
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "matching_exec_blossom5_general_max_weight", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBlossom5MaxWeight(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		return exec(thread, graphHandle, res, (g) -> new KolmogorovWeightedMatching<>(g, ObjectiveSense.MAXIMIZE));
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "matching_exec_blossom5_general_min_weight", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBlossom5MinWeight(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		return exec(thread, graphHandle, res, (g) -> new KolmogorovWeightedMatching<>(g, ObjectiveSense.MINIMIZE));
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "matching_exec_blossom5_general_perfect_max_weight", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBlossom5PerfectMaxWeight(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		return exec(thread, graphHandle, res,
+				(g) -> new KolmogorovWeightedPerfectMatching<>(g, ObjectiveSense.MAXIMIZE));
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "matching_exec_blossom5_general_perfect_min_weight", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBlossom5PerfectMinWeight(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		return exec(thread, graphHandle, res,
+				(g) -> new KolmogorovWeightedPerfectMatching<>(g, ObjectiveSense.MINIMIZE));
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
