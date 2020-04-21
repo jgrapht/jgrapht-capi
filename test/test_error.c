@@ -40,7 +40,7 @@ int main() {
 
     jgrapht_capi_graph_set_edge_weight(thread, g, e01, 15.0);
     assert(jgrapht_capi_get_errno(thread) == UNSUPPORTED_OPERATION);
-    assert(jgrapht_capi_get_errno_msg(thread) == NULL);
+    assert(strcmp("Error (UnsupportedOperationException)", jgrapht_capi_get_errno_msg(thread)) == 0);    
     jgrapht_capi_clear_errno(thread);
 
     jgrapht_capi_destroy(thread, g);
