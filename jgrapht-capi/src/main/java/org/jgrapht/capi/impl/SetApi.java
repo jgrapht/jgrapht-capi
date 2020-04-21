@@ -2,7 +2,6 @@ package org.jgrapht.capi.impl;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.graalvm.nativeimage.IsolateThread;
@@ -103,14 +102,6 @@ public class SetApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS.toCEnum();
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "map_long_double_put", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int mapLongDoublePut(IsolateThread thread, ObjectHandle handle, long key, double value) {
-		Map<Long, Double> map = globalHandles.get(handle);
-		map.put(key, value);
 		return Status.SUCCESS.toCEnum();
 	}
 
