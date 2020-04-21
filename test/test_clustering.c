@@ -48,13 +48,16 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     int k = 2;
-    void *c = jgrapht_capi_clustering_exec_k_spanning_tree(thread, g, k);
+    void *c;
+    assert(jgrapht_capi_clustering_exec_k_spanning_tree(thread, g, k, &c) == 0);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    int num_clusters = jgrapht_capi_clustering_get_number_clusters(thread, c);
+    long num_clusters;
+    jgrapht_capi_clustering_get_number_clusters(thread, c, &num_clusters);
     assert(num_clusters == 2);
 
-    void *vit = jgrapht_capi_clustering_ith_cluster_vit(thread, c, 0);
+    void *vit;
+    jgrapht_capi_clustering_ith_cluster_vit(thread, c, 0, &vit);
     assert(jgrapht_capi_it_next_long(thread, vit) == 0);
     assert(jgrapht_capi_it_next_long(thread, vit) == 1);
     assert(jgrapht_capi_it_next_long(thread, vit) == 2);
@@ -62,7 +65,7 @@ int main() {
     assert(!jgrapht_capi_it_hasnext(thread, vit));
     jgrapht_capi_destroy(thread, vit);
 
-    vit = jgrapht_capi_clustering_ith_cluster_vit(thread, c, 1);
+    jgrapht_capi_clustering_ith_cluster_vit(thread, c, 1, &vit);
     assert(jgrapht_capi_it_next_long(thread, vit) == 4);
     assert(jgrapht_capi_it_next_long(thread, vit) == 5);
     assert(jgrapht_capi_it_next_long(thread, vit) == 6);
