@@ -17,25 +17,15 @@ public enum Status {
 	@CEnumConstant(value = "1")
 	ERROR,
 	@CEnumConstant(value = "2")
-	UNSUPPORTED_OPERATION,
-	@CEnumConstant(value = "3")
 	ILLEGAL_ARGUMENT,
+	@CEnumConstant(value = "3")
+	UNSUPPORTED_OPERATION,
 	@CEnumConstant(value = "4")
 	INDEX_OUT_OF_BOUNDS,
-	@CEnumConstant(value = "20")
-	INVALID_HANDLE,
-	@CEnumConstant(value = "22")
-	INVALID_VERTEX,
-	@CEnumConstant(value = "23")
-	INVALID_EDGE,
-	@CEnumConstant(value = "51")
-	GRAPH_IS_UNWEIGHTED,
-	@CEnumConstant(value = "52")
-	GRAPH_NOT_UNDIRECTED,
-	@CEnumConstant(value = "100")
+	@CEnumConstant(value = "5")
 	NO_SUCH_ELEMENT,
-	@CEnumConstant(value = "200")
-	MAP_NO_SUCH_KEY
+	@CEnumConstant(value = "6")
+	NULL_POINTER,
 	;
 	// @formatter:on
 

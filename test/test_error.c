@@ -5,7 +5,9 @@
 
 #include <jgrapht_capi.h>
 
-#define UNSUPPORTED_OPERATION 2
+#define ILLEGAL_ARGUMENT 2
+#define UNSUPPORTED_OPERATION 3
+#define NULL_POINTER 6
 
 int main() {
     graal_isolate_t *isolate = NULL;
@@ -43,6 +45,12 @@ int main() {
 
     jgrapht_capi_destroy(thread, g);
     assert(jgrapht_capi_get_errno(thread) == 0);
+
+    // test error invalid handle
+    int has_next = jgrapht_capi_it_hasnext(thread, g);
+    assert(jgrapht_capi_get_errno(thread) == NULL_POINTER);
+    assert(!has_next);
+    assert(strcmp("Error (NullPointerException)", jgrapht_capi_get_errno_msg(thread)) == 0);    
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

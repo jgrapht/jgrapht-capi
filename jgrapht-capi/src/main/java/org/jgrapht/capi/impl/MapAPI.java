@@ -8,149 +8,91 @@ import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
-import org.graalvm.word.WordFactory;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.Errors;
-import org.jgrapht.capi.Status;
+import org.jgrapht.capi.error.BooleanExceptionHandler;
+import org.jgrapht.capi.error.DoubleExceptionHandler;
+import org.jgrapht.capi.error.LongExceptionHandler;
+import org.jgrapht.capi.error.ObjectHandleExceptionHandler;
+import org.jgrapht.capi.error.VoidExceptionHandler;
 
 public class MapAPI {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "map_create")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_create", exceptionHandler = ObjectHandleExceptionHandler.class)
 	public static ObjectHandle createMap(IsolateThread thread) {
-		try {
-			return globalHandles.create(new HashMap<>());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
-		return WordFactory.nullPointer();
+		return globalHandles.create(new HashMap<>());
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "map_linked_create")
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "map_linked_create", exceptionHandler = ObjectHandleExceptionHandler.class)
 	public static ObjectHandle createLinkedMap(IsolateThread thread) {
-		try {
-			return globalHandles.create(new LinkedHashMap<>());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
-		return WordFactory.nullPointer();
+		return globalHandles.create(new LinkedHashMap<>());
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "map_keys_it_create")
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "map_keys_it_create", exceptionHandler = ObjectHandleExceptionHandler.class)
 	public static ObjectHandle createMapKeysIterator(IsolateThread thread, ObjectHandle mapHandle) {
-		try {
-			Map<?, ?> map = globalHandles.get(mapHandle);
-			return globalHandles.create(map.keySet().iterator());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
-		return WordFactory.nullPointer();
+		Map<?, ?> map = globalHandles.get(mapHandle);
+		return globalHandles.create(map.keySet().iterator());
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "map_size")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_size", exceptionHandler = LongExceptionHandler.class)
 	public static long mapSize(IsolateThread thread, ObjectHandle mapHandle) {
-		try {
-			Map<?, ?> map = globalHandles.get(mapHandle);
-			return map.size();
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
-		return 0L;
+		Map<?, ?> map = globalHandles.get(mapHandle);
+		return map.size();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "map_values_it_create")
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "map_values_it_create", exceptionHandler = ObjectHandleExceptionHandler.class)
 	public static ObjectHandle createMapValuesIterator(IsolateThread thread, ObjectHandle mapHandle) {
-		try {
-			Map<?, ?> map = globalHandles.get(mapHandle);
-			return globalHandles.create(map.values().iterator());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
-		return WordFactory.nullPointer();
+		Map<?, ?> map = globalHandles.get(mapHandle);
+		return globalHandles.create(map.values().iterator());
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_double_put")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_double_put", exceptionHandler = VoidExceptionHandler.class)
 	public static void mapLongDoublePut(IsolateThread thread, ObjectHandle mapHandle, long key, double value) {
-		try {
-			Map<Long, Double> map = globalHandles.get(mapHandle);
-			map.put(key, value);
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
+		Map<Long, Double> map = globalHandles.get(mapHandle);
+		map.put(key, value);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_long_put")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_long_put", exceptionHandler = VoidExceptionHandler.class)
 	public static void mapLongLongPut(IsolateThread thread, ObjectHandle mapHandle, long key, long value) {
-		try {
-			Map<Long, Long> map = globalHandles.get(mapHandle);
-			map.put(key, value);
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
+		Map<Long, Long> map = globalHandles.get(mapHandle);
+		map.put(key, value);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_double_get")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_double_get", exceptionHandler = DoubleExceptionHandler.class)
 	public static double mapLongDoubleGet(IsolateThread thread, ObjectHandle mapHandle, long key) {
-		try {
-			Map<Long, Double> map = globalHandles.get(mapHandle);
-			Double value = map.get(key);
-			if (value == null) {
-				Errors.setError(Status.MAP_NO_SUCH_KEY, "Key " + key + " not found in map");
-				return 0d;
-			}
-			return value;
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
+		Map<Long, Double> map = globalHandles.get(mapHandle);
+		Double value = map.get(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
 		}
-		return 0d;
+		return value;
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_long_get")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_long_get", exceptionHandler = LongExceptionHandler.class)
 	public static long mapLongLongGet(IsolateThread thread, ObjectHandle mapHandle, long key) {
-		try {
-			Map<Long, Long> map = globalHandles.get(mapHandle);
-			Long value = map.get(key);
-			if (value == null) {
-				Errors.setError(Status.MAP_NO_SUCH_KEY, "Key " + key + " not found in map");
-				return 0L;
-			}
-			return value;
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
+		Map<Long, Long> map = globalHandles.get(mapHandle);
+		Long value = map.get(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
 		}
-		return 0L;
+		return value;
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_contains_key")
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "map_long_contains_key", exceptionHandler = BooleanExceptionHandler.class)
 	public static boolean mapLongContains(IsolateThread thread, ObjectHandle mapHandle, long key) {
-		try {
-			Map<Long, ?> map = globalHandles.get(mapHandle);
-			return map.containsKey(key);
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
-		return false;
+		Map<Long, ?> map = globalHandles.get(mapHandle);
+		return map.containsKey(key);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "map_clear")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_clear", exceptionHandler = VoidExceptionHandler.class)
 	public static void clearMap(IsolateThread thread, ObjectHandle mapHandle) {
-		try {
-			Map<?, ?> map = globalHandles.get(mapHandle);
-			map.clear();
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
+		Map<?, ?> map = globalHandles.get(mapHandle);
+		map.clear();
 	}
 
 }

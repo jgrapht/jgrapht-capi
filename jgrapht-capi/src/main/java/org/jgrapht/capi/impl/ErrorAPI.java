@@ -4,8 +4,8 @@ import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.Errors;
 import org.jgrapht.capi.Status;
+import org.jgrapht.capi.error.Errors;
 
 /**
  * Error handling

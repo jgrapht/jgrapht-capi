@@ -1,61 +1,36 @@
 package org.jgrapht.capi.impl;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.Errors;
-import org.jgrapht.capi.Status;
+import org.jgrapht.capi.error.BooleanExceptionHandler;
+import org.jgrapht.capi.error.DoubleExceptionHandler;
+import org.jgrapht.capi.error.LongExceptionHandler;
 
 public class IteratorAPI {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_long")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_long", exceptionHandler = LongExceptionHandler.class)
 	public static long iteratorNextLong(IsolateThread thread, ObjectHandle itHandle) {
-		try {
-			Iterator<Long> it = globalHandles.get(itHandle);
-			return it.next();
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
-		} catch (NoSuchElementException e) {
-			Errors.setError(Status.NO_SUCH_ELEMENT, e.getMessage());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
-		return 0L;
-	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_double")
-	public static double iteratorNextDouble(IsolateThread thread, ObjectHandle itHandle) {
-		try {
-			Iterator<Double> it = globalHandles.get(itHandle);
-			return it.next();
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
-		} catch (NoSuchElementException e) {
-			Errors.setError(Status.NO_SUCH_ELEMENT, e.getMessage());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
-		return 0d;
+		Iterator<Long> it = globalHandles.get(itHandle);
+		return it.next();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "it_hasnext")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_double", exceptionHandler = DoubleExceptionHandler.class)
+	public static double iteratorNextDouble(IsolateThread thread, ObjectHandle itHandle) {
+		Iterator<Double> it = globalHandles.get(itHandle);
+		return it.next();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "it_hasnext", exceptionHandler = BooleanExceptionHandler.class)
 	public static boolean iteratorHasNext(IsolateThread thread, ObjectHandle itHandle) {
-		try {
-			Iterator<Long> it = globalHandles.get(itHandle);
-			return it.hasNext();
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
-		return false;
+		Iterator<Long> it = globalHandles.get(itHandle);
+		return it.hasNext();
 	}
 
 }

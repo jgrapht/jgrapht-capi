@@ -4,7 +4,7 @@
 
 #include <jgrapht_capi.h>
 
-#define MAP_NO_SUCH_KEY 200
+#define ILLEGAL_ARGUMENT 2
 
 int main() {
     graal_isolate_t *isolate = NULL;
@@ -25,7 +25,7 @@ int main() {
     assert(jgrapht_capi_map_size(thread, map) == 0);
 
     jgrapht_capi_map_long_double_get(thread, map, 5);
-    assert(jgrapht_capi_get_errno(thread) == MAP_NO_SUCH_KEY);
+    assert(jgrapht_capi_get_errno(thread) == ILLEGAL_ARGUMENT);
     jgrapht_capi_clear_errno(thread);
 
     for(int i = 0; i < 1000; i++) { 

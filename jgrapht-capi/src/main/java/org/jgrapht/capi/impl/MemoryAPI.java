@@ -5,8 +5,8 @@ import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.Errors;
 import org.jgrapht.capi.Status;
+import org.jgrapht.capi.error.Errors;
 
 public class MemoryAPI {
 
