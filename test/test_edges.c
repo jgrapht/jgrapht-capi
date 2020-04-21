@@ -93,17 +93,17 @@ int main() {
     assert(flag);
     assert(jgrapht_capi_graph_contains_edge_between(thread, g, 0, 2, &flag) == 0);
     assert(flag);
-    assert(!jgrapht_capi_graph_contains_edge_between(thread, g, 1, 0, &flag) == 0);
+    assert(jgrapht_capi_graph_contains_edge_between(thread, g, 1, 0, &flag) == 0);
     assert(!flag);
-    assert(!jgrapht_capi_graph_contains_edge_between(thread, g, 1, 1, &flag) == 0);
+    assert(jgrapht_capi_graph_contains_edge_between(thread, g, 1, 1, &flag) == 0);
     assert(!flag);
     assert(jgrapht_capi_graph_contains_edge_between(thread, g, 1, 2, &flag) == 0);
     assert(flag);
-    assert(!jgrapht_capi_graph_contains_edge_between(thread, g, 2, 0, &flag) == 0);
+    assert(jgrapht_capi_graph_contains_edge_between(thread, g, 2, 0, &flag) == 0);
     assert(!flag);
-    assert(!jgrapht_capi_graph_contains_edge_between(thread, g, 2, 1, &flag) == 0);
+    assert(jgrapht_capi_graph_contains_edge_between(thread, g, 2, 1, &flag) == 0);
     assert(!flag);
-    assert(!jgrapht_capi_graph_contains_edge_between(thread, g, 2, 2, &flag) == 0);
+    assert(jgrapht_capi_graph_contains_edge_between(thread, g, 2, 2, &flag) == 0);
     assert(!flag);
 
     eit = jgrapht_capi_graph_create_between_eit(thread, g, 1 , 2);

@@ -47,9 +47,10 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     // test error invalid handle
-    int has_next = jgrapht_capi_it_hasnext(thread, g);
-    assert(jgrapht_capi_get_errno(thread) == NULL_POINTER);
+    int has_next; 
+    jgrapht_capi_it_hasnext(thread, g, &has_next);
     assert(!has_next);
+    assert(jgrapht_capi_get_errno(thread) == NULL_POINTER);
     assert(strcmp("Error (NullPointerException)", jgrapht_capi_get_errno_msg(thread)) == 0);    
 
     if (thread, graal_detach_thread(thread) != 0) {

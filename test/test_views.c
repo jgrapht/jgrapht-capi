@@ -38,17 +38,16 @@ int main() {
 
     int flag;
     assert(jgrapht_capi_graph_is_directed(thread, g, &flag) == 0);
-    assert(flag == 0);
-    assert(jgrapht_capi_graph_is_undirected(thread, g, &flag) == 0);
     assert(flag == 1);
-
+    assert(jgrapht_capi_graph_is_undirected(thread, g, &flag) == 0);
+    assert(flag == 0);
 
     void *g1 = jgrapht_capi_graph_as_undirected(thread, g);
 
     assert(jgrapht_capi_graph_is_directed(thread, g1, &flag) == 0);
-    assert(flag == 1);
-    assert(jgrapht_capi_graph_is_undirected(thread, g1, &flag) == 0);
     assert(flag == 0);
+    assert(jgrapht_capi_graph_is_undirected(thread, g1, &flag) == 0);
+    assert(flag == 1);
 
     jgrapht_capi_destroy(thread, g1);
 
