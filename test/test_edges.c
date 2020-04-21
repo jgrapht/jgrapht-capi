@@ -18,7 +18,8 @@ int main() {
 
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    void *g = jgrapht_capi_graph_create(thread, 1, 1, 1, 1);
+    void *g;
+    jgrapht_capi_graph_create(thread, 1, 1, 1, 1, &g);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     int flag;
@@ -94,7 +95,8 @@ int main() {
     jgrapht_capi_graph_get_edge_weight(thread, g, 0, &w);
     assert(w == 5.0);
 
-    void *eit = jgrapht_capi_graph_create_all_eit(thread, g);
+    void *eit;
+    jgrapht_capi_graph_create_all_eit(thread, g, &eit);
     assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
     assert(v == 0);
     assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
@@ -132,7 +134,7 @@ int main() {
     assert(jgrapht_capi_graph_contains_edge_between(thread, g, 2, 2, &flag) == 0);
     assert(!flag);
 
-    eit = jgrapht_capi_graph_create_between_eit(thread, g, 1 , 2);
+    jgrapht_capi_graph_create_between_eit(thread, g, 1 , 2, &eit);
     assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
     assert(v == 3);
     assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);

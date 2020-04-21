@@ -15,7 +15,8 @@ int main() {
 
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    void *g = jgrapht_capi_graph_create(thread, 0, 0, 0, 1);
+    void *g;
+    jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     int flag;

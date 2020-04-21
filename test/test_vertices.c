@@ -18,7 +18,8 @@ int main() {
 
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    void *g = jgrapht_capi_graph_create(thread, 1, 1, 1, 1);
+    void *g;
+    jgrapht_capi_graph_create(thread, 1, 1, 1, 1, &g);
     assert(jgrapht_capi_get_errno(thread) == 0);
     long long vcount;
     assert(jgrapht_capi_graph_vertices_count(thread,  g, &vcount) == 0);
@@ -68,7 +69,8 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     // test vertex iterator
-    void *vit = jgrapht_capi_graph_create_all_vit(thread,  g);
+    void *vit;
+    jgrapht_capi_graph_create_all_vit(thread,  g, &vit);
     assert(jgrapht_capi_get_errno(thread) == 0);
     long x = 0;
     long long value;
@@ -85,7 +87,7 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     // test vertex iterator (second use case)
-    vit = jgrapht_capi_graph_create_all_vit(thread,  g);
+    jgrapht_capi_graph_create_all_vit(thread,  g, &vit);
     assert(jgrapht_capi_get_errno(thread) == 0);
     x = 0;
     while(1) { 

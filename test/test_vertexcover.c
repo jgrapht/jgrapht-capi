@@ -17,7 +17,8 @@ int main() {
 
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    void *g = jgrapht_capi_graph_create(thread, 0, 0, 0, 1);
+    void *g;
+    jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     int flag;
@@ -45,11 +46,13 @@ int main() {
 
     // test the greedy for the API and the results
 
-    void *vc = jgrapht_capi_vertexcover_exec_greedy(thread, g);
+    void *vc;
+    jgrapht_capi_vertexcover_exec_greedy(thread, g, &vc);
     double vc_w;
     jgrapht_capi_vertexcover_get_weight(thread, vc, &vc_w);
     assert(vc_w == 1.0);
-    void *vit = jgrapht_capi_vertexcover_create_vit(thread, vc);
+    void *vit;
+    jgrapht_capi_vertexcover_create_vit(thread, vc, &vit);
 
     long long v;
     assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
@@ -71,10 +74,10 @@ int main() {
     jgrapht_capi_map_long_double_put(thread, map, 5, 2.0);
     jgrapht_capi_map_long_double_put(thread, map, 6, 2.0);
 
-    vc = jgrapht_capi_vertexcover_exec_greedy_weighted(thread, g, map);
+    jgrapht_capi_vertexcover_exec_greedy_weighted(thread, g, map, &vc);
     jgrapht_capi_vertexcover_get_weight(thread, vc, &vc_w);
     assert(vc_w == 12.0);
-    vit = jgrapht_capi_vertexcover_create_vit(thread, vc);
+    jgrapht_capi_vertexcover_create_vit(thread, vc, &vit);
 
     assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
     assert(v == 1);
@@ -96,31 +99,31 @@ int main() {
 
     // test the remaining algs only for the API
 
-    vc = jgrapht_capi_vertexcover_exec_clarkson(thread, g);
+    jgrapht_capi_vertexcover_exec_clarkson(thread, g, &vc);
     assert(jgrapht_capi_get_errno(thread) == 0);
     jgrapht_capi_destroy(thread, vc);
 
-    vc = jgrapht_capi_vertexcover_exec_clarkson_weighted(thread, g, map);
+    jgrapht_capi_vertexcover_exec_clarkson_weighted(thread, g, map, &vc);
     assert(jgrapht_capi_get_errno(thread) == 0);
     jgrapht_capi_destroy(thread, vc);
 
-    vc = jgrapht_capi_vertexcover_exec_edgebased(thread, g);
+    jgrapht_capi_vertexcover_exec_edgebased(thread, g, &vc);
     assert(jgrapht_capi_get_errno(thread) == 0);
     jgrapht_capi_destroy(thread, vc);
 
-    vc = jgrapht_capi_vertexcover_exec_baryehudaeven(thread, g);
+    jgrapht_capi_vertexcover_exec_baryehudaeven(thread, g, &vc);
     assert(jgrapht_capi_get_errno(thread) == 0);
     jgrapht_capi_destroy(thread, vc);
 
-    vc = jgrapht_capi_vertexcover_exec_baryehudaeven_weighted(thread, g, map);
+    jgrapht_capi_vertexcover_exec_baryehudaeven_weighted(thread, g, map, &vc);
     assert(jgrapht_capi_get_errno(thread) == 0);
     jgrapht_capi_destroy(thread, vc);
 
-    vc = jgrapht_capi_vertexcover_exec_exact(thread, g);
+    jgrapht_capi_vertexcover_exec_exact(thread, g, &vc);
     assert(jgrapht_capi_get_errno(thread) == 0);
     jgrapht_capi_destroy(thread, vc);
 
-    vc = jgrapht_capi_vertexcover_exec_exact_weighted(thread, g, map);
+    jgrapht_capi_vertexcover_exec_exact_weighted(thread, g, map, &vc);
     assert(jgrapht_capi_get_errno(thread) == 0);
     jgrapht_capi_destroy(thread, vc);
 

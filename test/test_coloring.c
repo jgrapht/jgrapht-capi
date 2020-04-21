@@ -7,7 +7,8 @@
 void assert_coloring(graal_isolatethread_t *thread, void *g, void *c) { 
     void *map; 
     jgrapht_capi_coloring_get_vertex_color_map(thread, c, &map);
-    void *eit = jgrapht_capi_graph_create_all_eit(thread, g);
+    void *eit;
+    jgrapht_capi_graph_create_all_eit(thread, g, &eit);
     int has_next;
     while(1) { 
         jgrapht_capi_it_hasnext(thread, eit, &has_next);
@@ -40,7 +41,8 @@ int main() {
 
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    void *g = jgrapht_capi_graph_create(thread, 0, 0, 0, 0);
+    void *g;
+    jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     int flag;

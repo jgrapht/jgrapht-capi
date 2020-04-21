@@ -10,10 +10,10 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.CLongPointer;
+import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.Status;
-import org.jgrapht.capi.error.ObjectHandleExceptionHandler;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.graph.AsUndirectedGraph;
 import org.jgrapht.graph.AsUnmodifiableGraph;
@@ -35,9 +35,9 @@ public class GraphAPI {
 	 * @param thread the thread isolate
 	 * @return the graph handle
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_create", exceptionHandler = ObjectHandleExceptionHandler.class)
-	public static ObjectHandle createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges, boolean weighted) {
+	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
+			boolean allowingMultipleEdges, boolean weighted, WordPointer res) {
 		Graph<Long, Long> graph;
 		if (directed) {
 			graph = GraphTypeBuilder.directed().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
@@ -48,7 +48,10 @@ public class GraphAPI {
 					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(SupplierUtil.createLongSupplier())
 					.edgeSupplier(SupplierUtil.createLongSupplier()).buildGraph();
 		}
-		return globalHandles.create(graph);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph));
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -281,91 +284,121 @@ public class GraphAPI {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_create_all_vit", exceptionHandler = ObjectHandleExceptionHandler.class)
-	public static ObjectHandle createAllVerticesIterator(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_create_all_vit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createAllVerticesIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = g.vertexSet().iterator();
-		return ObjectHandles.getGlobal().create(it);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(it));
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_create_all_eit", exceptionHandler = ObjectHandleExceptionHandler.class)
-	public static ObjectHandle createAllEdgesIterator(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_create_all_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createAllEdgesIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = g.edgeSet().iterator();
-		return ObjectHandles.getGlobal().create(it);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(it));
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_create_between_eit", exceptionHandler = ObjectHandleExceptionHandler.class)
-	public static ObjectHandle createEdgesBetweenIterator(IsolateThread thread, ObjectHandle graphHandle, long source,
-			long target) {
+			+ "graph_create_between_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createEdgesBetweenIterator(IsolateThread thread, ObjectHandle graphHandle, long source,
+			long target, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Set<Long> edges = g.getAllEdges(source, target);
 		if (edges == null) {
 			throw new IllegalArgumentException("Unknown vertex " + source + " or " + target);
 		}
 		Iterator<Long> it = edges.iterator();
-		return ObjectHandles.getGlobal().create(it);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(it));
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_vertex_create_eit", exceptionHandler = ObjectHandleExceptionHandler.class)
-	public static ObjectHandle createVertexEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle,
-			long vertex) {
+			+ "graph_vertex_create_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createVertexEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, long vertex,
+			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = g.edgesOf(vertex).iterator();
-		return ObjectHandles.getGlobal().create(it);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(it));
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_vertex_create_out_eit", exceptionHandler = ObjectHandleExceptionHandler.class)
-	public static ObjectHandle createVertexOutEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle,
-			long vertex) {
+			+ "graph_vertex_create_out_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createVertexOutEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, long vertex,
+			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = g.outgoingEdgesOf(vertex).iterator();
-		return ObjectHandles.getGlobal().create(it);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(it));
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_vertex_create_in_eit", exceptionHandler = ObjectHandleExceptionHandler.class)
-	public static ObjectHandle createVertexInEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle,
-			long vertex) {
+			+ "graph_vertex_create_in_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createVertexInEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, long vertex,
+			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = g.incomingEdgesOf(vertex).iterator();
-		return globalHandles.create(it);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(it));
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_as_undirected", exceptionHandler = ObjectHandleExceptionHandler.class)
-	public static ObjectHandle asUndirected(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_as_undirected", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int asUndirected(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Long, Long> gIn = globalHandles.get(graphHandle);
 		Graph<Long, Long> gOut = new AsUndirectedGraph<>(gIn);
-		return globalHandles.create(gOut);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(gOut));
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_as_unmodifiable", exceptionHandler = ObjectHandleExceptionHandler.class)
-	public static ObjectHandle asUnmodifiable(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_as_unmodifiable", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int asUnmodifiable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Long, Long> gIn = globalHandles.get(graphHandle);
 		Graph<Long, Long> gOut = new AsUnmodifiableGraph<>(gIn);
-		return globalHandles.create(gOut);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(gOut));
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_as_unweighted", exceptionHandler = ObjectHandleExceptionHandler.class)
-	public static ObjectHandle asUnweighted(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_as_unweighted", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int asUnweighted(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Long, Long> gIn = globalHandles.get(graphHandle);
 		Graph<Long, Long> gOut = new AsUnweightedGraph<>(gIn);
-		return globalHandles.create(gOut);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(gOut));
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_as_edgereversed", exceptionHandler = ObjectHandleExceptionHandler.class)
-	public static ObjectHandle asEdgeReversed(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_as_edgereversed", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int asEdgeReversed(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Long, Long> gIn = globalHandles.get(graphHandle);
 		Graph<Long, Long> gOut = new EdgeReversedGraph<>(gIn);
-		return globalHandles.create(gOut);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(gOut));
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 }
