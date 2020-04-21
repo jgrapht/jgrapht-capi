@@ -6,7 +6,7 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.Status;
-import org.jgrapht.capi.error.Errors;
+import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class MemoryAPI {
 
@@ -18,15 +18,10 @@ public class MemoryAPI {
 	 * @param thread the thread
 	 * @param handle the handle
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "destroy")
-	public static void destroy(IsolateThread thread, ObjectHandle handle) {
-		try {
-			globalHandles.destroy(handle);
-		} catch (IllegalArgumentException e) {
-			Errors.setError(Status.ILLEGAL_ARGUMENT, e.getMessage());
-		} catch (Exception e) {
-			Errors.setError(Status.ERROR, e.getMessage());
-		}
+	@CEntryPoint(name = Constants.LIB_PREFIX + "destroy", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int destroy(IsolateThread thread, ObjectHandle handle) {
+		globalHandles.destroy(handle);
+		return Status.SUCCESS.toCEnum();
 	}
 
 }

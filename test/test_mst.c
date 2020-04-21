@@ -45,9 +45,14 @@ int main() {
     jgrapht_capi_graph_set_edge_weight(thread, g, 4, 1.0);
 
     // run kruskal
-    void *mst = jgrapht_capi_mst_exec_kruskal(thread, g);
-    assert(jgrapht_capi_mst_get_weight(thread,  mst) == 10.0);
-    void *eit = jgrapht_capi_mst_create_eit(thread,  mst);
+    void *mst;
+    double weight;
+    assert(jgrapht_capi_mst_exec_kruskal(thread, g, &mst) == 0);
+    assert(jgrapht_capi_mst_get_weight(thread, mst, &weight) == 0);
+    assert(weight == 10.0);
+    void *eit;
+    assert(jgrapht_capi_mst_create_eit(thread, mst, &eit) == 0);
+
     assert(jgrapht_capi_it_next_long(thread,  eit) == 1);
     assert(jgrapht_capi_it_next_long(thread,  eit) == 2);
     assert(jgrapht_capi_it_next_long(thread,  eit) == 3);
@@ -57,9 +62,10 @@ int main() {
     jgrapht_capi_destroy(thread,  mst);
 
     // run prim
-    mst = jgrapht_capi_mst_exec_prim(thread, g);
-    assert(jgrapht_capi_mst_get_weight(thread,  mst) == 10.0);
-    eit = jgrapht_capi_mst_create_eit(thread,  mst);
+    assert(jgrapht_capi_mst_exec_prim(thread, g, &mst) == 0);
+    assert(jgrapht_capi_mst_get_weight(thread, mst, &weight) == 0);
+    assert(weight == 10.0);
+    assert(jgrapht_capi_mst_create_eit(thread, mst, &eit) == 0);
     assert(jgrapht_capi_it_next_long(thread,  eit) == 1);
     assert(jgrapht_capi_it_next_long(thread,  eit) == 2);
     assert(jgrapht_capi_it_next_long(thread,  eit) == 3);

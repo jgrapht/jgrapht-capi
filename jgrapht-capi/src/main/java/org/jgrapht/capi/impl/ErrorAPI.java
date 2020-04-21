@@ -29,7 +29,7 @@ public class ErrorAPI {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + "get_errno")
 	public static Status getError(IsolateThread thread) {
-		return Errors.getError();
+		return Errors.getErrorStatus();
 	}
 
 	/**
