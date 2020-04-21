@@ -7,12 +7,14 @@ import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
+import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.error.BooleanExceptionHandler;
+import org.jgrapht.capi.Status;
 import org.jgrapht.capi.error.DoubleExceptionHandler;
 import org.jgrapht.capi.error.LongExceptionHandler;
 import org.jgrapht.capi.error.ObjectHandleExceptionHandler;
+import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.error.VoidExceptionHandler;
 import org.jgrapht.graph.AsUndirectedGraph;
 import org.jgrapht.graph.AsUnmodifiableGraph;
@@ -68,17 +70,26 @@ public class GraphAPI {
 		return g.addVertex();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_remove_vertex", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean removeVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_remove_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int removeVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.removeVertex(vertex);
+		boolean result = g.removeVertex(vertex);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_contains_vertex", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean containsVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex) {
+			+ "graph_contains_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int containsVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.containsVertex(vertex);
+		boolean result = g.containsVertex(vertex);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_add_edge", exceptionHandler = LongExceptionHandler.class)
@@ -87,24 +98,38 @@ public class GraphAPI {
 		return g.addEdge(source, target);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_remove_edge", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean removeEdge(IsolateThread thread, ObjectHandle graphHandle, long edge) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_remove_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int removeEdge(IsolateThread thread, ObjectHandle graphHandle, long edge, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.removeEdge(edge);
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_contains_edge", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean containsEdge(IsolateThread thread, ObjectHandle graphHandle, long edge) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.containsEdge(edge);
+		boolean result = g.removeEdge(edge);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_contains_edge_between", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean containsEdgeBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
-			long target) {
+			+ "graph_contains_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int containsEdge(IsolateThread thread, ObjectHandle graphHandle, long edge, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.containsEdge(source, target);
+		boolean result = g.containsEdge(edge);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_contains_edge_between", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int containsEdgeBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
+			CIntPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		boolean result = g.containsEdge(source, target);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_degree_of", exceptionHandler = LongExceptionHandler.class)
@@ -137,36 +162,59 @@ public class GraphAPI {
 		return g.getEdgeTarget(edge);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_is_weighted", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isWeighted(IsolateThread thread, ObjectHandle graphHandle) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_is_weighted", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isWeighted(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.getType().isWeighted();
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_is_directed", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isDirected(IsolateThread thread, ObjectHandle graphHandle) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.getType().isDirected();
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_is_undirected", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isUndirected(IsolateThread thread, ObjectHandle graphHandle) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.getType().isUndirected();
+		boolean result = g.getType().isWeighted();
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_is_allowing_selfloops", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean allowSelfLoops(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_is_directed", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isDirected(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.getType().isAllowingSelfLoops();
+		boolean result = g.getType().isDirected();
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_is_allowing_multipleedges", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean allowMultipleEdges(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_is_undirected", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isUndirected(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return g.getType().isAllowingMultipleEdges();
+		boolean result = g.getType().isUndirected();
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_is_allowing_selfloops", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int allowSelfLoops(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		boolean result = g.getType().isAllowingSelfLoops();
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_is_allowing_multipleedges", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int allowMultipleEdges(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		boolean result = g.getType().isAllowingMultipleEdges();
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_get_edge_weight", exceptionHandler = DoubleExceptionHandler.class)

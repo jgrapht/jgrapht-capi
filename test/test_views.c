@@ -36,12 +36,20 @@ int main() {
     long e52 = jgrapht_capi_graph_add_edge(thread, g, v5, v2);
     long e55_2 = jgrapht_capi_graph_add_edge(thread, g, v5, v5);
 
-    assert(jgrapht_capi_graph_is_directed(thread, g));
-    assert(!jgrapht_capi_graph_is_undirected(thread, g));
+    int flag;
+    assert(jgrapht_capi_graph_is_directed(thread, g, &flag) == 0);
+    assert(flag == 0);
+    assert(jgrapht_capi_graph_is_undirected(thread, g, &flag) == 0);
+    assert(flag == 1);
+
 
     void *g1 = jgrapht_capi_graph_as_undirected(thread, g);
-    assert(!jgrapht_capi_graph_is_directed(thread, g1));
-    assert(jgrapht_capi_graph_is_undirected(thread, g1));
+
+    assert(jgrapht_capi_graph_is_directed(thread, g1, &flag) == 0);
+    assert(flag == 1);
+    assert(jgrapht_capi_graph_is_undirected(thread, g1, &flag) == 0);
+    assert(flag == 0);
+
     jgrapht_capi_destroy(thread, g1);
 
     jgrapht_capi_graph_set_edge_weight(thread, g, e12, 100.0);

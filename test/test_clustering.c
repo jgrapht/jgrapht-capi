@@ -18,11 +18,17 @@ int main() {
     void *g = jgrapht_capi_graph_create(thread, 0, 0, 0, 1);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    assert(!jgrapht_capi_graph_is_directed(thread, g));
-    assert(jgrapht_capi_graph_is_undirected(thread, g));
-    assert(jgrapht_capi_graph_is_weighted(thread, g));
-    assert(!jgrapht_capi_graph_is_allowing_selfloops(thread, g));
-    assert(!jgrapht_capi_graph_is_allowing_multipleedges(thread, g));
+    int flag;
+    assert(jgrapht_capi_graph_is_directed(thread, g, &flag) == 0);
+    assert(flag == 0);
+    assert(jgrapht_capi_graph_is_undirected(thread, g, &flag) == 0);
+    assert(flag == 1);
+    assert(jgrapht_capi_graph_is_weighted(thread, g, &flag) == 0);
+    assert(flag == 1);
+    assert(jgrapht_capi_graph_is_allowing_selfloops(thread, g, &flag) == 0);
+    assert(flag == 0);
+    assert(jgrapht_capi_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
+    assert(flag == 0);
 
     assert(jgrapht_capi_graph_add_vertex(thread, g) == 0);
     assert(jgrapht_capi_graph_add_vertex(thread, g) == 1);
@@ -58,19 +64,31 @@ int main() {
 
     void *vit;
     jgrapht_capi_clustering_ith_cluster_vit(thread, c, 0, &vit);
-    assert(jgrapht_capi_it_next_long(thread, vit) == 0);
-    assert(jgrapht_capi_it_next_long(thread, vit) == 1);
-    assert(jgrapht_capi_it_next_long(thread, vit) == 2);
-    assert(jgrapht_capi_it_next_long(thread, vit) == 3);
-    assert(!jgrapht_capi_it_hasnext(thread, vit));
+    long long v;
+    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(v == 0);
+    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(v == 1);
+    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(v == 2);
+    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(v == 3);
+    int hasnext;
+    assert(jgrapht_capi_it_hasnext(thread, vit, &hasnext) == 0);
+    assert(hasnext == 0);
     jgrapht_capi_destroy(thread, vit);
 
     jgrapht_capi_clustering_ith_cluster_vit(thread, c, 1, &vit);
-    assert(jgrapht_capi_it_next_long(thread, vit) == 4);
-    assert(jgrapht_capi_it_next_long(thread, vit) == 5);
-    assert(jgrapht_capi_it_next_long(thread, vit) == 6);
-    assert(jgrapht_capi_it_next_long(thread, vit) == 7);
-    assert(!jgrapht_capi_it_hasnext(thread, vit));
+    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(v == 4);
+    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(v == 5);
+    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(v == 6);
+    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(v == 7);
+    assert(!jgrapht_capi_it_hasnext(thread, vit, &hasnext));
+    assert(hasnext == 0);
     jgrapht_capi_destroy(thread, vit);
 
     jgrapht_capi_destroy(thread, c);

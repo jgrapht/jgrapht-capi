@@ -8,8 +8,14 @@ void assert_coloring(graal_isolatethread_t *thread, void *g, void *c) {
     void *map; 
     jgrapht_capi_coloring_get_vertex_color_map(thread, c, &map);
     void *eit = jgrapht_capi_graph_create_all_eit(thread, g);
-    while(jgrapht_capi_it_hasnext(thread, eit)) { 
-        long e = jgrapht_capi_it_next_long(thread, eit);
+    int has_next;
+    while(1) { 
+        jgrapht_capi_it_hasnext(thread, eit, &has_next);
+        if (!has_next) { 
+            break;
+        }
+        long long e;
+        jgrapht_capi_it_next_long(thread, eit, &e);
         long s = jgrapht_capi_graph_edge_source(thread, g, e);
         long t = jgrapht_capi_graph_edge_target(thread, g, e);
         long source_color, target_color;
@@ -35,11 +41,17 @@ int main() {
     void *g = jgrapht_capi_graph_create(thread, 0, 0, 0, 0);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    assert(!jgrapht_capi_graph_is_directed(thread, g));
-    assert(jgrapht_capi_graph_is_undirected(thread, g));
-    assert(!jgrapht_capi_graph_is_weighted(thread, g));
-    assert(!jgrapht_capi_graph_is_allowing_selfloops(thread, g));
-    assert(!jgrapht_capi_graph_is_allowing_multipleedges(thread, g));
+    int flag;
+    assert(jgrapht_capi_graph_is_directed(thread, g, &flag) == 0);
+    assert(flag == 0);
+    assert(jgrapht_capi_graph_is_undirected(thread, g, &flag) == 0);
+    assert(flag == 1);
+    assert(jgrapht_capi_graph_is_weighted(thread, g, &flag) == 0);
+    assert(flag == 0);
+    assert(jgrapht_capi_graph_is_allowing_selfloops(thread, g, &flag) == 0);
+    assert(flag == 0);
+    assert(jgrapht_capi_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
+    assert(flag == 0);
 
     assert(jgrapht_capi_graph_add_vertex(thread, g) == 0);
     assert(jgrapht_capi_graph_add_vertex(thread, g) == 1);

@@ -4,166 +4,245 @@ import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
+import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.error.BooleanExceptionHandler;
+import org.jgrapht.capi.Status;
+import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class GraphTestsApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_test_is_empty", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isEmpty(IsolateThread thread, ObjectHandle graphHandle) {
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_test_is_empty", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isEmpty(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isEmpty(g);
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_test_is_simple", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isSimple(IsolateThread thread, ObjectHandle graphHandle) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isSimple(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isEmpty(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_has_selfloops", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean hasSelfLoops(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_simple", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isSimple(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.hasSelfLoops(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isSimple(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_has_multipleedges", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean hasMultipleEdges(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_has_selfloops", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int hasSelfLoops(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.hasMultipleEdges(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.hasSelfLoops(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_complete", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isComplete(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_has_multipleedges", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int hasMultipleEdges(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isComplete(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.hasMultipleEdges(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_weekly_connected", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isWeaklyConnected(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_complete", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isComplete(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isWeaklyConnected(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isComplete(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_strongly_connected", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isStronglyConnected(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_weekly_connected", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isWeaklyConnected(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isStronglyConnected(g);
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_test_is_tree", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isTree(IsolateThread thread, ObjectHandle graphHandle) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isTree(g);
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_test_is_forest", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isForest(IsolateThread thread, ObjectHandle graphHandle) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isForest(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isWeaklyConnected(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_overfull", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isOverfull(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_strongly_connected", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isStronglyConnected(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isOverfull(g);
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_test_is_split", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isSplit(IsolateThread thread, ObjectHandle graphHandle) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isSplit(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isStronglyConnected(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_bipartite", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isBipartite(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_tree", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isTree(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isBipartite(g);
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_test_is_cubic", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isCubic(IsolateThread thread, ObjectHandle graphHandle) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isCubic(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isTree(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_eulerian", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isEulerian(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_forest", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isForest(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isEulerian(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isForest(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_chordal", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isChordal(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_overfull", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isOverfull(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isChordal(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isOverfull(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_weakly_chordal", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isWeaklyChordal(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_split", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isSplit(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isWeaklyChordal(g);
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_test_has_ore", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean hasOreProperty(IsolateThread thread, ObjectHandle graphHandle) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.hasOreProperty(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isSplit(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_trianglefree", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isTriangleFree(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_bipartite", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isBipartite(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isTriangleFree(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isBipartite(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_perfect", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isPerfect(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_cubic", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isCubic(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isPerfect(g);
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_test_is_planar", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isPlanar(IsolateThread thread, ObjectHandle graphHandle) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isPlanar(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isCubic(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_kuratowski_subdivision", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isKuratowskiSubdivision(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_eulerian", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isEulerian(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isKuratowskiSubdivision(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isEulerian(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_k33_subdivision", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isK33Subdivision(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_chordal", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isChordal(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isK33Subdivision(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isChordal(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_test_is_k5_subdivision", exceptionHandler = BooleanExceptionHandler.class)
-	public static boolean isK5Subdivision(IsolateThread thread, ObjectHandle graphHandle) {
+			+ "graph_test_is_weakly_chordal", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isWeaklyChordal(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		return GraphTests.isK5Subdivision(g);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isWeaklyChordal(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_test_has_ore", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int hasOreProperty(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(GraphTests.hasOreProperty(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_test_is_trianglefree", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isTriangleFree(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isTriangleFree(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_test_is_perfect", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isPerfect(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isPerfect(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_test_is_planar", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isPlanar(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isPlanar(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_test_is_kuratowski_subdivision", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isKuratowskiSubdivision(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isKuratowskiSubdivision(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_test_is_k33_subdivision", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isK33Subdivision(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isK33Subdivision(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_test_is_k5_subdivision", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int isK5Subdivision(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(GraphTests.isK5Subdivision(g) ? 1 : 0);
+		}
+		return Status.SUCCESS.toCEnum();
 	}
 
 }
