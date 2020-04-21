@@ -34,8 +34,10 @@ int main() {
     assert(jgrapht_capi_graph_edges_count(thread,  g) == 0);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
+    int flag;
     for(int i = 0; i < NUM_VERTICES; i++) {
-        assert(jgrapht_capi_graph_contains_vertex(thread,  g, i));
+        assert(jgrapht_capi_graph_contains_vertex(thread,  g, i, &flag) == 0);
+        assert(flag);
         assert(jgrapht_capi_get_errno(thread) == 0);
     }
 
@@ -44,12 +46,14 @@ int main() {
     assert(v == NUM_VERTICES);
     assert(jgrapht_capi_graph_vertices_count(thread,  g) == NUM_VERTICES+1);
     assert(jgrapht_capi_get_errno(thread) == 0);
-    assert(jgrapht_capi_graph_contains_vertex(thread,  g, v));
+    assert(jgrapht_capi_graph_contains_vertex(thread,  g, v, &flag) == 0);
+    assert(flag);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    jgrapht_capi_graph_remove_vertex(thread,  g, v);
+    jgrapht_capi_graph_remove_vertex(thread,  g, v, &flag);
     assert(jgrapht_capi_get_errno(thread) == 0);
-    assert(!jgrapht_capi_graph_contains_vertex(thread,  g, v));
+    assert(jgrapht_capi_graph_contains_vertex(thread,  g, v, &flag) == 0);
+    assert(!flag);
     assert(jgrapht_capi_get_errno(thread) == 0);
     assert(jgrapht_capi_graph_vertices_count(thread,  g) == NUM_VERTICES);
     assert(jgrapht_capi_get_errno(thread) == 0);
@@ -58,8 +62,14 @@ int main() {
     void *vit = jgrapht_capi_graph_create_all_vit(thread,  g);
     assert(jgrapht_capi_get_errno(thread) == 0);
     long x = 0;
-    while(jgrapht_capi_it_hasnext(thread,  vit)) { 
-        assert(jgrapht_capi_it_next_long(thread,  vit) == x++);
+    long long value;
+    while(1) { 
+        jgrapht_capi_it_hasnext(thread,  vit, &flag);
+        if (!flag) { 
+            break;
+        }
+        jgrapht_capi_it_next_long(thread,  vit, &value);
+        assert(value == x++);
     }
     assert(jgrapht_capi_get_errno(thread) == 0);
     jgrapht_capi_destroy(thread,  vit);
@@ -70,7 +80,8 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
     x = 0;
     while(1) { 
-        long ret = jgrapht_capi_it_next_long(thread,  vit);
+        long long ret;
+        jgrapht_capi_it_next_long(thread,  vit, &ret);
         if (x < 1000) { 
             assert(ret == x);
             assert(jgrapht_capi_get_errno(thread) == 0);
