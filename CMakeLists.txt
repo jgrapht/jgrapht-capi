@@ -89,6 +89,7 @@ set(
     "test_partition.c"
     "test_matching.c"
     "test_generate.c"
+    "test_scoring.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
