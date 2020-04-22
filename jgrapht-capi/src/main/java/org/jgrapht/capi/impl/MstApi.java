@@ -27,6 +27,7 @@ import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.SpanningTreeAlgorithm.SpanningTree;
+import org.jgrapht.alg.spanning.BoruvkaMinimumSpanningTree;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.spanning.PrimMinimumSpanningTree;
 import org.jgrapht.capi.Constants;
@@ -66,6 +67,24 @@ public class MstApi {
 	public static int executeMSTPrim(IsolateThread thread, ObjectHandle graph, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		SpanningTree<Long> mst = new PrimMinimumSpanningTree<>(g).getSpanningTree();
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(mst));
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	/**
+	 * Execute MST Boruvka on a graph
+	 * 
+	 * @param thread      the thread
+	 * @param graphHandle the graph handle
+	 * @return a handle on the result
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "mst_exec_boruvka", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeMSTBoruvka(IsolateThread thread, ObjectHandle graph, WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graph);
+		SpanningTree<Long> mst = new BoruvkaMinimumSpanningTree<>(g).getSpanningTree();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(mst));
 		}

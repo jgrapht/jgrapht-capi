@@ -96,6 +96,12 @@ int main() {
     jgrapht_capi_destroy(thread,  eit);
     jgrapht_capi_destroy(thread,  mst);
 
+    // run boruvka
+    assert(jgrapht_capi_mst_exec_boruvka(thread, g, &mst) == 0);
+    assert(jgrapht_capi_mst_get_weight(thread, mst, &weight) == 0);
+    assert(weight == 10.0);
+    jgrapht_capi_destroy(thread,  mst);
+
     jgrapht_capi_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {

@@ -94,6 +94,8 @@ public class Errors {
 			status = Status.NO_SUCH_ELEMENT;
 		} else if (e instanceof NullPointerException) {
 			status = Status.NULL_POINTER;
+		} else if (e instanceof ClassCastException) {
+			status = Status.CLASS_CAST;
 		} else {
 			status = Status.ERROR;
 		}

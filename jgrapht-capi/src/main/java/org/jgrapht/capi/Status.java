@@ -43,6 +43,8 @@ public enum Status {
 	NO_SUCH_ELEMENT,
 	@CEnumConstant(value = "6")
 	NULL_POINTER,
+	@CEnumConstant(value = "7")
+	CLASS_CAST,
 	;
 	// @formatter:on
 
