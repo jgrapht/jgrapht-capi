@@ -130,7 +130,10 @@ public class GraphApi {
 	public static int addEdge(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
 			CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		long result = g.addEdge(source, target);
+		Long result = g.addEdge(source, target);
+		if (result == null) { 
+			throw new UnsupportedOperationException("Graph does not allow multiple edges");
+		}
 		if (res.isNonNull()) {
 			res.write(result);
 		}
