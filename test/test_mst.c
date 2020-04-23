@@ -56,49 +56,39 @@ int main() {
     // run kruskal
     void *mst;
     double weight;
-    assert(jgrapht_capi_mst_exec_kruskal(thread, g, &mst) == 0);
-    assert(jgrapht_capi_mst_get_weight(thread, mst, &weight) == 0);
+    assert(jgrapht_capi_mst_exec_kruskal(thread, g, &weight, &mst) == 0);
     assert(weight == 10.0);
-    void *eit;
-    assert(jgrapht_capi_mst_create_eit(thread, mst, &eit) == 0);
-
-    assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
-    assert(v == 1);
-    assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
-    assert(v == 2);
-    assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
-    assert(v == 3);
-    assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
-    assert(v == 4);
-    int hasnext;
-    assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
-    assert(hasnext == 0);
-    jgrapht_capi_destroy(thread,  eit);
+    long long size;
+    jgrapht_capi_set_size(thread, mst, &size);
+    assert(size == 4);
+    int contains;
+    jgrapht_capi_set_long_contains(thread, mst, 1, &contains);
+    assert(contains);
+    jgrapht_capi_set_long_contains(thread, mst, 2, &contains);
+    assert(contains);
+    jgrapht_capi_set_long_contains(thread, mst, 3, &contains);
+    assert(contains);
+    jgrapht_capi_set_long_contains(thread, mst, 4, &contains);
+    assert(contains);
     jgrapht_capi_destroy(thread,  mst);
 
     // run prim
-    assert(jgrapht_capi_mst_exec_prim(thread, g, &mst) == 0);
-    assert(jgrapht_capi_mst_get_weight(thread, mst, &weight) == 0);
+    assert(jgrapht_capi_mst_exec_prim(thread, g, &weight, &mst) == 0);
     assert(weight == 10.0);
-    assert(jgrapht_capi_mst_create_eit(thread, mst, &eit) == 0);
-
-    assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
-    assert(v == 1);
-    assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
-    assert(v == 2);
-    assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
-    assert(v == 3);
-    assert(jgrapht_capi_it_next_long(thread, eit, &v) == 0);
-    assert(v == 4);
-    assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
-    assert(hasnext == 0);
-
-    jgrapht_capi_destroy(thread,  eit);
+    jgrapht_capi_set_size(thread, mst, &size);
+    assert(size == 4);
+    jgrapht_capi_set_long_contains(thread, mst, 1, &contains);
+    assert(contains);
+    jgrapht_capi_set_long_contains(thread, mst, 2, &contains);
+    assert(contains);
+    jgrapht_capi_set_long_contains(thread, mst, 3, &contains);
+    assert(contains);
+    jgrapht_capi_set_long_contains(thread, mst, 4, &contains);
+    assert(contains);
     jgrapht_capi_destroy(thread,  mst);
 
     // run boruvka
-    assert(jgrapht_capi_mst_exec_boruvka(thread, g, &mst) == 0);
-    assert(jgrapht_capi_mst_get_weight(thread, mst, &weight) == 0);
+    assert(jgrapht_capi_mst_exec_boruvka(thread, g, &weight, &mst) == 0);
     assert(weight == 10.0);
     jgrapht_capi_destroy(thread,  mst);
 

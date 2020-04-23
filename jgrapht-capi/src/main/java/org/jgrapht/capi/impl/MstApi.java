@@ -17,8 +17,6 @@
  */
 package org.jgrapht.capi.impl;
 
-import java.util.Iterator;
-
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
@@ -47,11 +45,15 @@ public class MstApi {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "mst_exec_kruskal", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeMSTKruskal(IsolateThread thread, ObjectHandle graph, WordPointer res) {
+	public static int executeMSTKruskal(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
+			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		SpanningTree<Long> mst = new KruskalMinimumSpanningTree<>(g).getSpanningTree();
+		if (weightRes.isNonNull()) {
+			weightRes.write(mst.getWeight());
+		}
 		if (res.isNonNull()) {
-			res.write(globalHandles.create(mst));
+			res.write(globalHandles.create(mst.getEdges()));
 		}
 		return Status.SUCCESS.toCEnum();
 	}
@@ -64,11 +66,15 @@ public class MstApi {
 	 * @return a handle on the result
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + "mst_exec_prim", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeMSTPrim(IsolateThread thread, ObjectHandle graph, WordPointer res) {
+	public static int executeMSTPrim(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
+			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		SpanningTree<Long> mst = new PrimMinimumSpanningTree<>(g).getSpanningTree();
+		if (weightRes.isNonNull()) {
+			weightRes.write(mst.getWeight());
+		}
 		if (res.isNonNull()) {
-			res.write(globalHandles.create(mst));
+			res.write(globalHandles.create(mst.getEdges()));
 		}
 		return Status.SUCCESS.toCEnum();
 	}
@@ -82,44 +88,15 @@ public class MstApi {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "mst_exec_boruvka", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeMSTBoruvka(IsolateThread thread, ObjectHandle graph, WordPointer res) {
+	public static int executeMSTBoruvka(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
+			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		SpanningTree<Long> mst = new BoruvkaMinimumSpanningTree<>(g).getSpanningTree();
-		if (res.isNonNull()) {
-			res.write(globalHandles.create(mst));
+		if (weightRes.isNonNull()) {
+			weightRes.write(mst.getWeight());
 		}
-		return Status.SUCCESS.toCEnum();
-	}
-
-	/**
-	 * Get the weight of an MST.
-	 * 
-	 * @param thread    the thread
-	 * @param mstHandle the mst handle
-	 * @return the weight
-	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "mst_get_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int getMSTWeight(IsolateThread thread, ObjectHandle mstHandle, CDoublePointer res) {
-		SpanningTree<Long> mst = globalHandles.get(mstHandle);
 		if (res.isNonNull()) {
-			res.write(mst.getWeight());
-		}
-		return Status.SUCCESS.toCEnum();
-	}
-
-	/**
-	 * Get an edge iterator for the MST.
-	 * 
-	 * @param thread    the thread
-	 * @param mstHandle the mst handle
-	 * @return the edge iterator
-	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "mst_create_eit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int createMSTEdgeIterator(IsolateThread thread, ObjectHandle mstHandle, WordPointer res) {
-		SpanningTree<Long> mst = globalHandles.get(mstHandle);
-		Iterator<Long> it = mst.iterator();
-		if (res.isNonNull()) {
-			res.write(globalHandles.create(it));
+			res.write(globalHandles.create(mst.getEdges()));
 		}
 		return Status.SUCCESS.toCEnum();
 	}

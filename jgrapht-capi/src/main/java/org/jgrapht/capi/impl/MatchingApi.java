@@ -146,8 +146,11 @@ public class MatchingApi {
 		Set<Long> part1 = part.getPartition(1);
 		MatchingAlgorithm<Long, Long> alg = new HopcroftKarpMaximumCardinalityBipartiteMatching<>(g, part0, part1);
 		Matching<Long, Long> result = alg.getMatching();
+		if (weightRes.isNonNull()) { 
+			weightRes.write(result.getWeight());
+		}
 		if (res.isNonNull()) {
-			res.write(globalHandles.create(result));
+			res.write(globalHandles.create(result.getEdges()));
 		}
 		return Status.SUCCESS.toCEnum();
 	}
