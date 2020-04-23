@@ -4,9 +4,7 @@
 
 #include <jgrapht_capi.h>
 
-void assert_coloring(graal_isolatethread_t *thread, void *g, void *c) { 
-    void *map; 
-    jgrapht_capi_coloring_get_vertex_color_map(thread, c, &map);
+void assert_coloring(graal_isolatethread_t *thread, void *g, void *map) { 
     void *eit;
     jgrapht_capi_graph_create_all_eit(thread, g, &eit);
     int has_next;
@@ -27,7 +25,6 @@ void assert_coloring(graal_isolatethread_t *thread, void *g, void *c) {
         assert(source_color != target_color);
     }
     jgrapht_capi_destroy(thread, eit);
-    jgrapht_capi_destroy(thread, map);
 }
 
 int main() {
@@ -98,47 +95,40 @@ int main() {
     assert(e == 9);
 
     void *c;
-    jgrapht_capi_coloring_exec_greedy(thread, g, &c);
-    assert(jgrapht_capi_get_errno(thread) == 0);
     long long colors;
-    assert(jgrapht_capi_coloring_get_number_colors(thread, c, &colors) == 0);
+    jgrapht_capi_coloring_exec_greedy(thread, g, &colors, &c);
+    assert(jgrapht_capi_get_errno(thread) == 0);
     assert(colors == 3);
     assert_coloring(thread, g, c);
     jgrapht_capi_destroy(thread, c);
 
-    jgrapht_capi_coloring_exec_greedy_smallestdegreelast(thread, g, &c);
-    assert(jgrapht_capi_coloring_get_number_colors(thread, c, &colors) == 0);
+    jgrapht_capi_coloring_exec_greedy_smallestdegreelast(thread, g, &colors, &c);
     assert(colors == 3);
     assert_coloring(thread, g, c);
     jgrapht_capi_destroy(thread, c);
 
-    jgrapht_capi_coloring_exec_backtracking_brown(thread, g, &c);
-    assert(jgrapht_capi_coloring_get_number_colors(thread, c, &colors) == 0);
+    jgrapht_capi_coloring_exec_backtracking_brown(thread, g, &colors, &c);
     assert(colors == 3);
     assert_coloring(thread, g, c);
     jgrapht_capi_destroy(thread, c);
 
-    jgrapht_capi_coloring_exec_greedy_largestdegreefirst(thread, g, &c);
-    assert(jgrapht_capi_coloring_get_number_colors(thread, c, &colors) == 0);
+    jgrapht_capi_coloring_exec_greedy_largestdegreefirst(thread, g, &colors, &c);
     assert(colors == 3);
     assert_coloring(thread, g, c);
     jgrapht_capi_destroy(thread, c);
 
-    jgrapht_capi_coloring_exec_greedy_random_with_seed(thread, g, 13, &c);
-    assert(jgrapht_capi_coloring_get_number_colors(thread, c, &colors) == 0);
+    jgrapht_capi_coloring_exec_greedy_random_with_seed(thread, g, 13, &colors, &c);
     assert(colors == 3);
     assert_coloring(thread, g, c);
     jgrapht_capi_destroy(thread, c);
 
-    jgrapht_capi_coloring_exec_greedy_dsatur(thread, g, &c);
-    assert(jgrapht_capi_coloring_get_number_colors(thread, c, &colors) == 0);
+    jgrapht_capi_coloring_exec_greedy_dsatur(thread, g, &colors, &c);
     assert(colors == 3);
     assert_coloring(thread, g, c);
     jgrapht_capi_destroy(thread, c);
 
     // just test API, since this is not a coloring
-    jgrapht_capi_coloring_exec_color_refinement(thread, g, &c);
-    assert(jgrapht_capi_coloring_get_number_colors(thread, c, &colors) == 0);
+    jgrapht_capi_coloring_exec_color_refinement(thread, g, &colors, &c);
     assert(colors == 8);
     jgrapht_capi_destroy(thread, c);
 
