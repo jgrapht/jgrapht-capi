@@ -137,6 +137,34 @@ public class MapApi {
 		return Status.SUCCESS.toCEnum();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "map_long_double_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongDoubleRemove(IsolateThread thread, ObjectHandle mapHandle, long key, CDoublePointer res) {
+		Map<Long, Double> map = globalHandles.get(mapHandle);
+		Double value = map.remove(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(value);
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "map_long_long_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongLongRemove(IsolateThread thread, ObjectHandle mapHandle, long key, CLongPointer res) {
+		Map<Long, Long> map = globalHandles.get(mapHandle);
+		Long value = map.remove(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(value);
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_clear", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int clearMap(IsolateThread thread, ObjectHandle mapHandle) {
 		Map<?, ?> map = globalHandles.get(mapHandle);

@@ -91,6 +91,15 @@ int main() {
     assert(map_size == 0);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
+    jgrapht_capi_map_long_double_put(thread, map, 100, 150.0);
+    double v;
+    jgrapht_capi_map_long_double_get(thread, map, 100, &v);
+    assert(v == 150.0);
+    jgrapht_capi_map_long_double_remove(thread, map, 100, &v);
+    assert(v == 150.0);
+    assert(jgrapht_capi_map_long_double_remove(thread, map, 100, &v) == ILLEGAL_ARGUMENT);
+    jgrapht_capi_clear_errno(thread);
+
     jgrapht_capi_destroy(thread, map);
     assert(jgrapht_capi_get_errno(thread) == 0);
    
