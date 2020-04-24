@@ -91,8 +91,8 @@ public class GenerateApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "generate_gnm_random", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int customRandomGnmGenerator(IsolateThread thread, ObjectHandle graph, int n, int m, long seed,
-			boolean loops, boolean multipleEdges) {
+	public static int customRandomGnmGenerator(IsolateThread thread, ObjectHandle graph, int n, int m, boolean loops,
+			boolean multipleEdges, long seed) {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		GraphGenerator<Long, Long, Long> gen = new GnmRandomGraphGenerator<>(n, m, seed, loops, multipleEdges);
 		gen.generateGraph(g);
@@ -101,8 +101,8 @@ public class GenerateApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "generate_gnp_random", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int customRandomGnpGenerator(IsolateThread thread, ObjectHandle graph, int n, double p, long seed,
-			boolean createLoops) {
+	public static int customRandomGnpGenerator(IsolateThread thread, ObjectHandle graph, int n, double p,
+			boolean createLoops, long seed) {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		GraphGenerator<Long, Long, Long> gen = new GnpRandomGraphGenerator<>(n, p, seed, createLoops);
 		gen.generateGraph(g);

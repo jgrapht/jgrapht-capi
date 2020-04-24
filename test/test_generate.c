@@ -55,14 +55,14 @@ int main() {
 
     // gnm random 
     jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
-    jgrapht_capi_generate_gnm_random(thread, g, 10, 30, 17, 0, 0);
+    jgrapht_capi_generate_gnm_random(thread, g, 10, 30, 0, 0, 17);
     jgrapht_capi_graph_vertices_count(thread, g, &vcount);
     assert(vcount == 10);
     jgrapht_capi_destroy(thread, g);
 
     // gnp random
     jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
-    jgrapht_capi_generate_gnp_random(thread, g, 10, 0.1, 17, 0);
+    jgrapht_capi_generate_gnp_random(thread, g, 10, 0.1, 0, 17);
     jgrapht_capi_graph_vertices_count(thread, g, &vcount);
     assert(vcount == 10);
     jgrapht_capi_destroy(thread, g);
