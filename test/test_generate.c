@@ -53,6 +53,48 @@ int main() {
     assert(vcount == 10);
     jgrapht_capi_destroy(thread, g);
 
+    // gnm random 
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_gnm_random(thread, g, 10, 30, 17, 0, 0);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 10);
+    jgrapht_capi_destroy(thread, g);
+
+    // gnp random
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_gnp_random(thread, g, 10, 0.1, 17, 0);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 10);
+    jgrapht_capi_destroy(thread, g);
+
+    // ring
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_ring(thread, g, 10);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 10);
+    jgrapht_capi_destroy(thread, g);
+
+    // scalefree
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_scalefree(thread, g, 10, 17);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 10);
+    jgrapht_capi_destroy(thread, g);
+
+    // watts strogatz
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_watts_strogatz(thread, g, 10, 2, 0.1, 0, 17);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 10);
+    jgrapht_capi_destroy(thread, g);
+
+    // kleinberg
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_kleinberg_smallworld(thread, g, 10, 2, 1, 0.2, 17);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 100);
+    jgrapht_capi_destroy(thread, g);
+
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");
         exit(EXIT_FAILURE);
