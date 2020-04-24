@@ -86,6 +86,7 @@ set(
     "test_coloring.c"
     "test_views.c"
     "test_graphtests.c"
+    "test_graphmetrics.c"
     "test_partition.c"
     "test_matching.c"
     "test_generate.c"
