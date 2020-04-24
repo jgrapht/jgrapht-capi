@@ -147,6 +147,4 @@ public class GenerateApi {
 		return Status.SUCCESS.toCEnum();
 	}
 
-	// TODO: add all missing generators
-
 }
