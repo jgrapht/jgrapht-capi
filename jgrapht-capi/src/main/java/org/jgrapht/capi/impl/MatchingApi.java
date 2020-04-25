@@ -146,7 +146,7 @@ public class MatchingApi {
 		Set<Long> part1 = part.getPartition(1);
 		MatchingAlgorithm<Long, Long> alg = new HopcroftKarpMaximumCardinalityBipartiteMatching<>(g, part0, part1);
 		Matching<Long, Long> result = alg.getMatching();
-		if (weightRes.isNonNull()) { 
+		if (weightRes.isNonNull()) {
 			weightRes.write(result.getWeight());
 		}
 		if (res.isNonNull()) {
@@ -178,6 +178,7 @@ public class MatchingApi {
 	public static int executeBipartiteMaximumWeightedMatching(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		System.out.println("Partitioning");
 		BipartitePartitioning<Long, Long> partAlg = new BipartitePartitioning<>(g);
 		if (!partAlg.isBipartite()) {
 			throw new IllegalArgumentException("Graph is not bipartite");
@@ -187,8 +188,15 @@ public class MatchingApi {
 		Set<Long> part1 = part.getPartition(1);
 		MatchingAlgorithm<Long, Long> alg = new MaximumWeightBipartiteMatching<>(g, part0, part1);
 		Matching<Long, Long> result = alg.getMatching();
+
+		// fix bug in JGraphT 1.4.0 which returns the wrong weight here
+		double weight = 0d;
+		for (Long e : result.getEdges()) {
+			weight += g.getEdgeWeight(e);
+		}
+
 		if (weightRes.isNonNull()) {
-			weightRes.write(result.getWeight());
+			weightRes.write(weight);
 		}
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result.getEdges()));
