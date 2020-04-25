@@ -17,7 +17,6 @@ mkdir build/
 cd build/
 cmake ..
 make
-make install
 ```
 
 After a successful build, you should see the following files: 
@@ -29,7 +28,11 @@ graal_isolate.h
 graal_isolate_dynamic.h
 ```
 
-and the shared libraries `libjgrapht_capi.so`.
+and the shared library `libjgrapht_capi.so`.
+
+## Installation
+
+Use `make install` to install the library.
 
 ## Requirements 
 
@@ -62,6 +65,10 @@ Please note that this library is distributed WITHOUT ANY WARRANTY; without even 
 Please refer to the license for details.
 
 SPDX-License-Identifier: LGPL-2.1-or-later OR EPL-2.0
+
+## Author
+
+(C) Copyright 2020, by Dimitrios Michail
 
 
 Enjoy!
