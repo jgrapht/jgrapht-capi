@@ -131,8 +131,8 @@ public class GraphApi {
 			CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Long result = g.addEdge(source, target);
-		if (result == null) { 
-			throw new UnsupportedOperationException("Graph does not allow multiple edges");
+		if (result == null) {
+			throw new IllegalArgumentException("Graph does not allow multiple edges");
 		}
 		if (res.isNonNull()) {
 			res.write(result);
