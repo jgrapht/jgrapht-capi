@@ -93,6 +93,7 @@ set(
     "test_scoring.c"
     "test_traverse.c"
     "test_spanner.c"
+    "test_tour.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})

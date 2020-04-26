@@ -22,15 +22,19 @@ int main() {
     jgrapht_capi_set_long_contains(thread, set, 4, &exists);
     assert(exists == 0);
 
-    jgrapht_capi_set_long_add(thread, set, 4);
+    int did_not_exist;
+    jgrapht_capi_set_long_add(thread, set, 4, &did_not_exist);
+    assert(did_not_exist);
     jgrapht_capi_set_long_contains(thread, set, 4, &exists);
     assert(exists == 1);
 
-    jgrapht_capi_set_long_add(thread, set, 100);
+    jgrapht_capi_set_long_add(thread, set, 100, &did_not_exist);
+    assert(did_not_exist);
     jgrapht_capi_set_long_contains(thread, set, 100, &exists);
     assert(exists == 1);
 
-    jgrapht_capi_set_long_add(thread, set, 500);
+    jgrapht_capi_set_long_add(thread, set, 500, &did_not_exist);
+    assert(did_not_exist);
     jgrapht_capi_set_long_contains(thread, set, 500, &exists);
     assert(exists == 1);
 

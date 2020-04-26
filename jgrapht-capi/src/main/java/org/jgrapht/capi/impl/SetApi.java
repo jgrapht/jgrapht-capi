@@ -72,16 +72,22 @@ public class SetApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_long_add", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int setLongAdd(IsolateThread thread, ObjectHandle handle, long value) {
+	public static int setLongAdd(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
 		Set<Long> set = globalHandles.get(handle);
-		set.add(value);
+		boolean result = set.add(value);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
 		return Status.SUCCESS.toCEnum();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_double_add", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int setDoubleAdd(IsolateThread thread, ObjectHandle handle, double value) {
+	public static int setDoubleAdd(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
 		Set<Double> set = globalHandles.get(handle);
-		set.add(value);
+		boolean result = set.add(value);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
 		return Status.SUCCESS.toCEnum();
 	}
 
