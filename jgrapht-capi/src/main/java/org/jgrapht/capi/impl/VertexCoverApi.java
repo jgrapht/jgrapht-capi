@@ -17,7 +17,6 @@
  */
 package org.jgrapht.capi.impl;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -47,107 +46,79 @@ public class VertexCoverApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "vertexcover_exec_greedy", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeVertexCoverGreedyWeighted(IsolateThread thread, ObjectHandle graphHandle,
-			WordPointer res) {
-		return executeVertexCover(thread, graphHandle, g -> new GreedyVCImpl<>(g), res);
+			CDoublePointer weightRes, WordPointer res) {
+		return executeVertexCover(thread, graphHandle, g -> new GreedyVCImpl<>(g), weightRes, res);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "vertexcover_exec_greedy_weighted", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeVertexCoverGreedyWeighted(IsolateThread thread, ObjectHandle graphHandle,
-			ObjectHandle mapHandle, WordPointer res) {
+			ObjectHandle mapHandle, CDoublePointer weightRes, WordPointer res) {
 		return executeVertexCoverWeighted(thread, graphHandle, mapHandle,
-				(g, weights) -> new GreedyVCImpl<>(g, weights), res);
+				(g, weights) -> new GreedyVCImpl<>(g, weights), weightRes, res);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "vertexcover_exec_clarkson", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeVertexCoverClarkson(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		return executeVertexCover(thread, graphHandle, g -> new ClarksonTwoApproxVCImpl<>(g), res);
+	public static int executeVertexCoverClarkson(IsolateThread thread, ObjectHandle graphHandle,
+			CDoublePointer weightRes, WordPointer res) {
+		return executeVertexCover(thread, graphHandle, g -> new ClarksonTwoApproxVCImpl<>(g), weightRes, res);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "vertexcover_exec_clarkson_weighted", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeVertexCoverClarksonWeighted(IsolateThread thread, ObjectHandle graphHandle,
-			ObjectHandle mapHandle, WordPointer res) {
+			ObjectHandle mapHandle, CDoublePointer weightRes, WordPointer res) {
 		return executeVertexCoverWeighted(thread, graphHandle, mapHandle,
-				(g, weights) -> new ClarksonTwoApproxVCImpl<>(g, weights), res);
+				(g, weights) -> new ClarksonTwoApproxVCImpl<>(g, weights), weightRes, res);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "vertexcover_exec_edgebased", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeVertexCoverEdgeBased(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		return executeVertexCover(thread, graphHandle, g -> new EdgeBasedTwoApproxVCImpl<>(g), res);
+	public static int executeVertexCoverEdgeBased(IsolateThread thread, ObjectHandle graphHandle,
+			CDoublePointer weightRes, WordPointer res) {
+		return executeVertexCover(thread, graphHandle, g -> new EdgeBasedTwoApproxVCImpl<>(g), weightRes, res);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "vertexcover_exec_baryehudaeven", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeVertexCoverBarYehudaEven(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		return executeVertexCover(thread, graphHandle, g -> new BarYehudaEvenTwoApproxVCImpl<>(g), res);
+	public static int executeVertexCoverBarYehudaEven(IsolateThread thread, ObjectHandle graphHandle,
+			CDoublePointer weightRes, WordPointer res) {
+		return executeVertexCover(thread, graphHandle, g -> new BarYehudaEvenTwoApproxVCImpl<>(g), weightRes, res);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "vertexcover_exec_baryehudaeven_weighted", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeVertexCoverBarYehudaEvenWeighted(IsolateThread thread, ObjectHandle graphHandle,
-			ObjectHandle mapHandle, WordPointer res) {
+			ObjectHandle mapHandle, CDoublePointer weightRes, WordPointer res) {
 		return executeVertexCoverWeighted(thread, graphHandle, mapHandle,
-				(g, weights) -> new BarYehudaEvenTwoApproxVCImpl<>(g, weights), res);
+				(g, weights) -> new BarYehudaEvenTwoApproxVCImpl<>(g, weights), weightRes, res);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "vertexcover_exec_exact", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeVertexCoverExact(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		return executeVertexCover(thread, graphHandle, g -> new RecursiveExactVCImpl<>(g), res);
+	public static int executeVertexCoverExact(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer weightRes,
+			WordPointer res) {
+		return executeVertexCover(thread, graphHandle, g -> new RecursiveExactVCImpl<>(g), weightRes, res);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "vertexcover_exec_exact_weighted", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeVertexCoverExactWeighted(IsolateThread thread, ObjectHandle graphHandle,
-			ObjectHandle mapHandle, WordPointer res) {
+			ObjectHandle mapHandle, CDoublePointer weightRes, WordPointer res) {
 		return executeVertexCoverWeighted(thread, graphHandle, mapHandle,
-				(g, weights) -> new RecursiveExactVCImpl<>(g, weights), res);
-	}
-
-	/**
-	 * Get the weight of an vertex cover.
-	 * 
-	 * @param thread   the thread
-	 * @param vcHandle the vertex cover handle
-	 * @return the weight
-	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "vertexcover_get_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int getVertexCoverWeight(IsolateThread thread, ObjectHandle vcHandle, CDoublePointer res) {
-		VertexCover<Long> vc = globalHandles.get(vcHandle);
-		double result = vc.getWeight();
-		if (res.isNonNull()) {
-			res.write(result);
-		}
-		return Status.SUCCESS.toCEnum();
-	}
-
-	/**
-	 * Get a vertex iterator for the vertex cover
-	 * 
-	 * @param thread   the thread
-	 * @param vcHandle the vertex cover handle
-	 * @return the vertex iterator
-	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "vertexcover_create_vit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int createMSTEdgeIterator(IsolateThread thread, ObjectHandle vcHandle, WordPointer res) {
-		VertexCover<Long> vc = globalHandles.get(vcHandle);
-		Iterator<Long> it = vc.iterator();
-		if (res.isNonNull()) {
-			res.write(globalHandles.create(it));
-		}
-		return Status.SUCCESS.toCEnum();
+				(g, weights) -> new RecursiveExactVCImpl<>(g, weights), weightRes, res);
 	}
 
 	private static int executeVertexCover(IsolateThread thread, ObjectHandle graphHandle,
-			Function<Graph<Long, Long>, VertexCoverAlgorithm<Long>> algProvider, WordPointer res) {
+			Function<Graph<Long, Long>, VertexCoverAlgorithm<Long>> algProvider, CDoublePointer weightRes,
+			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		VertexCoverAlgorithm<Long> alg = algProvider.apply(g);
 		VertexCover<Long> vertexCover = alg.getVertexCover();
+		if (weightRes.isNonNull()) {
+			weightRes.write(vertexCover.getWeight());
+		}
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(vertexCover));
 		}
@@ -156,11 +127,15 @@ public class VertexCoverApi {
 
 	private static int executeVertexCoverWeighted(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle mapHandle,
-			BiFunction<Graph<Long, Long>, Map<Long, Double>, VertexCoverAlgorithm<Long>> algProvider, WordPointer res) {
+			BiFunction<Graph<Long, Long>, Map<Long, Double>, VertexCoverAlgorithm<Long>> algProvider,
+			CDoublePointer weightRes, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Map<Long, Double> vertexWeights = globalHandles.get(mapHandle);
 		VertexCoverAlgorithm<Long> alg = algProvider.apply(g, vertexWeights);
 		VertexCover<Long> vertexCover = alg.getVertexCover();
+		if (weightRes.isNonNull()) {
+			weightRes.write(vertexCover.getWeight());
+		}
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(vertexCover));
 		}
