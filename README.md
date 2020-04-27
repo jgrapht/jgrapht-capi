@@ -42,6 +42,7 @@ The build will succeed only if you have the following piece of software installe
  * Native Image component from GraalVM
  * Maven build tool
  * GNU C compiler or clang
+ * CMake
 
 For now only linux has been tested.
 
