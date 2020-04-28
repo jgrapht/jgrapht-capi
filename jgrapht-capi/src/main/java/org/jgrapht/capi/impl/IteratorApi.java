@@ -26,6 +26,7 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.CLongPointer;
+import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
@@ -48,6 +49,16 @@ public class IteratorApi {
 		Iterator<Double> it = globalHandles.get(itHandle);
 		if (res.isNonNull()) {
 			res.write(it.next());
+		}
+		return Status.SUCCESS.toCEnum();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_object", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int iteratorNextObject(IsolateThread thread, ObjectHandle itHandle, WordPointer res) {
+		Iterator<?> it = globalHandles.get(itHandle);
+		Object o = it.next();
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(o));
 		}
 		return Status.SUCCESS.toCEnum();
 	}
