@@ -8,6 +8,8 @@
 This library provides a native C api to the JGraphT library. Since the JGraphT library is written in Java, we
 use [GraalVM](https://www.graalvm.org/) in order to build a shared library.
 
+_Important! This is alpha software and the interface many change!_
+
 ## Build
 
 We use cmake to build the native library. 
