@@ -33,7 +33,8 @@ int main() {
     assert(jgrapht_capi_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
     assert(flag == 0);
 
-    for(int i = 0; i < 7; i++) { 
+    int i;
+    for(i = 0; i < 7; i++) { 
         jgrapht_capi_graph_add_vertex(thread, g, NULL);
     }
 

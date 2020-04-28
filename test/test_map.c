@@ -36,12 +36,13 @@ int main() {
     jgrapht_capi_clear_errno(thread);
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    for(int i = 0; i < 1000; i++) { 
+    int i;
+    for(i = 0; i < 1000; i++) { 
         jgrapht_capi_map_long_double_put(thread, map, i, 1000+i);
         assert(jgrapht_capi_get_errno(thread) == 0);
     }
 
-    for(int i = 0; i < 1000; i++) { 
+    for(i = 0; i < 1000; i++) { 
         assert(jgrapht_capi_map_long_double_get(thread, map, i, &dvalue) == 0);
         assert(dvalue == 1000+i);
         assert(jgrapht_capi_get_errno(thread) == 0);

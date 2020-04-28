@@ -51,9 +51,9 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     // test error invalid handle
-    int has_next; 
+    int has_next = 50; 
     jgrapht_capi_it_hasnext(thread, g, &has_next);
-    assert(!has_next);
+    assert(has_next == 50); // no write due to exception
     assert(jgrapht_capi_get_errno(thread) == NULL_POINTER);
     assert(strcmp("Error (NullPointerException)", jgrapht_capi_get_errno_msg(thread)) == 0);    
 

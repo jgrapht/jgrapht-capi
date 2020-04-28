@@ -28,7 +28,8 @@ int main() {
     assert(jgrapht_capi_graph_edges_count(thread,  g, &ecount) == 0);
     assert(jgrapht_capi_get_errno(thread) == 0);
     
-    for(int i = 0; i < NUM_VERTICES; i++) {
+    int i;
+    for(i = 0; i < NUM_VERTICES; i++) {
         long long v;
         assert(jgrapht_capi_graph_add_vertex(thread,  g, &v) == 0);
         assert(v == i);
@@ -42,7 +43,7 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     int flag;
-    for(int i = 0; i < NUM_VERTICES; i++) {
+    for(i = 0; i < NUM_VERTICES; i++) {
         assert(jgrapht_capi_graph_contains_vertex(thread,  g, i, &flag) == 0);
         assert(flag);
         assert(jgrapht_capi_get_errno(thread) == 0);

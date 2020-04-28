@@ -32,7 +32,8 @@ int main() {
     assert(flag == 0);
 
     long long v;
-    for(int i = 0; i < 8; i++) { 
+    int i;
+    for(i = 0; i < 8; i++) { 
         jgrapht_capi_graph_add_vertex(thread, g, &v);
     }
 
