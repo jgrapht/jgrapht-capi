@@ -20,21 +20,19 @@ cd build/
 cmake ..
 make
 ```
+## Installation
 
-After a successful build, you should see the following files: 
+Use `make install` to install the library. After a successful installation, you should see the following files: 
 
 ```
 jgrapht_capi.h
+jgrapht_capi_types.h
 jgrapht_capi_dynamic.h
 graal_isolate.h
 graal_isolate_dynamic.h
 ```
 
 and the shared library `libjgrapht_capi.so`.
-
-## Installation
-
-Use `make install` to install the library.
 
 ## Requirements 
 
