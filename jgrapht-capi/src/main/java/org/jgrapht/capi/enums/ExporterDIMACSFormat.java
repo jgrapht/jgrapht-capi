@@ -28,9 +28,9 @@ import org.jgrapht.capi.JGraphTDirectives;
 public enum ExporterDIMACSFormat {
 
 	// @formatter:off
-	SHORTEST_PATH, 
-	MAX_CLIQUE,
-	COLORING,
+	DIMACS_FORMAT_SHORTEST_PATH, 
+	DIMACS_FORMAT_MAX_CLIQUE,
+	DIMACS_FORMAT_COLORING,
 	;
 	// @formatter:on
 

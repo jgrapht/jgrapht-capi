@@ -42,7 +42,7 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(new HashMap<>()));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -51,7 +51,7 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(new LinkedHashMap<>()));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -61,7 +61,7 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(map.keySet().iterator()));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_size", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -70,7 +70,7 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(map.size());
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -80,7 +80,7 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(map.values().iterator()));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -88,7 +88,7 @@ public class MapApi {
 	public static Status mapLongDoublePut(IsolateThread thread, ObjectHandle mapHandle, long key, double value) {
 		Map<Long, Double> map = globalHandles.get(mapHandle);
 		map.put(key, value);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -96,7 +96,7 @@ public class MapApi {
 	public static Status mapLongLongPut(IsolateThread thread, ObjectHandle mapHandle, long key, long value) {
 		Map<Long, Long> map = globalHandles.get(mapHandle);
 		map.put(key, value);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -110,7 +110,7 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(value);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -124,7 +124,7 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(value);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -134,7 +134,7 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(map.containsKey(key) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -148,7 +148,7 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(value);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -162,14 +162,14 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(value);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_clear", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static Status clearMap(IsolateThread thread, ObjectHandle mapHandle) {
 		Map<?, ?> map = globalHandles.get(mapHandle);
 		map.clear();
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

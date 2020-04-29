@@ -46,7 +46,7 @@ public class ClusteringApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(clustering));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -56,7 +56,7 @@ public class ClusteringApi {
 		if (res.isNonNull()) {
 			res.write(c.getNumberClusters());
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -68,7 +68,7 @@ public class ClusteringApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

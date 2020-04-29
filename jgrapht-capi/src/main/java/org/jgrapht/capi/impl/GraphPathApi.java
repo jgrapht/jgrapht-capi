@@ -50,7 +50,7 @@ public class GraphPathApi {
 		if (edgeItRes.isNonNull()) {
 			edgeItRes.write(globalHandles.create(gp.getEdgeList().iterator()));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

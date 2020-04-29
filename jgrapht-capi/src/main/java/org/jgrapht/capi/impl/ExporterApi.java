@@ -45,10 +45,10 @@ public class ExporterApi {
 
 		DIMACSFormat actualFormat = null;
 		switch (format) {
-		case COLORING:
+		case DIMACS_FORMAT_COLORING:
 			actualFormat = DIMACSFormat.COLORING;
 			break;
-		case MAX_CLIQUE:
+		case DIMACS_FORMAT_MAX_CLIQUE:
 			actualFormat = DIMACSFormat.MAX_CLIQUE;
 			break;
 		default:
@@ -58,7 +58,7 @@ public class ExporterApi {
 
 		DIMACSExporter<Long, Long> exporter = new DIMACSExporter<>(x -> String.valueOf(x), actualFormat);
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

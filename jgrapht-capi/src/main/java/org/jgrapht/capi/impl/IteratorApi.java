@@ -41,7 +41,7 @@ public class IteratorApi {
 		if (res.isNonNull()) {
 			res.write(it.next());
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_double", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -50,7 +50,7 @@ public class IteratorApi {
 		if (res.isNonNull()) {
 			res.write(it.next());
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_object", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -60,7 +60,7 @@ public class IteratorApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(o));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "it_hasnext", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -69,7 +69,7 @@ public class IteratorApi {
 		if (res.isNonNull()) {
 			res.write(it.hasNext() ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

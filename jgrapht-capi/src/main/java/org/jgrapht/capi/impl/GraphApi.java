@@ -68,7 +68,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -79,7 +79,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -90,7 +90,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -101,7 +101,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -112,7 +112,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -123,7 +123,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_add_edge", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -137,7 +137,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -148,7 +148,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -159,7 +159,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -171,7 +171,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_degree_of", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -181,7 +181,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -192,7 +192,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -203,7 +203,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -214,7 +214,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -225,7 +225,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -236,7 +236,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -247,7 +247,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -258,7 +258,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -269,7 +269,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -280,7 +280,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -292,7 +292,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -300,7 +300,7 @@ public class GraphApi {
 	public static Status allowMultipleEdges(IsolateThread thread, ObjectHandle graphHandle, long edge, double weight) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		g.setEdgeWeight(edge, weight);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -311,7 +311,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -322,7 +322,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -338,7 +338,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -350,7 +350,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -362,7 +362,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -374,7 +374,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -385,7 +385,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -396,7 +396,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -407,7 +407,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -418,7 +418,7 @@ public class GraphApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

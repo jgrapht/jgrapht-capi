@@ -51,7 +51,7 @@ public class GenerateApi {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		GraphGenerator<Long, Long, Long> gen = new BarabasiAlbertGraphGenerator<>(m0, m, n, seed);
 		gen.generateGraph(g);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -60,7 +60,7 @@ public class GenerateApi {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		GraphGenerator<Long, Long, Long> gen = new BarabasiAlbertForestGenerator<>(t, n, seed);
 		gen.generateGraph(g);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -69,7 +69,7 @@ public class GenerateApi {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		GraphGenerator<Long, Long, Long> gen = new CompleteGraphGenerator<>(n);
 		gen.generateGraph(g);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -78,7 +78,7 @@ public class GenerateApi {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		GraphGenerator<Long, Long, Long> gen = new CompleteBipartiteGraphGenerator<>(a, b);
 		gen.generateGraph(g);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "generate_empty", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -86,7 +86,7 @@ public class GenerateApi {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		GraphGenerator<Long, Long, Long> gen = new EmptyGraphGenerator<>(n);
 		gen.generateGraph(g);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -96,7 +96,7 @@ public class GenerateApi {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		GraphGenerator<Long, Long, Long> gen = new GnmRandomGraphGenerator<>(n, m, seed, loops, multipleEdges);
 		gen.generateGraph(g);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -106,7 +106,7 @@ public class GenerateApi {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		GraphGenerator<Long, Long, Long> gen = new GnpRandomGraphGenerator<>(n, p, seed, createLoops);
 		gen.generateGraph(g);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "generate_ring", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -114,7 +114,7 @@ public class GenerateApi {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		GraphGenerator<Long, Long, Long> gen = new RingGraphGenerator<>(n);
 		gen.generateGraph(g);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -123,7 +123,7 @@ public class GenerateApi {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		GraphGenerator<Long, Long, Long> gen = new ScaleFreeGraphGenerator<>(n, seed);
 		gen.generateGraph(g);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -134,7 +134,7 @@ public class GenerateApi {
 		GraphGenerator<Long, Long, Long> gen = new WattsStrogatzGraphGenerator<>(n, k, p, addInsteadOfRewire,
 				new Random(seed));
 		gen.generateGraph(g);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -144,7 +144,7 @@ public class GenerateApi {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		GraphGenerator<Long, Long, Long> gen = new KleinbergSmallWorldGraphGenerator<>(n, p, q, r, seed);
 		gen.generateGraph(g);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

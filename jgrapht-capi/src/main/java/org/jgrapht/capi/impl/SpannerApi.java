@@ -49,7 +49,7 @@ public class SpannerApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(spanner));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

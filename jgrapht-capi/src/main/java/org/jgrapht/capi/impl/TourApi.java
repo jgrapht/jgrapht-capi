@@ -52,7 +52,7 @@ public class TourApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -64,7 +64,7 @@ public class TourApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -76,7 +76,7 @@ public class TourApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -88,7 +88,7 @@ public class TourApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -100,7 +100,7 @@ public class TourApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -112,7 +112,7 @@ public class TourApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -124,7 +124,7 @@ public class TourApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -136,7 +136,7 @@ public class TourApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -149,7 +149,7 @@ public class TourApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -162,7 +162,7 @@ public class TourApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

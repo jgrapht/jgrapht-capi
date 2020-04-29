@@ -87,23 +87,23 @@ public class Errors {
 	public static Status throwableToStatus(Throwable e) {
 		Status status;
 		if (e instanceof IllegalArgumentException) {
-			status = Status.ILLEGAL_ARGUMENT;
+			status = Status.STATUS_ILLEGAL_ARGUMENT;
 		} else if (e instanceof UnsupportedOperationException) {
-			status = Status.UNSUPPORTED_OPERATION;
+			status = Status.STATUS_UNSUPPORTED_OPERATION;
 		} else if (e instanceof IndexOutOfBoundsException) {
-			status = Status.INDEX_OUT_OF_BOUNDS;
+			status = Status.STATUS_INDEX_OUT_OF_BOUNDS;
 		} else if (e instanceof NoSuchElementException) {
-			status = Status.NO_SUCH_ELEMENT;
+			status = Status.STATUS_NO_SUCH_ELEMENT;
 		} else if (e instanceof NullPointerException) {
-			status = Status.NULL_POINTER;
+			status = Status.STATUS_NULL_POINTER;
 		} else if (e instanceof ClassCastException) {
-			status = Status.CLASS_CAST;
+			status = Status.STATUS_CLASS_CAST;
 		} else if (e instanceof ExportException) {
-			status = Status.EXPORT_ERROR;
+			status = Status.STATUS_EXPORT_ERROR;
 		} else if (e instanceof IOException) {
-			status = Status.IO_ERROR;
+			status = Status.STATUS_IO_ERROR;
 		} else {
-			status = Status.ERROR;
+			status = Status.STATUS_ERROR;
 		}
 		return status;
 	}

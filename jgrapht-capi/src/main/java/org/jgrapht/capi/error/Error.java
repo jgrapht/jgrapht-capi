@@ -25,7 +25,7 @@ import org.jgrapht.capi.enums.Status;
 
 public class Error {
 
-	public static final Error SUCCESS = Error.of(Status.SUCCESS);
+	public static final Error SUCCESS = Error.of(Status.STATUS_SUCCESS);
 
 	private static final String NO_MESSAGE = "";
 	private static final CCharPointerHolder NO_MESSAGE_PIN = CTypeConversion.toCString(NO_MESSAGE);

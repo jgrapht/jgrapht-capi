@@ -41,7 +41,7 @@ public class GraphMetricsApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -52,7 +52,7 @@ public class GraphMetricsApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -63,7 +63,7 @@ public class GraphMetricsApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -74,7 +74,7 @@ public class GraphMetricsApi {
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

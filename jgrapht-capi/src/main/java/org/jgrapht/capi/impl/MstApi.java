@@ -55,7 +55,7 @@ public class MstApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(mst.getEdges()));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class MstApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(mst.getEdges()));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class MstApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(mst.getEdges()));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

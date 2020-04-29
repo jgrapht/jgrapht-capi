@@ -38,7 +38,7 @@ public class MemoryApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "destroy", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static Status destroy(IsolateThread thread, ObjectHandle handle) {
 		globalHandles.destroy(handle);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

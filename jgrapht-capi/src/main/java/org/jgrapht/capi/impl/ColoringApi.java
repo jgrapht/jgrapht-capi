@@ -121,6 +121,6 @@ public class ColoringApi {
 		if (resColorsMap.isNonNull()) {
 			resColorsMap.write(globalHandles.create(colors));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 }

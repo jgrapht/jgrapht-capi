@@ -50,7 +50,7 @@ public class TraverseApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -61,7 +61,7 @@ public class TraverseApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -72,7 +72,7 @@ public class TraverseApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -83,7 +83,7 @@ public class TraverseApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -94,7 +94,7 @@ public class TraverseApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -105,7 +105,7 @@ public class TraverseApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -117,7 +117,7 @@ public class TraverseApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -129,7 +129,7 @@ public class TraverseApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -140,7 +140,7 @@ public class TraverseApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -151,7 +151,7 @@ public class TraverseApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -162,7 +162,7 @@ public class TraverseApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -174,7 +174,7 @@ public class TraverseApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

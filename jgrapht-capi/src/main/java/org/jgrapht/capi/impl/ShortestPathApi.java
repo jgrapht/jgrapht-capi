@@ -56,7 +56,7 @@ public class ShortestPathApi {
 				pathRes.write(WordFactory.nullPointer());
 			}
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -74,7 +74,7 @@ public class ShortestPathApi {
 				pathRes.write(WordFactory.nullPointer());
 			}
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -88,7 +88,7 @@ public class ShortestPathApi {
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -102,7 +102,7 @@ public class ShortestPathApi {
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -116,7 +116,7 @@ public class ShortestPathApi {
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -127,7 +127,7 @@ public class ShortestPathApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(alg));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -138,7 +138,7 @@ public class ShortestPathApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(alg));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -154,7 +154,7 @@ public class ShortestPathApi {
 				pathRes.write(WordFactory.nullPointer());
 			}
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -170,7 +170,7 @@ public class ShortestPathApi {
 				res.write(WordFactory.nullPointer());
 			}
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -182,7 +182,7 @@ public class ShortestPathApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(paths));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

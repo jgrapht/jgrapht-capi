@@ -39,7 +39,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isEmpty(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -49,7 +49,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isSimple(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -59,7 +59,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.hasSelfLoops(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -69,7 +69,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.hasMultipleEdges(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -79,7 +79,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isComplete(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -89,7 +89,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isWeaklyConnected(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -99,7 +99,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isStronglyConnected(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -109,7 +109,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isTree(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -119,7 +119,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isForest(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -129,7 +129,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isOverfull(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -139,7 +139,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isSplit(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -149,7 +149,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isBipartite(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -159,7 +159,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isCubic(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -169,7 +169,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isEulerian(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -179,7 +179,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isChordal(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -189,7 +189,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isWeaklyChordal(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -199,7 +199,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.hasOreProperty(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -209,7 +209,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isTriangleFree(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -219,7 +219,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isPerfect(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -229,7 +229,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isPlanar(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -239,7 +239,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isKuratowskiSubdivision(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -249,7 +249,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isK33Subdivision(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -259,7 +259,7 @@ public class GraphTestsApi {
 		if (res.isNonNull()) {
 			res.write(GraphTests.isK5Subdivision(g) ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

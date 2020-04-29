@@ -122,7 +122,7 @@ public class VertexCoverApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(vertexCover));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	private static Status executeVertexCoverWeighted(IsolateThread thread, ObjectHandle graphHandle,
@@ -139,7 +139,7 @@ public class VertexCoverApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(vertexCover));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

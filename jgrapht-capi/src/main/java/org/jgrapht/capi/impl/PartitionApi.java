@@ -54,7 +54,7 @@ public class PartitionApi {
 				part2.write(globalHandles.create(partitioning.getPartition(1)));
 			}
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }

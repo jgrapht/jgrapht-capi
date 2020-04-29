@@ -41,7 +41,7 @@ public class SetApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(new HashSet<>()));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -50,7 +50,7 @@ public class SetApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(new LinkedHashSet<>()));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_it_create", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -59,7 +59,7 @@ public class SetApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(set.iterator()));
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_size", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -68,7 +68,7 @@ public class SetApi {
 		if (res.isNonNull()) {
 			res.write(set.size());
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_long_add", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -78,7 +78,7 @@ public class SetApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_double_add", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -88,14 +88,14 @@ public class SetApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_long_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static Status setLongRemove(IsolateThread thread, ObjectHandle handle, long value) {
 		Set<Long> set = globalHandles.get(handle);
 		set.remove(value);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -103,7 +103,7 @@ public class SetApi {
 	public static Status setDoubleRemove(IsolateThread thread, ObjectHandle handle, double value) {
 		Set<Double> set = globalHandles.get(handle);
 		set.remove(value);
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -114,7 +114,7 @@ public class SetApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -125,14 +125,14 @@ public class SetApi {
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_clear", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static Status clearMap(IsolateThread thread, ObjectHandle handle) {
 		Set<?> set = globalHandles.get(handle);
 		set.clear();
-		return Status.SUCCESS;
+		return Status.STATUS_SUCCESS;
 	}
 
 }
