@@ -38,9 +38,9 @@ public class ExporterApi {
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "export_file_dimacs_sp", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "export_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static Status exportDIMACSShortestPathToFile(IsolateThread thread, ObjectHandle graphHandle,
-			ExporterDIMACSFormat format, CCharPointer filename) {
+			CCharPointer filename, ExporterDIMACSFormat format) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
 		DIMACSFormat actualFormat = null;
