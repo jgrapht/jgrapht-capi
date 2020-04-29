@@ -26,7 +26,7 @@ import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphMetrics;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class GraphMetricsApi {
@@ -35,46 +35,46 @@ public class GraphMetricsApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_metrics_diameter", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status diameter(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer res) {
+	public static int diameter(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		double result = GraphMetrics.getDiameter(g);
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_metrics_radius", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status radius(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer res) {
+	public static int radius(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		double result = GraphMetrics.getRadius(g);
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_metrics_girth", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status girth(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
+	public static int girth(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		long result = GraphMetrics.getGirth(g);
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_metrics_triangles", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status triangles(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
+	public static int triangles(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		long result = GraphMetrics.getNumberOfTriangles(g);
 		if (res.isNonNull()) {
 			res.write(result);
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

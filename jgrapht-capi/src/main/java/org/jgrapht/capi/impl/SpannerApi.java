@@ -28,7 +28,7 @@ import org.jgrapht.alg.interfaces.SpannerAlgorithm;
 import org.jgrapht.alg.interfaces.SpannerAlgorithm.Spanner;
 import org.jgrapht.alg.spanning.GreedyMultiplicativeSpanner;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class SpannerApi {
@@ -37,7 +37,7 @@ public class SpannerApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "spanner_exec_greedy_multiplicative", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeGreedyMultiplicativeSpanner(IsolateThread thread, ObjectHandle graph, int k,
+	public static int executeGreedyMultiplicativeSpanner(IsolateThread thread, ObjectHandle graph, int k,
 			CDoublePointer weightRes, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		SpannerAlgorithm<Long> spannerAlg = new GreedyMultiplicativeSpanner<>(g, k);
@@ -49,7 +49,7 @@ public class SpannerApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(spanner));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

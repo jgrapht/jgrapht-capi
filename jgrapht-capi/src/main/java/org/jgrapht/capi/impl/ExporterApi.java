@@ -27,8 +27,8 @@ import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.graalvm.nativeimage.c.type.CTypeConversion;
 import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.enums.ExporterDIMACSFormat;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.ExporterDIMACSFormat;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.nio.dimacs.DIMACSExporter;
 import org.jgrapht.nio.dimacs.DIMACSFormat;
@@ -39,7 +39,7 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status exportDIMACSShortestPathToFile(IsolateThread thread, ObjectHandle graphHandle,
+	public static int exportDIMACSShortestPathToFile(IsolateThread thread, ObjectHandle graphHandle,
 			CCharPointer filename, ExporterDIMACSFormat format) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
@@ -58,7 +58,7 @@ public class ExporterApi {
 
 		DIMACSExporter<Long, Long> exporter = new DIMACSExporter<>(x -> String.valueOf(x), actualFormat);
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

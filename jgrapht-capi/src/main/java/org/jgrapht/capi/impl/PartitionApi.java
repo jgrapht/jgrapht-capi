@@ -27,7 +27,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.PartitioningAlgorithm.Partitioning;
 import org.jgrapht.alg.partition.BipartitePartitioning;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class PartitionApi {
@@ -36,7 +36,7 @@ public class PartitionApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "partition_exec_bipartite", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeBipartitePartitioner(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res,
+	public static int executeBipartitePartitioner(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res,
 			WordPointer part1, WordPointer part2) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
@@ -54,7 +54,7 @@ public class PartitionApi {
 				part2.write(globalHandles.create(partitioning.getPartition(1)));
 			}
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

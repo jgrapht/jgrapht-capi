@@ -37,7 +37,7 @@ import org.jgrapht.alg.tour.RandomTourTSP;
 import org.jgrapht.alg.tour.TwoApproxMetricTSP;
 import org.jgrapht.alg.tour.TwoOptHeuristicTSP;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class TourApi {
@@ -45,103 +45,103 @@ public class TourApi {
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "tour_tsp_random", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status randomTSP(IsolateThread thread, ObjectHandle handle, long seed, WordPointer res) {
+	public static int randomTSP(IsolateThread thread, ObjectHandle handle, long seed, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(handle);
 		HamiltonianCycleAlgorithm<Long, Long> alg = new RandomTourTSP<>(new Random(seed));
 		GraphPath<Long, Long> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_tsp_greedy_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status greedyHeuristic(IsolateThread thread, ObjectHandle handle, WordPointer res) {
+	public static int greedyHeuristic(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(handle);
 		HamiltonianCycleAlgorithm<Long, Long> alg = new GreedyHeuristicTSP<>();
 		GraphPath<Long, Long> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_tsp_nearest_insertion_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status nearestInsertionHeuristic(IsolateThread thread, ObjectHandle handle, WordPointer res) {
+	public static int nearestInsertionHeuristic(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(handle);
 		HamiltonianCycleAlgorithm<Long, Long> alg = new NearestInsertionHeuristicTSP<>();
 		GraphPath<Long, Long> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_tsp_nearest_neighbor_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status nearestNeighborHeuristic(IsolateThread thread, ObjectHandle handle, long seed, WordPointer res) {
+	public static int nearestNeighborHeuristic(IsolateThread thread, ObjectHandle handle, long seed, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(handle);
 		HamiltonianCycleAlgorithm<Long, Long> alg = new NearestNeighborHeuristicTSP<>(new Random(seed));
 		GraphPath<Long, Long> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_metric_tsp_christofides", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status christofides(IsolateThread thread, ObjectHandle handle, WordPointer res) {
+	public static int christofides(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(handle);
 		HamiltonianCycleAlgorithm<Long, Long> alg = new ChristofidesThreeHalvesApproxMetricTSP<>();
 		GraphPath<Long, Long> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_metric_tsp_two_approx", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status twoApprox(IsolateThread thread, ObjectHandle handle, WordPointer res) {
+	public static int twoApprox(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(handle);
 		HamiltonianCycleAlgorithm<Long, Long> alg = new TwoApproxMetricTSP<>();
 		GraphPath<Long, Long> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_tsp_held_karp", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status heldKarp(IsolateThread thread, ObjectHandle handle, WordPointer res) {
+	public static int heldKarp(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(handle);
 		HamiltonianCycleAlgorithm<Long, Long> alg = new HeldKarpTSP<>();
 		GraphPath<Long, Long> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_hamiltonian_palmer", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status palmer(IsolateThread thread, ObjectHandle handle, WordPointer res) {
+	public static int palmer(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(handle);
 		HamiltonianCycleAlgorithm<Long, Long> alg = new PalmerHamiltonianCycle<>();
 		GraphPath<Long, Long> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_tsp_two_opt_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status twoOptHeuristic(IsolateThread thread, ObjectHandle handle, int k, double minCostImprovement,
+	public static int twoOptHeuristic(IsolateThread thread, ObjectHandle handle, int k, double minCostImprovement,
 			long seed, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(handle);
 		HamiltonianCycleAlgorithm<Long, Long> alg = new TwoOptHeuristicTSP<>(k, new Random(seed), minCostImprovement);
@@ -149,12 +149,12 @@ public class TourApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_tsp_two_opt_heuristic_improve", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status twoOptHeuristicImprove(IsolateThread thread, ObjectHandle handle, double minCostImprovement,
+	public static int twoOptHeuristicImprove(IsolateThread thread, ObjectHandle handle, double minCostImprovement,
 			long seed, WordPointer res) {
 		GraphPath<Long, Long> tour = globalHandles.get(handle);
 		TwoOptHeuristicTSP<Long, Long> alg = new TwoOptHeuristicTSP<>(1, new Random(seed), minCostImprovement);
@@ -162,7 +162,7 @@ public class TourApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

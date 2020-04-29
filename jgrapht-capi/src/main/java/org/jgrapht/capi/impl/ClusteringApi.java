@@ -30,7 +30,7 @@ import org.jgrapht.alg.clustering.KSpanningTreeClustering;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm.Clustering;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class ClusteringApi {
@@ -39,36 +39,36 @@ public class ClusteringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clustering_exec_k_spanning_tree", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeKSpanningTree(IsolateThread thread, ObjectHandle graphHandle, int k, WordPointer res) {
+	public static int executeKSpanningTree(IsolateThread thread, ObjectHandle graphHandle, int k, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		ClusteringAlgorithm<Long> alg = new KSpanningTreeClustering<>(g, k);
 		Clustering<Long> clustering = alg.getClustering();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(clustering));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clustering_get_number_clusters", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status getNumberOfClusters(IsolateThread thread, ObjectHandle cHandle, CLongPointer res) {
+	public static int getNumberOfClusters(IsolateThread thread, ObjectHandle cHandle, CLongPointer res) {
 		Clustering<Long> c = globalHandles.get(cHandle);
 		if (res.isNonNull()) {
 			res.write(c.getNumberClusters());
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clustering_ith_cluster_vit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status getClusterWithIndexVertexIterator(IsolateThread thread, ObjectHandle cHandle, int i,
+	public static int getClusterWithIndexVertexIterator(IsolateThread thread, ObjectHandle cHandle, int i,
 			WordPointer res) {
 		Clustering<Long> c = globalHandles.get(cHandle);
 		Iterator<Long> it = c.getClusters().get(i).iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

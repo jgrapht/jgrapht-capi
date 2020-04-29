@@ -43,7 +43,7 @@ import org.jgrapht.alg.matching.blossom.v5.KolmogorovWeightedPerfectMatching;
 import org.jgrapht.alg.matching.blossom.v5.ObjectiveSense;
 import org.jgrapht.alg.partition.BipartitePartitioning;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class MatchingApi {
@@ -52,42 +52,42 @@ public class MatchingApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_greedy_general_max_card", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeGreedyMaximumCardinality(IsolateThread thread, ObjectHandle graphHandle,
+	public static int executeGreedyMaximumCardinality(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
 		return exec(thread, graphHandle, weightRes, res, (g) -> new GreedyMaximumCardinalityMatching<>(g, false));
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_custom_greedy_general_max_card", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeCustomGreedyMaximumCardinality(IsolateThread thread, ObjectHandle graphHandle,
+	public static int executeCustomGreedyMaximumCardinality(IsolateThread thread, ObjectHandle graphHandle,
 			boolean sort, CDoublePointer weightRes, WordPointer res) {
 		return exec(thread, graphHandle, weightRes, res, (g) -> new GreedyMaximumCardinalityMatching<>(g, sort));
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_edmonds_general_max_card_dense", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeEdmondsMCMDense(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer weightRes,
+	public static int executeEdmondsMCMDense(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer weightRes,
 			WordPointer res) {
 		return exec(thread, graphHandle, weightRes, res, (g) -> new DenseEdmondsMaximumCardinalityMatching<>(g));
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_edmonds_general_max_card_sparse", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeEdmondsMCMSparse(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer weightRes,
+	public static int executeEdmondsMCMSparse(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer weightRes,
 			WordPointer res) {
 		return exec(thread, graphHandle, weightRes, res, (g) -> new SparseEdmondsMaximumCardinalityMatching<>(g));
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_greedy_general_max_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeGreedyMaximumWeightedMatching(IsolateThread thread, ObjectHandle graphHandle,
+	public static int executeGreedyMaximumWeightedMatching(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
 		return exec(thread, graphHandle, weightRes, res, (g) -> new GreedyWeightedMatching<>(g, false));
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_custom_greedy_general_max_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeCustomGreedyMaximumWeightedMatching(IsolateThread thread, ObjectHandle graphHandle,
+	public static int executeCustomGreedyMaximumWeightedMatching(IsolateThread thread, ObjectHandle graphHandle,
 			boolean normalizeEdgeCosts, double epsilon, CDoublePointer weightRes, WordPointer res) {
 		return exec(thread, graphHandle, weightRes, res,
 				(g) -> new GreedyWeightedMatching<>(g, normalizeEdgeCosts, epsilon));
@@ -95,14 +95,14 @@ public class MatchingApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_pathgrowing_max_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executePathGrowingMaximumWeightedMatching(IsolateThread thread, ObjectHandle graphHandle,
+	public static int executePathGrowingMaximumWeightedMatching(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
 		return exec(thread, graphHandle, weightRes, res, (g) -> new PathGrowingWeightedMatching<>(g, true));
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_blossom5_general_max_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeBlossom5MaxWeight(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer weightRes,
+	public static int executeBlossom5MaxWeight(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer weightRes,
 			WordPointer res) {
 		return exec(thread, graphHandle, weightRes, res,
 				(g) -> new KolmogorovWeightedMatching<>(g, ObjectiveSense.MAXIMIZE));
@@ -110,7 +110,7 @@ public class MatchingApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_blossom5_general_min_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeBlossom5MinWeight(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer weightRes,
+	public static int executeBlossom5MinWeight(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer weightRes,
 			WordPointer res) {
 		return exec(thread, graphHandle, weightRes, res,
 				(g) -> new KolmogorovWeightedMatching<>(g, ObjectiveSense.MINIMIZE));
@@ -118,7 +118,7 @@ public class MatchingApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_blossom5_general_perfect_max_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeBlossom5PerfectMaxWeight(IsolateThread thread, ObjectHandle graphHandle,
+	public static int executeBlossom5PerfectMaxWeight(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
 		return exec(thread, graphHandle, weightRes, res,
 				(g) -> new KolmogorovWeightedPerfectMatching<>(g, ObjectiveSense.MAXIMIZE));
@@ -126,7 +126,7 @@ public class MatchingApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_blossom5_general_perfect_min_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeBlossom5PerfectMinWeight(IsolateThread thread, ObjectHandle graphHandle,
+	public static int executeBlossom5PerfectMinWeight(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
 		return exec(thread, graphHandle, weightRes, res,
 				(g) -> new KolmogorovWeightedPerfectMatching<>(g, ObjectiveSense.MINIMIZE));
@@ -134,7 +134,7 @@ public class MatchingApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_bipartite_max_card", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeBipartiteMaximumCardinalityMatching(IsolateThread thread, ObjectHandle graphHandle,
+	public static int executeBipartiteMaximumCardinalityMatching(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		BipartitePartitioning<Long, Long> partAlg = new BipartitePartitioning<>(g);
@@ -152,12 +152,12 @@ public class MatchingApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result.getEdges()));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_bipartite_perfect_min_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeBipartitePerfectMinimumWeight(IsolateThread thread, ObjectHandle graphHandle,
+	public static int executeBipartitePerfectMinimumWeight(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle part1Handle, ObjectHandle part2Handle, CDoublePointer weightRes, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Set<Long> part1 = globalHandles.get(part1Handle);
@@ -170,12 +170,12 @@ public class MatchingApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result.getEdges()));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "matching_exec_bipartite_max_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeBipartiteMaximumWeightedMatching(IsolateThread thread, ObjectHandle graphHandle,
+	public static int executeBipartiteMaximumWeightedMatching(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		System.out.println("Partitioning");
@@ -201,10 +201,10 @@ public class MatchingApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result.getEdges()));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	private static Status exec(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer weightRes, WordPointer res,
+	private static int exec(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer weightRes, WordPointer res,
 			Function<Graph<Long, Long>, MatchingAlgorithm<Long, Long>> algProvider) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		MatchingAlgorithm<Long, Long> alg = algProvider.apply(g);
@@ -217,7 +217,7 @@ public class MatchingApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(edges));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

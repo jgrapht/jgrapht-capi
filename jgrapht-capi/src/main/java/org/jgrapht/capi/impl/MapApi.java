@@ -30,7 +30,7 @@ import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class MapApi {
@@ -38,70 +38,70 @@ public class MapApi {
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_create", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status createMap(IsolateThread thread, WordPointer res) {
+	public static int createMap(IsolateThread thread, WordPointer res) {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(new HashMap<>()));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_linked_create", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status createLinkedMap(IsolateThread thread, WordPointer res) {
+	public static int createLinkedMap(IsolateThread thread, WordPointer res) {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(new LinkedHashMap<>()));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_keys_it_create", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status createMapKeysIterator(IsolateThread thread, ObjectHandle mapHandle, WordPointer res) {
+	public static int createMapKeysIterator(IsolateThread thread, ObjectHandle mapHandle, WordPointer res) {
 		Map<?, ?> map = globalHandles.get(mapHandle);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(map.keySet().iterator()));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_size", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status mapSize(IsolateThread thread, ObjectHandle mapHandle, CLongPointer res) {
+	public static int mapSize(IsolateThread thread, ObjectHandle mapHandle, CLongPointer res) {
 		Map<?, ?> map = globalHandles.get(mapHandle);
 		if (res.isNonNull()) {
 			res.write(map.size());
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_values_it_create", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status createMapValuesIterator(IsolateThread thread, ObjectHandle mapHandle, WordPointer res) {
+	public static int createMapValuesIterator(IsolateThread thread, ObjectHandle mapHandle, WordPointer res) {
 		Map<?, ?> map = globalHandles.get(mapHandle);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(map.values().iterator()));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_long_double_put", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status mapLongDoublePut(IsolateThread thread, ObjectHandle mapHandle, long key, double value) {
+	public static int mapLongDoublePut(IsolateThread thread, ObjectHandle mapHandle, long key, double value) {
 		Map<Long, Double> map = globalHandles.get(mapHandle);
 		map.put(key, value);
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_long_long_put", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status mapLongLongPut(IsolateThread thread, ObjectHandle mapHandle, long key, long value) {
+	public static int mapLongLongPut(IsolateThread thread, ObjectHandle mapHandle, long key, long value) {
 		Map<Long, Long> map = globalHandles.get(mapHandle);
 		map.put(key, value);
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_long_double_get", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status mapLongDoubleGet(IsolateThread thread, ObjectHandle mapHandle, long key, CDoublePointer res) {
+	public static int mapLongDoubleGet(IsolateThread thread, ObjectHandle mapHandle, long key, CDoublePointer res) {
 		Map<Long, Double> map = globalHandles.get(mapHandle);
 		Double value = map.get(key);
 		if (value == null) {
@@ -110,12 +110,12 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(value);
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_long_long_get", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status mapLongLongGet(IsolateThread thread, ObjectHandle mapHandle, long key, CLongPointer res) {
+	public static int mapLongLongGet(IsolateThread thread, ObjectHandle mapHandle, long key, CLongPointer res) {
 		Map<Long, Long> map = globalHandles.get(mapHandle);
 		Long value = map.get(key);
 		if (value == null) {
@@ -124,22 +124,22 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(value);
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_long_contains_key", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status mapLongContains(IsolateThread thread, ObjectHandle mapHandle, long key, CIntPointer res) {
+	public static int mapLongContains(IsolateThread thread, ObjectHandle mapHandle, long key, CIntPointer res) {
 		Map<Long, ?> map = globalHandles.get(mapHandle);
 		if (res.isNonNull()) {
 			res.write(map.containsKey(key) ? 1 : 0);
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_long_double_remove", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status mapLongDoubleRemove(IsolateThread thread, ObjectHandle mapHandle, long key, CDoublePointer res) {
+	public static int mapLongDoubleRemove(IsolateThread thread, ObjectHandle mapHandle, long key, CDoublePointer res) {
 		Map<Long, Double> map = globalHandles.get(mapHandle);
 		Double value = map.remove(key);
 		if (value == null) {
@@ -148,12 +148,12 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(value);
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_long_long_remove", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status mapLongLongRemove(IsolateThread thread, ObjectHandle mapHandle, long key, CLongPointer res) {
+	public static int mapLongLongRemove(IsolateThread thread, ObjectHandle mapHandle, long key, CLongPointer res) {
 		Map<Long, Long> map = globalHandles.get(mapHandle);
 		Long value = map.remove(key);
 		if (value == null) {
@@ -162,14 +162,14 @@ public class MapApi {
 		if (res.isNonNull()) {
 			res.write(value);
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_clear", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status clearMap(IsolateThread thread, ObjectHandle mapHandle) {
+	public static int clearMap(IsolateThread thread, ObjectHandle mapHandle) {
 		Map<?, ?> map = globalHandles.get(mapHandle);
 		map.clear();
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

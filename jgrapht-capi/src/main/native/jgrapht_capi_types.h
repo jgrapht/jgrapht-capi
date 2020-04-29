@@ -1,8 +1,6 @@
-#ifndef __JGRAPHT_CAPI_TYPES_H
-#define __JGRAPHT_CAPI_TYPES_H
 
-typedef enum { 
-    STATUS_SUCCESS = 0,
+typedef enum {
+    STATUS_SUCCESS = 0, 
     STATUS_ERROR,
     STATUS_ILLEGAL_ARGUMENT,
     STATUS_UNSUPPORTED_OPERATION,
@@ -20,6 +18,3 @@ typedef enum {
     DIMACS_FORMAT_MAX_CLIQUE,
     DIMACS_FORMAT_COLORING,
 } dimacs_format_t;
-
-#endif
-

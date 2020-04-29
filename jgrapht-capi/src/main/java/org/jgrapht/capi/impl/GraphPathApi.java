@@ -26,7 +26,7 @@ import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.GraphPath;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class GraphPathApi {
@@ -35,7 +35,7 @@ public class GraphPathApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graphpath_get_fields", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status readGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
+	public static int readGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
 			CLongPointer startVertexRes, CLongPointer endVertexRes, WordPointer edgeItRes) {
 		GraphPath<Long, Long> gp = globalHandles.get(handle);
 		if (weightRes.isNonNull()) {
@@ -50,7 +50,7 @@ public class GraphPathApi {
 		if (edgeItRes.isNonNull()) {
 			edgeItRes.write(globalHandles.create(gp.getEdgeList().iterator()));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

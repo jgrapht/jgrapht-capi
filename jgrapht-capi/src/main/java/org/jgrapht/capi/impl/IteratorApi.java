@@ -28,7 +28,7 @@ import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class IteratorApi {
@@ -36,40 +36,40 @@ public class IteratorApi {
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_long", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status iteratorNextLong(IsolateThread thread, ObjectHandle itHandle, CLongPointer res) {
+	public static int iteratorNextLong(IsolateThread thread, ObjectHandle itHandle, CLongPointer res) {
 		Iterator<Long> it = globalHandles.get(itHandle);
 		if (res.isNonNull()) {
 			res.write(it.next());
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_double", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status iteratorNextDouble(IsolateThread thread, ObjectHandle itHandle, CDoublePointer res) {
+	public static int iteratorNextDouble(IsolateThread thread, ObjectHandle itHandle, CDoublePointer res) {
 		Iterator<Double> it = globalHandles.get(itHandle);
 		if (res.isNonNull()) {
 			res.write(it.next());
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_object", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status iteratorNextObject(IsolateThread thread, ObjectHandle itHandle, WordPointer res) {
+	public static int iteratorNextObject(IsolateThread thread, ObjectHandle itHandle, WordPointer res) {
 		Iterator<?> it = globalHandles.get(itHandle);
 		Object o = it.next();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(o));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "it_hasnext", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status iteratorHasNext(IsolateThread thread, ObjectHandle itHandle, CIntPointer res) {
+	public static int iteratorHasNext(IsolateThread thread, ObjectHandle itHandle, CIntPointer res) {
 		Iterator<Long> it = globalHandles.get(itHandle);
 		if (res.isNonNull()) {
 			res.write(it.hasNext() ? 1 : 0);
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

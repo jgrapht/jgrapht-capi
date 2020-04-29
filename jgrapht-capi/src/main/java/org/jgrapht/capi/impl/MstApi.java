@@ -29,7 +29,7 @@ import org.jgrapht.alg.spanning.BoruvkaMinimumSpanningTree;
 import org.jgrapht.alg.spanning.KruskalMinimumSpanningTree;
 import org.jgrapht.alg.spanning.PrimMinimumSpanningTree;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class MstApi {
@@ -45,7 +45,7 @@ public class MstApi {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "mst_exec_kruskal", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeMSTKruskal(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
+	public static int executeMSTKruskal(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
 			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		SpanningTree<Long> mst = new KruskalMinimumSpanningTree<>(g).getSpanningTree();
@@ -55,7 +55,7 @@ public class MstApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(mst.getEdges()));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class MstApi {
 	 * @return a handle on the result
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + "mst_exec_prim", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeMSTPrim(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
+	public static int executeMSTPrim(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
 			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		SpanningTree<Long> mst = new PrimMinimumSpanningTree<>(g).getSpanningTree();
@@ -76,7 +76,7 @@ public class MstApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(mst.getEdges()));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class MstApi {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "mst_exec_boruvka", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeMSTBoruvka(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
+	public static int executeMSTBoruvka(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
 			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graph);
 		SpanningTree<Long> mst = new BoruvkaMinimumSpanningTree<>(g).getSpanningTree();
@@ -98,7 +98,7 @@ public class MstApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(mst.getEdges()));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

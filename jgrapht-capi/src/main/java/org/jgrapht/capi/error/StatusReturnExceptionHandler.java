@@ -17,16 +17,17 @@
  */
 package org.jgrapht.capi.error;
 
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 
 /**
  * Convert an exception into an status code.
  */
 public class StatusReturnExceptionHandler {
 
-	public static Status handle(Throwable e) {
+	public static int handle(Throwable e) {
+		Status s = Errors.throwableToStatus(e);
 		Errors.setError(e);
-		return Errors.throwableToStatus(e);
+		return s.getCValue();
 	}
 
 }

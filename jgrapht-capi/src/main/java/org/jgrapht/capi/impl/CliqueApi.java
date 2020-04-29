@@ -32,7 +32,7 @@ import org.jgrapht.alg.clique.DegeneracyBronKerboschCliqueFinder;
 import org.jgrapht.alg.clique.PivotBronKerboschCliqueFinder;
 import org.jgrapht.alg.interfaces.MaximalCliqueEnumerationAlgorithm;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class CliqueApi {
@@ -41,7 +41,7 @@ public class CliqueApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clique_exec_bron_kerbosch", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeBrownKerbosch(IsolateThread thread, ObjectHandle graphHandle, long timeoutSeconds,
+	public static int executeBrownKerbosch(IsolateThread thread, ObjectHandle graphHandle, long timeoutSeconds,
 			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		MaximalCliqueEnumerationAlgorithm<Long, Long> alg = new BronKerboschCliqueFinder<>(g, timeoutSeconds,
@@ -50,13 +50,13 @@ public class CliqueApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clique_exec_bron_kerbosch_pivot", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeBrownKerboschWithPivot(IsolateThread thread, ObjectHandle graphHandle,
-			long timeoutSeconds, WordPointer res) {
+	public static int executeBrownKerboschWithPivot(IsolateThread thread, ObjectHandle graphHandle, long timeoutSeconds,
+			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		MaximalCliqueEnumerationAlgorithm<Long, Long> alg = new PivotBronKerboschCliqueFinder<>(g, timeoutSeconds,
 				TimeUnit.SECONDS);
@@ -64,12 +64,12 @@ public class CliqueApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clique_exec_bron_kerbosch_pivot_degeneracy_ordering", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeBrownKerboschPivotAndDegeneracyOrdering(IsolateThread thread, ObjectHandle graphHandle,
+	public static int executeBrownKerboschPivotAndDegeneracyOrdering(IsolateThread thread, ObjectHandle graphHandle,
 			long timeoutSeconds, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		MaximalCliqueEnumerationAlgorithm<Long, Long> alg = new DegeneracyBronKerboschCliqueFinder<>(g, timeoutSeconds,
@@ -78,7 +78,7 @@ public class CliqueApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
-		return Status.STATUS_SUCCESS;
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

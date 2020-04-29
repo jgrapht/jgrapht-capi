@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import org.graalvm.nativeimage.c.type.CCharPointer;
-import org.jgrapht.capi.enums.Status;
+import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.nio.ExportException;
 
 /**
@@ -81,31 +81,28 @@ public class Errors {
 			message = sb.toString();
 		}
 		error.set(Error.of(status, message));
-
 	}
 
 	public static Status throwableToStatus(Throwable e) {
-		Status status;
 		if (e instanceof IllegalArgumentException) {
-			status = Status.STATUS_ILLEGAL_ARGUMENT;
+			return Status.STATUS_ILLEGAL_ARGUMENT;
 		} else if (e instanceof UnsupportedOperationException) {
-			status = Status.STATUS_UNSUPPORTED_OPERATION;
+			return Status.STATUS_UNSUPPORTED_OPERATION;
 		} else if (e instanceof IndexOutOfBoundsException) {
-			status = Status.STATUS_INDEX_OUT_OF_BOUNDS;
+			return Status.STATUS_INDEX_OUT_OF_BOUNDS;
 		} else if (e instanceof NoSuchElementException) {
-			status = Status.STATUS_NO_SUCH_ELEMENT;
+			return Status.STATUS_NO_SUCH_ELEMENT;
 		} else if (e instanceof NullPointerException) {
-			status = Status.STATUS_NULL_POINTER;
+			return Status.STATUS_NULL_POINTER;
 		} else if (e instanceof ClassCastException) {
-			status = Status.STATUS_CLASS_CAST;
+			return Status.STATUS_CLASS_CAST;
 		} else if (e instanceof ExportException) {
-			status = Status.STATUS_EXPORT_ERROR;
+			return Status.STATUS_EXPORT_ERROR;
 		} else if (e instanceof IOException) {
-			status = Status.STATUS_IO_ERROR;
+			return Status.STATUS_IO_ERROR;
 		} else {
-			status = Status.STATUS_ERROR;
+			return Status.STATUS_ERROR;
 		}
-		return status;
 	}
 
 }

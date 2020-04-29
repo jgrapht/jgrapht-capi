@@ -5,8 +5,6 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-#define ILLEGAL_ARGUMENT 2
-
 int main() {
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;
@@ -32,10 +30,10 @@ int main() {
     assert(size == 0);
 
     double dvalue;
-    assert(jgrapht_capi_map_long_double_get(thread, map, 5, &dvalue) == ILLEGAL_ARGUMENT);
-    assert(jgrapht_capi_get_errno(thread) == ILLEGAL_ARGUMENT);
+    assert(jgrapht_capi_map_long_double_get(thread, map, 5, &dvalue) == STATUS_ILLEGAL_ARGUMENT);
+    assert(jgrapht_capi_get_errno(thread) == STATUS_ILLEGAL_ARGUMENT);
     jgrapht_capi_clear_errno(thread);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_get_errno(thread) == STATUS_SUCCESS);
 
     int i;
     for(i = 0; i < 1000; i++) { 
@@ -99,7 +97,7 @@ int main() {
     assert(v == 150.0);
     jgrapht_capi_map_long_double_remove(thread, map, 100, &v);
     assert(v == 150.0);
-    assert(jgrapht_capi_map_long_double_remove(thread, map, 100, &v) == ILLEGAL_ARGUMENT);
+    assert(jgrapht_capi_map_long_double_remove(thread, map, 100, &v) == STATUS_ILLEGAL_ARGUMENT);
     jgrapht_capi_clear_errno(thread);
 
     jgrapht_capi_destroy(thread, map);
