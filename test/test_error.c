@@ -6,10 +6,6 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-#define ILLEGAL_ARGUMENT 2
-#define UNSUPPORTED_OPERATION 3
-#define NULL_POINTER 6
-
 int main() {
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;
@@ -44,7 +40,7 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     jgrapht_capi_graph_set_edge_weight(thread, g, e01, 15.0);
-    assert(jgrapht_capi_get_errno(thread) == UNSUPPORTED_OPERATION);
+    assert(jgrapht_capi_get_errno(thread) == STATUS_UNSUPPORTED_OPERATION);
     assert(strcmp("Error (UnsupportedOperationException)", jgrapht_capi_get_errno_msg(thread)) == 0);    
     jgrapht_capi_clear_errno(thread);
 
@@ -55,7 +51,7 @@ int main() {
     int has_next = 50; 
     jgrapht_capi_it_hasnext(thread, g, &has_next);
     assert(has_next == 50); // no write due to exception
-    assert(jgrapht_capi_get_errno(thread) == NULL_POINTER);
+    assert(jgrapht_capi_get_errno(thread) == STATUS_NULL_POINTER);
     assert(strcmp("Error (NullPointerException)", jgrapht_capi_get_errno_msg(thread)) == 0);    
 
     if (thread, graal_detach_thread(thread) != 0) {

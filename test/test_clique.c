@@ -5,8 +5,6 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-#define ITERATOR_NO_SUCH_ELEMENT 100
-
 int main() {
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;

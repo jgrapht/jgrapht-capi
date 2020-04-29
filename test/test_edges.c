@@ -6,7 +6,6 @@
 #include <jgrapht_capi.h>
 
 #define NUM_VERTICES 1000
-#define ITERATOR_NO_SUCH_ELEMENT 100
 
 int main() { 
     graal_isolate_t *isolate = NULL;

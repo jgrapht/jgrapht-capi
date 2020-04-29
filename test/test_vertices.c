@@ -6,7 +6,6 @@
 #include <jgrapht_capi.h>
 
 #define NUM_VERTICES 1000
-#define ITERATOR_NO_SUCH_ELEMENT 5
 
 int main() {
     graal_isolate_t *isolate = NULL;
@@ -99,12 +98,12 @@ int main() {
             assert(ret == x);
             assert(jgrapht_capi_get_errno(thread) == 0);
         } else { 
-            assert(jgrapht_capi_get_errno(thread) == ITERATOR_NO_SUCH_ELEMENT);
+            assert(jgrapht_capi_get_errno(thread) == STATUS_NO_SUCH_ELEMENT);
             break;
         }
         x++;
     }
-    assert(jgrapht_capi_get_errno(thread) == ITERATOR_NO_SUCH_ELEMENT);
+    assert(jgrapht_capi_get_errno(thread) == STATUS_NO_SUCH_ELEMENT);
     jgrapht_capi_clear_errno(thread);
     assert(jgrapht_capi_get_errno(thread) == 0);
     jgrapht_capi_destroy(thread,  vit);

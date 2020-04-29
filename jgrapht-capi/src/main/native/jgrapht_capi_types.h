@@ -1,3 +1,5 @@
+#ifndef __JGRAPHT_CAPI_TYPES
+#define __JGRAPHT_CAPI_TYPES
 
 typedef enum {
     STATUS_SUCCESS = 0, 
@@ -18,3 +20,5 @@ typedef enum {
     DIMACS_FORMAT_MAX_CLIQUE,
     DIMACS_FORMAT_COLORING,
 } dimacs_format_t;
+
+#endif

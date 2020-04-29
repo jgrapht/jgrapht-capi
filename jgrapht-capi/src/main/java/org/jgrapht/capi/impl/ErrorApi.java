@@ -21,7 +21,6 @@ import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.Errors;
 
 /**
@@ -45,8 +44,8 @@ public class ErrorApi {
 	 * @param thread the thread isolate
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + "get_errno")
-	public static Status getError(IsolateThread thread) {
-		return Errors.getErrorStatus();
+	public static int getError(IsolateThread thread) {
+		return Errors.getErrorStatus().getCValue();
 	}
 
 	/**

@@ -5,7 +5,6 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-#define ILLEGAL_ARGUMENT 2
 
 int main() {
     graal_isolate_t *isolate = NULL;
