@@ -17,43 +17,47 @@
  */
 package org.jgrapht.capi.impl;
 
+import java.io.File;
+
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
-import org.graalvm.nativeimage.c.type.CIntPointer;
-import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.nativeimage.c.type.CCharPointer;
+import org.graalvm.nativeimage.c.type.CTypeConversion;
 import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.PartitioningAlgorithm.Partitioning;
-import org.jgrapht.alg.partition.BipartitePartitioning;
 import org.jgrapht.capi.Constants;
+import org.jgrapht.capi.enums.ExporterDIMACSFormat;
 import org.jgrapht.capi.enums.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.nio.dimacs.DIMACSExporter;
+import org.jgrapht.nio.dimacs.DIMACSFormat;
 
-public class PartitionApi {
+public class ExporterApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "partition_exec_bipartite", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static Status executeBipartitePartitioner(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res,
-			WordPointer part1, WordPointer part2) {
+			+ "export_file_dimacs_sp", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static Status exportDIMACSShortestPathToFile(IsolateThread thread, ObjectHandle graphHandle,
+			ExporterDIMACSFormat format, CCharPointer filename) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
-		BipartitePartitioning<Long, Long> p = new BipartitePartitioning<>(g);
-		boolean result = p.isBipartite();
-		if (res.isNonNull()) {
-			res.write(result ? 1 : 0);
+		DIMACSFormat actualFormat = null;
+		switch (format) {
+		case COLORING:
+			actualFormat = DIMACSFormat.COLORING;
+			break;
+		case MAX_CLIQUE:
+			actualFormat = DIMACSFormat.MAX_CLIQUE;
+			break;
+		default:
+			actualFormat = DIMACSFormat.SHORTEST_PATH;
+			break;
 		}
-		if (result) {
-			Partitioning<Long> partitioning = p.getPartitioning();
-			if (part1.isNonNull()) {
-				part1.write(globalHandles.create(partitioning.getPartition(0)));
-			}
-			if (part2.isNonNull()) {
-				part2.write(globalHandles.create(partitioning.getPartition(1)));
-			}
-		}
+
+		DIMACSExporter<Long, Long> exporter = new DIMACSExporter<>(x -> String.valueOf(x), actualFormat);
+		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.SUCCESS;
 	}
 

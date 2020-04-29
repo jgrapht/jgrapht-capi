@@ -39,7 +39,7 @@ import org.jgrapht.alg.color.SmallestDegreeLastColoring;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm.Coloring;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.Status;
+import org.jgrapht.capi.enums.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class ColoringApi {
@@ -48,42 +48,42 @@ public class ColoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_greedy", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeGreedyColoring(IsolateThread thread, ObjectHandle graphHandle, CLongPointer resColors,
+	public static Status executeGreedyColoring(IsolateThread thread, ObjectHandle graphHandle, CLongPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new GreedyColoring<>(g), resColors, resColorsMap);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_greedy_smallestdegreelast", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeSmallestDegreeLastColoring(IsolateThread thread, ObjectHandle graphHandle,
+	public static Status executeSmallestDegreeLastColoring(IsolateThread thread, ObjectHandle graphHandle,
 			CLongPointer resColors, WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new SmallestDegreeLastColoring<>(g), resColors, resColorsMap);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_backtracking_brown", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeBacktrackingBrown(IsolateThread thread, ObjectHandle graphHandle, CLongPointer resColors,
+	public static Status executeBacktrackingBrown(IsolateThread thread, ObjectHandle graphHandle, CLongPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new BrownBacktrackColoring<>(g), resColors, resColorsMap);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_greedy_largestdegreefirst", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeLargestDegreeFirstColoring(IsolateThread thread, ObjectHandle graphHandle,
+	public static Status executeLargestDegreeFirstColoring(IsolateThread thread, ObjectHandle graphHandle,
 			CLongPointer resColors, WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new LargestDegreeFirstColoring<>(g), resColors, resColorsMap);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_greedy_random", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeRandomGreedyWithSeed(IsolateThread thread, ObjectHandle graphHandle,
+	public static Status executeRandomGreedyWithSeed(IsolateThread thread, ObjectHandle graphHandle,
 			CLongPointer resColors, WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new RandomGreedyColoring<>(g), resColors, resColorsMap);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_greedy_random_with_seed", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeRandomGreedy(IsolateThread thread, ObjectHandle graphHandle, long seed,
+	public static Status executeRandomGreedy(IsolateThread thread, ObjectHandle graphHandle, long seed,
 			CLongPointer resColors, WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new RandomGreedyColoring<>(g, new Random(seed)), resColors,
 				resColorsMap);
@@ -91,19 +91,19 @@ public class ColoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_greedy_dsatur", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeGreedyDSatur(IsolateThread thread, ObjectHandle graphHandle, CLongPointer resColors,
+	public static Status executeGreedyDSatur(IsolateThread thread, ObjectHandle graphHandle, CLongPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new SaturationDegreeColoring<>(g), resColors, resColorsMap);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_color_refinement", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeColorRefinement(IsolateThread thread, ObjectHandle graphHandle, CLongPointer resColors,
+	public static Status executeColorRefinement(IsolateThread thread, ObjectHandle graphHandle, CLongPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new ColorRefinementAlgorithm<>(g), resColors, resColorsMap);
 	}
 
-	private static int executeColoring(IsolateThread thread, ObjectHandle graphHandle,
+	private static Status executeColoring(IsolateThread thread, ObjectHandle graphHandle,
 			Function<Graph<Long, Long>, VertexColoringAlgorithm<Long>> algProvider, CLongPointer resColors,
 			WordPointer resColorsMap) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
@@ -121,6 +121,6 @@ public class ColoringApi {
 		if (resColorsMap.isNonNull()) {
 			resColorsMap.write(globalHandles.create(colors));
 		}
-		return Status.SUCCESS.toCEnum();
+		return Status.SUCCESS;
 	}
 }

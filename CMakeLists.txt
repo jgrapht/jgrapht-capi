@@ -52,11 +52,12 @@ set_property(TARGET jgrapht_capi PROPERTY IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/
 add_dependencies(jgrapht_capi jgraphtsharedlib)
 
 install(
-    FILES 
+    FILES
     ${CMAKE_BINARY_DIR}/jgrapht_capi.h 
     ${CMAKE_BINARY_DIR}/jgrapht_capi_dynamic.h
     ${CMAKE_BINARY_DIR}/graal_isolate.h
     ${CMAKE_BINARY_DIR}/graal_isolate_dynamic.h
+    ${CMAKE_SOURCE_DIR}/jgrapht-capi/src/main/native/jgrapht_capi_types.h
     DESTINATION 
     ${CMAKE_INSTALL_INCLUDEDIR}/jgrapht_capi
 )
@@ -100,7 +101,7 @@ set(
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
     add_executable(${testname} test/${testsourcefile})
-    target_include_directories(${testname} PUBLIC ${CMAKE_BINARY_DIR})
+    target_include_directories(${testname} PUBLIC ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/jgrapht-capi/src/main/native)
     target_link_libraries(${testname} jgrapht_capi)
     add_test(NAME ${testname} COMMAND ${testname})
 endforeach( testsourcefile ${APP_SOURCES} )

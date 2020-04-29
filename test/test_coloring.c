@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
+#include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
 void assert_coloring(graal_isolatethread_t *thread, void *g, void *map) { 

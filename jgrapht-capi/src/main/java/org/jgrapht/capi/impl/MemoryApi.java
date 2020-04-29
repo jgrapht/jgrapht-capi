@@ -22,7 +22,7 @@ import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.Status;
+import org.jgrapht.capi.enums.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class MemoryApi {
@@ -36,9 +36,9 @@ public class MemoryApi {
 	 * @param handle the handle
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + "destroy", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int destroy(IsolateThread thread, ObjectHandle handle) {
+	public static Status destroy(IsolateThread thread, ObjectHandle handle) {
 		globalHandles.destroy(handle);
-		return Status.SUCCESS.toCEnum();
+		return Status.SUCCESS;
 	}
 
 }

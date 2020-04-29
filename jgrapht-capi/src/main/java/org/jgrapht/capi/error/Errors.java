@@ -17,10 +17,12 @@
  */
 package org.jgrapht.capi.error;
 
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import org.graalvm.nativeimage.c.type.CCharPointer;
-import org.jgrapht.capi.Status;
+import org.jgrapht.capi.enums.Status;
+import org.jgrapht.nio.ExportException;
 
 /**
  * Error handling
@@ -96,6 +98,10 @@ public class Errors {
 			status = Status.NULL_POINTER;
 		} else if (e instanceof ClassCastException) {
 			status = Status.CLASS_CAST;
+		} else if (e instanceof ExportException) {
+			status = Status.EXPORT_ERROR;
+		} else if (e instanceof IOException) {
+			status = Status.IO_ERROR;
 		} else {
 			status = Status.ERROR;
 		}

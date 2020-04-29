@@ -34,7 +34,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.FloydWarshallShortestPaths;
 import org.jgrapht.alg.shortestpath.JohnsonShortestPaths;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.Status;
+import org.jgrapht.capi.enums.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class ShortestPathApi {
@@ -43,7 +43,7 @@ public class ShortestPathApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_exec_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeDijkstraBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
+	public static Status executeDijkstraBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
 			WordPointer pathRes) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
@@ -56,12 +56,12 @@ public class ShortestPathApi {
 				pathRes.write(WordFactory.nullPointer());
 			}
 		}
-		return Status.SUCCESS.toCEnum();
+		return Status.SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_exec_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
+	public static Status executeBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
 			long target, WordPointer pathRes) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
@@ -74,12 +74,12 @@ public class ShortestPathApi {
 				pathRes.write(WordFactory.nullPointer());
 			}
 		}
-		return Status.SUCCESS.toCEnum();
+		return Status.SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_exec_dijkstra_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeDijkstraFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
+	public static Status executeDijkstraFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
 			WordPointer pathsRes) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
@@ -88,12 +88,12 @@ public class ShortestPathApi {
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
 		}
-		return Status.SUCCESS.toCEnum();
+		return Status.SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_exec_bellmanford_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeBellmanFordFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
+	public static Status executeBellmanFordFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
 			WordPointer pathsRes) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
@@ -102,12 +102,12 @@ public class ShortestPathApi {
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
 		}
-		return Status.SUCCESS.toCEnum();
+		return Status.SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_exec_bfs_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeBfsFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
+	public static Status executeBfsFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
 			WordPointer pathsRes) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
@@ -116,34 +116,34 @@ public class ShortestPathApi {
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
 		}
-		return Status.SUCCESS.toCEnum();
+		return Status.SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_exec_johnson_get_allpairs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeJohnson(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+	public static Status executeJohnson(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		ShortestPathAlgorithm<Long, Long> alg = new JohnsonShortestPaths<>(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(alg));
 		}
-		return Status.SUCCESS.toCEnum();
+		return Status.SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_exec_floydwarshall_get_allpairs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeFloydWarshall(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+	public static Status executeFloydWarshall(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		ShortestPathAlgorithm<Long, Long> alg = new FloydWarshallShortestPaths<>(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(alg));
 		}
-		return Status.SUCCESS.toCEnum();
+		return Status.SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_singlesource_get_path_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int singleSourceGetPathToVertex(IsolateThread thread, ObjectHandle pathsHandle, long target,
+	public static Status singleSourceGetPathToVertex(IsolateThread thread, ObjectHandle pathsHandle, long target,
 			WordPointer pathRes) {
 		SingleSourcePaths<Long, Long> paths = globalHandles.get(pathsHandle);
 		GraphPath<Long, Long> path = paths.getPath(target);
@@ -154,12 +154,12 @@ public class ShortestPathApi {
 				pathRes.write(WordFactory.nullPointer());
 			}
 		}
-		return Status.SUCCESS.toCEnum();
+		return Status.SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_allpairs_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int allPairsGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, long source,
+	public static Status allPairsGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, long source,
 			long target, WordPointer res) {
 		ShortestPathAlgorithm<Long, Long> alg = globalHandles.get(handle);
 		GraphPath<Long, Long> path = alg.getPath(source, target);
@@ -170,19 +170,19 @@ public class ShortestPathApi {
 				res.write(WordFactory.nullPointer());
 			}
 		}
-		return Status.SUCCESS.toCEnum();
+		return Status.SUCCESS;
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_allpairs_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int allPairsGetSingleSourceFromVertex(IsolateThread thread, ObjectHandle handle, long source,
+	public static Status allPairsGetSingleSourceFromVertex(IsolateThread thread, ObjectHandle handle, long source,
 			WordPointer res) {
 		ShortestPathAlgorithm<Long, Long> alg = globalHandles.get(handle);
 		SingleSourcePaths<Long, Long> paths = alg.getPaths(source);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(paths));
 		}
-		return Status.SUCCESS.toCEnum();
+		return Status.SUCCESS;
 	}
 
 }

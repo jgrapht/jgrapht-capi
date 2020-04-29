@@ -15,36 +15,22 @@
  *
  * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
  */
-package org.jgrapht.capi;
+package org.jgrapht.capi.enums;
 
+import org.graalvm.nativeimage.c.CContext;
 import org.graalvm.nativeimage.c.constant.CEnum;
-import org.graalvm.nativeimage.c.constant.CEnumConstant;
 import org.graalvm.nativeimage.c.constant.CEnumLookup;
 import org.graalvm.nativeimage.c.constant.CEnumValue;
+import org.jgrapht.capi.JGraphTDirectives;
 
-/**
- * Error number status
- */
-@CEnum
-public enum Status {
+@CContext(JGraphTDirectives.class)
+@CEnum("dimacs_format_t")
+public enum ExporterDIMACSFormat {
 
 	// @formatter:off
-	@CEnumConstant(value = "0")
-	SUCCESS, 
-	@CEnumConstant(value = "1")
-	ERROR,
-	@CEnumConstant(value = "2")
-	ILLEGAL_ARGUMENT,
-	@CEnumConstant(value = "3")
-	UNSUPPORTED_OPERATION,
-	@CEnumConstant(value = "4")
-	INDEX_OUT_OF_BOUNDS,
-	@CEnumConstant(value = "5")
-	NO_SUCH_ELEMENT,
-	@CEnumConstant(value = "6")
-	NULL_POINTER,
-	@CEnumConstant(value = "7")
-	CLASS_CAST,
+	SHORTEST_PATH, 
+	MAX_CLIQUE,
+	COLORING,
 	;
 	// @formatter:on
 
@@ -52,6 +38,6 @@ public enum Status {
 	public native int toCEnum();
 
 	@CEnumLookup
-	public static native Status toJavaEnum(int value);
+	public static native ExporterDIMACSFormat toJavaEnum(int value);
 
 }
