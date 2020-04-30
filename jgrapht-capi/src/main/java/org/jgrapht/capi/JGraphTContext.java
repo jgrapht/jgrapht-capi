@@ -1,9 +1,13 @@
 package org.jgrapht.capi;
 
+import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.c.CContext;
 import org.graalvm.nativeimage.c.constant.CEnum;
 import org.graalvm.nativeimage.c.constant.CEnumLookup;
 import org.graalvm.nativeimage.c.constant.CEnumValue;
+import org.graalvm.nativeimage.c.function.CFunctionPointer;
+import org.graalvm.nativeimage.c.function.InvokeCFunctionPointer;
+import org.graalvm.nativeimage.c.type.CCharPointer;
 
 @CContext(JGraphTDirectives.class)
 public class JGraphTContext {
@@ -49,6 +53,17 @@ public class JGraphTContext {
 		@CEnumLookup
 		public static native ExporterDIMACSFormat toJavaEnum(int value);
 
+	}
+
+	/* Import of a C function pointer type. */
+	public interface LongToStringFunctionPointer extends CFunctionPointer {
+
+		/*
+		 * Invocation of the function pointer. A call to the function is replaced with
+		 * an indirect call of the function pointer.
+		 */
+		@InvokeCFunctionPointer
+		CCharPointer invoke(IsolateThread thread, long vertex);
 	}
 
 }

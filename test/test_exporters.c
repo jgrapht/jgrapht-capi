@@ -5,6 +5,12 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
+char label[100];
+
+char * vertex_label(void *thread, long long v) { 
+    sprintf(label, "label %lld", v);
+    return label;
+}
 
 int main() {
     graal_isolate_t *isolate = NULL;
@@ -33,7 +39,10 @@ int main() {
     jgrapht_capi_graph_add_edge(thread, g, 3, 0, NULL);
 
     // just test the API with a dummy file
-    jgrapht_capi_export_file_dimacs(thread, g, "dummy.out", DIMACS_FORMAT_COLORING);
+    jgrapht_capi_export_file_dimacs(thread, g, "dummy.dimacs.out", DIMACS_FORMAT_COLORING);
+
+    // API test
+    jgrapht_capi_export_file_gml(thread, g, "dummy.gml.out", 0, &vertex_label, NULL);
 
     jgrapht_capi_destroy(thread, g);
 
