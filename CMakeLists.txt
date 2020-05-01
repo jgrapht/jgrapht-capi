@@ -97,8 +97,8 @@ set(
     "test_tour.c"
     "test_shortestpaths.c"
     "test_clique.c"
-    "test_exporters.c"
-    "test_gml_importer.c"
+    "test_dimacs.c"
+    "test_gml.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})

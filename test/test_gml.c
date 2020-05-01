@@ -57,7 +57,39 @@ int main() {
 
     assert(jgrapht_capi_get_errno(thread) == 0);
 
+    // first write a gml
     void *g;
+    jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
+    assert(jgrapht_capi_get_errno(thread) == 0);
+
+    long long v;
+    long long e;
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+
+    assert(jgrapht_capi_get_errno(thread) == 0);
+
+    jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
+    jgrapht_capi_graph_add_edge(thread, g, 1, 2, NULL);
+    assert(jgrapht_capi_get_errno(thread) == 0);
+
+    // test gml with extra attributes
+    void *attr_store;
+    jgrapht_capi_attributes_store_create(thread, &attr_store);
+    jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 0, "label", "label 0");
+    jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 1, "label", "label 1");
+    jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 2, "label", "label 2");
+
+    jgrapht_capi_export_file_gml(thread, g, "dummy.gml.out", 0, attr_store, NULL);
+    assert(jgrapht_capi_get_errno(thread) == 0);
+    jgrapht_capi_destroy(thread, attr_store);
+    assert(jgrapht_capi_get_errno(thread) == 0);
+
+    jgrapht_capi_destroy(thread, g);
+    assert(jgrapht_capi_get_errno(thread) == 0);
+
+    // then read back
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_get_errno(thread) == 0);
 

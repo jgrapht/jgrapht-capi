@@ -5,13 +5,6 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-char label[100];
-
-char* vertex_label(long long v) { 
-    sprintf(label, "label %lld", v);
-    return label;
-}
-
 int main() {
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;
@@ -40,16 +33,6 @@ int main() {
 
     // just test the API with a dummy file
     jgrapht_capi_export_file_dimacs(thread, g, "dummy.dimacs.out", DIMACS_FORMAT_COLORING);
-
-    // test gml with extra attributes
-    void *attr_store;
-    jgrapht_capi_attributes_store_create(thread, &attr_store);
-    jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 0, "label", "label 0");
-    jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 1, "label", "label 1");
-    jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 2, "label", "label 2");
-
-    jgrapht_capi_export_file_gml(thread, g, "dummy.gml.out", 0, attr_store, NULL);
-    jgrapht_capi_destroy(thread, attr_store);
 
     jgrapht_capi_destroy(thread, g);
 
