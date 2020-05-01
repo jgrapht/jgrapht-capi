@@ -41,8 +41,15 @@ int main() {
     // just test the API with a dummy file
     jgrapht_capi_export_file_dimacs(thread, g, "dummy.dimacs.out", DIMACS_FORMAT_COLORING);
 
-    // API test
-    jgrapht_capi_export_file_gml(thread, g, "dummy.gml.out", 0, &vertex_label, NULL);
+    // test gml with extra attributes
+    void *attr_store;
+    jgrapht_capi_attributes_store_create(thread, &attr_store);
+    jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 0, "label", "label 0");
+    jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 1, "label", "label 1");
+    jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 2, "label", "label 2");
+
+    jgrapht_capi_export_file_gml(thread, g, "dummy.gml.out", 0, attr_store, NULL);
+    jgrapht_capi_destroy(thread, attr_store);
 
     jgrapht_capi_destroy(thread, g);
 

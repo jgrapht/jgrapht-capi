@@ -55,14 +55,14 @@ public class JGraphTContext {
 	}
 
 	/* Import of a C function pointer type. */
-	public interface LongToStringFunctionPointer extends CFunctionPointer {
+	public interface NotifyAttributeFunctionPointer extends CFunctionPointer {
 
 		/*
 		 * Invocation of the function pointer. A call to the function is replaced with
 		 * an indirect call of the function pointer.
 		 */
 		@InvokeCFunctionPointer
-		CCharPointer invoke(long vertex);
+		void invoke(long element, CCharPointer key, CCharPointer value);
 	}
 
 }
