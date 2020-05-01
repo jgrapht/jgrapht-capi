@@ -1,6 +1,5 @@
 package org.jgrapht.capi;
 
-import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.c.CContext;
 import org.graalvm.nativeimage.c.constant.CEnum;
 import org.graalvm.nativeimage.c.constant.CEnumLookup;
@@ -63,7 +62,7 @@ public class JGraphTContext {
 		 * an indirect call of the function pointer.
 		 */
 		@InvokeCFunctionPointer
-		CCharPointer invoke(IsolateThread thread, long vertex);
+		CCharPointer invoke(long vertex);
 	}
 
 }

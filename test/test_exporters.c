@@ -7,7 +7,7 @@
 
 char label[100];
 
-char * vertex_label(void *thread, long long v) { 
+char* vertex_label(long long v) { 
     sprintf(label, "label %lld", v);
     return label;
 }

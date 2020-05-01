@@ -81,7 +81,7 @@ public class ExporterApi {
 			exporter.setVertexAttributeProvider(v -> {
 				Map<String, Attribute> h = new HashMap<>();
 				// invoke the provided C function
-				CCharPointer cResult = vertexLabelsFunction.invoke(thread, v);
+				CCharPointer cResult = vertexLabelsFunction.invoke(v);
 				String result = CTypeConversion.toJavaString(cResult);
 				h.put("label", DefaultAttribute.createAttribute(result));
 				return h;
@@ -93,7 +93,7 @@ public class ExporterApi {
 			exporter.setEdgeAttributeProvider(e -> {
 				Map<String, Attribute> h = new HashMap<>();
 				// invoke the provided C function
-				CCharPointer cResult = edgeLabelsFunction.invoke(thread, e);
+				CCharPointer cResult = edgeLabelsFunction.invoke(e);
 				String result = CTypeConversion.toJavaString(cResult);
 				h.put("label", DefaultAttribute.createAttribute(result));
 				return h;
