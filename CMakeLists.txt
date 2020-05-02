@@ -100,6 +100,7 @@ set(
     "test_dimacs.c"
     "test_gml.c"
     "test_json.c"
+    "test_json2.c"
     "test_lemon.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
