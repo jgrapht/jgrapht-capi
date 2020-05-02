@@ -23,6 +23,7 @@ import java.util.NoSuchElementException;
 import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.nio.ExportException;
+import org.jgrapht.nio.ImportException;
 
 /**
  * Error handling
@@ -96,10 +97,12 @@ public class Errors {
 			return Status.STATUS_NULL_POINTER;
 		} else if (e instanceof ClassCastException) {
 			return Status.STATUS_CLASS_CAST;
-		} else if (e instanceof ExportException) {
-			return Status.STATUS_EXPORT_ERROR;
 		} else if (e instanceof IOException) {
 			return Status.STATUS_IO_ERROR;
+		} else if (e instanceof ExportException) {
+			return Status.STATUS_EXPORT_ERROR;
+		} else if (e instanceof ImportException) {
+			return Status.STATUS_IMPORT_ERROR;
 		} else {
 			return Status.STATUS_ERROR;
 		}

@@ -12,6 +12,7 @@ typedef enum {
     STATUS_CLASS_CAST,
     STATUS_IO_ERROR,
     STATUS_EXPORT_ERROR,
+    STATUS_IMPORT_ERROR,
 } status_t;
 
 
