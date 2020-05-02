@@ -19,6 +19,8 @@ package org.jgrapht.capi.impl;
 
 import java.io.File;
 
+import org.apache.commons.text.StringEscapeUtils;
+import org.apache.commons.text.translate.CharSequenceTranslator;
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
@@ -61,7 +63,7 @@ public class ImporterApi {
 		GmlImporter<Long, Long> importer = new GmlImporter<Long, Long>();
 		importer.setVertexFactory(x -> Long.valueOf(x));
 
-		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction);
+		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
 
 		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
 
@@ -78,7 +80,8 @@ public class ImporterApi {
 		JSONImporter<Long, Long> importer = new JSONImporter<Long, Long>();
 		importer.setVertexFactory(x -> Long.valueOf(x));
 
-		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction);
+		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction,
+				StringEscapeUtils.UNESCAPE_JSON);
 
 		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
 
@@ -87,13 +90,16 @@ public class ImporterApi {
 
 	private static void setupImportAttributes(BaseEventDrivenImporter<Long, Long> importer,
 			NotifyAttributeFunctionPointer vertexAttributeFunction,
-			NotifyAttributeFunctionPointer edgeAttributeFunction) {
+			NotifyAttributeFunctionPointer edgeAttributeFunction, CharSequenceTranslator unescapeTranslator) {
 		if (vertexAttributeFunction.isNonNull()) {
 			importer.addVertexAttributeConsumer((p, attr) -> {
 				long vertex = p.getFirst();
 				String key = p.getSecond();
 				CCharPointerHolder keyHolder = CTypeConversion.toCString(key);
 				String value = attr.getValue();
+				if (unescapeTranslator != null) {
+					value = unescapeTranslator.translate(value);
+				}
 				CCharPointerHolder valueHolder = CTypeConversion.toCString(value);
 				vertexAttributeFunction.invoke(vertex, keyHolder.get(), valueHolder.get());
 			});
@@ -105,6 +111,9 @@ public class ImporterApi {
 				String key = p.getSecond();
 				CCharPointerHolder keyHolder = CTypeConversion.toCString(key);
 				String value = attr.getValue();
+				if (unescapeTranslator != null) {
+					value = unescapeTranslator.translate(value);
+				}
 				CCharPointerHolder valueHolder = CTypeConversion.toCString(value);
 				edgeAttributeFunction.invoke(edge, keyHolder.get(), valueHolder.get());
 			});
