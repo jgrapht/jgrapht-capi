@@ -18,6 +18,7 @@
 package org.jgrapht.capi.impl;
 
 import java.io.File;
+import java.io.StringReader;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.commons.text.translate.CharSequenceTranslator;
@@ -54,6 +55,22 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importDIMACSFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		CustomDIMACSImporter<Long, Long> importer = new CustomDIMACSImporter<>();
+		importer.setVertexFactory(x -> Long.valueOf(x));
+
+		String inputAsJava = CTypeConversion.toJavaString(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importGraph(g, reader);
+		}
+
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + "import_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			NotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -66,6 +83,26 @@ public class ImporterApi {
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
 
 		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importGmlFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
+			NotifyAttributeFunctionPointer edgeAttributeFunction) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		GmlImporter<Long, Long> importer = new GmlImporter<Long, Long>();
+		importer.setVertexFactory(x -> Long.valueOf(x));
+
+		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		String inputAsJava = CTypeConversion.toJavaString(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importGraph(g, reader);
+		}
 
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -84,6 +121,27 @@ public class ImporterApi {
 				StringEscapeUtils.UNESCAPE_JSON);
 
 		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_string_json", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importJsonFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
+			NotifyAttributeFunctionPointer edgeAttributeFunction) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		JSONImporter<Long, Long> importer = new JSONImporter<Long, Long>();
+		importer.setVertexFactory(x -> Long.valueOf(x));
+
+		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction,
+				StringEscapeUtils.UNESCAPE_JSON);
+
+		String inputAsJava = CTypeConversion.toJavaString(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importGraph(g, reader);
+		}
 
 		return Status.STATUS_SUCCESS.getCValue();
 	}
