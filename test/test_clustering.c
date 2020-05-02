@@ -92,6 +92,11 @@ int main() {
 
     jgrapht_capi_destroy(thread, c);
 
+    // test API on label propagation
+    assert(jgrapht_capi_clustering_exec_label_propagation(thread, g, 0, 17, &c) == 0);
+    assert(jgrapht_capi_get_errno(thread) == 0);
+    jgrapht_capi_destroy(thread, c);
+
     // cleanup
     jgrapht_capi_destroy(thread, g);
 

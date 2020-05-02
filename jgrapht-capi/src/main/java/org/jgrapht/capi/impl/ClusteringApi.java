@@ -18,6 +18,7 @@
 package org.jgrapht.capi.impl;
 
 import java.util.Iterator;
+import java.util.Random;
 
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
@@ -27,6 +28,7 @@ import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.clustering.KSpanningTreeClustering;
+import org.jgrapht.alg.clustering.LabelPropagationClustering;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm.Clustering;
 import org.jgrapht.capi.Constants;
@@ -42,6 +44,19 @@ public class ClusteringApi {
 	public static int executeKSpanningTree(IsolateThread thread, ObjectHandle graphHandle, int k, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		ClusteringAlgorithm<Long> alg = new KSpanningTreeClustering<>(g, k);
+		Clustering<Long> clustering = alg.getClustering();
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(clustering));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "clustering_exec_label_propagation", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeLabelPropagationTree(IsolateThread thread, ObjectHandle graphHandle, int maxIterations,
+			long seed, WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		ClusteringAlgorithm<Long> alg = new LabelPropagationClustering<>(g, maxIterations, new Random(seed));
 		Clustering<Long> clustering = alg.getClustering();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(clustering));
