@@ -25,33 +25,14 @@ int main() {
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
 
     jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
     jgrapht_capi_graph_add_edge(thread, g, 1, 2, NULL);
     jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
     jgrapht_capi_graph_add_edge(thread, g, 3, 0, NULL);
 
-    // write file
-    jgrapht_capi_export_file_dimacs(thread, g, "dummy.dimacs.out", DIMACS_FORMAT_COLORING, 0);
-    jgrapht_capi_destroy(thread, g);
-
-    assert(jgrapht_capi_get_errno(thread) == 0);
-
-    // read file
-    jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
-
-    jgrapht_capi_import_file_dimacs(thread, g, "dummy.dimacs.out");
-    assert(jgrapht_capi_get_errno(thread) == 0);
-    
-    assert(jgrapht_capi_get_errno(thread) == 0);
-
-    long long count;
-    jgrapht_capi_graph_vertices_count(thread, g, &count);
-    assert(count == 4);
-    jgrapht_capi_graph_edges_count(thread, g, &count);
-    assert(count == 4);
+    // just test the API with a dummy file
+    jgrapht_capi_export_file_lemon(thread, g, "dummy.lemon.out", 1, 0);
 
     jgrapht_capi_destroy(thread, g);
 

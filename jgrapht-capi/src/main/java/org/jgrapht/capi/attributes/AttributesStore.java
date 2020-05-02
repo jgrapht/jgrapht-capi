@@ -1,6 +1,8 @@
 package org.jgrapht.capi.attributes;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jgrapht.nio.Attribute;
@@ -18,21 +20,25 @@ public class AttributesStore {
 	}
 
 	public Attribute getAttribute(long element, String name) {
-		return getMap(element).get(name);
+		return getSafeMap(element).get(name);
 	}
 
 	public void putAttribute(long element, String name, Attribute value) {
-		getMap(element).put(name, value);
+		getSafeMap(element).put(name, value);
 	}
 
 	public void removeAttribute(long element, String name) {
-		getMap(element).remove(name);
+		getSafeMap(element).remove(name);
 	}
 
-	private Map<String, Attribute> getMap(long element) {
+	public Map<String, Attribute> getAttributes(long element) {
+		return Collections.unmodifiableMap(getSafeMap(element));
+	}
+
+	private Map<String, Attribute> getSafeMap(long element) {
 		Map<String, Attribute> attrs = attributes.get(element);
 		if (attrs == null) {
-			attrs = new HashMap<>();
+			attrs = new LinkedHashMap<>();
 			attributes.put(element, attrs);
 		}
 		return attrs;

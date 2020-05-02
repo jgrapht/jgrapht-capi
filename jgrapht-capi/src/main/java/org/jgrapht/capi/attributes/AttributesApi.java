@@ -34,6 +34,36 @@ public class AttributesApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "attributes_store_put_boolean_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putBooleanAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
+			CCharPointer namePtr, boolean value) {
+		AttributesStore store = globalHandles.get(storeHandle);
+		String name = CTypeConversion.toJavaString(namePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "attributes_store_put_long_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putLongAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
+			CCharPointer namePtr, long value) {
+		AttributesStore store = globalHandles.get(storeHandle);
+		String name = CTypeConversion.toJavaString(namePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "attributes_store_put_double_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putDoubleAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
+			CCharPointer namePtr, double value) {
+		AttributesStore store = globalHandles.get(storeHandle);
+		String name = CTypeConversion.toJavaString(namePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "attributes_store_put_string_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putStringAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr, CCharPointer valuePtr) {

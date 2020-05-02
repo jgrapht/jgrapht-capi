@@ -99,6 +99,8 @@ set(
     "test_clique.c"
     "test_dimacs.c"
     "test_gml.c"
+    "test_json.c"
+    "test_lemon.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
@@ -106,5 +108,5 @@ foreach(testsourcefile ${TEST_SOURCES})
     target_include_directories(${testname} PUBLIC ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/jgrapht-capi/src/main/native)
     target_link_libraries(${testname} jgrapht_capi)
     add_test(NAME ${testname} COMMAND ${testname})
-endforeach( testsourcefile ${APP_SOURCES} )
+endforeach(testsourcefile ${TEST_SOURCES})
 

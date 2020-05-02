@@ -31,8 +31,10 @@ import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.NotifyAttributeFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
-import org.jgrapht.nio.dimacs.DIMACSImporter;
+import org.jgrapht.capi.io.CustomDIMACSImporter;
+import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.gml.GmlImporter;
+import org.jgrapht.nio.json.JSONImporter;
 
 public class ImporterApi {
 
@@ -43,7 +45,7 @@ public class ImporterApi {
 	public static int importDIMACSFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
-		DIMACSImporter<Long, Long> importer = new DIMACSImporter<>();
+		CustomDIMACSImporter<Long, Long> importer = new CustomDIMACSImporter<>();
 		importer.setVertexFactory(x -> Long.valueOf(x));
 		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
 
@@ -59,6 +61,33 @@ public class ImporterApi {
 		GmlImporter<Long, Long> importer = new GmlImporter<Long, Long>();
 		importer.setVertexFactory(x -> Long.valueOf(x));
 
+		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction);
+
+		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importJsonFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
+			NotifyAttributeFunctionPointer edgeAttributeFunction) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		JSONImporter<Long, Long> importer = new JSONImporter<Long, Long>();
+		importer.setVertexFactory(x -> Long.valueOf(x));
+
+		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction);
+
+		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	private static void setupImportAttributes(BaseEventDrivenImporter<Long, Long> importer,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
+			NotifyAttributeFunctionPointer edgeAttributeFunction) {
 		if (vertexAttributeFunction.isNonNull()) {
 			importer.addVertexAttributeConsumer((p, attr) -> {
 				long vertex = p.getFirst();
@@ -80,10 +109,6 @@ public class ImporterApi {
 				edgeAttributeFunction.invoke(edge, keyHolder.get(), valueHolder.get());
 			});
 		}
-
-		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
-
-		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 }

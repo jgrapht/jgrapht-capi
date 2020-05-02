@@ -37,6 +37,8 @@ import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.dimacs.DIMACSExporter;
 import org.jgrapht.nio.dimacs.DIMACSFormat;
 import org.jgrapht.nio.gml.GmlExporter;
+import org.jgrapht.nio.json.JSONExporter;
+import org.jgrapht.nio.lemon.LemonExporter;
 
 public class ExporterApi {
 
@@ -45,7 +47,7 @@ public class ExporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportDIMACSToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			ExporterDIMACSFormat format) {
+			ExporterDIMACSFormat format, boolean exportEdgeWeights) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
 		DIMACSFormat actualFormat = null;
@@ -61,7 +63,8 @@ public class ExporterApi {
 			break;
 		}
 
-		DIMACSExporter<Long, Long> exporter = new DIMACSExporter<>(x -> String.valueOf(x), actualFormat);
+		DIMACSExporter<Long, Long> exporter = new DIMACSExporter<>(x -> String.valueOf(x + 1), actualFormat);
+		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -94,6 +97,41 @@ public class ExporterApi {
 			});
 		}
 
+		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportJsonFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+			ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		JSONExporter<Long, Long> exporter = new JSONExporter<>(x -> String.valueOf(x));
+
+		AttributesStore vStore = globalHandles.get(vertexLabelsStore);
+		if (vStore != null) {
+			exporter.setVertexAttributeProvider(v -> vStore.getAttributes(v));
+		}
+
+		AttributesStore eStore = globalHandles.get(edgeLabelsStore);
+		if (eStore != null) {
+			exporter.setEdgeAttributeProvider(e -> eStore.getAttributes(e));
+		}
+
+		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_file_lemon", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportLemonToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+			boolean exportEdgeWeights, boolean escapeStringsAsJava) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		LemonExporter<Long, Long> exporter = new LemonExporter<>(x -> String.valueOf(x));
+		exporter.setParameter(LemonExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
+		exporter.setParameter(LemonExporter.Parameter.ESCAPE_STRINGS_AS_JAVA, escapeStringsAsJava);
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
