@@ -103,6 +103,7 @@ set(
     "test_json2.c"
     "test_lemon.c"
     "test_flow.c"
+    "test_planar.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
