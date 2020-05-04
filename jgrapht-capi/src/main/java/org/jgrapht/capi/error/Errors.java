@@ -30,41 +30,29 @@ import org.jgrapht.nio.ImportException;
  */
 public class Errors {
 
+	public static final String NO_MESSAGE = "";
+
 	/**
 	 * The actual error, one per thread.
 	 */
-	private static CustomErrorThreadLocal error = new CustomErrorThreadLocal();
-
-	/**
-	 * A custom thread local for proper initialization.
-	 */
-	private static class CustomErrorThreadLocal extends ThreadLocal<Error> {
-
-		public CustomErrorThreadLocal() {
-			super();
-		}
-
-		@Override
-		protected Error initialValue() {
-			return Error.SUCCESS;
-		}
-
-	}
+	private static ThreadLocal<Error> errorThreadLocal = ThreadLocal
+			.withInitial(() -> new Error(Status.STATUS_SUCCESS, NO_MESSAGE));
 
 	public static Status getErrorStatus() {
-		return error.get().getStatus();
+		return errorThreadLocal.get().getStatus();
 	}
 
 	public static String getErrorMessage() {
-		return error.get().getMessage();
+		return errorThreadLocal.get().getMessage();
 	}
 
 	public static CCharPointer getMessageCCharPointer() {
-		return error.get().getMessagePin().get();
+		Error error = errorThreadLocal.get();
+		return error.getMessagePin().get();
 	}
 
 	public static void clearError() {
-		error.set(Error.SUCCESS);
+		errorThreadLocal.set(new Error(Status.STATUS_SUCCESS, NO_MESSAGE));
 	}
 
 	public static void setError(Throwable e) {
@@ -81,7 +69,7 @@ public class Errors {
 			}
 			message = sb.toString();
 		}
-		error.set(Error.of(status, message));
+		errorThreadLocal.set(new Error(status, message));
 	}
 
 	public static Status throwableToStatus(Throwable e) {

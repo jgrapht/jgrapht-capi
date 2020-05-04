@@ -54,6 +54,11 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == STATUS_NULL_POINTER);
     assert(strcmp("Error (NullPointerException)", jgrapht_capi_get_errno_msg(thread)) == 0);    
 
+    // test error message after clear
+    jgrapht_capi_clear_errno(thread);
+    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(strcmp(jgrapht_capi_get_errno_msg(thread), "") == 0);
+
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");
         exit(EXIT_FAILURE);
