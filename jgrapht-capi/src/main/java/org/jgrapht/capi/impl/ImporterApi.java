@@ -31,11 +31,16 @@ import org.graalvm.nativeimage.c.type.CTypeConversion;
 import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
+import org.jgrapht.capi.JGraphTContext.ImportIdFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.ImporterExporterCSVFormat;
 import org.jgrapht.capi.JGraphTContext.NotifyAttributeFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.io.CustomDIMACSImporter;
 import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.csv.CSVFormat;
+import org.jgrapht.nio.csv.CSVImporter;
+import org.jgrapht.nio.gexf.SimpleGEXFImporter;
 import org.jgrapht.nio.gml.GmlImporter;
 import org.jgrapht.nio.json.JSONImporter;
 
@@ -45,11 +50,14 @@ public class ImporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int importDIMACSFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
+	public static int importDIMACSFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+			boolean preserveIdsFromInput) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
 		CustomDIMACSImporter<Long, Long> importer = new CustomDIMACSImporter<>();
-		importer.setVertexFactory(x -> Long.valueOf(x));
+		if (preserveIdsFromInput) {
+			importer.setVertexFactory(x -> Long.valueOf(x));
+		}
 		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
 
 		return Status.STATUS_SUCCESS.getCValue();
@@ -57,11 +65,14 @@ public class ImporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int importDIMACSFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input) {
+	public static int importDIMACSFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
+			boolean preserveIdsFromInput) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
 		CustomDIMACSImporter<Long, Long> importer = new CustomDIMACSImporter<>();
-		importer.setVertexFactory(x -> Long.valueOf(x));
+		if (preserveIdsFromInput) {
+			importer.setVertexFactory(x -> Long.valueOf(x));
+		}
 
 		String inputAsJava = CTypeConversion.toJavaString(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
@@ -73,12 +84,14 @@ public class ImporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "import_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			NotifyAttributeFunctionPointer vertexAttributeFunction,
+			boolean preserveIdsFromInput, NotifyAttributeFunctionPointer vertexAttributeFunction,
 			NotifyAttributeFunctionPointer edgeAttributeFunction) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
 		GmlImporter<Long, Long> importer = new GmlImporter<Long, Long>();
-		importer.setVertexFactory(x -> Long.valueOf(x));
+		if (preserveIdsFromInput) {
+			importer.setVertexFactory(x -> Long.valueOf(x));
+		}
 
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
 
@@ -90,12 +103,14 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
-			NotifyAttributeFunctionPointer vertexAttributeFunction,
+			boolean preserveIdsFromInput, NotifyAttributeFunctionPointer vertexAttributeFunction,
 			NotifyAttributeFunctionPointer edgeAttributeFunction) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
 		GmlImporter<Long, Long> importer = new GmlImporter<Long, Long>();
-		importer.setVertexFactory(x -> Long.valueOf(x));
+		if (preserveIdsFromInput) {
+			importer.setVertexFactory(x -> Long.valueOf(x));
+		}
 
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
 
@@ -110,12 +125,19 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importJsonFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			NotifyAttributeFunctionPointer vertexAttributeFunction,
+			ImportIdFunctionPointer importIdFunctionPointer, NotifyAttributeFunctionPointer vertexAttributeFunction,
 			NotifyAttributeFunctionPointer edgeAttributeFunction) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
 		JSONImporter<Long, Long> importer = new JSONImporter<Long, Long>();
-		importer.setVertexFactory(x -> Long.valueOf(x));
+
+		if (importIdFunctionPointer.isNonNull()) {
+			importer.setVertexFactory(x -> {
+				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				long id = importIdFunctionPointer.invoke(holder.get());
+				return id;
+			});
+		}
 
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction,
 				StringEscapeUtils.UNESCAPE_JSON);
@@ -128,15 +150,158 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_string_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importJsonFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
-			NotifyAttributeFunctionPointer vertexAttributeFunction,
+			ImportIdFunctionPointer importIdFunctionPointer, NotifyAttributeFunctionPointer vertexAttributeFunction,
 			NotifyAttributeFunctionPointer edgeAttributeFunction) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
 		JSONImporter<Long, Long> importer = new JSONImporter<Long, Long>();
-		importer.setVertexFactory(x -> Long.valueOf(x));
+
+		if (importIdFunctionPointer.isNonNull()) {
+			importer.setVertexFactory(x -> {
+				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				long id = importIdFunctionPointer.invoke(holder.get());
+				return id;
+			});
+		}
 
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction,
 				StringEscapeUtils.UNESCAPE_JSON);
+
+		String inputAsJava = CTypeConversion.toJavaString(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importGraph(g, reader);
+		}
+
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "import_file_csv", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importCSVFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+			ImportIdFunctionPointer importIdFunctionPointer, ImporterExporterCSVFormat format,
+			boolean import_edge_weights, boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		CSVFormat actualFormat = null;
+		switch (format) {
+		case CSV_FORMAT_ADJACENCY_LIST:
+			actualFormat = CSVFormat.ADJACENCY_LIST;
+			break;
+		case CSV_FORMAT_EDGE_LIST:
+			actualFormat = CSVFormat.EDGE_LIST;
+			break;
+		default:
+			actualFormat = CSVFormat.MATRIX;
+			break;
+		}
+
+		CSVImporter<Long, Long> importer = new CSVImporter<>(actualFormat);
+
+		if (importIdFunctionPointer.isNonNull()) {
+			importer.setVertexFactory(x -> {
+				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				long id = importIdFunctionPointer.invoke(holder.get());
+				return id;
+			});
+		}
+
+		importer.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, import_edge_weights);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
+		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importCSVFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
+			ImportIdFunctionPointer importIdFunctionPointer, ImporterExporterCSVFormat format,
+			boolean import_edge_weights, boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		CSVFormat actualFormat = null;
+		switch (format) {
+		case CSV_FORMAT_ADJACENCY_LIST:
+			actualFormat = CSVFormat.ADJACENCY_LIST;
+			break;
+		case CSV_FORMAT_EDGE_LIST:
+			actualFormat = CSVFormat.EDGE_LIST;
+			break;
+		default:
+			actualFormat = CSVFormat.MATRIX;
+			break;
+		}
+
+		CSVImporter<Long, Long> importer = new CSVImporter<>(actualFormat);
+
+		if (importIdFunctionPointer.isNonNull()) {
+			importer.setVertexFactory(x -> {
+				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				long id = importIdFunctionPointer.invoke(holder.get());
+				return id;
+			});
+		}
+
+		importer.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, import_edge_weights);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
+
+		String inputAsJava = CTypeConversion.toJavaString(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importGraph(g, reader);
+		}
+
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_file_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importGEXFFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+			ImportIdFunctionPointer importIdFunctionPointer, boolean validate_schema,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
+			NotifyAttributeFunctionPointer edgeAttributeFunction) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		SimpleGEXFImporter<Long, Long> importer = new SimpleGEXFImporter<>();
+
+		if (importIdFunctionPointer.isNonNull()) {
+			importer.setVertexFactory(x -> {
+				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				long id = importIdFunctionPointer.invoke(holder.get());
+				return id;
+			});
+		}
+
+		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		importer.setSchemaValidation(validate_schema);
+
+		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importGEXFFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
+			ImportIdFunctionPointer importIdFunctionPointer, boolean validate_schema,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
+			NotifyAttributeFunctionPointer edgeAttributeFunction) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		SimpleGEXFImporter<Long, Long> importer = new SimpleGEXFImporter<>();
+
+		if (importIdFunctionPointer.isNonNull()) {
+			importer.setVertexFactory(x -> {
+				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				long id = importIdFunctionPointer.invoke(holder.get());
+				return id;
+			});
+		}
+
+		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		importer.setSchemaValidation(validate_schema);
 
 		String inputAsJava = CTypeConversion.toJavaString(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {

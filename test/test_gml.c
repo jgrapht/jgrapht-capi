@@ -94,7 +94,7 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     // test gml with extra attributes
-    jgrapht_capi_import_file_gml(thread, g, "dummy.gml.out", vertex_attribute, edge_attribute);
+    jgrapht_capi_import_file_gml(thread, g, "dummy.gml.out", 1, vertex_attribute, edge_attribute);
 
     long long ecount;
     jgrapht_capi_graph_edges_count(thread, g, &ecount);

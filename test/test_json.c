@@ -46,6 +46,10 @@ void edge_attribute(long long e, char *key, char *value) {
     }
 }
 
+long import_id_from_file(const char *id_from_file) { 
+    return atol(id_from_file);
+}
+
 int main() {
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;
@@ -95,7 +99,7 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
 
     // test gml with extra attributes
-    jgrapht_capi_import_file_json(thread, g, "dummy.json.out", vertex_attribute, edge_attribute);
+    jgrapht_capi_import_file_json(thread, g, "dummy.json.out", import_id_from_file, vertex_attribute, edge_attribute);
 
     long long ecount;
     jgrapht_capi_graph_edges_count(thread, g, &ecount);

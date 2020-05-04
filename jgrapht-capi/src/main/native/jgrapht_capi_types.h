@@ -15,11 +15,16 @@ typedef enum {
     STATUS_IMPORT_ERROR,
 } status_t;
 
-
 typedef enum {
     DIMACS_FORMAT_SHORTEST_PATH = 0,
     DIMACS_FORMAT_MAX_CLIQUE,
     DIMACS_FORMAT_COLORING,
 } dimacs_format_t;
+
+typedef enum {
+    CSV_FORMAT_EDGE_LIST = 0,
+    CSV_FORMAT_ADJACENCY_LIST,
+    CSV_FORMAT_MATRIX,
+} csv_format_t;
 
 #endif

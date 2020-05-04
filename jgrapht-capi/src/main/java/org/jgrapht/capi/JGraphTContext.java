@@ -55,6 +55,24 @@ public class JGraphTContext {
 
 	}
 
+	@CEnum("csv_format_t")
+	public enum ImporterExporterCSVFormat {
+
+		// @formatter:off
+	    CSV_FORMAT_EDGE_LIST,
+	    CSV_FORMAT_ADJACENCY_LIST,
+	    CSV_FORMAT_MATRIX,
+		;
+		// @formatter:on
+
+		@CEnumValue
+		public native int toCEnum();
+
+		@CEnumLookup
+		public static native ImporterExporterCSVFormat toJavaEnum(int value);
+
+	}
+
 	/* Import of a C function pointer type. */
 	public interface NotifyAttributeFunctionPointer extends CFunctionPointer {
 
@@ -64,6 +82,17 @@ public class JGraphTContext {
 		 */
 		@InvokeCFunctionPointer
 		void invoke(long element, CCharPointer key, CCharPointer value);
+	}
+
+	/*
+	 * Function pointer for importers which give the user control on how to convert
+	 * the input identifier of a vertex or edge into a long integer.
+	 */
+	public interface ImportIdFunctionPointer extends CFunctionPointer {
+		
+		@InvokeCFunctionPointer
+		long invoke(CCharPointer id);
+		
 	}
 
 }
