@@ -58,5 +58,12 @@ public class ErrorApi {
 	public static CCharPointer getErrorMessage(IsolateThread thread) {
 		return Errors.getMessageCCharPointer();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "print_stack_trace")
+	public static void printLastStacktrace(IsolateThread thread) {
+		Errors.getErrorThrowable().ifPresent(e->{
+			e.printStackTrace();
+		});
+	}
 
 }

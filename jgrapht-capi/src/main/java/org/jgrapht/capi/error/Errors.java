@@ -19,6 +19,7 @@ package org.jgrapht.capi.error;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
@@ -36,7 +37,7 @@ public class Errors {
 	 * The actual error, one per thread.
 	 */
 	private static ThreadLocal<Error> errorThreadLocal = ThreadLocal
-			.withInitial(() -> new Error(Status.STATUS_SUCCESS, NO_MESSAGE));
+			.withInitial(() -> new Error(Status.STATUS_SUCCESS, NO_MESSAGE, null));
 
 	public static Status getErrorStatus() {
 		return errorThreadLocal.get().getStatus();
@@ -50,9 +51,13 @@ public class Errors {
 		Error error = errorThreadLocal.get();
 		return error.getMessagePin().get();
 	}
+	
+	public static Optional<Throwable> getErrorThrowable() {
+		return Optional.ofNullable(errorThreadLocal.get().getThrowable());
+	}
 
 	public static void clearError() {
-		errorThreadLocal.set(new Error(Status.STATUS_SUCCESS, NO_MESSAGE));
+		errorThreadLocal.set(new Error(Status.STATUS_SUCCESS, NO_MESSAGE, null));
 	}
 
 	public static void setError(Throwable e) {
@@ -69,7 +74,7 @@ public class Errors {
 			}
 			message = sb.toString();
 		}
-		errorThreadLocal.set(new Error(status, message));
+		errorThreadLocal.set(new Error(status, message, e));
 	}
 
 	public static Status throwableToStatus(Throwable e) {

@@ -28,11 +28,13 @@ public class Error {
 	private Status status;
 	private String message;
 	private CCharPointerHolder messagePin;
+	private Throwable throwable;
 
-	public Error(Status status, String message) {
+	public Error(Status status, String message, Throwable throwable) {
 		this.status = Objects.requireNonNull(status, "Status cannot be null");
 		this.message = Objects.requireNonNull(message, "Message cannot be null");
 		this.messagePin = CTypeConversion.toCString(message);
+		this.throwable = throwable;
 	}
 
 	public Status getStatus() {
@@ -47,9 +49,14 @@ public class Error {
 		return messagePin;
 	}
 
+	public Throwable getThrowable() {
+		return throwable;
+	}
+
 	@Override
 	public String toString() {
-		return "Error [status=" + status + ", message=" + message + ", messagePin=" + messagePin + "]";
+		return "Error [status=" + status + ", message=" + message + ", messagePin=" + messagePin + ", throwable="
+				+ throwable + "]";
 	}
 
 }
