@@ -75,6 +75,7 @@ include(CTest)
 set(
     TEST_SOURCES 
     "test_vertices.c"
+    "test_addvertex.c"
     "test_edges.c"
     "test_directed_graph.c" 
     "test_undirected_graph.c"
