@@ -209,8 +209,9 @@ public class ExporterApi {
 		List<RegisteredAttribute> aRegistry = globalHandles.get(attributesRegistry);
 		if (aRegistry != null) {
 			for (RegisteredAttribute ra : aRegistry) {
-				AttributeCategory aCategory = AttributeCategory.valueOf(ra.getCategory());
-				GEXFAttributeType aType = ra.getType() == null ? null : GEXFAttributeType.valueOf(ra.getType());
+				AttributeCategory aCategory = AttributeCategory.valueOf(ra.getCategory().toUpperCase());
+				GEXFAttributeType aType = ra.getType() == null ? null
+						: GEXFAttributeType.valueOf(ra.getType().toUpperCase());
 				exporter.registerAttribute(ra.getName(), aCategory, aType, ra.getDefaultValue());
 			}
 		}
@@ -242,7 +243,7 @@ public class ExporterApi {
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_file_sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportSparse6File(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
@@ -253,7 +254,7 @@ public class ExporterApi {
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_file_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportGraphMLFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
@@ -262,7 +263,7 @@ public class ExporterApi {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
 		GraphMLExporter<Long, Long> exporter = new GraphMLExporter<>(x -> String.valueOf(x));
-		
+
 		exporter.setExportEdgeWeights(exportEdgeWeights);
 		exporter.setExportVertexLabels(exportVertexLabels);
 		exporter.setExportEdgeLabels(exportEdgeLabels);
@@ -272,8 +273,9 @@ public class ExporterApi {
 		List<RegisteredAttribute> aRegistry = globalHandles.get(attributesRegistry);
 		if (aRegistry != null) {
 			for (RegisteredAttribute ra : aRegistry) {
-				GraphMLExporter.AttributeCategory aCategory = GraphMLExporter.AttributeCategory.valueOf(ra.getCategory());
-				AttributeType aType = ra.getType() == null ? null : AttributeType.valueOf(ra.getType());
+				GraphMLExporter.AttributeCategory aCategory = GraphMLExporter.AttributeCategory
+						.valueOf(ra.getCategory().toUpperCase());
+				AttributeType aType = ra.getType() == null ? null : AttributeType.valueOf(ra.getType().toUpperCase());
 				exporter.registerAttribute(ra.getName(), aCategory, aType, ra.getDefaultValue());
 			}
 		}

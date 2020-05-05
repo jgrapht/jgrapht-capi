@@ -105,6 +105,9 @@ set(
     "test_flow.c"
     "test_planar.c"
     "test_gexf.c"
+    "test_graph6.c"
+    "test_sparse6.c"
+    "test_csv.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})

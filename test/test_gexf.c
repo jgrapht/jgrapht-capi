@@ -24,6 +24,27 @@ xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> \
         </graph>\
 </gexf>";
 
+void edge_attribute(long long e, char *key, char *value) { 
+    if (e == 0) { 
+        if (strcmp(key, "cost") == 0) { 
+            assert(strcmp(value, "5.4") == 0);
+        }
+    }
+    if (e == 1) { 
+        if (strcmp(key, "cost") == 0) { 
+            assert(strcmp(value, "6.5") == 0);
+        }
+    }
+    if (e == 2) { 
+        if (strcmp(key, "cost") == 0) { 
+            assert(strcmp(value, "9.2") == 0);
+        }
+    }
+}
+
+long long import_id(const char *id) { 
+    return atol(id);
+}
 
 int main() {
     graal_isolate_t *isolate = NULL;
@@ -36,7 +57,7 @@ int main() {
 
     assert(jgrapht_capi_get_errno(thread) == 0);
 
-    // first write a gml
+    // import a gexf from string
     void *g;
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_get_errno(thread) == 0);
@@ -52,6 +73,32 @@ int main() {
     long long ecount;
     jgrapht_capi_graph_edges_count(thread, g, &ecount);
     assert(ecount == 3);
+
+    // write it to file
+
+    void *attrs_registry;
+    jgrapht_capi_attributes_registry_create(thread, &attrs_registry);
+    jgrapht_capi_attributes_registry_register_attribute(thread, attrs_registry, "cost", "edge", "double", NULL);
+
+    void *attr_store;
+    jgrapht_capi_attributes_store_create(thread, &attr_store);
+    jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 0, "cost", 5.4);
+    jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 1, "cost", 6.5);
+    jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 2, "cost", 9.2);
+
+    jgrapht_capi_export_file_gexf(thread, g, "dummy.gexf.out", attrs_registry, NULL, attr_store, 0, 0, 0, 0);
+    assert(jgrapht_capi_get_errno(thread) == 0);
+
+    jgrapht_capi_destroy(thread, attr_store);
+    jgrapht_capi_destroy(thread, attrs_registry);
+
+    // now read back 
+
+    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
+
+    jgrapht_capi_import_file_gexf(thread, g, "dummy.gexf.out", import_id, 1, NULL, edge_attribute);
+    assert(jgrapht_capi_get_errno(thread) == 0);
 
     jgrapht_capi_destroy(thread, g);
 
