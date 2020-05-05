@@ -1,5 +1,8 @@
 package org.jgrapht.capi.attributes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
@@ -12,6 +15,9 @@ import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.nio.DefaultAttribute;
 
+/**
+ * This is a helper API for the I/O and in particular for the exporters.
+ */
 public class AttributesApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
@@ -81,6 +87,43 @@ public class AttributesApi {
 		AttributesStore store = globalHandles.get(storeHandle);
 		String name = CTypeConversion.toJavaString(namePtr);
 		store.removeAttribute(element, name);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * Create a new attributes store.
+	 * 
+	 * @param thread the thread isolate
+	 * @param res    Pointer to store the result
+	 * @return return code
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "attributes_registry_create", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createRegistry(IsolateThread thread, WordPointer res) {
+		List<RegisteredAttribute> registry = new ArrayList<>();
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(registry));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "attributes_registry_register_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int registerAttribute(IsolateThread thread, ObjectHandle registryHandle, CCharPointer name,
+			CCharPointer category, CCharPointer type, CCharPointer defaultValue) {
+		List<RegisteredAttribute> store = globalHandles.get(registryHandle);
+		store.add(new RegisteredAttribute(CTypeConversion.toJavaString(name), CTypeConversion.toJavaString(category),
+				CTypeConversion.toJavaString(type), CTypeConversion.toJavaString(defaultValue)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "attributes_registry_unregister_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int unregisterAttribute(IsolateThread thread, ObjectHandle registryHandle, CCharPointer name,
+			CCharPointer category, CCharPointer type, CCharPointer defaultValue) {
+		List<RegisteredAttribute> store = globalHandles.get(registryHandle);
+		store.remove(new RegisteredAttribute(CTypeConversion.toJavaString(name), CTypeConversion.toJavaString(category),
+				CTypeConversion.toJavaString(type), CTypeConversion.toJavaString(defaultValue)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 

@@ -19,6 +19,7 @@ package org.jgrapht.capi.impl;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.graalvm.nativeimage.IsolateThread;
@@ -30,13 +31,25 @@ import org.graalvm.nativeimage.c.type.CTypeConversion;
 import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.ExporterDIMACSFormat;
+import org.jgrapht.capi.JGraphTContext.ImporterExporterCSVFormat;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.attributes.AttributesStore;
+import org.jgrapht.capi.attributes.RegisteredAttribute;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.nio.Attribute;
+import org.jgrapht.nio.AttributeType;
+import org.jgrapht.nio.BaseExporter;
+import org.jgrapht.nio.csv.CSVExporter;
+import org.jgrapht.nio.csv.CSVFormat;
 import org.jgrapht.nio.dimacs.DIMACSExporter;
 import org.jgrapht.nio.dimacs.DIMACSFormat;
+import org.jgrapht.nio.dot.DOTExporter;
+import org.jgrapht.nio.gexf.GEXFAttributeType;
+import org.jgrapht.nio.gexf.GEXFExporter;
+import org.jgrapht.nio.gexf.GEXFExporter.AttributeCategory;
 import org.jgrapht.nio.gml.GmlExporter;
+import org.jgrapht.nio.graph6.Graph6Sparse6Exporter;
+import org.jgrapht.nio.graphml.GraphMLExporter;
 import org.jgrapht.nio.json.JSONExporter;
 import org.jgrapht.nio.lemon.LemonExporter;
 
@@ -134,6 +147,156 @@ public class ExporterApi {
 		exporter.setParameter(LemonExporter.Parameter.ESCAPE_STRINGS_AS_JAVA, escapeStringsAsJava);
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "export_file_csv", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportCSVToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+			ImporterExporterCSVFormat format, boolean exportEdgeWeights, boolean matrix_format_nodeid,
+			boolean matrix_format_zero_when_no_edge) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		CSVFormat actualFormat = null;
+		switch (format) {
+		case CSV_FORMAT_MATRIX:
+			actualFormat = CSVFormat.MATRIX;
+			break;
+		default:
+			actualFormat = CSVFormat.ADJACENCY_LIST;
+			break;
+		}
+
+		CSVExporter<Long, Long> exporter = new CSVExporter<>(x -> String.valueOf(x), actualFormat, ',');
+		exporter.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, exportEdgeWeights);
+		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
+		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
+		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * Export a GEXF file
+	 * 
+	 * @param thread                the thread
+	 * @param graphHandle           handle for the graph
+	 * @param filename              filename to export to
+	 * @param attributesRegistry    handle for reading which attributes to export
+	 * @param vertexAttributesStore handle for acquiring the actual vertex attribute
+	 *                              values
+	 * @param edgeAttributesStore   handle for acquiring the actual edge attribute
+	 *                              values
+	 * @param exportEdgeWeights     whether to export edge weights
+	 * @param exportEdgeLabels      whether to export edge labels
+	 * @param exportEdgeTypes       whether to export edge types
+	 * @param exportMeta            whether to export meta information
+	 * @return status code
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_file_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportGexfFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
+			boolean exportEdgeWeights, boolean exportEdgeLabels, boolean exportEdgeTypes, boolean exportMeta) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		GEXFExporter<Long, Long> exporter = new GEXFExporter<>(x -> String.valueOf(x), x -> String.valueOf(x));
+
+		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
+		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_LABELS, exportEdgeLabels);
+		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_TYPES, exportEdgeTypes);
+		exporter.setParameter(GEXFExporter.Parameter.EXPORT_META, exportMeta);
+
+		setupAttributeStores(exporter, vertexAttributesStore, edgeAttributesStore);
+
+		List<RegisteredAttribute> aRegistry = globalHandles.get(attributesRegistry);
+		if (aRegistry != null) {
+			for (RegisteredAttribute ra : aRegistry) {
+				AttributeCategory aCategory = AttributeCategory.valueOf(ra.getCategory());
+				GEXFAttributeType aType = ra.getType() == null ? null : GEXFAttributeType.valueOf(ra.getType());
+				exporter.registerAttribute(ra.getName(), aCategory, aType, ra.getDefaultValue());
+			}
+		}
+
+		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "export_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportDotFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		DOTExporter<Long, Long> exporter = new DOTExporter<>(x -> String.valueOf(x));
+
+		setupAttributeStores(exporter, vertexAttributesStore, edgeAttributesStore);
+
+		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_file_graph6", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportGraph6File(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		Graph6Sparse6Exporter<Long, Long> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.GRAPH6);
+
+		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_file_sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportSparse6File(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		Graph6Sparse6Exporter<Long, Long> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.SPARSE6);
+
+		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_file_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportGraphMLFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
+			boolean exportEdgeWeights, boolean exportVertexLabels, boolean exportEdgeLabels) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		GraphMLExporter<Long, Long> exporter = new GraphMLExporter<>(x -> String.valueOf(x));
+		
+		exporter.setExportEdgeWeights(exportEdgeWeights);
+		exporter.setExportVertexLabels(exportVertexLabels);
+		exporter.setExportEdgeLabels(exportEdgeLabels);
+
+		setupAttributeStores(exporter, vertexAttributesStore, edgeAttributesStore);
+
+		List<RegisteredAttribute> aRegistry = globalHandles.get(attributesRegistry);
+		if (aRegistry != null) {
+			for (RegisteredAttribute ra : aRegistry) {
+				GraphMLExporter.AttributeCategory aCategory = GraphMLExporter.AttributeCategory.valueOf(ra.getCategory());
+				AttributeType aType = ra.getType() == null ? null : AttributeType.valueOf(ra.getType());
+				exporter.registerAttribute(ra.getName(), aCategory, aType, ra.getDefaultValue());
+			}
+		}
+
+		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	private static void setupAttributeStores(BaseExporter<Long, Long> exporter, ObjectHandle vertexAttributesStore,
+			ObjectHandle edgeAttributesStore) {
+		AttributesStore vStore = globalHandles.get(vertexAttributesStore);
+		if (vStore != null) {
+			exporter.setVertexAttributeProvider(v -> {
+				return vStore.getAttributes(v);
+			});
+		}
+
+		AttributesStore eStore = globalHandles.get(edgeAttributesStore);
+		if (eStore != null) {
+			exporter.setEdgeAttributeProvider(e -> {
+				return eStore.getAttributes(e);
+			});
+		}
 	}
 
 }
