@@ -114,6 +114,17 @@ public class GraphApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_add_given_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int addGivenVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, CIntPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		boolean result = g.addVertex(vertex);
+		if (res.isNonNull()) {
+			res.write(result?1:0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}	
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_remove_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
