@@ -50,6 +50,14 @@ int main() {
     assert(jgrapht_capi_get_errno(thread) == 0);
 
 
+    // test safe supplier
+    jgrapht_capi_graph_add_given_vertex(thread, g, 4, &added);
+    assert (added==1);
+    jgrapht_capi_graph_add_given_vertex(thread, g, 5, &added);
+    assert (added==1);
+    jgrapht_capi_graph_add_vertex(thread, g, &v);
+    assert (v == 6);
+
     jgrapht_capi_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
