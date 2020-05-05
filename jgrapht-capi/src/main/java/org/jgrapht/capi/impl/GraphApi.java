@@ -32,12 +32,13 @@ import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.SafeEdgeSupplier;
+import org.jgrapht.capi.graph.SafeVertexSupplier;
 import org.jgrapht.graph.AsUndirectedGraph;
 import org.jgrapht.graph.AsUnmodifiableGraph;
 import org.jgrapht.graph.AsUnweightedGraph;
 import org.jgrapht.graph.EdgeReversedGraph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
-import org.jgrapht.util.SupplierUtil;
 
 /**
  * Basic graph operations
@@ -55,16 +56,24 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
 			boolean allowingMultipleEdges, boolean weighted, WordPointer res) {
+
+		SafeVertexSupplier vSupplier = new SafeVertexSupplier();
+		SafeEdgeSupplier eSupplier = new SafeEdgeSupplier();
+
 		Graph<Long, Long> graph;
 		if (directed) {
 			graph = GraphTypeBuilder.directed().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
-					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(SupplierUtil.createLongSupplier())
-					.edgeSupplier(SupplierUtil.createLongSupplier()).buildGraph();
+					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(vSupplier).edgeSupplier(eSupplier)
+					.buildGraph();
 		} else {
 			graph = GraphTypeBuilder.undirected().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
-					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(SupplierUtil.createLongSupplier())
-					.edgeSupplier(SupplierUtil.createLongSupplier()).buildGraph();
+					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(vSupplier).edgeSupplier(eSupplier)
+					.buildGraph();
 		}
+		
+		vSupplier.setGraph(graph);
+		eSupplier.setGraph(graph);
+		
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
 		}
