@@ -153,6 +153,48 @@ public class ExporterApi {
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "export_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportGmlString(IsolateThread thread, ObjectHandle graphHandle, 
+			boolean exportEdgeWeights, ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore, WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		GmlExporter<Long, Long> exporter = new GmlExporter<>(x -> String.valueOf(x));
+		exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
+
+		AttributesStore vStore = globalHandles.get(vertexLabelsStore);
+		if (vStore != null) {
+			exporter.setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, true);
+			exporter.setVertexAttributeProvider(v -> {
+				Map<String, Attribute> h = new HashMap<>();
+				h.put("label", vStore.getAttribute(v, "label"));
+				return h;
+			});
+		}
+
+		AttributesStore eStore = globalHandles.get(edgeLabelsStore);
+		if (eStore != null) {
+			exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS, true);
+			exporter.setEdgeAttributeProvider(e -> {
+				Map<String, Attribute> h = new HashMap<>();
+				h.put("label", eStore.getAttribute(e, "label"));
+				return h;
+			});
+		}
+
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		exporter.exportGraph(g, os);
+		try {
+			String outputAsAString = new String(os.toByteArray(), "UTF-8");
+			CCharPointerHolder cString = CTypeConversion.toCString(outputAsAString);
+			if (res.isNonNull()) {
+				res.write(globalHandles.create(cString));
+			}
+		} catch (UnsupportedEncodingException e) {
+			// should not happen
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -161,18 +203,34 @@ public class ExporterApi {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
 		JSONExporter<Long, Long> exporter = new JSONExporter<>(x -> String.valueOf(x));
-
-		AttributesStore vStore = globalHandles.get(vertexLabelsStore);
-		if (vStore != null) {
-			exporter.setVertexAttributeProvider(v -> vStore.getAttributes(v));
-		}
-
-		AttributesStore eStore = globalHandles.get(edgeLabelsStore);
-		if (eStore != null) {
-			exporter.setEdgeAttributeProvider(e -> eStore.getAttributes(e));
-		}
-
+		
+		setupAttributeStores(exporter, vertexLabelsStore, edgeLabelsStore);
+		
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_string_json", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportJsonString(IsolateThread thread, ObjectHandle graphHandle, 
+			ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore, WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		JSONExporter<Long, Long> exporter = new JSONExporter<>(x -> String.valueOf(x));
+		
+		setupAttributeStores(exporter, vertexLabelsStore, edgeLabelsStore);
+		
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		exporter.exportGraph(g, os);
+		try {
+			String outputAsAString = new String(os.toByteArray(), "UTF-8");
+			CCharPointerHolder cString = CTypeConversion.toCString(outputAsAString);
+			if (res.isNonNull()) {
+				res.write(globalHandles.create(cString));
+			}
+		} catch (UnsupportedEncodingException e) {
+			// should not happen
+		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -186,6 +244,31 @@ public class ExporterApi {
 		exporter.setParameter(LemonExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.setParameter(LemonExporter.Parameter.ESCAPE_STRINGS_AS_JAVA, escapeStringsAsJava);
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_string_lemon", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportLemonToString(IsolateThread thread, ObjectHandle graphHandle, 
+			boolean exportEdgeWeights, boolean escapeStringsAsJava, WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		LemonExporter<Long, Long> exporter = new LemonExporter<>(x -> String.valueOf(x));
+		exporter.setParameter(LemonExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
+		exporter.setParameter(LemonExporter.Parameter.ESCAPE_STRINGS_AS_JAVA, escapeStringsAsJava);
+		
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		exporter.exportGraph(g, os);
+		try {
+			String outputAsAString = new String(os.toByteArray(), "UTF-8");
+			CCharPointerHolder cString = CTypeConversion.toCString(outputAsAString);
+			if (res.isNonNull()) {
+				res.write(globalHandles.create(cString));
+			}
+		} catch (UnsupportedEncodingException e) {
+			// should not happen
+		}
+		
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -210,6 +293,42 @@ public class ExporterApi {
 		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
 		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "export_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportCSVToString(IsolateThread thread, ObjectHandle graphHandle, 
+			ImporterExporterCSVFormat format, boolean exportEdgeWeights, boolean matrix_format_nodeid,
+			boolean matrix_format_zero_when_no_edge, WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		CSVFormat actualFormat = null;
+		switch (format) {
+		case CSV_FORMAT_MATRIX:
+			actualFormat = CSVFormat.MATRIX;
+			break;
+		default:
+			actualFormat = CSVFormat.ADJACENCY_LIST;
+			break;
+		}
+
+		CSVExporter<Long, Long> exporter = new CSVExporter<>(x -> String.valueOf(x), actualFormat, ',');
+		exporter.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, exportEdgeWeights);
+		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
+		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
+		
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		exporter.exportGraph(g, os);
+		try {
+			String outputAsAString = new String(os.toByteArray(), "UTF-8");
+			CCharPointerHolder cString = CTypeConversion.toCString(outputAsAString);
+			if (res.isNonNull()) {
+				res.write(globalHandles.create(cString));
+			}
+		} catch (UnsupportedEncodingException e) {
+			// should not happen
+		}
+		
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -259,6 +378,47 @@ public class ExporterApi {
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportGexfString(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
+			boolean exportEdgeWeights, boolean exportEdgeLabels, boolean exportEdgeTypes, boolean exportMeta, WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		GEXFExporter<Long, Long> exporter = new GEXFExporter<>(x -> String.valueOf(x), x -> String.valueOf(x));
+
+		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
+		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_LABELS, exportEdgeLabels);
+		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_TYPES, exportEdgeTypes);
+		exporter.setParameter(GEXFExporter.Parameter.EXPORT_META, exportMeta);
+
+		setupAttributeStores(exporter, vertexAttributesStore, edgeAttributesStore);
+
+		List<RegisteredAttribute> aRegistry = globalHandles.get(attributesRegistry);
+		if (aRegistry != null) {
+			for (RegisteredAttribute ra : aRegistry) {
+				AttributeCategory aCategory = AttributeCategory.valueOf(ra.getCategory().toUpperCase());
+				GEXFAttributeType aType = ra.getType() == null ? null
+						: GEXFAttributeType.valueOf(ra.getType().toUpperCase());
+				exporter.registerAttribute(ra.getName(), aCategory, aType, ra.getDefaultValue());
+			}
+		}
+
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		exporter.exportGraph(g, os);
+		try {
+			String outputAsAString = new String(os.toByteArray(), "UTF-8");
+			CCharPointerHolder cString = CTypeConversion.toCString(outputAsAString);
+			if (res.isNonNull()) {
+				res.write(globalHandles.create(cString));
+			}
+		} catch (UnsupportedEncodingException e) {
+			// should not happen
+		}
+		
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "export_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportDotFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
@@ -272,6 +432,30 @@ public class ExporterApi {
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "export_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportDotString(IsolateThread thread, ObjectHandle graphHandle, 
+			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore, WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		DOTExporter<Long, Long> exporter = new DOTExporter<>(x -> String.valueOf(x));
+
+		setupAttributeStores(exporter, vertexAttributesStore, edgeAttributesStore);
+
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		exporter.exportGraph(g, os);
+		try {
+			String outputAsAString = new String(os.toByteArray(), "UTF-8");
+			CCharPointerHolder cString = CTypeConversion.toCString(outputAsAString);
+			if (res.isNonNull()) {
+				res.write(globalHandles.create(cString));
+			}
+		} catch (UnsupportedEncodingException e) {
+			// should not happen
+		}
+		
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_file_graph6", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -283,6 +467,28 @@ public class ExporterApi {
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_string_graph6", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportGraph6String(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		Graph6Sparse6Exporter<Long, Long> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.GRAPH6);
+
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		exporter.exportGraph(g, os);
+		try {
+			String outputAsAString = new String(os.toByteArray(), "UTF-8");
+			CCharPointerHolder cString = CTypeConversion.toCString(outputAsAString);
+			if (res.isNonNull()) {
+				res.write(globalHandles.create(cString));
+			}
+		} catch (UnsupportedEncodingException e) {
+			// should not happen
+		}
+		
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_file_sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -292,6 +498,28 @@ public class ExporterApi {
 		Graph6Sparse6Exporter<Long, Long> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.SPARSE6);
 
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_string_sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportSparse6String(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		Graph6Sparse6Exporter<Long, Long> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.SPARSE6);
+
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		exporter.exportGraph(g, os);
+		try {
+			String outputAsAString = new String(os.toByteArray(), "UTF-8");
+			CCharPointerHolder cString = CTypeConversion.toCString(outputAsAString);
+			if (res.isNonNull()) {
+				res.write(globalHandles.create(cString));
+			}
+		} catch (UnsupportedEncodingException e) {
+			// should not happen
+		}
+		
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -321,6 +549,46 @@ public class ExporterApi {
 		}
 
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_string_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportGraphMLString(IsolateThread thread, ObjectHandle graphHandle, 
+			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
+			boolean exportEdgeWeights, boolean exportVertexLabels, boolean exportEdgeLabels, WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		GraphMLExporter<Long, Long> exporter = new GraphMLExporter<>(x -> String.valueOf(x));
+
+		exporter.setExportEdgeWeights(exportEdgeWeights);
+		exporter.setExportVertexLabels(exportVertexLabels);
+		exporter.setExportEdgeLabels(exportEdgeLabels);
+
+		setupAttributeStores(exporter, vertexAttributesStore, edgeAttributesStore);
+
+		List<RegisteredAttribute> aRegistry = globalHandles.get(attributesRegistry);
+		if (aRegistry != null) {
+			for (RegisteredAttribute ra : aRegistry) {
+				GraphMLExporter.AttributeCategory aCategory = GraphMLExporter.AttributeCategory
+						.valueOf(ra.getCategory().toUpperCase());
+				AttributeType aType = ra.getType() == null ? null : AttributeType.valueOf(ra.getType().toUpperCase());
+				exporter.registerAttribute(ra.getName(), aCategory, aType, ra.getDefaultValue());
+			}
+		}
+
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		exporter.exportGraph(g, os);
+		try {
+			String outputAsAString = new String(os.toByteArray(), "UTF-8");
+			CCharPointerHolder cString = CTypeConversion.toCString(outputAsAString);
+			if (res.isNonNull()) {
+				res.write(globalHandles.create(cString));
+			}
+		} catch (UnsupportedEncodingException e) {
+			// should not happen
+		}
+		
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
