@@ -18,7 +18,7 @@ int main() {
 
     void *g;
     jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     long long v;
     assert(jgrapht_capi_graph_add_vertex(thread, g, &v) == 0);
@@ -66,7 +66,7 @@ int main() {
     int hasnext;
     jgrapht_capi_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, it);
+    jgrapht_capi_handles_destroy(thread, it);
 
     // bfs from single
     jgrapht_capi_traverse_create_bfs_from_vertex_vit(thread, g, 2, &it);
@@ -85,7 +85,7 @@ int main() {
     jgrapht_capi_it_next_long(thread, it, &v);
     jgrapht_capi_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, it);
+    jgrapht_capi_handles_destroy(thread, it);
 
     // lex bfs
     jgrapht_capi_traverse_create_lex_bfs_vit(thread, g, &it);
@@ -104,7 +104,7 @@ int main() {
     jgrapht_capi_it_next_long(thread, it, &v);
     jgrapht_capi_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, it);
+    jgrapht_capi_handles_destroy(thread, it);
 
 
     // dfs all
@@ -124,7 +124,7 @@ int main() {
     jgrapht_capi_it_next_long(thread, it, &v);
     jgrapht_capi_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, it);
+    jgrapht_capi_handles_destroy(thread, it);
 
     // dfs single vertex
     jgrapht_capi_traverse_create_dfs_from_vertex_vit(thread, g, 2, &it);
@@ -143,7 +143,7 @@ int main() {
     jgrapht_capi_it_next_long(thread, it, &v);
     jgrapht_capi_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, it);
+    jgrapht_capi_handles_destroy(thread, it);
 
     // random walk from vertex
     jgrapht_capi_traverse_create_custom_random_walk_from_vertex_vit(thread, g, 2, 0, 4, 17, &it);
@@ -153,7 +153,7 @@ int main() {
     assert(jgrapht_capi_it_next_long(thread, it, &v) == 0);    
     jgrapht_capi_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, it);
+    jgrapht_capi_handles_destroy(thread, it);
 
     // max card
     jgrapht_capi_traverse_create_max_cardinality_vit(thread, g, &it);
@@ -172,7 +172,7 @@ int main() {
     jgrapht_capi_it_next_long(thread, it, &v);
     jgrapht_capi_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, it);
+    jgrapht_capi_handles_destroy(thread, it);
 
     // degeneracy
     jgrapht_capi_traverse_create_degeneracy_ordering_vit(thread, g, &it);
@@ -191,7 +191,7 @@ int main() {
     jgrapht_capi_it_next_long(thread, it, &v);
     jgrapht_capi_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, it);
+    jgrapht_capi_handles_destroy(thread, it);
 
     // closest first
     jgrapht_capi_traverse_create_closest_first_from_vertex_vit(thread, g, 0, &it);
@@ -210,10 +210,10 @@ int main() {
     jgrapht_capi_it_next_long(thread, it, &v);
     jgrapht_capi_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, it);
+    jgrapht_capi_handles_destroy(thread, it);
 
 
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

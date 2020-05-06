@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
+
+char *expected="c\nc SOURCE: Generated using the JGraphT library\nc\np edge 4 4\ne 1 2\ne 2 3\ne 3 4\ne 4 1\n";
 
 int main() {
     graal_isolate_t *isolate = NULL;
@@ -14,11 +17,11 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     long long v;
     long long e;
@@ -34,18 +37,18 @@ int main() {
 
     // write file
     jgrapht_capi_export_file_dimacs(thread, g, "dummy.dimacs.out", DIMACS_FORMAT_COLORING, 0);
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // read file
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_import_file_dimacs(thread, g, "dummy.dimacs.out", 1);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
     
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     long long count;
     jgrapht_capi_graph_vertices_count(thread, g, &count);
@@ -53,7 +56,16 @@ int main() {
     jgrapht_capi_graph_edges_count(thread, g, &count);
     assert(count == 4);
 
-    jgrapht_capi_destroy(thread, g);
+    // test output to string
+
+    void *out;
+    jgrapht_capi_export_string_dimacs(thread, g, DIMACS_FORMAT_MAX_CLIQUE, 0, &out);
+    char *str;
+    jgrapht_capi_handles_get_ccharpointer(thread, out, &str);
+    assert(strcmp(str, expected) == 0);
+    jgrapht_capi_handles_destroy(thread, out);
+
+    jgrapht_capi_handles_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

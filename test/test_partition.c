@@ -55,10 +55,10 @@ int main() {
     assert(contains == 1);
 
 
-    jgrapht_capi_destroy(thread, part1);
-    jgrapht_capi_destroy(thread, part2);
+    jgrapht_capi_handles_destroy(thread, part1);
+    jgrapht_capi_handles_destroy(thread, part2);
 
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

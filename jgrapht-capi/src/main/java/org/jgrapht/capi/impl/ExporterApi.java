@@ -17,7 +17,9 @@
  */
 package org.jgrapht.capi.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,8 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.graalvm.nativeimage.c.type.CTypeConversion;
+import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
+import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.ExporterDIMACSFormat;
@@ -79,6 +83,42 @@ public class ExporterApi {
 		DIMACSExporter<Long, Long> exporter = new DIMACSExporter<>(x -> String.valueOf(x + 1), actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle, ExporterDIMACSFormat format,
+			boolean exportEdgeWeights, WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		DIMACSFormat actualFormat = null;
+		switch (format) {
+		case DIMACS_FORMAT_COLORING:
+			actualFormat = DIMACSFormat.COLORING;
+			break;
+		case DIMACS_FORMAT_MAX_CLIQUE:
+			actualFormat = DIMACSFormat.MAX_CLIQUE;
+			break;
+		default:
+			actualFormat = DIMACSFormat.SHORTEST_PATH;
+			break;
+		}
+
+		DIMACSExporter<Long, Long> exporter = new DIMACSExporter<>(x -> String.valueOf(x + 1), actualFormat);
+		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
+
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		exporter.exportGraph(g, os);
+		try {
+			String outputAsAString = new String(os.toByteArray(), "UTF-8");
+			CCharPointerHolder cString = CTypeConversion.toCString(outputAsAString);
+			if (res.isNonNull()) {
+				res.write(globalHandles.create(cString));
+			}
+		} catch (UnsupportedEncodingException e) {
+			// should not happen
+		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 

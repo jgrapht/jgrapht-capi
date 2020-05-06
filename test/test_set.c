@@ -59,14 +59,14 @@ int main() {
     int hasnext;
     jgrapht_capi_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, it);
+    jgrapht_capi_handles_destroy(thread, it);
 
     jgrapht_capi_set_clear(thread, set);
     jgrapht_capi_set_size(thread, set, &size);
     assert(size == 0);
 
-    jgrapht_capi_destroy(thread, set);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    jgrapht_capi_handles_destroy(thread, set);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
    
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

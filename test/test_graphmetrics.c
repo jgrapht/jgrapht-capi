@@ -42,7 +42,7 @@ int main() {
     long long triangles;
     jgrapht_capi_graph_metrics_triangles(thread, g, &triangles);
 
-    assert(jgrapht_capi_destroy(thread, g) == 0);
+    assert(jgrapht_capi_handles_destroy(thread, g) == 0);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

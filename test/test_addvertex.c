@@ -16,17 +16,17 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
     jgrapht_capi_graph_create(thread, 1, 1, 1, 1, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
     long long vcount;
     assert(jgrapht_capi_graph_vertices_count(thread,  g, &vcount) == 0);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
     long long ecount;
     assert(jgrapht_capi_graph_edges_count(thread,  g, &ecount) == 0);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     long long v;
     jgrapht_capi_graph_add_vertex(thread, g, &v);
@@ -47,7 +47,7 @@ int main() {
 
     jgrapht_capi_graph_vertices_count(thread,  g, &vcount);
     assert(vcount == 5);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
 
     // test safe supplier
@@ -58,7 +58,7 @@ int main() {
     jgrapht_capi_graph_add_vertex(thread, g, &v);
     assert (v == 6);
 
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

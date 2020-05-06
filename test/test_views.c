@@ -15,11 +15,11 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
     jgrapht_capi_graph_create(thread, 1, 1, 1, 1, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     long long v1; 
     jgrapht_capi_graph_add_vertex(thread, g, &v1);
@@ -67,7 +67,7 @@ int main() {
     assert(jgrapht_capi_graph_is_undirected(thread, g1, &flag) == 0);
     assert(flag == 1);
 
-    jgrapht_capi_destroy(thread, g1);
+    jgrapht_capi_handles_destroy(thread, g1);
 
     jgrapht_capi_graph_set_edge_weight(thread, g, e12, 100.0);
     double w;
@@ -76,7 +76,7 @@ int main() {
     jgrapht_capi_graph_as_unweighted(thread, g, &g1);
     jgrapht_capi_graph_get_edge_weight(thread, g1, e12, &w);
     assert(w == 1.0);
-    jgrapht_capi_destroy(thread, g1);
+    jgrapht_capi_handles_destroy(thread, g1);
 
     jgrapht_capi_graph_as_edgereversed(thread, g, &g1);
     long long v;
@@ -84,17 +84,17 @@ int main() {
     assert(v == v2);
     jgrapht_capi_graph_edge_target(thread, g1, e12, &v);
     assert(v == v1);
-    jgrapht_capi_destroy(thread, g1);
+    jgrapht_capi_handles_destroy(thread, g1);
 
     jgrapht_capi_graph_as_unmodifiable(thread, g, &g1);
     jgrapht_capi_graph_add_edge(thread, g1, v1, v5, NULL);
-    assert(jgrapht_capi_get_errno(thread) != 0);
-    assert(strcmp("this graph is unmodifiable", jgrapht_capi_get_errno_msg(thread))==0);
-    jgrapht_capi_clear_errno(thread);
-    jgrapht_capi_destroy(thread, g);
+    assert(jgrapht_capi_error_get_errno(thread) != 0);
+    assert(strcmp("this graph is unmodifiable", jgrapht_capi_error_get_errno_msg(thread))==0);
+    jgrapht_capi_error_clear_errno(thread);
+    jgrapht_capi_handles_destroy(thread, g);
 
-    jgrapht_capi_destroy(thread, g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    jgrapht_capi_handles_destroy(thread, g);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

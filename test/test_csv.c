@@ -18,11 +18,11 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     long long v;
     long long e;
@@ -38,16 +38,16 @@ int main() {
 
     // write file
     jgrapht_capi_export_file_csv(thread, g, "dummy.csv.out", CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0);
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // read file
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_import_file_csv(thread, g, "dummy.csv.out", import_id, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     long long count;
     jgrapht_capi_graph_vertices_count(thread, g, &count);
@@ -55,9 +55,9 @@ int main() {
     jgrapht_capi_graph_edges_count(thread, g, &count);
     assert(count == 4);
 
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
     
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

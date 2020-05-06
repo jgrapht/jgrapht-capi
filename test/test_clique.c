@@ -52,8 +52,8 @@ int main() {
             break;
         jgrapht_capi_it_next_long(thread, vit, &v);
     }
-    jgrapht_capi_destroy(thread, vit);
-    jgrapht_capi_destroy(thread, clique);
+    jgrapht_capi_handles_destroy(thread, vit);
+    jgrapht_capi_handles_destroy(thread, clique);
     printf("\n");
 
     jgrapht_capi_it_hasnext(thread, cliqueit, &hasnext);
@@ -68,16 +68,16 @@ int main() {
             break;
         jgrapht_capi_it_next_long(thread, vit, &v);
     }
-    jgrapht_capi_destroy(thread, vit);
-    jgrapht_capi_destroy(thread, clique);
+    jgrapht_capi_handles_destroy(thread, vit);
+    jgrapht_capi_handles_destroy(thread, clique);
 
     jgrapht_capi_it_hasnext(thread, cliqueit, &hasnext);
     assert(hasnext == 1);
 
     // more cliques present
 
-    jgrapht_capi_destroy(thread, cliqueit);
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, cliqueit);
+    jgrapht_capi_handles_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

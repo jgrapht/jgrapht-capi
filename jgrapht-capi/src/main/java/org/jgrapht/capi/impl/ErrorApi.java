@@ -33,7 +33,7 @@ public class ErrorApi {
 	 *
 	 * @param thread the thread isolate
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "clear_errno")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "error_clear_errno")
 	public static void clearError(IsolateThread thread) {
 		Errors.clearError();
 	}
@@ -43,7 +43,7 @@ public class ErrorApi {
 	 *
 	 * @param thread the thread isolate
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "get_errno")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "error_get_errno")
 	public static int getError(IsolateThread thread) {
 		return Errors.getErrorStatus().getCValue();
 	}
@@ -54,12 +54,12 @@ public class ErrorApi {
 	 *
 	 * @param thread the thread isolate
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "get_errno_msg")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "error_get_errno_msg")
 	public static CCharPointer getErrorMessage(IsolateThread thread) {
 		return Errors.getMessageCCharPointer();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + "print_stack_trace")
+	@CEntryPoint(name = Constants.LIB_PREFIX + "error_print_stack_trace")
 	public static void printLastStacktrace(IsolateThread thread) {
 		Errors.getErrorThrowable().ifPresent(e->{
 			e.printStackTrace();

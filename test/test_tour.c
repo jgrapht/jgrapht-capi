@@ -32,11 +32,11 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
     jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_generate_complete(thread, g, 8);
 
@@ -44,13 +44,13 @@ int main() {
     void *tour;
     assert(jgrapht_capi_tour_tsp_greedy_heuristic(thread, g, &tour) == 0);
     assert(check_tour(thread, tour, 8.0));
-    jgrapht_capi_destroy(thread,  tour);
+    jgrapht_capi_handles_destroy(thread,  tour);
 
 
     // TODO: test the rest of the API
 
 
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

@@ -59,12 +59,12 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // first write a gml
     void *g;
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     long long v;
     long long e;
@@ -72,11 +72,11 @@ int main() {
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
     jgrapht_capi_graph_add_edge(thread, g, 1, 2, NULL);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test gml with extra attributes
     void *attr_store;
@@ -87,16 +87,16 @@ int main() {
     jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 0, "cost", 100.5);
 
     jgrapht_capi_export_file_json(thread, g, "dummy.json.out", attr_store, NULL);
-    assert(jgrapht_capi_get_errno(thread) == 0);
-    jgrapht_capi_destroy(thread, attr_store);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    jgrapht_capi_handles_destroy(thread, attr_store);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_destroy(thread, g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    jgrapht_capi_handles_destroy(thread, g);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // then read back
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test gml with extra attributes
     jgrapht_capi_import_file_json(thread, g, "dummy.json.out", import_id_from_file, vertex_attribute, edge_attribute);
@@ -105,7 +105,7 @@ int main() {
     jgrapht_capi_graph_edges_count(thread, g, &ecount);
     assert(ecount == 2);
 
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

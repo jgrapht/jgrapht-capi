@@ -14,11 +14,11 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
     jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int flag;
     assert(jgrapht_capi_graph_is_directed(thread, g, &flag) == 0);
@@ -51,12 +51,12 @@ int main() {
 
     // set larger weight on bridge
     jgrapht_capi_graph_set_edge_weight(thread, g, 8, 100.0);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int k = 2;
     void *c;
     assert(jgrapht_capi_clustering_exec_k_spanning_tree(thread, g, k, &c) == 0);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     long long num_clusters;
     jgrapht_capi_clustering_get_number_clusters(thread, c, &num_clusters);
@@ -75,7 +75,7 @@ int main() {
     int hasnext;
     assert(jgrapht_capi_it_hasnext(thread, vit, &hasnext) == 0);
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, vit);
+    jgrapht_capi_handles_destroy(thread, vit);
 
     jgrapht_capi_clustering_ith_cluster_vit(thread, c, 1, &vit);
     assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
@@ -88,17 +88,17 @@ int main() {
     assert(v == 7);
     assert(!jgrapht_capi_it_hasnext(thread, vit, &hasnext));
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, vit);
+    jgrapht_capi_handles_destroy(thread, vit);
 
-    jgrapht_capi_destroy(thread, c);
+    jgrapht_capi_handles_destroy(thread, c);
 
     // test API on label propagation
     assert(jgrapht_capi_clustering_exec_label_propagation(thread, g, 0, 17, &c) == 0);
-    assert(jgrapht_capi_get_errno(thread) == 0);
-    jgrapht_capi_destroy(thread, c);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    jgrapht_capi_handles_destroy(thread, c);
 
     // cleanup
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

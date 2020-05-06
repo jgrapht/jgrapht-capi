@@ -77,7 +77,7 @@ int main() {
     jgrapht_capi_graph_test_is_k5_subdivision(thread, g, &flag);
     assert(flag == 0);
 
-    assert(jgrapht_capi_destroy(thread, g) == 0);
+    assert(jgrapht_capi_handles_destroy(thread, g) == 0);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

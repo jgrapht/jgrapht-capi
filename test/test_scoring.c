@@ -35,54 +35,54 @@ int main() {
     jgrapht_capi_scoring_exec_alpha_centrality(thread, g, &map);
     jgrapht_capi_map_long_contains_key(thread, map, 0, &value);
     assert(value == 1);
-    jgrapht_capi_destroy(thread, map);
+    jgrapht_capi_handles_destroy(thread, map);
 
     jgrapht_capi_scoring_exec_custom_alpha_centrality(thread, g, 0.5, 0.3, 3, 0.0000001, &map);
     jgrapht_capi_map_long_contains_key(thread, map, 0, &value);
     assert(value == 1);
-    jgrapht_capi_destroy(thread, map);
+    jgrapht_capi_handles_destroy(thread, map);
 
     jgrapht_capi_scoring_exec_betweenness_centrality(thread, g, &map);
     jgrapht_capi_map_long_contains_key(thread, map, 0, &value);
     assert(value == 1);
-    jgrapht_capi_destroy(thread, map);
+    jgrapht_capi_handles_destroy(thread, map);
 
     jgrapht_capi_scoring_exec_custom_betweenness_centrality(thread, g, 1, &map);
     jgrapht_capi_map_long_contains_key(thread, map, 0, &value);
     assert(value == 1);
-    jgrapht_capi_destroy(thread, map);
+    jgrapht_capi_handles_destroy(thread, map);
 
     jgrapht_capi_scoring_exec_closeness_centrality(thread, g, &map);
     jgrapht_capi_map_long_contains_key(thread, map, 0, &value);
     assert(value == 1);
-    jgrapht_capi_destroy(thread, map);
+    jgrapht_capi_handles_destroy(thread, map);
 
     jgrapht_capi_scoring_exec_custom_closeness_centrality(thread, g, 0, 1, &map);
     jgrapht_capi_map_long_contains_key(thread, map, 0, &value);
     assert(value == 1);
-    jgrapht_capi_destroy(thread, map);
+    jgrapht_capi_handles_destroy(thread, map);
 
     jgrapht_capi_scoring_exec_harmonic_centrality(thread, g, &map);
     jgrapht_capi_map_long_contains_key(thread, map, 0, &value);
     assert(value == 1);
-    jgrapht_capi_destroy(thread, map);
+    jgrapht_capi_handles_destroy(thread, map);
 
     jgrapht_capi_scoring_exec_custom_harmonic_centrality(thread, g, 0, 1, &map);
     jgrapht_capi_map_long_contains_key(thread, map, 0, &value);
     assert(value == 1);
-    jgrapht_capi_destroy(thread, map);
+    jgrapht_capi_handles_destroy(thread, map);
 
     jgrapht_capi_scoring_exec_pagerank(thread, g, &map);
     jgrapht_capi_map_long_contains_key(thread, map, 0, &value);
     assert(value == 1);
-    jgrapht_capi_destroy(thread, map);
+    jgrapht_capi_handles_destroy(thread, map);
 
     jgrapht_capi_scoring_exec_custom_pagerank(thread, g, 0.85, 20, 0.00001, &map);
     jgrapht_capi_map_long_contains_key(thread, map, 0, &value);
     assert(value == 1);
-    jgrapht_capi_destroy(thread, map);
+    jgrapht_capi_handles_destroy(thread, map);
 
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

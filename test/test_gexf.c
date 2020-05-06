@@ -55,16 +55,16 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // import a gexf from string
     void *g;
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test gml with extra attributes
     jgrapht_capi_import_string_gexf(thread, g, input, NULL, 1, NULL, NULL);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     long long vcount;
     jgrapht_capi_graph_vertices_count(thread, g, &vcount);
@@ -87,20 +87,20 @@ int main() {
     jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 2, "cost", 9.2);
 
     jgrapht_capi_export_file_gexf(thread, g, "dummy.gexf.out", attrs_registry, NULL, attr_store, 0, 0, 0, 0);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_destroy(thread, attr_store);
-    jgrapht_capi_destroy(thread, attrs_registry);
+    jgrapht_capi_handles_destroy(thread, attr_store);
+    jgrapht_capi_handles_destroy(thread, attrs_registry);
 
     // now read back 
 
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
 
     jgrapht_capi_import_file_gexf(thread, g, "dummy.gexf.out", import_id, 1, NULL, edge_attribute);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

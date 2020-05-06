@@ -15,11 +15,11 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
 
     long long v;
@@ -56,13 +56,13 @@ int main() {
     jgrapht_capi_it_hasnext(thread, it, &has_next);
     assert (has_next == 0);
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_destroy(thread, it);
-    jgrapht_capi_destroy(thread, embedding);
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, it);
+    jgrapht_capi_handles_destroy(thread, embedding);
+    jgrapht_capi_handles_destroy(thread, g);
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

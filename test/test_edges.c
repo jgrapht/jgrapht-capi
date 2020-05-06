@@ -16,11 +16,11 @@ int main() {
         exit(EXIT_FAILURE);
     }    
 
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
     jgrapht_capi_graph_create(thread, 1, 1, 1, 1, &g);
-    assert(jgrapht_capi_get_errno(thread) == 0);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int flag;
     assert(jgrapht_capi_graph_is_directed(thread, g, &flag) == 0);
@@ -91,7 +91,7 @@ int main() {
     assert(w == 1.0);
 
     jgrapht_capi_graph_set_edge_weight(thread, g, 0, 5.0);
-    assert(jgrapht_capi_get_errno(thread) == 0); 
+    assert(jgrapht_capi_error_get_errno(thread) == 0); 
     jgrapht_capi_graph_get_edge_weight(thread, g, 0, &w);
     assert(w == 5.0);
 
@@ -113,7 +113,7 @@ int main() {
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     assert(hasnext == 0);
 
-    jgrapht_capi_destroy(thread, eit);
+    jgrapht_capi_handles_destroy(thread, eit);
 
     assert(jgrapht_capi_graph_contains_edge_between(thread, g, 0, 0, &flag) == 0);
     assert(flag);
@@ -143,9 +143,9 @@ int main() {
     assert(v == 5);
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     assert(hasnext == 0);
-    jgrapht_capi_destroy(thread, eit);
+    jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");
