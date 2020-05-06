@@ -6,6 +6,25 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
+char *expected="\
+<?xml version=\"1.0\" encoding=\"UTF-8\"?><graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n\
+    <key id=\"key0\" for=\"edge\" attr.name=\"cost\" attr.type=\"double\"/>\n\
+    <graph edgedefault=\"undirected\">\n\
+        <node id=\"0\"/>\n\
+        <node id=\"1\"/>\n\
+        <node id=\"2\"/>\n\
+        <edge source=\"0\" target=\"1\">\n\
+            <data key=\"key0\">5.4</data>\n\
+        </edge>\n\
+        <edge source=\"1\" target=\"2\">\n\
+            <data key=\"key0\">6.5</data>\n\
+        </edge>\n\
+        <edge source=\"2\" target=\"0\">\n\
+            <data key=\"key0\">9.2</data>\n\
+        </edge>\n\
+    </graph>\n\
+</graphml>\n";
+
 void edge_attribute(long long e, char *key, char *value) { 
     if (e == 0) { 
         if (strcmp(key, "cost") == 0) { 
@@ -69,9 +88,6 @@ int main() {
     jgrapht_capi_export_file_graphml(thread, g, "dummy.graphml.simple.out", attrs_registry, NULL, attr_store, 0, 0, 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_handles_destroy(thread, attr_store);
-    jgrapht_capi_handles_destroy(thread, attrs_registry);
-
     // now read back 
     jgrapht_capi_handles_destroy(thread, g);
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
@@ -79,7 +95,20 @@ int main() {
     jgrapht_capi_import_file_graphml_simple(thread, g, "dummy.graphml.simple.out", import_id, 1, NULL, edge_attribute);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
+    // test output to string
+    void *out;
+    jgrapht_capi_export_string_graphml(thread, g, attrs_registry, NULL, attr_store, 0, 0, 0, &out);
+    char *str;
+    jgrapht_capi_handles_get_ccharpointer(thread, out, &str);
+    //printf("%s", str);
+    assert(strcmp(str, expected) == 0);
+    jgrapht_capi_handles_destroy(thread, out);
+
+
+    jgrapht_capi_handles_destroy(thread, attr_store);
+    jgrapht_capi_handles_destroy(thread, attrs_registry);
     jgrapht_capi_handles_destroy(thread, g);
+
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");

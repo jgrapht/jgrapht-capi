@@ -54,6 +54,15 @@ int main() {
     jgrapht_capi_graph_edges_count(thread, g, &ecount);
     assert(ecount == 2);
 
+    // test output to string
+    void *out;
+    jgrapht_capi_export_string_graph6(thread, g, &out);
+    char *str;
+    jgrapht_capi_handles_get_ccharpointer(thread, out, &str);
+    //printf("%s", str);
+    assert(strcmp(str, "Bg") == 0);
+    jgrapht_capi_handles_destroy(thread, out);
+
     jgrapht_capi_handles_destroy(thread, g);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
