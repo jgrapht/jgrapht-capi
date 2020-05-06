@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
+
+char *expected="0,1,3\n1,0,2\n3,0,2\n2,1,3\n";
 
 long long import_id(const char *id) { 
     return atol(id);
@@ -54,6 +57,15 @@ int main() {
     assert(count == 4);
     jgrapht_capi_graph_edges_count(thread, g, &count);
     assert(count == 4);
+
+    // test output to string
+    void *out;
+    jgrapht_capi_export_string_csv(thread, g, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0, &out);
+    char *str;
+    jgrapht_capi_handles_get_ccharpointer(thread, out, &str);
+    assert(strcmp(str, expected) == 0);
+    //printf("%s", str);
+    jgrapht_capi_handles_destroy(thread, out);
 
     jgrapht_capi_handles_destroy(thread, g);
     

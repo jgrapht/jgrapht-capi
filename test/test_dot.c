@@ -6,6 +6,7 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
+char *expected = "strict graph G {\n  0;\n  1;\n  2;\n  0 -- 1 [ cost=\"5.4\" ];\n  1 -- 2 [ cost=\"6.5\" ];\n  2 -- 0 [ cost=\"9.2\" ];\n}\n";
 
 void edge_attribute(long long e, char *key, char *value) { 
     if (e == 0) { 
@@ -66,7 +67,6 @@ int main() {
     jgrapht_capi_export_file_dot(thread, g, "dummy.dot.out", NULL, attr_store);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_handles_destroy(thread, attr_store);
 
     // now read back 
     jgrapht_capi_handles_destroy(thread, g);
@@ -75,6 +75,16 @@ int main() {
     jgrapht_capi_import_file_dot(thread, g, "dummy.dot.out", import_id, NULL, edge_attribute);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
+    // test output to string
+    void *out;
+    jgrapht_capi_export_string_dot(thread, g, NULL, attr_store, &out);
+    char *str;
+    jgrapht_capi_handles_get_ccharpointer(thread, out, &str);
+    assert(strcmp(str, expected) == 0);
+    jgrapht_capi_handles_destroy(thread, out);
+
+
+    jgrapht_capi_handles_destroy(thread, attr_store);
     jgrapht_capi_handles_destroy(thread, g);
 
     if (thread, graal_detach_thread(thread) != 0) {
