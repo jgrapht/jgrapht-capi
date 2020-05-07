@@ -194,10 +194,10 @@ public class ShortestPathApi {
 			AStarHeuristicFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
-		AStarShortestPath<Long, Long> alg = new AStarShortestPath<>(g, (a,b)->{
+		AStarShortestPath<Long, Long> alg = new AStarShortestPath<>(g, (a, b) -> {
 			return admissibleHeuristicFunctionPointer.invoke(a, b);
 		});
-		
+
 		GraphPath<Long, Long> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
@@ -208,17 +208,17 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_exec_bidirectional_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeBidirectionalAStarBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
-			AStarHeuristicFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
+	public static int executeBidirectionalAStarBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
+			long target, AStarHeuristicFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
-		BidirectionalAStarShortestPath<Long, Long> alg = new BidirectionalAStarShortestPath<>(g, (a,b)->{
+		BidirectionalAStarShortestPath<Long, Long> alg = new BidirectionalAStarShortestPath<>(g, (a, b) -> {
 			return admissibleHeuristicFunctionPointer.invoke(a, b);
 		});
-		
+
 		GraphPath<Long, Long> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
