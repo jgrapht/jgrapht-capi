@@ -1,9 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <assert.h>
 
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
+
+double astar_heuristic(long long int source, long long int target) { 
+    // just for testing
+    double sx = (source == 0 || source ==1)? 0 : 1;
+    double sy = (source == 0 || source ==3)? 0 : 1;
+
+    double tx = (target == 0 || target ==1)? 0 : 1;
+    double ty = (target == 0 || target ==3)? 0 : 1;
+
+    return sqrt(tx*tx + ty*ty);
+}
 
 int main() {
     graal_isolate_t *isolate = NULL;
@@ -150,9 +162,32 @@ int main() {
     jgrapht_capi_handles_destroy(thread, gp);
     jgrapht_capi_handles_destroy(thread, singlesource);
     jgrapht_capi_handles_destroy(thread, allpairs);
-
-
     jgrapht_capi_handles_destroy(thread, g);
+
+    // test A*
+    jgrapht_capi_graph_create(thread, 1, 0, 0, 1, &g);
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+
+    jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
+    jgrapht_capi_graph_set_edge_weight(thread, g, 0, 1.0);
+    jgrapht_capi_graph_add_edge(thread, g, 1, 2, NULL);
+    jgrapht_capi_graph_set_edge_weight(thread, g, 1, 1.0);
+    jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
+    jgrapht_capi_graph_set_edge_weight(thread, g, 2, 1.0);
+    jgrapht_capi_graph_add_edge(thread, g, 3, 0, NULL);
+    jgrapht_capi_graph_set_edge_weight(thread, g, 3, 1.0);
+
+    jgrapht_capi_sp_exec_astar_get_path_between_vertices(thread, g, 0, 2, astar_heuristic, &gp);
+
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+
+    jgrapht_capi_handles_destroy(thread, gp);
+    jgrapht_capi_handles_destroy(thread, g);
+
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     if (thread, graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");
