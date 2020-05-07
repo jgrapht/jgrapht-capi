@@ -13,6 +13,7 @@ typedef enum {
     STATUS_IO_ERROR,
     STATUS_EXPORT_ERROR,
     STATUS_IMPORT_ERROR,
+    STATUS_NEGATIVE_CYCLE_DETECTED,
 } status_t;
 
 typedef enum {

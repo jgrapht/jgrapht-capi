@@ -26,6 +26,7 @@ public class JGraphTContext {
 		STATUS_IO_ERROR,
 		STATUS_EXPORT_ERROR, 
 		STATUS_IMPORT_ERROR,
+		STATUS_NEGATIVE_CYCLE_DETECTED,
 		;
 		// @formatter:on
 
@@ -89,10 +90,20 @@ public class JGraphTContext {
 	 * the input identifier of a vertex or edge into a long integer.
 	 */
 	public interface ImportIdFunctionPointer extends CFunctionPointer {
-		
+
 		@InvokeCFunctionPointer
 		long invoke(CCharPointer id);
-		
+
+	}
+
+	/*
+	 * Function pointer for A* heuristic functions.
+	 */
+	public interface AStarHeuristicFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		double invoke(long source, long target);
+
 	}
 
 }

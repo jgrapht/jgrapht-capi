@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.graalvm.nativeimage.c.type.CCharPointer;
+import org.jgrapht.alg.shortestpath.NegativeCycleDetectedException;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.nio.ExportException;
 import org.jgrapht.nio.ImportException;
@@ -51,7 +52,7 @@ public class Errors {
 		Error error = errorThreadLocal.get();
 		return error.getMessagePin().get();
 	}
-	
+
 	public static Optional<Throwable> getErrorThrowable() {
 		return Optional.ofNullable(errorThreadLocal.get().getThrowable());
 	}
@@ -96,6 +97,8 @@ public class Errors {
 			return Status.STATUS_EXPORT_ERROR;
 		} else if (e instanceof ImportException) {
 			return Status.STATUS_IMPORT_ERROR;
+		} else if (e instanceof NegativeCycleDetectedException) {
+			return Status.STATUS_NEGATIVE_CYCLE_DETECTED;
 		} else {
 			return Status.STATUS_ERROR;
 		}

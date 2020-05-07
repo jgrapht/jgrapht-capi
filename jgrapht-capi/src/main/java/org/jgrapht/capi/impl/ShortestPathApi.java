@@ -27,13 +27,16 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
+import org.jgrapht.alg.shortestpath.AStarShortestPath;
 import org.jgrapht.alg.shortestpath.BFSShortestPath;
 import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
+import org.jgrapht.alg.shortestpath.BidirectionalAStarShortestPath;
 import org.jgrapht.alg.shortestpath.BidirectionalDijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.FloydWarshallShortestPaths;
 import org.jgrapht.alg.shortestpath.JohnsonShortestPaths;
 import org.jgrapht.capi.Constants;
+import org.jgrapht.capi.JGraphTContext.AStarHeuristicFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
@@ -181,6 +184,48 @@ public class ShortestPathApi {
 		SingleSourcePaths<Long, Long> paths = alg.getPaths(source);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(paths));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "sp_exec_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeAStarBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
+			AStarHeuristicFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		AStarShortestPath<Long, Long> alg = new AStarShortestPath<>(g, (a,b)->{
+			return admissibleHeuristicFunctionPointer.invoke(a, b);
+		});
+		
+		GraphPath<Long, Long> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "sp_exec_bidirectional_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBidirectionalAStarBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
+			AStarHeuristicFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		BidirectionalAStarShortestPath<Long, Long> alg = new BidirectionalAStarShortestPath<>(g, (a,b)->{
+			return admissibleHeuristicFunctionPointer.invoke(a, b);
+		});
+		
+		GraphPath<Long, Long> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
