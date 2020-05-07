@@ -181,10 +181,13 @@ int main() {
     jgrapht_capi_graph_set_edge_weight(thread, g, 3, 1.0);
 
     jgrapht_capi_sp_exec_astar_get_path_between_vertices(thread, g, 0, 2, astar_heuristic, &gp);
-
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-
     jgrapht_capi_handles_destroy(thread, gp);
+
+    jgrapht_capi_sp_exec_bidirectional_astar_get_path_between_vertices(thread, g, 0, 2, astar_heuristic, &gp);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    jgrapht_capi_handles_destroy(thread, gp);
+
     jgrapht_capi_handles_destroy(thread, g);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
