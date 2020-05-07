@@ -188,6 +188,20 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     jgrapht_capi_handles_destroy(thread, gp);
 
+    // test A* with alt heuristic
+    void *landmarks;
+    jgrapht_capi_set_linked_create(thread, &landmarks);
+    jgrapht_capi_set_long_add(thread, landmarks, 1, NULL);
+    
+    jgrapht_capi_sp_exec_astar_alt_heuristic_get_path_between_vertices(thread, g, 0, 2, landmarks, &gp);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    jgrapht_capi_handles_destroy(thread, gp);
+
+    jgrapht_capi_sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices(thread, g, 0, 2, landmarks, &gp);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    jgrapht_capi_handles_destroy(thread, gp);
+
+    jgrapht_capi_handles_destroy(thread, landmarks);
     jgrapht_capi_handles_destroy(thread, g);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);

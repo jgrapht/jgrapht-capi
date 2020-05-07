@@ -17,6 +17,8 @@
  */
 package org.jgrapht.capi.impl;
 
+import java.util.Set;
+
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
@@ -27,6 +29,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
+import org.jgrapht.alg.shortestpath.ALTAdmissibleHeuristic;
 import org.jgrapht.alg.shortestpath.AStarShortestPath;
 import org.jgrapht.alg.shortestpath.BFSShortestPath;
 import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
@@ -218,6 +221,46 @@ public class ShortestPathApi {
 		BidirectionalAStarShortestPath<Long, Long> alg = new BidirectionalAStarShortestPath<>(g, (a, b) -> {
 			return admissibleHeuristicFunctionPointer.invoke(a, b);
 		});
+
+		GraphPath<Long, Long> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "sp_exec_astar_alt_heuristic_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
+			long target, ObjectHandle landmarksSet, WordPointer pathRes) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Set<Long> landmarks = globalHandles.get(landmarksSet);
+
+		AStarShortestPath<Long, Long> alg = new AStarShortestPath<>(g, new ALTAdmissibleHeuristic<>(g, landmarks));
+
+		GraphPath<Long, Long> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBidirectionalAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
+			long target, ObjectHandle landmarksSet, WordPointer pathRes) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Set<Long> landmarks = globalHandles.get(landmarksSet);
+
+		BidirectionalAStarShortestPath<Long, Long> alg = new BidirectionalAStarShortestPath<>(g, new ALTAdmissibleHeuristic<>(g, landmarks));
 
 		GraphPath<Long, Long> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
