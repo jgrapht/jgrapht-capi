@@ -17,6 +17,7 @@
  */
 package org.jgrapht.capi.impl;
 
+import java.util.List;
 import java.util.Set;
 
 import org.graalvm.nativeimage.IsolateThread;
@@ -36,8 +37,10 @@ import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.alg.shortestpath.BidirectionalAStarShortestPath;
 import org.jgrapht.alg.shortestpath.BidirectionalDijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.EppsteinKShortestPath;
 import org.jgrapht.alg.shortestpath.FloydWarshallShortestPaths;
 import org.jgrapht.alg.shortestpath.JohnsonShortestPaths;
+import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.AStarHeuristicFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
@@ -255,12 +258,13 @@ public class ShortestPathApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeBidirectionalAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
-			long target, ObjectHandle landmarksSet, WordPointer pathRes) {
+	public static int executeBidirectionalAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle,
+			long source, long target, ObjectHandle landmarksSet, WordPointer pathRes) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Set<Long> landmarks = globalHandles.get(landmarksSet);
 
-		BidirectionalAStarShortestPath<Long, Long> alg = new BidirectionalAStarShortestPath<>(g, new ALTAdmissibleHeuristic<>(g, landmarks));
+		BidirectionalAStarShortestPath<Long, Long> alg = new BidirectionalAStarShortestPath<>(g,
+				new ALTAdmissibleHeuristic<>(g, landmarks));
 
 		GraphPath<Long, Long> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
@@ -269,6 +273,36 @@ public class ShortestPathApi {
 			} else {
 				pathRes.write(WordFactory.nullPointer());
 			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "sp_exec_yen_get_k_loopless_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeYenBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target, int k,
+			WordPointer pathIteratorRes) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		YenKShortestPath<Long, Long> alg = new YenKShortestPath<>(g);
+		List<GraphPath<Long, Long>> paths = alg.getPaths(source, target, k);
+
+		if (pathIteratorRes.isNonNull()) {
+			pathIteratorRes.write(globalHandles.create(paths.iterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "sp_exec_eppstein_get_k_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeEppsteinBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
+			int k, WordPointer pathIteratorRes) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		EppsteinKShortestPath<Long, Long> alg = new EppsteinKShortestPath<>(g);
+		List<GraphPath<Long, Long>> paths = alg.getPaths(source, target, k);
+
+		if (pathIteratorRes.isNonNull()) {
+			pathIteratorRes.write(globalHandles.create(paths.iterator()));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
