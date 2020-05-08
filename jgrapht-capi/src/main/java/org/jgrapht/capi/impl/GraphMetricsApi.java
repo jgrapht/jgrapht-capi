@@ -17,14 +17,19 @@
  */
 package org.jgrapht.capi.impl;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CLongPointer;
+import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphMetrics;
+import org.jgrapht.alg.shortestpath.GraphMeasurer;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
@@ -73,6 +78,41 @@ public class GraphMetricsApi {
 		long result = GraphMetrics.getNumberOfTriangles(g);
 		if (res.isNonNull()) {
 			res.write(result);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_metrics_measure_graph", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int vertexEccentricity(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer diameter,
+			CDoublePointer radius, WordPointer center, WordPointer periphery, WordPointer pseudoPeriphery,
+			WordPointer vertexEccentricityMap) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		GraphMeasurer<Long, Long> alg = new GraphMeasurer<>(g);
+		double graphDiameter = alg.getDiameter();
+		if (diameter.isNonNull()) {
+			diameter.write(graphDiameter);
+		}
+		double graphRadius = alg.getRadius();
+		if (radius.isNonNull()) {
+			radius.write(graphRadius);
+		}
+		Set<Long> graphCenter = alg.getGraphCenter();
+		if (center.isNonNull()) {
+			center.write(globalHandles.create(graphCenter));
+		}
+		Set<Long> graphPeriphery = alg.getGraphPeriphery();
+		if (periphery.isNonNull()) {
+			periphery.write(globalHandles.create(graphPeriphery));
+		}
+		Set<Long> graphPseudoPeriphery = alg.getGraphPseudoPeriphery();
+		if (pseudoPeriphery.isNonNull()) {
+			pseudoPeriphery.write(globalHandles.create(graphPseudoPeriphery));
+		}
+		Map<Long, Double> graphVertexEccentricityMap = alg.getVertexEccentricityMap();
+		if (vertexEccentricityMap.isNonNull()) {
+			vertexEccentricityMap.write(globalHandles.create(graphVertexEccentricityMap));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}

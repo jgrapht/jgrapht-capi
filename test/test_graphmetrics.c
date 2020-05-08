@@ -42,6 +42,20 @@ int main() {
     long long triangles;
     jgrapht_capi_graph_metrics_triangles(thread, g, &triangles);
 
+    // test measure
+
+    void *center = NULL, *periphery = NULL, *pseudoPeriphery = NULL, *eccentricityMap = NULL;
+    jgrapht_capi_graph_metrics_measure_graph(thread, g, &diameter, &radius, &center, &periphery, &pseudoPeriphery, &eccentricityMap);
+    assert(center);
+    assert(periphery);
+    assert(pseudoPeriphery);
+    assert(eccentricityMap);
+
+    assert(jgrapht_capi_handles_destroy(thread, center) == 0);
+    assert(jgrapht_capi_handles_destroy(thread, periphery) == 0);
+    assert(jgrapht_capi_handles_destroy(thread, pseudoPeriphery) == 0);
+    assert(jgrapht_capi_handles_destroy(thread, eccentricityMap) == 0);
+
     assert(jgrapht_capi_handles_destroy(thread, g) == 0);
 
     if (thread, graal_detach_thread(thread) != 0) {

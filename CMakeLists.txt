@@ -113,6 +113,7 @@ set(
     "test_graphml.c"
     "test_graphml_simple.c"
     "test_dot.c"
+    "test_mincut.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
