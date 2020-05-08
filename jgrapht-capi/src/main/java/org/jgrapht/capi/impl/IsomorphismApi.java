@@ -83,7 +83,7 @@ public class IsomorphismApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "isomorphism_graph_mapping_vertexe_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "isomorphism_graph_mapping_vertex_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphMappingVertex(IsolateThread thread, ObjectHandle mappingHandle, long vertex, boolean forward,
 			CIntPointer existsVertexRes, CLongPointer vertexRes) {
 		GraphMapping<Long, Long> graphMapping = globalHandles.get(mappingHandle);
