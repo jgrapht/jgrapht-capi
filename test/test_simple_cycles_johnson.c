@@ -40,7 +40,7 @@ int main() {
     jgrapht_capi_graph_add_edge(thread, g, 5, 2, NULL);
 
     void *cycleit;
-    jgrapht_capi_cycles_simple_enumeration_exec_hawick_james(thread, g, &cycleit);
+    jgrapht_capi_cycles_simple_enumeration_exec_johnson(thread, g, &cycleit);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // 1st cycle
@@ -69,7 +69,8 @@ int main() {
         sprintf(vastext, "%lld", v);
         strcat(result, vastext);
     }
-    assert(strcmp(result, "3210") == 0);
+    //printf("%s\n", result);
+    assert(strcmp(result, "0123") == 0);
     jgrapht_capi_handles_destroy(thread, vit);
     jgrapht_capi_handles_destroy(thread, cycle);
 
@@ -94,7 +95,7 @@ int main() {
         strcat(result, vastext);
     }
     //printf("%s\n", result);
-    assert(strcmp(result, "325410") == 0);
+    assert(strcmp(result, "014523") == 0);
     jgrapht_capi_handles_destroy(thread, vit);
     jgrapht_capi_handles_destroy(thread, cycle);
 

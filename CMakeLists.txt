@@ -125,6 +125,10 @@ set(
     "test_fundamental_basis_bfs.c"
     "test_fundamental_basis_stack.c"
     "test_simple_cycles_hawick_james.c"
+    "test_simple_cycles_tarjan.c"
+    "test_simple_cycles_tiernan.c"
+    "test_simple_cycles_szwarcfiter_lauer.c"
+    "test_simple_cycles_johnson.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
