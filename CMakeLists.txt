@@ -117,6 +117,7 @@ set(
     "test_iso.c"
     "test_iso_subgraph.c"
     "test_edgesupplier.c"
+    "test_mincostflow.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
