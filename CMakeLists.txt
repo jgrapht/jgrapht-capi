@@ -82,6 +82,7 @@ set(
     "test_error.c"
     "test_map.c"
     "test_set.c"
+    "test_list.c"
     "test_mst.c"
     "test_vertexcover.c"
     "test_clustering.c"
