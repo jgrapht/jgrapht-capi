@@ -121,6 +121,9 @@ set(
     "test_mincostflow.c"
     "test_eulerian.c"
     "test_chinese_postman.c"
+    "test_fundamental_basis_paton.c"
+    "test_fundamental_basis_bfs.c"
+    "test_fundamental_basis_stack.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
