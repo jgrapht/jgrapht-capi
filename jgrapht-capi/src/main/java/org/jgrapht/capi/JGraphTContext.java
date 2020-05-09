@@ -105,5 +105,12 @@ public class JGraphTContext {
 		double invoke(long source, long target);
 
 	}
+	
+	public interface LongToIntegerFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		int invoke(long key);
+
+	}
 
 }

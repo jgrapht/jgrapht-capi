@@ -70,10 +70,10 @@ public class GraphApi {
 					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(vSupplier).edgeSupplier(eSupplier)
 					.buildGraph();
 		}
-		
+
 		vSupplier.setGraph(graph);
 		eSupplier.setGraph(graph);
-		
+
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
 		}
@@ -119,11 +119,11 @@ public class GraphApi {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		boolean result = g.addVertex(vertex);
 		if (res.isNonNull()) {
-			res.write(result?1:0);
+			res.write(result ? 1 : 0);
 		}
 		return Status.STATUS_SUCCESS.getCValue();
-	}	
-	
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_remove_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, CIntPointer res) {
@@ -156,6 +156,18 @@ public class GraphApi {
 		}
 		if (res.isNonNull()) {
 			res.write(result);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_add_given_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int addGivenEdge(IsolateThread thread, ObjectHandle graphHandle, long source, long target, long edge,
+			CIntPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		boolean result = g.addEdge(source, target, edge);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
