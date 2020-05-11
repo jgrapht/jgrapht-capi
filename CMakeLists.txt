@@ -129,6 +129,7 @@ set(
     "test_simple_cycles_tiernan.c"
     "test_simple_cycles_szwarcfiter_lauer.c"
     "test_simple_cycles_johnson.c"
+    "test_connectivity.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
