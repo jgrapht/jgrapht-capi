@@ -26,6 +26,8 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
@@ -74,6 +76,30 @@ public class ListApi {
 	public static int listDoubleAdd(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
 		List<Double> list = globalHandles.get(handle);
 		boolean result = list.add(value);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "list_edge_pair_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listEdgePairAdd(IsolateThread thread, ObjectHandle handle, int source, int target,
+			CIntPointer res) {
+		List<Pair<Integer, Integer>> list = globalHandles.get(handle);
+		boolean result = list.add(Pair.of(source, target));
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "list_edge_triple_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listEdgeTripleAdd(IsolateThread thread, ObjectHandle handle, int source, int target,
+			double weight, CIntPointer res) {
+		List<Triple<Integer, Integer, Double>> list = globalHandles.get(handle);
+		boolean result = list.add(Triple.of(source, target, weight));
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}

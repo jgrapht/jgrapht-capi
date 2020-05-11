@@ -18,6 +18,7 @@
 package org.jgrapht.capi.impl;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.graalvm.nativeimage.IsolateThread;
@@ -28,6 +29,8 @@ import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
@@ -38,6 +41,10 @@ import org.jgrapht.graph.AsUnmodifiableGraph;
 import org.jgrapht.graph.AsUnweightedGraph;
 import org.jgrapht.graph.EdgeReversedGraph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
+import org.jgrapht.opt.graph.sparse.SparseIntDirectedGraph;
+import org.jgrapht.opt.graph.sparse.SparseIntDirectedWeightedGraph;
+import org.jgrapht.opt.graph.sparse.SparseIntUndirectedGraph;
+import org.jgrapht.opt.graph.sparse.SparseIntUndirectedWeightedGraph;
 
 /**
  * Basic graph operations
@@ -73,6 +80,38 @@ public class GraphApi {
 		vSupplier.setGraph(graph);
 		eSupplier.setGraph(graph);
 
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * Create a graph and return its handle.
+	 *
+	 * @param thread the thread isolate
+	 * @return the graph handle
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_sparse_create", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createSparseGraph(IsolateThread thread, boolean directed, boolean weighted, int numVertices,
+			ObjectHandle edgesListHandle, WordPointer res) {
+		Graph<Integer, Integer> graph;
+		if (weighted) {
+			List<Triple<Integer, Integer, Double>> edges = globalHandles.get(edgesListHandle);
+			if (directed) {
+				graph = new SparseIntDirectedWeightedGraph(numVertices, edges);
+			} else {
+				graph = new SparseIntUndirectedWeightedGraph(numVertices, edges);
+			}
+		} else {
+			List<Pair<Integer, Integer>> edges = globalHandles.get(edgesListHandle);
+			if (directed) {
+				graph = new SparseIntDirectedGraph(numVertices, edges);
+			} else {
+				graph = new SparseIntUndirectedGraph(numVertices, edges);
+			}
+		}
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
 		}
