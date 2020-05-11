@@ -13,29 +13,29 @@ import org.jgrapht.nio.Attribute;
  */
 public class AttributesStore {
 
-	private Map<Long, Map<String, Attribute>> attributes;
+	private Map<Integer, Map<String, Attribute>> attributes;
 
 	public AttributesStore() {
 		this.attributes = new HashMap<>();
 	}
 
-	public Attribute getAttribute(long element, String name) {
+	public Attribute getAttribute(int element, String name) {
 		return getSafeMap(element).get(name);
 	}
 
-	public void putAttribute(long element, String name, Attribute value) {
+	public void putAttribute(int element, String name, Attribute value) {
 		getSafeMap(element).put(name, value);
 	}
 
-	public void removeAttribute(long element, String name) {
+	public void removeAttribute(int element, String name) {
 		getSafeMap(element).remove(name);
 	}
 
-	public Map<String, Attribute> getAttributes(long element) {
+	public Map<String, Attribute> getAttributes(int element) {
 		return Collections.unmodifiableMap(getSafeMap(element));
 	}
 
-	private Map<String, Attribute> getSafeMap(long element) {
+	private Map<String, Attribute> getSafeMap(int element) {
 		Map<String, Attribute> attrs = attributes.get(element);
 		if (attrs == null) {
 			attrs = new LinkedHashMap<>();

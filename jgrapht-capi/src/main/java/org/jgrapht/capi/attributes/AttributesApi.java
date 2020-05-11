@@ -41,7 +41,7 @@ public class AttributesApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "attributes_store_put_boolean_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int putBooleanAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
+	public static int putBooleanAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, boolean value) {
 		AttributesStore store = globalHandles.get(storeHandle);
 		String name = CTypeConversion.toJavaString(namePtr);
@@ -51,7 +51,7 @@ public class AttributesApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "attributes_store_put_long_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int putLongAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
+	public static int putLongAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, long value) {
 		AttributesStore store = globalHandles.get(storeHandle);
 		String name = CTypeConversion.toJavaString(namePtr);
@@ -61,7 +61,7 @@ public class AttributesApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "attributes_store_put_double_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int putDoubleAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
+	public static int putDoubleAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, double value) {
 		AttributesStore store = globalHandles.get(storeHandle);
 		String name = CTypeConversion.toJavaString(namePtr);
@@ -71,7 +71,7 @@ public class AttributesApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "attributes_store_put_string_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int putStringAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
+	public static int putStringAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, CCharPointer valuePtr) {
 		AttributesStore store = globalHandles.get(storeHandle);
 		String name = CTypeConversion.toJavaString(namePtr);
@@ -82,7 +82,7 @@ public class AttributesApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "attributes_store_remove_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int removeAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
+	public static int removeAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr) {
 		AttributesStore store = globalHandles.get(storeHandle);
 		String name = CTypeConversion.toJavaString(namePtr);
