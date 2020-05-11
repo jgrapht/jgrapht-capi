@@ -51,42 +51,42 @@ int main() {
     jgrapht_capi_vertexcover_exec_greedy(thread, g, &vc_w, &vc);
     assert(vc_w == 1.0);
 
-    long long size;
+    int size;
     jgrapht_capi_set_size(thread, vc, &size);
     assert(size == 1);
     int contains;
-    jgrapht_capi_set_long_contains(thread, vc, 0, &contains);
+    jgrapht_capi_set_int_contains(thread, vc, 0, &contains);
     assert(contains == 1);
 
     jgrapht_capi_handles_destroy(thread, vc);
 
     void * map;
     jgrapht_capi_map_linked_create(thread, &map);
-    jgrapht_capi_map_long_double_put(thread, map, 0, 1000.0);
-    jgrapht_capi_map_long_double_put(thread, map, 1, 2.0);
-    jgrapht_capi_map_long_double_put(thread, map, 2, 2.0);
-    jgrapht_capi_map_long_double_put(thread, map, 3, 2.0);
-    jgrapht_capi_map_long_double_put(thread, map, 4, 2.0);
-    jgrapht_capi_map_long_double_put(thread, map, 5, 2.0);
-    jgrapht_capi_map_long_double_put(thread, map, 6, 2.0);
+    jgrapht_capi_map_int_double_put(thread, map, 0, 1000.0);
+    jgrapht_capi_map_int_double_put(thread, map, 1, 2.0);
+    jgrapht_capi_map_int_double_put(thread, map, 2, 2.0);
+    jgrapht_capi_map_int_double_put(thread, map, 3, 2.0);
+    jgrapht_capi_map_int_double_put(thread, map, 4, 2.0);
+    jgrapht_capi_map_int_double_put(thread, map, 5, 2.0);
+    jgrapht_capi_map_int_double_put(thread, map, 6, 2.0);
 
     jgrapht_capi_vertexcover_exec_greedy_weighted(thread, g, map, &vc_w, &vc);
     assert(vc_w == 12.0);
     void *vit;
     jgrapht_capi_set_it_create(thread, vc, &vit);
 
-    long long v;
-    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    int v;
+    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
     assert(v == 1);
-    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
     assert(v == 2);
-    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
     assert(v == 3);
-    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
     assert(v == 4);
-    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
     assert(v == 5);
-    assert(jgrapht_capi_it_next_long(thread, vit, &v) == 0);
+    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
     assert(v == 6);
     int hasnext;
     assert(jgrapht_capi_it_hasnext(thread, vit, &hasnext) == 0);

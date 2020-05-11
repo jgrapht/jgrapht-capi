@@ -5,11 +5,11 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-int edge_lower_bound(long long int e) { 
+int edge_lower_bound(int e) { 
     return 0;
 }
 
-int edge_upper_bound(long long int e) { 
+int edge_upper_bound(int e) { 
     switch(e) { 
     case 0:
         return 20;
@@ -25,7 +25,7 @@ int edge_upper_bound(long long int e) {
     return 0;
 }
 
-int vertex_supply(long long int v) { 
+int vertex_supply(int v) { 
     switch(v) { 
     case 0:
         return 30;
@@ -67,8 +67,8 @@ int main() {
     jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
     jgrapht_capi_graph_set_edge_weight(thread, g, 4, 20);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 

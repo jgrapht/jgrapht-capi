@@ -21,14 +21,14 @@ int main() {
     void *g;
     jgrapht_capi_graph_create(thread, 1, 1, 1, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-    long long vcount;
+    int vcount;
     assert(jgrapht_capi_graph_vertices_count(thread,  g, &vcount) == 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-    long long ecount;
+    int ecount;
     assert(jgrapht_capi_graph_edges_count(thread,  g, &ecount) == 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    long long v;
+    int v;
     jgrapht_capi_graph_add_vertex(thread, g, &v);
     assert(v == 0);
     jgrapht_capi_graph_add_vertex(thread, g, &v);

@@ -33,8 +33,8 @@ int main() {
     assert(jgrapht_capi_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
     assert(flag == 0);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -58,19 +58,19 @@ int main() {
     double weight;
     assert(jgrapht_capi_spanner_exec_greedy_multiplicative(thread, g, 3, &weight, &spanner)==0);
     assert(weight == 4.0);
-    long long size;
+    int size;
     jgrapht_capi_set_size(thread, spanner, &size);
     assert(size == 4);
     int contains;
-    jgrapht_capi_set_long_contains(thread, spanner, 0, &contains);
+    jgrapht_capi_set_int_contains(thread, spanner, 0, &contains);
     assert(contains);
-    jgrapht_capi_set_long_contains(thread, spanner, 1, &contains);
+    jgrapht_capi_set_int_contains(thread, spanner, 1, &contains);
     assert(contains);
-    jgrapht_capi_set_long_contains(thread, spanner, 2, &contains);
+    jgrapht_capi_set_int_contains(thread, spanner, 2, &contains);
     assert(contains);
-    jgrapht_capi_set_long_contains(thread, spanner, 3, &contains);
+    jgrapht_capi_set_int_contains(thread, spanner, 3, &contains);
     assert(contains);
-    jgrapht_capi_set_long_contains(thread, spanner, 4, &contains);
+    jgrapht_capi_set_int_contains(thread, spanner, 4, &contains);
     assert(!contains);
     jgrapht_capi_handles_destroy(thread,  spanner);
 

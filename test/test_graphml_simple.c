@@ -25,7 +25,7 @@ char *expected="\
     </graph>\n\
 </graphml>\n";
 
-void edge_attribute(long long e, char *key, char *value) { 
+void edge_attribute(int e, char *key, char *value) { 
     if (e == 0) { 
         if (strcmp(key, "cost") == 0) { 
             assert(strcmp(value, "5.4") == 0);
@@ -43,7 +43,7 @@ void edge_attribute(long long e, char *key, char *value) {
     }
 }
 
-long long import_id(const char *id) { 
+int import_id(const char *id) { 
     return atol(id);
 }
 

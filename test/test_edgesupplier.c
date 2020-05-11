@@ -22,7 +22,7 @@ int main() {
     jgrapht_capi_graph_create(thread, 1, 1, 1, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    long long v;
+    int v;
     assert(jgrapht_capi_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 0);
     assert(jgrapht_capi_graph_add_vertex(thread, g, &v) == 0);
@@ -30,7 +30,7 @@ int main() {
     assert(jgrapht_capi_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 2);
 
-    long long e;
+    int e;
     assert(jgrapht_capi_graph_add_edge(thread, g, 0, 0, &e) == 0);
     assert(e == 0);
     assert(jgrapht_capi_graph_add_edge(thread, g, 0, 1, &e) == 0);

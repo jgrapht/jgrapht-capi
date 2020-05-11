@@ -19,42 +19,42 @@ int main() {
     jgrapht_capi_set_linked_create(thread, &set);
 
     int exists;
-    jgrapht_capi_set_long_contains(thread, set, 4, &exists);
+    jgrapht_capi_set_int_contains(thread, set, 4, &exists);
     assert(exists == 0);
 
     int did_not_exist;
-    jgrapht_capi_set_long_add(thread, set, 4, &did_not_exist);
+    jgrapht_capi_set_int_add(thread, set, 4, &did_not_exist);
     assert(did_not_exist);
-    jgrapht_capi_set_long_contains(thread, set, 4, &exists);
+    jgrapht_capi_set_int_contains(thread, set, 4, &exists);
     assert(exists == 1);
 
-    jgrapht_capi_set_long_add(thread, set, 100, &did_not_exist);
+    jgrapht_capi_set_int_add(thread, set, 100, &did_not_exist);
     assert(did_not_exist);
-    jgrapht_capi_set_long_contains(thread, set, 100, &exists);
+    jgrapht_capi_set_int_contains(thread, set, 100, &exists);
     assert(exists == 1);
 
-    jgrapht_capi_set_long_add(thread, set, 500, &did_not_exist);
+    jgrapht_capi_set_int_add(thread, set, 500, &did_not_exist);
     assert(did_not_exist);
-    jgrapht_capi_set_long_contains(thread, set, 500, &exists);
+    jgrapht_capi_set_int_contains(thread, set, 500, &exists);
     assert(exists == 1);
 
-    long long size;
+    int size;
     jgrapht_capi_set_size(thread, set, &size);
     assert(size == 3);
 
-    jgrapht_capi_set_long_remove(thread, set, 500);
-    jgrapht_capi_set_long_contains(thread, set, 500, &exists);
+    jgrapht_capi_set_int_remove(thread, set, 500);
+    jgrapht_capi_set_int_contains(thread, set, 500, &exists);
     assert(exists == 0);
 
     jgrapht_capi_set_size(thread, set, &size);
     assert(size == 2);
 
     void * it;
-    long long elem;
+    int elem;
     jgrapht_capi_set_it_create(thread, set, &it);
-    jgrapht_capi_it_next_long(thread, it, &elem);
+    jgrapht_capi_it_next_int(thread, it, &elem);
     assert(elem == 4);
-    jgrapht_capi_it_next_long(thread, it, &elem);
+    jgrapht_capi_it_next_int(thread, it, &elem);
     assert(elem == 100);
     int hasnext;
     jgrapht_capi_it_hasnext(thread, it, &hasnext);

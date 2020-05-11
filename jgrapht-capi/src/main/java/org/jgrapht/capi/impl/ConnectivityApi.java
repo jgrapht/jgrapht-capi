@@ -25,12 +25,12 @@ public class ConnectivityApi {
 			+ "connectivity_strong_exec_kosaraju", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeKosaraju(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		KosarajuStrongConnectivityInspector<Long, Long> alg = new KosarajuStrongConnectivityInspector<>(g);
+		KosarajuStrongConnectivityInspector<Integer, Integer> alg = new KosarajuStrongConnectivityInspector<>(g);
 
 		boolean result = alg.isStronglyConnected();
-		List<Set<Long>> connectedSets = alg.stronglyConnectedSets();
+		List<Set<Integer>> connectedSets = alg.stronglyConnectedSets();
 
 		if (valueRes.isNonNull()) {
 			valueRes.write(result ? 1 : 0);
@@ -45,12 +45,12 @@ public class ConnectivityApi {
 			+ "connectivity_strong_exec_gabow", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeGabow(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		GabowStrongConnectivityInspector<Long, Long> alg = new GabowStrongConnectivityInspector<>(g);
+		GabowStrongConnectivityInspector<Integer, Integer> alg = new GabowStrongConnectivityInspector<>(g);
 
 		boolean result = alg.isStronglyConnected();
-		List<Set<Long>> connectedSets = alg.stronglyConnectedSets();
+		List<Set<Integer>> connectedSets = alg.stronglyConnectedSets();
 
 		if (valueRes.isNonNull()) {
 			valueRes.write(result ? 1 : 0);
@@ -65,12 +65,12 @@ public class ConnectivityApi {
 			+ "connectivity_weak_exec_bfs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeWeakBfs(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		ConnectivityInspector<Long, Long> alg = new ConnectivityInspector<>(g);
+		ConnectivityInspector<Integer, Integer> alg = new ConnectivityInspector<>(g);
 
 		boolean result = alg.isConnected();
-		List<Set<Long>> connectedSets = alg.connectedSets();
+		List<Set<Integer>> connectedSets = alg.connectedSets();
 
 		if (valueRes.isNonNull()) {
 			valueRes.write(result ? 1 : 0);

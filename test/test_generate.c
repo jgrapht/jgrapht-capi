@@ -19,7 +19,7 @@ int main() {
     // barabasi albert
     jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
     jgrapht_capi_generate_barabasi_albert(thread, g, 10, 5, 100, 17);
-    long long vcount;
+    int vcount;
     jgrapht_capi_graph_vertices_count(thread, g, &vcount);
     assert(vcount == 100);
     jgrapht_capi_handles_destroy(thread, g);

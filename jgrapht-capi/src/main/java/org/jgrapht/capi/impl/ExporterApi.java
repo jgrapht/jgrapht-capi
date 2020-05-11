@@ -65,7 +65,7 @@ public class ExporterApi {
 			+ "export_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportDIMACSToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ExporterDIMACSFormat format, boolean exportEdgeWeights) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		DIMACSFormat actualFormat = null;
 		switch (format) {
@@ -80,7 +80,7 @@ public class ExporterApi {
 			break;
 		}
 
-		DIMACSExporter<Long, Long> exporter = new DIMACSExporter<>(x -> String.valueOf(x + 1), actualFormat);
+		DIMACSExporter<Integer, Integer> exporter = new DIMACSExporter<>(x -> String.valueOf(x + 1), actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
@@ -90,7 +90,7 @@ public class ExporterApi {
 			+ "export_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle, ExporterDIMACSFormat format,
 			boolean exportEdgeWeights, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		DIMACSFormat actualFormat = null;
 		switch (format) {
@@ -105,7 +105,7 @@ public class ExporterApi {
 			break;
 		}
 
-		DIMACSExporter<Long, Long> exporter = new DIMACSExporter<>(x -> String.valueOf(x + 1), actualFormat);
+		DIMACSExporter<Integer, Integer> exporter = new DIMACSExporter<>(x -> String.valueOf(x + 1), actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -125,9 +125,9 @@ public class ExporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "export_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportGmlFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			boolean exportEdgeWeights, ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		GmlExporter<Long, Long> exporter = new GmlExporter<>(x -> String.valueOf(x));
+		GmlExporter<Integer, Integer> exporter = new GmlExporter<>(x -> String.valueOf(x));
 		exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 
 		AttributesStore vStore = globalHandles.get(vertexLabelsStore);
@@ -153,13 +153,14 @@ public class ExporterApi {
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX + "export_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int exportGmlString(IsolateThread thread, ObjectHandle graphHandle, 
-			boolean exportEdgeWeights, ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
-		GmlExporter<Long, Long> exporter = new GmlExporter<>(x -> String.valueOf(x));
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportGmlString(IsolateThread thread, ObjectHandle graphHandle, boolean exportEdgeWeights,
+			ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore, WordPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+
+		GmlExporter<Integer, Integer> exporter = new GmlExporter<>(x -> String.valueOf(x));
 		exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 
 		AttributesStore vStore = globalHandles.get(vertexLabelsStore);
@@ -200,26 +201,26 @@ public class ExporterApi {
 			+ "export_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportJsonFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		JSONExporter<Long, Long> exporter = new JSONExporter<>(x -> String.valueOf(x));
-		
+		JSONExporter<Integer, Integer> exporter = new JSONExporter<>(x -> String.valueOf(x));
+
 		setupAttributeStores(exporter, vertexLabelsStore, edgeLabelsStore);
-		
+
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_string_json", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int exportJsonString(IsolateThread thread, ObjectHandle graphHandle, 
-			ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+	public static int exportJsonString(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle vertexLabelsStore,
+			ObjectHandle edgeLabelsStore, WordPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		JSONExporter<Long, Long> exporter = new JSONExporter<>(x -> String.valueOf(x));
-		
+		JSONExporter<Integer, Integer> exporter = new JSONExporter<>(x -> String.valueOf(x));
+
 		setupAttributeStores(exporter, vertexLabelsStore, edgeLabelsStore);
-		
+
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		exporter.exportGraph(g, os);
 		try {
@@ -238,25 +239,25 @@ public class ExporterApi {
 			+ "export_file_lemon", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportLemonToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			boolean exportEdgeWeights, boolean escapeStringsAsJava) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		LemonExporter<Long, Long> exporter = new LemonExporter<>(x -> String.valueOf(x));
+		LemonExporter<Integer, Integer> exporter = new LemonExporter<>(x -> String.valueOf(x));
 		exporter.setParameter(LemonExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.setParameter(LemonExporter.Parameter.ESCAPE_STRINGS_AS_JAVA, escapeStringsAsJava);
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_string_lemon", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int exportLemonToString(IsolateThread thread, ObjectHandle graphHandle, 
-			boolean exportEdgeWeights, boolean escapeStringsAsJava, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+	public static int exportLemonToString(IsolateThread thread, ObjectHandle graphHandle, boolean exportEdgeWeights,
+			boolean escapeStringsAsJava, WordPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		LemonExporter<Long, Long> exporter = new LemonExporter<>(x -> String.valueOf(x));
+		LemonExporter<Integer, Integer> exporter = new LemonExporter<>(x -> String.valueOf(x));
 		exporter.setParameter(LemonExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.setParameter(LemonExporter.Parameter.ESCAPE_STRINGS_AS_JAVA, escapeStringsAsJava);
-		
+
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		exporter.exportGraph(g, os);
 		try {
@@ -268,7 +269,7 @@ public class ExporterApi {
 		} catch (UnsupportedEncodingException e) {
 			// should not happen
 		}
-		
+
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -276,7 +277,7 @@ public class ExporterApi {
 	public static int exportCSVToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ImporterExporterCSVFormat format, boolean exportEdgeWeights, boolean matrix_format_nodeid,
 			boolean matrix_format_zero_when_no_edge) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		CSVFormat actualFormat = null;
 		switch (format) {
@@ -288,19 +289,20 @@ public class ExporterApi {
 			break;
 		}
 
-		CSVExporter<Long, Long> exporter = new CSVExporter<>(x -> String.valueOf(x), actualFormat, ',');
+		CSVExporter<Integer, Integer> exporter = new CSVExporter<>(x -> String.valueOf(x), actualFormat, ',');
 		exporter.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
 		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX + "export_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int exportCSVToString(IsolateThread thread, ObjectHandle graphHandle, 
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportCSVToString(IsolateThread thread, ObjectHandle graphHandle,
 			ImporterExporterCSVFormat format, boolean exportEdgeWeights, boolean matrix_format_nodeid,
 			boolean matrix_format_zero_when_no_edge, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		CSVFormat actualFormat = null;
 		switch (format) {
@@ -312,11 +314,11 @@ public class ExporterApi {
 			break;
 		}
 
-		CSVExporter<Long, Long> exporter = new CSVExporter<>(x -> String.valueOf(x), actualFormat, ',');
+		CSVExporter<Integer, Integer> exporter = new CSVExporter<>(x -> String.valueOf(x), actualFormat, ',');
 		exporter.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
 		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
-		
+
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		exporter.exportGraph(g, os);
 		try {
@@ -328,7 +330,7 @@ public class ExporterApi {
 		} catch (UnsupportedEncodingException e) {
 			// should not happen
 		}
-		
+
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -354,9 +356,9 @@ public class ExporterApi {
 	public static int exportGexfFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
 			boolean exportEdgeWeights, boolean exportEdgeLabels, boolean exportEdgeTypes, boolean exportMeta) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		GEXFExporter<Long, Long> exporter = new GEXFExporter<>(x -> String.valueOf(x), x -> String.valueOf(x));
+		GEXFExporter<Integer, Integer> exporter = new GEXFExporter<>(x -> String.valueOf(x), x -> String.valueOf(x));
 
 		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_LABELS, exportEdgeLabels);
@@ -378,15 +380,15 @@ public class ExporterApi {
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int exportGexfString(IsolateThread thread, ObjectHandle graphHandle,
-			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
-			boolean exportEdgeWeights, boolean exportEdgeLabels, boolean exportEdgeTypes, boolean exportMeta, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+	public static int exportGexfString(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle attributesRegistry,
+			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore, boolean exportEdgeWeights,
+			boolean exportEdgeLabels, boolean exportEdgeTypes, boolean exportMeta, WordPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		GEXFExporter<Long, Long> exporter = new GEXFExporter<>(x -> String.valueOf(x), x -> String.valueOf(x));
+		GEXFExporter<Integer, Integer> exporter = new GEXFExporter<>(x -> String.valueOf(x), x -> String.valueOf(x));
 
 		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_LABELS, exportEdgeLabels);
@@ -416,29 +418,30 @@ public class ExporterApi {
 		} catch (UnsupportedEncodingException e) {
 			// should not happen
 		}
-		
+
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "export_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportDotFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		DOTExporter<Long, Long> exporter = new DOTExporter<>(x -> String.valueOf(x));
+		DOTExporter<Integer, Integer> exporter = new DOTExporter<>(x -> String.valueOf(x));
 
 		setupAttributeStores(exporter, vertexAttributesStore, edgeAttributesStore);
 
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX + "export_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int exportDotString(IsolateThread thread, ObjectHandle graphHandle, 
-			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
-		DOTExporter<Long, Long> exporter = new DOTExporter<>(x -> String.valueOf(x));
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "export_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int exportDotString(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore, WordPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+
+		DOTExporter<Integer, Integer> exporter = new DOTExporter<>(x -> String.valueOf(x));
 
 		setupAttributeStores(exporter, vertexAttributesStore, edgeAttributesStore);
 
@@ -453,27 +456,29 @@ public class ExporterApi {
 		} catch (UnsupportedEncodingException e) {
 			// should not happen
 		}
-		
+
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_file_graph6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportGraph6File(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		Graph6Sparse6Exporter<Long, Long> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.GRAPH6);
+		Graph6Sparse6Exporter<Integer, Integer> exporter = new Graph6Sparse6Exporter<>(
+				Graph6Sparse6Exporter.Format.GRAPH6);
 
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_string_graph6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportGraph6String(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		Graph6Sparse6Exporter<Long, Long> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.GRAPH6);
+		Graph6Sparse6Exporter<Integer, Integer> exporter = new Graph6Sparse6Exporter<>(
+				Graph6Sparse6Exporter.Format.GRAPH6);
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		exporter.exportGraph(g, os);
@@ -486,27 +491,29 @@ public class ExporterApi {
 		} catch (UnsupportedEncodingException e) {
 			// should not happen
 		}
-		
+
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_file_sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportSparse6File(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		Graph6Sparse6Exporter<Long, Long> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.SPARSE6);
+		Graph6Sparse6Exporter<Integer, Integer> exporter = new Graph6Sparse6Exporter<>(
+				Graph6Sparse6Exporter.Format.SPARSE6);
 
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_string_sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportSparse6String(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		Graph6Sparse6Exporter<Long, Long> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.SPARSE6);
+		Graph6Sparse6Exporter<Integer, Integer> exporter = new Graph6Sparse6Exporter<>(
+				Graph6Sparse6Exporter.Format.SPARSE6);
 
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		exporter.exportGraph(g, os);
@@ -519,7 +526,7 @@ public class ExporterApi {
 		} catch (UnsupportedEncodingException e) {
 			// should not happen
 		}
-		
+
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -528,9 +535,9 @@ public class ExporterApi {
 	public static int exportGraphMLFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
 			boolean exportEdgeWeights, boolean exportVertexLabels, boolean exportEdgeLabels) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		GraphMLExporter<Long, Long> exporter = new GraphMLExporter<>(x -> String.valueOf(x));
+		GraphMLExporter<Integer, Integer> exporter = new GraphMLExporter<>(x -> String.valueOf(x));
 
 		exporter.setExportEdgeWeights(exportEdgeWeights);
 		exporter.setExportVertexLabels(exportVertexLabels);
@@ -551,15 +558,15 @@ public class ExporterApi {
 		exporter.exportGraph(g, new File(CTypeConversion.toJavaString(filename)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_string_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int exportGraphMLString(IsolateThread thread, ObjectHandle graphHandle, 
+	public static int exportGraphMLString(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
 			boolean exportEdgeWeights, boolean exportVertexLabels, boolean exportEdgeLabels, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		GraphMLExporter<Long, Long> exporter = new GraphMLExporter<>(x -> String.valueOf(x));
+		GraphMLExporter<Integer, Integer> exporter = new GraphMLExporter<>(x -> String.valueOf(x));
 
 		exporter.setExportEdgeWeights(exportEdgeWeights);
 		exporter.setExportVertexLabels(exportVertexLabels);
@@ -588,12 +595,12 @@ public class ExporterApi {
 		} catch (UnsupportedEncodingException e) {
 			// should not happen
 		}
-		
+
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	private static void setupAttributeStores(BaseExporter<Long, Long> exporter, ObjectHandle vertexAttributesStore,
-			ObjectHandle edgeAttributesStore) {
+	private static void setupAttributeStores(BaseExporter<Integer, Integer> exporter,
+			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore) {
 		AttributesStore vStore = globalHandles.get(vertexAttributesStore);
 		if (vStore != null) {
 			exporter.setVertexAttributeProvider(v -> {

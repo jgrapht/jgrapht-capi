@@ -21,16 +21,16 @@ int main() {
     void *g;
     jgrapht_capi_graph_create(thread, 1, 1, 1, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-    long long vcount;
+    int vcount;
     assert(jgrapht_capi_graph_vertices_count(thread,  g, &vcount) == 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-    long long ecount;
+    int ecount;
     assert(jgrapht_capi_graph_edges_count(thread,  g, &ecount) == 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     int i;
     for(i = 0; i < NUM_VERTICES; i++) {
-        long long v;
+        int v;
         assert(jgrapht_capi_graph_add_vertex(thread,  g, &v) == 0);
         assert(v == i);
         assert(jgrapht_capi_error_get_errno(thread) == 0);
@@ -49,7 +49,7 @@ int main() {
         assert(jgrapht_capi_error_get_errno(thread) == 0);
     }
 
-    long long v;
+    int v;
     jgrapht_capi_graph_add_vertex(thread,  g, &v);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     assert(v == NUM_VERTICES);
@@ -74,13 +74,13 @@ int main() {
     jgrapht_capi_graph_create_all_vit(thread,  g, &vit);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     long x = 0;
-    long long value;
+    int value;
     while(1) { 
         jgrapht_capi_it_hasnext(thread,  vit, &flag);
         if (!flag) { 
             break;
         }
-        jgrapht_capi_it_next_long(thread,  vit, &value);
+        jgrapht_capi_it_next_int(thread,  vit, &value);
         assert(value == x++);
     }
     assert(jgrapht_capi_error_get_errno(thread) == 0);
@@ -92,8 +92,8 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     x = 0;
     while(1) { 
-        long long ret;
-        jgrapht_capi_it_next_long(thread,  vit, &ret);
+        int ret;
+        jgrapht_capi_it_next_int(thread,  vit, &ret);
         if (x < 1000) { 
             assert(ret == x);
             assert(jgrapht_capi_error_get_errno(thread) == 0);

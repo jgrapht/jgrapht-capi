@@ -21,36 +21,36 @@ int main() {
     jgrapht_capi_graph_create(thread, 1, 1, 1, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    long long v1; 
+    int v1; 
     jgrapht_capi_graph_add_vertex(thread, g, &v1);
-    long long v2;
+    int v2;
     jgrapht_capi_graph_add_vertex(thread, g, &v2);
-    long long v3;
+    int v3;
     jgrapht_capi_graph_add_vertex(thread, g, &v3);
-    long long v4;
+    int v4;
     jgrapht_capi_graph_add_vertex(thread, g, &v4);
-    long long v5;
+    int v5;
     jgrapht_capi_graph_add_vertex(thread, g, &v5);
 
-    long long vcount;
+    int vcount;
     jgrapht_capi_graph_vertices_count(thread, g, &vcount);
     assert(vcount == 5);
 
-    long long e12;
+    int e12;
     jgrapht_capi_graph_add_edge(thread, g, v1, v2, &e12);
-    long long e23_1;
+    int e23_1;
     jgrapht_capi_graph_add_edge(thread, g, v2, v3, &e23_1);
-    long long e23_2;
+    int e23_2;
     jgrapht_capi_graph_add_edge(thread, g, v2, v3, &e23_2);
-    long long e24;
+    int e24;
     jgrapht_capi_graph_add_edge(thread, g, v2, v4, &e24);
-    long long e44;
+    int e44;
     jgrapht_capi_graph_add_edge(thread, g, v4, v4, &e44);
-    long long e55_1;
+    int e55_1;
     jgrapht_capi_graph_add_edge(thread, g, v5, v5, &e55_1);
-    long long e52;
+    int e52;
     jgrapht_capi_graph_add_edge(thread, g, v5, v2, &e52);
-    long long e55_2;
+    int e55_2;
     jgrapht_capi_graph_add_edge(thread, g, v5, v5, &e55_2);
 
     int flag;
@@ -79,7 +79,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, g1);
 
     jgrapht_capi_graph_as_edgereversed(thread, g, &g1);
-    long long v;
+    int v;
     jgrapht_capi_graph_edge_source(thread, g1, e12, &v);
     assert(v == v2);
     jgrapht_capi_graph_edge_target(thread, g1, e12, &v);

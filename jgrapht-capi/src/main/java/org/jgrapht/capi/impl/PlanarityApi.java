@@ -23,21 +23,21 @@ public class PlanarityApi {
 			+ "planarity_exec_boyer_myrvold", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBoryerMyrvold(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res,
 			WordPointer embeddingRes, WordPointer kuratowskiSubdivisionRes) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		BoyerMyrvoldPlanarityInspector<Long, Long> alg = new BoyerMyrvoldPlanarityInspector<>(g);
+		BoyerMyrvoldPlanarityInspector<Integer, Integer> alg = new BoyerMyrvoldPlanarityInspector<>(g);
 
 		boolean result = alg.isPlanar();
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
 		if (result) {
-			Embedding<Long, Long> embedding = alg.getEmbedding();
+			Embedding<Integer, Integer> embedding = alg.getEmbedding();
 			if (embeddingRes.isNonNull()) {
 				embeddingRes.write(globalHandles.create(embedding));
 			}
 		} else {
-			Graph<Long, Long> kuratowskiSubdivision = alg.getKuratowskiSubdivision();
+			Graph<Integer, Integer> kuratowskiSubdivision = alg.getKuratowskiSubdivision();
 			if (kuratowskiSubdivisionRes.isNonNull()) {
 				kuratowskiSubdivisionRes.write(globalHandles.create(kuratowskiSubdivision));
 			}
@@ -47,9 +47,9 @@ public class PlanarityApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "planarity_embedding_edges_around_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int edgesAround(IsolateThread thread, ObjectHandle embeddingHandle, long vertex, WordPointer res) {
-		Embedding<Long, Long> embedding = globalHandles.get(embeddingHandle);
-		List<Long> list = embedding.getEdgesAround(vertex);
+	public static int edgesAround(IsolateThread thread, ObjectHandle embeddingHandle, int vertex, WordPointer res) {
+		Embedding<Integer, Integer> embedding = globalHandles.get(embeddingHandle);
+		List<Integer> list = embedding.getEdgesAround(vertex);
 		if (list != null && res.isNonNull()) {
 			res.write(globalHandles.create(list.iterator()));
 		}

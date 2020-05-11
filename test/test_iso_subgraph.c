@@ -21,8 +21,8 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g1);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
     jgrapht_capi_graph_add_vertex(thread, g1, NULL);
     jgrapht_capi_graph_add_vertex(thread, g1, NULL);
     jgrapht_capi_graph_add_vertex(thread, g1, NULL);
@@ -56,7 +56,7 @@ int main() {
     jgrapht_capi_it_next_object(thread, map_it, &map);
 
     int has_other_vertex;
-    long long other_vertex;
+    int other_vertex;
     jgrapht_capi_isomorphism_graph_mapping_vertex_correspondence(thread, map, 0, 1, &has_other_vertex, &other_vertex);
     assert(has_other_vertex && other_vertex == 0);
     jgrapht_capi_isomorphism_graph_mapping_vertex_correspondence(thread, map, 1, 1, &has_other_vertex, &other_vertex);

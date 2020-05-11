@@ -21,8 +21,8 @@ int main() {
     jgrapht_capi_graph_create(thread, 1, 0, 0, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -45,7 +45,7 @@ int main() {
     
     void *gp;
     double weight; 
-    long long start_vertex, end_vertex;
+    int start_vertex, end_vertex;
 
     // test yen
     void *gpit;

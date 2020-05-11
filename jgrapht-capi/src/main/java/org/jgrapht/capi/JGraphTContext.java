@@ -82,7 +82,7 @@ public class JGraphTContext {
 		 * an indirect call of the function pointer.
 		 */
 		@InvokeCFunctionPointer
-		void invoke(long element, CCharPointer key, CCharPointer value);
+		void invoke(int element, CCharPointer key, CCharPointer value);
 	}
 
 	/*
@@ -92,7 +92,7 @@ public class JGraphTContext {
 	public interface ImportIdFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
-		long invoke(CCharPointer id);
+		int invoke(CCharPointer id);
 
 	}
 
@@ -102,14 +102,14 @@ public class JGraphTContext {
 	public interface AStarHeuristicFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
-		double invoke(long source, long target);
+		double invoke(int source, int target);
 
 	}
-	
-	public interface LongToIntegerFunctionPointer extends CFunctionPointer {
+
+	public interface IntegerToIntegerFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
-		int invoke(long key);
+		int invoke(int key);
 
 	}
 

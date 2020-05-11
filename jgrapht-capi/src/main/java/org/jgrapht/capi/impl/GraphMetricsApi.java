@@ -25,6 +25,7 @@ import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
+import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
@@ -41,7 +42,7 @@ public class GraphMetricsApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_metrics_diameter", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int diameter(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 		double result = GraphMetrics.getDiameter(g);
 		if (res.isNonNull()) {
 			res.write(result);
@@ -52,7 +53,7 @@ public class GraphMetricsApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_metrics_radius", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int radius(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 		double result = GraphMetrics.getRadius(g);
 		if (res.isNonNull()) {
 			res.write(result);
@@ -62,9 +63,9 @@ public class GraphMetricsApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_metrics_girth", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int girth(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		long result = GraphMetrics.getGirth(g);
+	public static int girth(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		int result = GraphMetrics.getGirth(g);
 		if (res.isNonNull()) {
 			res.write(result);
 		}
@@ -74,7 +75,7 @@ public class GraphMetricsApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_metrics_triangles", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int triangles(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 		long result = GraphMetrics.getNumberOfTriangles(g);
 		if (res.isNonNull()) {
 			res.write(result);
@@ -87,9 +88,9 @@ public class GraphMetricsApi {
 	public static int vertexEccentricity(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer diameter,
 			CDoublePointer radius, WordPointer center, WordPointer periphery, WordPointer pseudoPeriphery,
 			WordPointer vertexEccentricityMap) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		GraphMeasurer<Long, Long> alg = new GraphMeasurer<>(g);
+		GraphMeasurer<Integer, Integer> alg = new GraphMeasurer<>(g);
 		double graphDiameter = alg.getDiameter();
 		if (diameter.isNonNull()) {
 			diameter.write(graphDiameter);
@@ -98,19 +99,19 @@ public class GraphMetricsApi {
 		if (radius.isNonNull()) {
 			radius.write(graphRadius);
 		}
-		Set<Long> graphCenter = alg.getGraphCenter();
+		Set<Integer> graphCenter = alg.getGraphCenter();
 		if (center.isNonNull()) {
 			center.write(globalHandles.create(graphCenter));
 		}
-		Set<Long> graphPeriphery = alg.getGraphPeriphery();
+		Set<Integer> graphPeriphery = alg.getGraphPeriphery();
 		if (periphery.isNonNull()) {
 			periphery.write(globalHandles.create(graphPeriphery));
 		}
-		Set<Long> graphPseudoPeriphery = alg.getGraphPseudoPeriphery();
+		Set<Integer> graphPseudoPeriphery = alg.getGraphPseudoPeriphery();
 		if (pseudoPeriphery.isNonNull()) {
 			pseudoPeriphery.write(globalHandles.create(graphPseudoPeriphery));
 		}
-		Map<Long, Double> graphVertexEccentricityMap = alg.getVertexEccentricityMap();
+		Map<Integer, Double> graphVertexEccentricityMap = alg.getVertexEccentricityMap();
 		if (vertexEccentricityMap.isNonNull()) {
 			vertexEccentricityMap.write(globalHandles.create(graphVertexEccentricityMap));
 		}

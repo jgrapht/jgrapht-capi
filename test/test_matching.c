@@ -18,8 +18,8 @@ int main() {
     void *g;
     jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -37,7 +37,7 @@ int main() {
 
     void *m;
     double weight;
-    long long card;
+    int card;
     void * part1, * part2;
     jgrapht_capi_matching_exec_greedy_general_max_card(thread, g, &weight, &m);
     assert(weight == 115.0);

@@ -136,16 +136,16 @@ public class MatchingApi {
 			+ "matching_exec_bipartite_max_card", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBipartiteMaximumCardinalityMatching(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		BipartitePartitioning<Long, Long> partAlg = new BipartitePartitioning<>(g);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		BipartitePartitioning<Integer, Integer> partAlg = new BipartitePartitioning<>(g);
 		if (!partAlg.isBipartite()) {
 			throw new IllegalArgumentException("Graph is not bipartite");
 		}
-		Partitioning<Long> part = partAlg.getPartitioning();
-		Set<Long> part0 = part.getPartition(0);
-		Set<Long> part1 = part.getPartition(1);
-		MatchingAlgorithm<Long, Long> alg = new HopcroftKarpMaximumCardinalityBipartiteMatching<>(g, part0, part1);
-		Matching<Long, Long> result = alg.getMatching();
+		Partitioning<Integer> part = partAlg.getPartitioning();
+		Set<Integer> part0 = part.getPartition(0);
+		Set<Integer> part1 = part.getPartition(1);
+		MatchingAlgorithm<Integer, Integer> alg = new HopcroftKarpMaximumCardinalityBipartiteMatching<>(g, part0, part1);
+		Matching<Integer, Integer> result = alg.getMatching();
 		if (weightRes.isNonNull()) {
 			weightRes.write(result.getWeight());
 		}
@@ -159,11 +159,11 @@ public class MatchingApi {
 			+ "matching_exec_bipartite_perfect_min_weight", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBipartitePerfectMinimumWeight(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle part1Handle, ObjectHandle part2Handle, CDoublePointer weightRes, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		Set<Long> part1 = globalHandles.get(part1Handle);
-		Set<Long> part2 = globalHandles.get(part2Handle);
-		MatchingAlgorithm<Long, Long> alg = new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(g, part1, part2);
-		Matching<Long, Long> result = alg.getMatching();
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Set<Integer> part1 = globalHandles.get(part1Handle);
+		Set<Integer> part2 = globalHandles.get(part2Handle);
+		MatchingAlgorithm<Integer, Integer> alg = new KuhnMunkresMinimalWeightBipartitePerfectMatching<>(g, part1, part2);
+		Matching<Integer, Integer> result = alg.getMatching();
 		if (weightRes.isNonNull()) {
 			weightRes.write(result.getWeight());
 		}
@@ -177,21 +177,21 @@ public class MatchingApi {
 			+ "matching_exec_bipartite_max_weight", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBipartiteMaximumWeightedMatching(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 		System.out.println("Partitioning");
-		BipartitePartitioning<Long, Long> partAlg = new BipartitePartitioning<>(g);
+		BipartitePartitioning<Integer, Integer> partAlg = new BipartitePartitioning<>(g);
 		if (!partAlg.isBipartite()) {
 			throw new IllegalArgumentException("Graph is not bipartite");
 		}
-		Partitioning<Long> part = partAlg.getPartitioning();
-		Set<Long> part0 = part.getPartition(0);
-		Set<Long> part1 = part.getPartition(1);
-		MatchingAlgorithm<Long, Long> alg = new MaximumWeightBipartiteMatching<>(g, part0, part1);
-		Matching<Long, Long> result = alg.getMatching();
+		Partitioning<Integer> part = partAlg.getPartitioning();
+		Set<Integer> part0 = part.getPartition(0);
+		Set<Integer> part1 = part.getPartition(1);
+		MatchingAlgorithm<Integer, Integer> alg = new MaximumWeightBipartiteMatching<>(g, part0, part1);
+		Matching<Integer, Integer> result = alg.getMatching();
 
 		// fix bug in JGraphT 1.4.0 which returns the wrong weight here
 		double weight = 0d;
-		for (Long e : result.getEdges()) {
+		for (Integer e : result.getEdges()) {
 			weight += g.getEdgeWeight(e);
 		}
 
@@ -205,12 +205,12 @@ public class MatchingApi {
 	}
 
 	private static int exec(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer weightRes, WordPointer res,
-			Function<Graph<Long, Long>, MatchingAlgorithm<Long, Long>> algProvider) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		MatchingAlgorithm<Long, Long> alg = algProvider.apply(g);
-		Matching<Long, Long> result = alg.getMatching();
+			Function<Graph<Integer, Integer>, MatchingAlgorithm<Integer, Integer>> algProvider) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		MatchingAlgorithm<Integer, Integer> alg = algProvider.apply(g);
+		Matching<Integer, Integer> result = alg.getMatching();
 		double weight = result.getWeight();
-		Set<Long> edges = result.getEdges();
+		Set<Integer> edges = result.getEdges();
 		if (weightRes.isNonNull()) {
 			weightRes.write(weight);
 		}

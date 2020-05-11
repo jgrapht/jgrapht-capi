@@ -25,7 +25,6 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
-import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
@@ -35,9 +34,9 @@ public class IteratorApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_long", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int iteratorNextLong(IsolateThread thread, ObjectHandle itHandle, CLongPointer res) {
-		Iterator<Long> it = globalHandles.get(itHandle);
+	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_int", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int iteratorNextInt(IsolateThread thread, ObjectHandle itHandle, CIntPointer res) {
+		Iterator<Integer> it = globalHandles.get(itHandle);
 		if (res.isNonNull()) {
 			res.write(it.next());
 		}
@@ -65,7 +64,7 @@ public class IteratorApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "it_hasnext", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorHasNext(IsolateThread thread, ObjectHandle itHandle, CIntPointer res) {
-		Iterator<Long> it = globalHandles.get(itHandle);
+		Iterator<?> it = globalHandles.get(itHandle);
 		if (res.isNonNull()) {
 			res.write(it.hasNext() ? 1 : 0);
 		}

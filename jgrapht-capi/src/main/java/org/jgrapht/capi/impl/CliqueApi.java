@@ -43,10 +43,10 @@ public class CliqueApi {
 			+ "clique_exec_bron_kerbosch", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBrownKerbosch(IsolateThread thread, ObjectHandle graphHandle, long timeoutSeconds,
 			WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		MaximalCliqueEnumerationAlgorithm<Long, Long> alg = new BronKerboschCliqueFinder<>(g, timeoutSeconds,
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		MaximalCliqueEnumerationAlgorithm<Integer, Integer> alg = new BronKerboschCliqueFinder<>(g, timeoutSeconds,
 				TimeUnit.SECONDS);
-		Iterator<Set<Long>> it = alg.iterator();
+		Iterator<Set<Integer>> it = alg.iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
@@ -57,10 +57,10 @@ public class CliqueApi {
 			+ "clique_exec_bron_kerbosch_pivot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBrownKerboschWithPivot(IsolateThread thread, ObjectHandle graphHandle, long timeoutSeconds,
 			WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		MaximalCliqueEnumerationAlgorithm<Long, Long> alg = new PivotBronKerboschCliqueFinder<>(g, timeoutSeconds,
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		MaximalCliqueEnumerationAlgorithm<Integer, Integer> alg = new PivotBronKerboschCliqueFinder<>(g, timeoutSeconds,
 				TimeUnit.SECONDS);
-		Iterator<Set<Long>> it = alg.iterator();
+		Iterator<Set<Integer>> it = alg.iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
@@ -71,10 +71,10 @@ public class CliqueApi {
 			+ "clique_exec_bron_kerbosch_pivot_degeneracy_ordering", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBrownKerboschPivotAndDegeneracyOrdering(IsolateThread thread, ObjectHandle graphHandle,
 			long timeoutSeconds, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		MaximalCliqueEnumerationAlgorithm<Long, Long> alg = new DegeneracyBronKerboschCliqueFinder<>(g, timeoutSeconds,
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		MaximalCliqueEnumerationAlgorithm<Integer, Integer> alg = new DegeneracyBronKerboschCliqueFinder<>(g, timeoutSeconds,
 				TimeUnit.SECONDS);
-		Iterator<Set<Long>> it = alg.iterator();
+		Iterator<Set<Integer>> it = alg.iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}

@@ -6,7 +6,7 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-double astar_heuristic(long long int source, long long int target) { 
+double astar_heuristic(int source, int target) { 
     // just for testing
     double sx = (source == 0 || source ==1)? 0 : 1;
     double sy = (source == 0 || source ==3)? 0 : 1;
@@ -32,8 +32,8 @@ int main() {
     jgrapht_capi_graph_create(thread, 1, 0, 0, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -56,7 +56,7 @@ int main() {
     
     void *gp;
     double weight; 
-    long long start_vertex, end_vertex;
+    int start_vertex, end_vertex;
 
     // test between vertices
     jgrapht_capi_sp_exec_dijkstra_get_path_between_vertices(thread, g, 0, 4, &gp);
@@ -191,7 +191,7 @@ int main() {
     // test A* with alt heuristic
     void *landmarks;
     jgrapht_capi_set_linked_create(thread, &landmarks);
-    jgrapht_capi_set_long_add(thread, landmarks, 1, NULL);
+    jgrapht_capi_set_int_add(thread, landmarks, 1, NULL);
     
     jgrapht_capi_sp_exec_astar_alt_heuristic_get_path_between_vertices(thread, g, 0, 2, landmarks, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);

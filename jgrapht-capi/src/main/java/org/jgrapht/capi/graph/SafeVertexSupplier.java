@@ -4,36 +4,36 @@ import java.util.function.Supplier;
 
 import org.jgrapht.Graph;
 
-public class SafeVertexSupplier implements Supplier<Long> {
+public class SafeVertexSupplier implements Supplier<Integer> {
 
-	private long nextVertex;
-	private Graph<Long, Long> graph;
+	private int nextVertex;
+	private Graph<Integer, Integer> graph;
 
 	public SafeVertexSupplier() {
 		this.nextVertex = 0;
 		this.graph = null;
 	}
 
-	public Graph<Long, Long> getGraph() {
+	public Graph<Integer, Integer> getGraph() {
 		return graph;
 	}
 
-	public void setGraph(Graph<Long, Long> graph) {
+	public void setGraph(Graph<Integer, Integer> graph) {
 		this.graph = graph;
 	}
 
-	public long getNextVertex() {
+	public int getNextVertex() {
 		return nextVertex;
 	}
 
-	public void setNextVertex(long nextVertex) {
+	public void setNextVertex(int nextVertex) {
 		this.nextVertex = nextVertex;
 	}
 
 	@Override
-	public Long get() {
+	public Integer get() {
 		while (true) {
-			long candidate = nextVertex++;
+			int candidate = nextVertex++;
 			if (!graph.containsVertex(candidate)) {
 				return candidate;
 			}

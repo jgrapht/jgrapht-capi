@@ -22,7 +22,7 @@ import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
-import org.graalvm.nativeimage.c.type.CLongPointer;
+import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.GraphPath;
 import org.jgrapht.capi.Constants;
@@ -36,8 +36,8 @@ public class GraphPathApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graphpath_get_fields", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int readGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
-			CLongPointer startVertexRes, CLongPointer endVertexRes, WordPointer edgeItRes) {
-		GraphPath<Long, Long> gp = globalHandles.get(handle);
+			CIntPointer startVertexRes, CIntPointer endVertexRes, WordPointer edgeItRes) {
+		GraphPath<Integer, Integer> gp = globalHandles.get(handle);
 		if (weightRes.isNonNull()) {
 			weightRes.write(gp.getWeight());
 		}

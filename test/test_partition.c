@@ -19,8 +19,8 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
 
 
-    long long v;
-    long long e;
+    int v;
+    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -36,22 +36,22 @@ int main() {
     assert(isbipartite == 1);
 
     int contains;
-    jgrapht_capi_set_long_contains(thread, part1, 0, &contains);
+    jgrapht_capi_set_int_contains(thread, part1, 0, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_long_contains(thread, part1, 1, &contains);
+    jgrapht_capi_set_int_contains(thread, part1, 1, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_long_contains(thread, part1, 2, &contains);
+    jgrapht_capi_set_int_contains(thread, part1, 2, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_long_contains(thread, part1, 3, &contains);
+    jgrapht_capi_set_int_contains(thread, part1, 3, &contains);
     assert(contains == 0);
 
-    jgrapht_capi_set_long_contains(thread, part2, 0, &contains);
+    jgrapht_capi_set_int_contains(thread, part2, 0, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_long_contains(thread, part2, 1, &contains);
+    jgrapht_capi_set_int_contains(thread, part2, 1, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_long_contains(thread, part2, 2, &contains);
+    jgrapht_capi_set_int_contains(thread, part2, 2, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_long_contains(thread, part2, 3, &contains);
+    jgrapht_capi_set_int_contains(thread, part2, 3, &contains);
     assert(contains == 1);
 
 

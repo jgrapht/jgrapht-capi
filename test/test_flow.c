@@ -36,8 +36,8 @@ int main() {
     jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
     jgrapht_capi_graph_set_edge_weight(thread, g, 4, 20);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
@@ -50,18 +50,18 @@ int main() {
     assert(flow_value == 30.0);
 
     double e2_flow;
-    jgrapht_capi_map_long_double_get(thread, flow, 2, &e2_flow);
+    jgrapht_capi_map_int_double_get(thread, flow, 2, &e2_flow);
     assert(e2_flow == 10.0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int contains = 0;
-    jgrapht_capi_set_long_contains(thread, cutSourcePartition, 0, &contains);
+    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 0, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_long_contains(thread, cutSourcePartition, 1, &contains);
+    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 1, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_long_contains(thread, cutSourcePartition, 2, &contains);
+    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 2, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_long_contains(thread, cutSourcePartition, 3, &contains);
+    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 3, &contains);
     assert(contains == 0);
 
     jgrapht_capi_handles_destroy(thread, flow);
@@ -73,17 +73,17 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     assert(flow_value == 30.0);
 
-    jgrapht_capi_map_long_double_get(thread, flow, 2, &e2_flow);
+    jgrapht_capi_map_int_double_get(thread, flow, 2, &e2_flow);
     assert(e2_flow == 10.0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_set_long_contains(thread, cutSourcePartition, 0, &contains);
+    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 0, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_long_contains(thread, cutSourcePartition, 1, &contains);
+    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 1, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_long_contains(thread, cutSourcePartition, 2, &contains);
+    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 2, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_long_contains(thread, cutSourcePartition, 3, &contains);
+    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 3, &contains);
     assert(contains == 0);
 
     jgrapht_capi_handles_destroy(thread, flow);
@@ -95,17 +95,17 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     assert(flow_value == 30.0);
 
-    jgrapht_capi_map_long_double_get(thread, flow, 2, &e2_flow);
+    jgrapht_capi_map_int_double_get(thread, flow, 2, &e2_flow);
     assert(e2_flow == 10.0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_set_long_contains(thread, cutSourcePartition, 0, &contains);
+    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 0, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_long_contains(thread, cutSourcePartition, 1, &contains);
+    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 1, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_long_contains(thread, cutSourcePartition, 2, &contains);
+    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 2, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_long_contains(thread, cutSourcePartition, 3, &contains);
+    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 3, &contains);
     assert(contains == 0);
 
     jgrapht_capi_handles_destroy(thread, flow);

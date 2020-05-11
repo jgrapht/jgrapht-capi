@@ -6,7 +6,7 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-void vertex_attribute(long long v, char *key, char *value) { 
+void vertex_attribute(int v, char *key, char *value) { 
     if (v == 0) { 
         if (strcmp(key, "ID") == 0) { 
             assert(strcmp(value, "0") == 0);
@@ -33,7 +33,7 @@ void vertex_attribute(long long v, char *key, char *value) {
     }
 }
 
-void edge_attribute(long long e, char *key, char *value) { 
+void edge_attribute(int e, char *key, char *value) { 
     if (e == 0) { 
         if (strcmp(key, "label") == 0) { 
             assert(strcmp(value, "edge 0-1") == 0);
@@ -66,8 +66,8 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
 
     int i;
     for(i = 0; i < 10; i++) {
@@ -120,7 +120,7 @@ int main() {
     // test gml with extra attributes
     jgrapht_capi_import_file_json(thread, g, "dummy2.json.out", import_id_from_file, vertex_attribute, edge_attribute);
 
-    long long ecount;
+    int ecount;
     jgrapht_capi_graph_edges_count(thread, g, &ecount);
     assert(ecount == 18);
 

@@ -21,8 +21,8 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -41,8 +41,8 @@ int main() {
     jgrapht_capi_cycles_chinese_postman_exec_edmonds_johnson(thread, g, &walk);
 
     double weight;
-    long long int start_vertex;
-    long long int end_vertex;
+    int start_vertex;
+    int end_vertex;
 
     jgrapht_capi_graphpath_get_fields(thread, walk, &weight, &start_vertex, &end_vertex, NULL);
 

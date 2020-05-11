@@ -55,7 +55,7 @@ char *expected="\
     </graph>\n\
 </gexf>\n";
 
-void edge_attribute(long long e, char *key, char *value) { 
+void edge_attribute(int e, char *key, char *value) { 
     if (e == 0) { 
         if (strcmp(key, "cost") == 0) { 
             assert(strcmp(value, "5.4") == 0);
@@ -73,7 +73,7 @@ void edge_attribute(long long e, char *key, char *value) {
     }
 }
 
-long long import_id(const char *id) { 
+int import_id(const char *id) { 
     return atol(id);
 }
 
@@ -97,11 +97,11 @@ int main() {
     jgrapht_capi_import_string_gexf(thread, g, input, NULL, 1, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
-    long long vcount;
+    int vcount;
     jgrapht_capi_graph_vertices_count(thread, g, &vcount);
     assert(vcount == 3);
 
-    long long ecount;
+    int ecount;
     jgrapht_capi_graph_edges_count(thread, g, &ecount);
     assert(ecount == 3);
 

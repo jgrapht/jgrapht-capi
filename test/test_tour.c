@@ -9,8 +9,8 @@
 int check_tour(graal_isolatethread_t *thread, void *tour, double expected_weight) {
 
     double weight;
-    long long start_vertex;
-    long long end_vertex;
+    int start_vertex;
+    int end_vertex;
 
     jgrapht_capi_graphpath_get_fields(thread, tour, &weight, &start_vertex, &end_vertex, NULL);
     printf("%lf\n", weight);

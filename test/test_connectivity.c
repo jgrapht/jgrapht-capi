@@ -22,8 +22,8 @@ int main() {
     jgrapht_capi_graph_create(thread, 1, 0, 0, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -49,7 +49,7 @@ int main() {
     void *set;
     jgrapht_capi_it_next_object(thread, setsit, &set);
 
-    long long size = 0;
+    int size = 0;
     jgrapht_capi_set_size(thread, set, &size);
     assert(size == 6);
     jgrapht_capi_handles_destroy(thread, set);

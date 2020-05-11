@@ -25,7 +25,6 @@ import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CIntPointer;
-import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
@@ -53,7 +52,7 @@ public class ListApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "list_size", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int listSize(IsolateThread thread, ObjectHandle handle, CLongPointer res) {
+	public static int listSize(IsolateThread thread, ObjectHandle handle, CIntPointer res) {
 		List<?> list = globalHandles.get(handle);
 		if (res.isNonNull()) {
 			res.write(list.size());
@@ -61,9 +60,9 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "list_long_add", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int listLongAdd(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
-		List<Long> list = globalHandles.get(handle);
+	@CEntryPoint(name = Constants.LIB_PREFIX + "list_int_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listIntegerAdd(IsolateThread thread, ObjectHandle handle, int value, CIntPointer res) {
+		List<Integer> list = globalHandles.get(handle);
 		boolean result = list.add(value);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
@@ -81,11 +80,11 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "list_long_remove", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int listLongRemove(IsolateThread thread, ObjectHandle handle, long value) {
-		List<Long> list = globalHandles.get(handle);
-		list.remove(value);
+	@CEntryPoint(name = Constants.LIB_PREFIX + "list_int_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listIntegerRemove(IsolateThread thread, ObjectHandle handle, int value) {
+		List<Integer> list = globalHandles.get(handle);
+		Integer objectToRemove = value;
+		list.remove(objectToRemove);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -98,9 +97,9 @@ public class ListApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "list_long_contains", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int listLongContains(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
-		List<Long> list = globalHandles.get(handle);
+			+ "list_int_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listIntegerContains(IsolateThread thread, ObjectHandle handle, int value, CIntPointer res) {
+		List<Integer> list = globalHandles.get(handle);
 		boolean result = list.contains(value);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);

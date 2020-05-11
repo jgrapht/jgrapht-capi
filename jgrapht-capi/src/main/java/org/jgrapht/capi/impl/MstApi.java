@@ -47,8 +47,8 @@ public class MstApi {
 			+ "mst_exec_kruskal", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeMSTKruskal(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
 			WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		SpanningTree<Long> mst = new KruskalMinimumSpanningTree<>(g).getSpanningTree();
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		SpanningTree<Integer> mst = new KruskalMinimumSpanningTree<>(g).getSpanningTree();
 		if (weightRes.isNonNull()) {
 			weightRes.write(mst.getWeight());
 		}
@@ -68,8 +68,8 @@ public class MstApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "mst_exec_prim", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeMSTPrim(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
 			WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		SpanningTree<Long> mst = new PrimMinimumSpanningTree<>(g).getSpanningTree();
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		SpanningTree<Integer> mst = new PrimMinimumSpanningTree<>(g).getSpanningTree();
 		if (weightRes.isNonNull()) {
 			weightRes.write(mst.getWeight());
 		}
@@ -90,8 +90,8 @@ public class MstApi {
 			+ "mst_exec_boruvka", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeMSTBoruvka(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
 			WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		SpanningTree<Long> mst = new BoruvkaMinimumSpanningTree<>(g).getSpanningTree();
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		SpanningTree<Integer> mst = new BoruvkaMinimumSpanningTree<>(g).getSpanningTree();
 		if (weightRes.isNonNull()) {
 			weightRes.write(mst.getWeight());
 		}

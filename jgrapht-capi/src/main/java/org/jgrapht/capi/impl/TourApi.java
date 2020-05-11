@@ -46,9 +46,9 @@ public class TourApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "tour_tsp_random", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int randomTSP(IsolateThread thread, ObjectHandle handle, long seed, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(handle);
-		HamiltonianCycleAlgorithm<Long, Long> alg = new RandomTourTSP<>(new Random(seed));
-		GraphPath<Long, Long> result = alg.getTour(g);
+		Graph<Integer, Integer> g = globalHandles.get(handle);
+		HamiltonianCycleAlgorithm<Integer, Integer> alg = new RandomTourTSP<>(new Random(seed));
+		GraphPath<Integer, Integer> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
@@ -58,9 +58,9 @@ public class TourApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_tsp_greedy_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int greedyHeuristic(IsolateThread thread, ObjectHandle handle, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(handle);
-		HamiltonianCycleAlgorithm<Long, Long> alg = new GreedyHeuristicTSP<>();
-		GraphPath<Long, Long> result = alg.getTour(g);
+		Graph<Integer, Integer> g = globalHandles.get(handle);
+		HamiltonianCycleAlgorithm<Integer, Integer> alg = new GreedyHeuristicTSP<>();
+		GraphPath<Integer, Integer> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
@@ -70,9 +70,9 @@ public class TourApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_tsp_nearest_insertion_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int nearestInsertionHeuristic(IsolateThread thread, ObjectHandle handle, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(handle);
-		HamiltonianCycleAlgorithm<Long, Long> alg = new NearestInsertionHeuristicTSP<>();
-		GraphPath<Long, Long> result = alg.getTour(g);
+		Graph<Integer, Integer> g = globalHandles.get(handle);
+		HamiltonianCycleAlgorithm<Integer, Integer> alg = new NearestInsertionHeuristicTSP<>();
+		GraphPath<Integer, Integer> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
@@ -82,9 +82,9 @@ public class TourApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_tsp_nearest_neighbor_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int nearestNeighborHeuristic(IsolateThread thread, ObjectHandle handle, long seed, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(handle);
-		HamiltonianCycleAlgorithm<Long, Long> alg = new NearestNeighborHeuristicTSP<>(new Random(seed));
-		GraphPath<Long, Long> result = alg.getTour(g);
+		Graph<Integer, Integer> g = globalHandles.get(handle);
+		HamiltonianCycleAlgorithm<Integer, Integer> alg = new NearestNeighborHeuristicTSP<>(new Random(seed));
+		GraphPath<Integer, Integer> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
@@ -94,9 +94,9 @@ public class TourApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_metric_tsp_christofides", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int christofides(IsolateThread thread, ObjectHandle handle, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(handle);
-		HamiltonianCycleAlgorithm<Long, Long> alg = new ChristofidesThreeHalvesApproxMetricTSP<>();
-		GraphPath<Long, Long> result = alg.getTour(g);
+		Graph<Integer, Integer> g = globalHandles.get(handle);
+		HamiltonianCycleAlgorithm<Integer, Integer> alg = new ChristofidesThreeHalvesApproxMetricTSP<>();
+		GraphPath<Integer, Integer> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
@@ -106,9 +106,9 @@ public class TourApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_metric_tsp_two_approx", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int twoApprox(IsolateThread thread, ObjectHandle handle, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(handle);
-		HamiltonianCycleAlgorithm<Long, Long> alg = new TwoApproxMetricTSP<>();
-		GraphPath<Long, Long> result = alg.getTour(g);
+		Graph<Integer, Integer> g = globalHandles.get(handle);
+		HamiltonianCycleAlgorithm<Integer, Integer> alg = new TwoApproxMetricTSP<>();
+		GraphPath<Integer, Integer> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
@@ -118,9 +118,9 @@ public class TourApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_tsp_held_karp", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int heldKarp(IsolateThread thread, ObjectHandle handle, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(handle);
-		HamiltonianCycleAlgorithm<Long, Long> alg = new HeldKarpTSP<>();
-		GraphPath<Long, Long> result = alg.getTour(g);
+		Graph<Integer, Integer> g = globalHandles.get(handle);
+		HamiltonianCycleAlgorithm<Integer, Integer> alg = new HeldKarpTSP<>();
+		GraphPath<Integer, Integer> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
@@ -130,9 +130,9 @@ public class TourApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_hamiltonian_palmer", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int palmer(IsolateThread thread, ObjectHandle handle, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(handle);
-		HamiltonianCycleAlgorithm<Long, Long> alg = new PalmerHamiltonianCycle<>();
-		GraphPath<Long, Long> result = alg.getTour(g);
+		Graph<Integer, Integer> g = globalHandles.get(handle);
+		HamiltonianCycleAlgorithm<Integer, Integer> alg = new PalmerHamiltonianCycle<>();
+		GraphPath<Integer, Integer> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
@@ -143,9 +143,9 @@ public class TourApi {
 			+ "tour_tsp_two_opt_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int twoOptHeuristic(IsolateThread thread, ObjectHandle handle, int k, double minCostImprovement,
 			long seed, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(handle);
-		HamiltonianCycleAlgorithm<Long, Long> alg = new TwoOptHeuristicTSP<>(k, new Random(seed), minCostImprovement);
-		GraphPath<Long, Long> result = alg.getTour(g);
+		Graph<Integer, Integer> g = globalHandles.get(handle);
+		HamiltonianCycleAlgorithm<Integer, Integer> alg = new TwoOptHeuristicTSP<>(k, new Random(seed), minCostImprovement);
+		GraphPath<Integer, Integer> result = alg.getTour(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}
@@ -156,9 +156,9 @@ public class TourApi {
 			+ "tour_tsp_two_opt_heuristic_improve", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int twoOptHeuristicImprove(IsolateThread thread, ObjectHandle handle, double minCostImprovement,
 			long seed, WordPointer res) {
-		GraphPath<Long, Long> tour = globalHandles.get(handle);
-		TwoOptHeuristicTSP<Long, Long> alg = new TwoOptHeuristicTSP<>(1, new Random(seed), minCostImprovement);
-		GraphPath<Long, Long> result = alg.improveTour(tour);
+		GraphPath<Integer, Integer> tour = globalHandles.get(handle);
+		TwoOptHeuristicTSP<Integer, Integer> alg = new TwoOptHeuristicTSP<>(1, new Random(seed), minCostImprovement);
+		GraphPath<Integer, Integer> result = alg.improveTour(tour);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
 		}

@@ -4,36 +4,36 @@ import java.util.function.Supplier;
 
 import org.jgrapht.Graph;
 
-public class SafeEdgeSupplier implements Supplier<Long> {
+public class SafeEdgeSupplier implements Supplier<Integer> {
 
-	private long nextEdge;
-	private Graph<Long, Long> graph;
+	private int nextEdge;
+	private Graph<Integer, Integer> graph;
 
 	public SafeEdgeSupplier() {
 		this.nextEdge = 0;
 		this.graph = null;
 	}
 
-	public Graph<Long, Long> getGraph() {
+	public Graph<Integer, Integer> getGraph() {
 		return graph;
 	}
 
-	public void setGraph(Graph<Long, Long> graph) {
+	public void setGraph(Graph<Integer, Integer> graph) {
 		this.graph = graph;
 	}
 
-	public long getNextEdge() {
+	public int getNextEdge() {
 		return nextEdge;
 	}
 
-	public void setNextEdge(long nextEdge) {
+	public void setNextEdge(int nextEdge) {
 		this.nextEdge = nextEdge;
 	}
 
 	@Override
-	public Long get() {
+	public Integer get() {
 		while (true) {
-			long candidate = nextEdge++;
+			int candidate = nextEdge++;
 			if (!graph.containsEdge(candidate)) {
 				return candidate;
 			}

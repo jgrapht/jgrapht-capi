@@ -8,7 +8,7 @@
 
 char *expected="0,1,3\n1,0,2\n3,0,2\n2,1,3\n";
 
-long long import_id(const char *id) { 
+int import_id(const char *id) { 
     return atol(id);
 }
 
@@ -27,8 +27,8 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -52,7 +52,7 @@ int main() {
     jgrapht_capi_import_file_csv(thread, g, "dummy.csv.out", import_id, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
-    long long count;
+    int count;
     jgrapht_capi_graph_vertices_count(thread, g, &count);
     assert(count == 4);
     jgrapht_capi_graph_edges_count(thread, g, &count);

@@ -48,8 +48,8 @@ public class GenerateApi {
 			+ "generate_barabasi_albert", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int barabasiAlbertGraphGenerator(IsolateThread thread, ObjectHandle graph, int m0, int m, int n,
 			long seed) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		GraphGenerator<Long, Long, Long> gen = new BarabasiAlbertGraphGenerator<>(m0, m, n, seed);
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		GraphGenerator<Integer, Integer, Integer> gen = new BarabasiAlbertGraphGenerator<>(m0, m, n, seed);
 		gen.generateGraph(g);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -57,8 +57,8 @@ public class GenerateApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "generate_barabasi_albert_forest", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int barabasiAlbertForestGenerator(IsolateThread thread, ObjectHandle graph, int t, int n, long seed) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		GraphGenerator<Long, Long, Long> gen = new BarabasiAlbertForestGenerator<>(t, n, seed);
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		GraphGenerator<Integer, Integer, Integer> gen = new BarabasiAlbertForestGenerator<>(t, n, seed);
 		gen.generateGraph(g);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -66,8 +66,8 @@ public class GenerateApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "generate_complete", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int completeGraphGenerator(IsolateThread thread, ObjectHandle graph, int n) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		GraphGenerator<Long, Long, Long> gen = new CompleteGraphGenerator<>(n);
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		GraphGenerator<Integer, Integer, Integer> gen = new CompleteGraphGenerator<>(n);
 		gen.generateGraph(g);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -75,16 +75,16 @@ public class GenerateApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "generate_bipartite_complete", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int completeBipartiteGraphGenerator(IsolateThread thread, ObjectHandle graph, int a, int b) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		GraphGenerator<Long, Long, Long> gen = new CompleteBipartiteGraphGenerator<>(a, b);
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		GraphGenerator<Integer, Integer, Integer> gen = new CompleteBipartiteGraphGenerator<>(a, b);
 		gen.generateGraph(g);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "generate_empty", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int emptyGraphGenerator(IsolateThread thread, ObjectHandle graph, int n) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		GraphGenerator<Long, Long, Long> gen = new EmptyGraphGenerator<>(n);
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		GraphGenerator<Integer, Integer, Integer> gen = new EmptyGraphGenerator<>(n);
 		gen.generateGraph(g);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -93,8 +93,8 @@ public class GenerateApi {
 			+ "generate_gnm_random", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int customRandomGnmGenerator(IsolateThread thread, ObjectHandle graph, int n, int m, boolean loops,
 			boolean multipleEdges, long seed) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		GraphGenerator<Long, Long, Long> gen = new GnmRandomGraphGenerator<>(n, m, seed, loops, multipleEdges);
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		GraphGenerator<Integer, Integer, Integer> gen = new GnmRandomGraphGenerator<>(n, m, seed, loops, multipleEdges);
 		gen.generateGraph(g);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -103,16 +103,16 @@ public class GenerateApi {
 			+ "generate_gnp_random", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int customRandomGnpGenerator(IsolateThread thread, ObjectHandle graph, int n, double p,
 			boolean createLoops, long seed) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		GraphGenerator<Long, Long, Long> gen = new GnpRandomGraphGenerator<>(n, p, seed, createLoops);
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		GraphGenerator<Integer, Integer, Integer> gen = new GnpRandomGraphGenerator<>(n, p, seed, createLoops);
 		gen.generateGraph(g);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "generate_ring", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int ringGenerator(IsolateThread thread, ObjectHandle graph, int n) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		GraphGenerator<Long, Long, Long> gen = new RingGraphGenerator<>(n);
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		GraphGenerator<Integer, Integer, Integer> gen = new RingGraphGenerator<>(n);
 		gen.generateGraph(g);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -120,8 +120,8 @@ public class GenerateApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "generate_scalefree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int scaleFreeGenerator(IsolateThread thread, ObjectHandle graph, int n, long seed) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		GraphGenerator<Long, Long, Long> gen = new ScaleFreeGraphGenerator<>(n, seed);
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		GraphGenerator<Integer, Integer, Integer> gen = new ScaleFreeGraphGenerator<>(n, seed);
 		gen.generateGraph(g);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -130,8 +130,8 @@ public class GenerateApi {
 			+ "generate_watts_strogatz", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int wattsStrogatzGenerator(IsolateThread thread, ObjectHandle graph, int n, int k, double p,
 			boolean addInsteadOfRewire, long seed) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		GraphGenerator<Long, Long, Long> gen = new WattsStrogatzGraphGenerator<>(n, k, p, addInsteadOfRewire,
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		GraphGenerator<Integer, Integer, Integer> gen = new WattsStrogatzGraphGenerator<>(n, k, p, addInsteadOfRewire,
 				new Random(seed));
 		gen.generateGraph(g);
 		return Status.STATUS_SUCCESS.getCValue();
@@ -141,8 +141,8 @@ public class GenerateApi {
 			+ "generate_kleinberg_smallworld", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int kleinbergSmallWorldGenerator(IsolateThread thread, ObjectHandle graph, int n, int p, int q, int r,
 			long seed) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		GraphGenerator<Long, Long, Long> gen = new KleinbergSmallWorldGraphGenerator<>(n, p, q, r, seed);
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		GraphGenerator<Integer, Integer, Integer> gen = new KleinbergSmallWorldGraphGenerator<>(n, p, q, r, seed);
 		gen.generateGraph(g);
 		return Status.STATUS_SUCCESS.getCValue();
 	}

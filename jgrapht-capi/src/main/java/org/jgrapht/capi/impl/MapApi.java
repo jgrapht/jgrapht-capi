@@ -27,7 +27,6 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
-import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
@@ -65,7 +64,7 @@ public class MapApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_size", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int mapSize(IsolateThread thread, ObjectHandle mapHandle, CLongPointer res) {
+	public static int mapSize(IsolateThread thread, ObjectHandle mapHandle, CIntPointer res) {
 		Map<?, ?> map = globalHandles.get(mapHandle);
 		if (res.isNonNull()) {
 			res.write(map.size());
@@ -84,25 +83,24 @@ public class MapApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "map_long_double_put", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int mapLongDoublePut(IsolateThread thread, ObjectHandle mapHandle, long key, double value) {
-		Map<Long, Double> map = globalHandles.get(mapHandle);
+			+ "map_int_double_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapIntDoublePut(IsolateThread thread, ObjectHandle mapHandle, int key, double value) {
+		Map<Integer, Double> map = globalHandles.get(mapHandle);
+		map.put(key, value);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_int_int_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapIntegerIntegerPut(IsolateThread thread, ObjectHandle mapHandle, int key, int value) {
+		Map<Integer, Integer> map = globalHandles.get(mapHandle);
 		map.put(key, value);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "map_long_long_put", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int mapLongLongPut(IsolateThread thread, ObjectHandle mapHandle, long key, long value) {
-		Map<Long, Long> map = globalHandles.get(mapHandle);
-		map.put(key, value);
-		return Status.STATUS_SUCCESS.getCValue();
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "map_long_double_get", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int mapLongDoubleGet(IsolateThread thread, ObjectHandle mapHandle, long key, CDoublePointer res) {
-		Map<Long, Double> map = globalHandles.get(mapHandle);
+			+ "map_int_double_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapIntDoubleGet(IsolateThread thread, ObjectHandle mapHandle, int key, CDoublePointer res) {
+		Map<Integer, Double> map = globalHandles.get(mapHandle);
 		Double value = map.get(key);
 		if (value == null) {
 			throw new IllegalArgumentException("Key " + key + " not in map");
@@ -113,11 +111,10 @@ public class MapApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "map_long_long_get", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int mapLongLongGet(IsolateThread thread, ObjectHandle mapHandle, long key, CLongPointer res) {
-		Map<Long, Long> map = globalHandles.get(mapHandle);
-		Long value = map.get(key);
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_int_int_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapIntegerIntegerGet(IsolateThread thread, ObjectHandle mapHandle, int key, CIntPointer res) {
+		Map<Integer, Integer> map = globalHandles.get(mapHandle);
+		Integer value = map.get(key);
 		if (value == null) {
 			throw new IllegalArgumentException("Key " + key + " not in map");
 		}
@@ -128,9 +125,9 @@ public class MapApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "map_long_contains_key", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int mapLongContains(IsolateThread thread, ObjectHandle mapHandle, long key, CIntPointer res) {
-		Map<Long, ?> map = globalHandles.get(mapHandle);
+			+ "map_int_contains_key", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapIntContains(IsolateThread thread, ObjectHandle mapHandle, int key, CIntPointer res) {
+		Map<Integer, ?> map = globalHandles.get(mapHandle);
 		if (res.isNonNull()) {
 			res.write(map.containsKey(key) ? 1 : 0);
 		}
@@ -138,9 +135,10 @@ public class MapApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "map_long_double_remove", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int mapLongDoubleRemove(IsolateThread thread, ObjectHandle mapHandle, long key, CDoublePointer res) {
-		Map<Long, Double> map = globalHandles.get(mapHandle);
+			+ "map_int_double_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapIntegerDoubleRemove(IsolateThread thread, ObjectHandle mapHandle, int key,
+			CDoublePointer res) {
+		Map<Integer, Double> map = globalHandles.get(mapHandle);
 		Double value = map.remove(key);
 		if (value == null) {
 			throw new IllegalArgumentException("Key " + key + " not in map");
@@ -152,10 +150,10 @@ public class MapApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "map_long_long_remove", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int mapLongLongRemove(IsolateThread thread, ObjectHandle mapHandle, long key, CLongPointer res) {
-		Map<Long, Long> map = globalHandles.get(mapHandle);
-		Long value = map.remove(key);
+			+ "map_int_int_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapIntegerIntegerRemove(IsolateThread thread, ObjectHandle mapHandle, int key, CIntPointer res) {
+		Map<Integer, Integer> map = globalHandles.get(mapHandle);
+		Integer value = map.remove(key);
 		if (value == null) {
 			throw new IllegalArgumentException("Key " + key + " not in map");
 		}

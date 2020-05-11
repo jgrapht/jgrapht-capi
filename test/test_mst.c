@@ -33,8 +33,8 @@ int main() {
     assert(jgrapht_capi_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
     assert(flag == 0);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -58,17 +58,17 @@ int main() {
     double weight;
     assert(jgrapht_capi_mst_exec_kruskal(thread, g, &weight, &mst) == 0);
     assert(weight == 10.0);
-    long long size;
+    int size;
     jgrapht_capi_set_size(thread, mst, &size);
     assert(size == 4);
     int contains;
-    jgrapht_capi_set_long_contains(thread, mst, 1, &contains);
+    jgrapht_capi_set_int_contains(thread, mst, 1, &contains);
     assert(contains);
-    jgrapht_capi_set_long_contains(thread, mst, 2, &contains);
+    jgrapht_capi_set_int_contains(thread, mst, 2, &contains);
     assert(contains);
-    jgrapht_capi_set_long_contains(thread, mst, 3, &contains);
+    jgrapht_capi_set_int_contains(thread, mst, 3, &contains);
     assert(contains);
-    jgrapht_capi_set_long_contains(thread, mst, 4, &contains);
+    jgrapht_capi_set_int_contains(thread, mst, 4, &contains);
     assert(contains);
     jgrapht_capi_handles_destroy(thread,  mst);
 
@@ -77,13 +77,13 @@ int main() {
     assert(weight == 10.0);
     jgrapht_capi_set_size(thread, mst, &size);
     assert(size == 4);
-    jgrapht_capi_set_long_contains(thread, mst, 1, &contains);
+    jgrapht_capi_set_int_contains(thread, mst, 1, &contains);
     assert(contains);
-    jgrapht_capi_set_long_contains(thread, mst, 2, &contains);
+    jgrapht_capi_set_int_contains(thread, mst, 2, &contains);
     assert(contains);
-    jgrapht_capi_set_long_contains(thread, mst, 3, &contains);
+    jgrapht_capi_set_int_contains(thread, mst, 3, &contains);
     assert(contains);
-    jgrapht_capi_set_long_contains(thread, mst, 4, &contains);
+    jgrapht_capi_set_int_contains(thread, mst, 4, &contains);
     assert(contains);
     jgrapht_capi_handles_destroy(thread,  mst);
 

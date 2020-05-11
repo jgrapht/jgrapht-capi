@@ -18,7 +18,7 @@ int main() {
     void *g;
     assert(jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g) == 0);
 
-    long long v;
+    int v;
     jgrapht_capi_graph_add_vertex(thread, g, &v);
     jgrapht_capi_graph_add_vertex(thread, g, &v);
     jgrapht_capi_graph_add_vertex(thread, g, &v);
@@ -36,7 +36,7 @@ int main() {
     double radius;
     jgrapht_capi_graph_metrics_radius(thread, g, &radius);
 
-    long long girth;
+    int girth;
     jgrapht_capi_graph_metrics_girth(thread, g, &girth);
 
     long long triangles;

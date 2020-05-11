@@ -22,8 +22,8 @@ int main() {
     jgrapht_capi_graph_create(thread, 1, 0, 0, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -51,7 +51,7 @@ int main() {
     jgrapht_capi_it_next_object(thread, cycleit, &cycle);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    // cycle is a List<Long> where each long is a vertex 
+    // cycle is a List<Integer> where each int is a vertex 
 
     void *vit;
     jgrapht_capi_list_it_create(thread, cycle, &vit);
@@ -63,10 +63,10 @@ int main() {
         if (!hasnext) { 
             break;
         }
-        long long v;
-        jgrapht_capi_it_next_long(thread, vit, &v);
+        int v;
+        jgrapht_capi_it_next_int(thread, vit, &v);
         char vastext[100];
-        sprintf(vastext, "%lld", v);
+        sprintf(vastext, "%d", v);
         strcat(result, vastext);
     }
     //printf("%s\n", result);
@@ -88,10 +88,10 @@ int main() {
         if (!hasnext) { 
             break;
         }
-        long long v;
-        jgrapht_capi_it_next_long(thread, vit, &v);
+        int v;
+        jgrapht_capi_it_next_int(thread, vit, &v);
         char vastext[100];
-        sprintf(vastext, "%lld", v);
+        sprintf(vastext, "%d", v);
         strcat(result, vastext);
     }
     //printf("%s\n", result);

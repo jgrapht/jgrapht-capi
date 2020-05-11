@@ -111,11 +111,11 @@ public class VertexCoverApi {
 	}
 
 	private static int executeVertexCover(IsolateThread thread, ObjectHandle graphHandle,
-			Function<Graph<Long, Long>, VertexCoverAlgorithm<Long>> algProvider, CDoublePointer weightRes,
+			Function<Graph<Integer, Integer>, VertexCoverAlgorithm<Integer>> algProvider, CDoublePointer weightRes,
 			WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		VertexCoverAlgorithm<Long> alg = algProvider.apply(g);
-		VertexCover<Long> vertexCover = alg.getVertexCover();
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		VertexCoverAlgorithm<Integer> alg = algProvider.apply(g);
+		VertexCover<Integer> vertexCover = alg.getVertexCover();
 		if (weightRes.isNonNull()) {
 			weightRes.write(vertexCover.getWeight());
 		}
@@ -127,12 +127,12 @@ public class VertexCoverApi {
 
 	private static int executeVertexCoverWeighted(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle mapHandle,
-			BiFunction<Graph<Long, Long>, Map<Long, Double>, VertexCoverAlgorithm<Long>> algProvider,
+			BiFunction<Graph<Integer, Integer>, Map<Integer, Double>, VertexCoverAlgorithm<Integer>> algProvider,
 			CDoublePointer weightRes, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		Map<Long, Double> vertexWeights = globalHandles.get(mapHandle);
-		VertexCoverAlgorithm<Long> alg = algProvider.apply(g, vertexWeights);
-		VertexCover<Long> vertexCover = alg.getVertexCover();
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Map<Integer, Double> vertexWeights = globalHandles.get(mapHandle);
+		VertexCoverAlgorithm<Integer> alg = algProvider.apply(g, vertexWeights);
+		VertexCover<Integer> vertexCover = alg.getVertexCover();
 		if (weightRes.isNonNull()) {
 			weightRes.write(vertexCover.getWeight());
 		}

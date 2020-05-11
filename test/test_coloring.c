@@ -14,15 +14,15 @@ void assert_coloring(graal_isolatethread_t *thread, void *g, void *map) {
         if (!has_next) { 
             break;
         }
-        long long e;
-        jgrapht_capi_it_next_long(thread, eit, &e);
-        long long s; 
+        int e;
+        jgrapht_capi_it_next_int(thread, eit, &e);
+        int s; 
         jgrapht_capi_graph_edge_source(thread, g, e, &s);
-        long long t;
+        int t;
         jgrapht_capi_graph_edge_target(thread, g, e, &t);
-        long long source_color, target_color;
-        jgrapht_capi_map_long_long_get(thread, map, s, &source_color);
-        jgrapht_capi_map_long_long_get(thread, map, t, &target_color);
+        int source_color, target_color;
+        jgrapht_capi_map_int_int_get(thread, map, s, &source_color);
+        jgrapht_capi_map_int_int_get(thread, map, t, &target_color);
         assert(source_color != target_color);
     }
     jgrapht_capi_handles_destroy(thread, eit);
@@ -55,7 +55,7 @@ int main() {
     assert(jgrapht_capi_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
     assert(flag == 0);
 
-    long long v;
+    int v;
     assert(jgrapht_capi_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 0);
     assert(jgrapht_capi_graph_add_vertex(thread, g, &v) == 0);
@@ -73,7 +73,7 @@ int main() {
     assert(jgrapht_capi_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 7);
 
-    long long e;
+    int e;
     assert(jgrapht_capi_graph_add_edge(thread, g, 0, 1, &e) == 0);
     assert(e == 0);
     assert(jgrapht_capi_graph_add_edge(thread, g, 1, 2, &e) == 0);
@@ -96,7 +96,7 @@ int main() {
     assert(e == 9);
 
     void *c;
-    long long colors;
+    int colors;
     jgrapht_capi_coloring_exec_greedy(thread, g, &colors, &c);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     assert(colors == 3);

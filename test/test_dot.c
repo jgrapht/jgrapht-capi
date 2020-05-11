@@ -8,7 +8,7 @@
 
 char *expected = "strict graph G {\n  0;\n  1;\n  2;\n  0 -- 1 [ cost=\"5.4\" ];\n  1 -- 2 [ cost=\"6.5\" ];\n  2 -- 0 [ cost=\"9.2\" ];\n}\n";
 
-void edge_attribute(long long e, char *key, char *value) { 
+void edge_attribute(int e, char *key, char *value) { 
     if (e == 0) { 
         if (strcmp(key, "cost") == 0) { 
             assert(strcmp(value, "5.4") == 0);
@@ -26,7 +26,7 @@ void edge_attribute(long long e, char *key, char *value) {
     }
 }
 
-long long import_id(const char *id) { 
+int import_id(const char *id) { 
     return atol(id);
 }
 

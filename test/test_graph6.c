@@ -6,7 +6,7 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-long long import_id(const char *id) { 
+int import_id(const char *id) { 
     return atol(id);
 }
 
@@ -26,8 +26,8 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    long long v;
-    long long e;
+    int v;
+    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -50,7 +50,7 @@ int main() {
 
     jgrapht_capi_import_file_graph6sparse6(thread, g, "dummy.graph6.out", import_id, NULL, NULL);
 
-    long long ecount;
+    int ecount;
     jgrapht_capi_graph_edges_count(thread, g, &ecount);
     assert(ecount == 2);
 

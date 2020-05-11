@@ -22,11 +22,11 @@ public class CutApi {
 			+ "cut_exec_stoer_wagner", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeStoerWagner(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer valueRes,
 			WordPointer cutSourcePartitionRes) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		StoerWagnerMinimumCut<Long, Long> alg = new StoerWagnerMinimumCut<>(g);
+		StoerWagnerMinimumCut<Integer, Integer> alg = new StoerWagnerMinimumCut<>(g);
 		double weight = alg.minCutWeight();
-		Set<Long> cutSourcePartition = alg.minCut();
+		Set<Integer> cutSourcePartition = alg.minCut();
 
 		if (valueRes.isNonNull()) {
 			valueRes.write(weight);

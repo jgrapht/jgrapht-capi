@@ -39,9 +39,9 @@ public class SpannerApi {
 			+ "spanner_exec_greedy_multiplicative", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeGreedyMultiplicativeSpanner(IsolateThread thread, ObjectHandle graph, int k,
 			CDoublePointer weightRes, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graph);
-		SpannerAlgorithm<Long> spannerAlg = new GreedyMultiplicativeSpanner<>(g, k);
-		Spanner<Long> spanner = spannerAlg.getSpanner();
+		Graph<Integer, Integer> g = globalHandles.get(graph);
+		SpannerAlgorithm<Integer> spannerAlg = new GreedyMultiplicativeSpanner<>(g, k);
+		Spanner<Integer> spanner = spannerAlg.getSpanner();
 		double weight = spanner.getWeight();
 		if (weightRes.isNonNull()) {
 			weightRes.write(weight);

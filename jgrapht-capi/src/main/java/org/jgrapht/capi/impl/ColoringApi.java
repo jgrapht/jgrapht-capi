@@ -26,7 +26,7 @@ import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
-import org.graalvm.nativeimage.c.type.CLongPointer;
+import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.color.BrownBacktrackColoring;
@@ -48,7 +48,7 @@ public class ColoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_greedy", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeGreedyColoring(IsolateThread thread, ObjectHandle graphHandle, CLongPointer resColors,
+	public static int executeGreedyColoring(IsolateThread thread, ObjectHandle graphHandle, CIntPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new GreedyColoring<>(g), resColors, resColorsMap);
 	}
@@ -56,13 +56,13 @@ public class ColoringApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_greedy_smallestdegreelast", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeSmallestDegreeLastColoring(IsolateThread thread, ObjectHandle graphHandle,
-			CLongPointer resColors, WordPointer resColorsMap) {
+			CIntPointer resColors, WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new SmallestDegreeLastColoring<>(g), resColors, resColorsMap);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_backtracking_brown", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeBacktrackingBrown(IsolateThread thread, ObjectHandle graphHandle, CLongPointer resColors,
+	public static int executeBacktrackingBrown(IsolateThread thread, ObjectHandle graphHandle, CIntPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new BrownBacktrackColoring<>(g), resColors, resColorsMap);
 	}
@@ -70,49 +70,49 @@ public class ColoringApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_greedy_largestdegreefirst", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeLargestDegreeFirstColoring(IsolateThread thread, ObjectHandle graphHandle,
-			CLongPointer resColors, WordPointer resColorsMap) {
+			CIntPointer resColors, WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new LargestDegreeFirstColoring<>(g), resColors, resColorsMap);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_greedy_random", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeRandomGreedyWithSeed(IsolateThread thread, ObjectHandle graphHandle,
-			CLongPointer resColors, WordPointer resColorsMap) {
+	public static int executeRandomGreedyWithSeed(IsolateThread thread, ObjectHandle graphHandle, CIntPointer resColors,
+			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new RandomGreedyColoring<>(g), resColors, resColorsMap);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_greedy_random_with_seed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeRandomGreedy(IsolateThread thread, ObjectHandle graphHandle, long seed,
-			CLongPointer resColors, WordPointer resColorsMap) {
+			CIntPointer resColors, WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new RandomGreedyColoring<>(g, new Random(seed)), resColors,
 				resColorsMap);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_greedy_dsatur", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeGreedyDSatur(IsolateThread thread, ObjectHandle graphHandle, CLongPointer resColors,
+	public static int executeGreedyDSatur(IsolateThread thread, ObjectHandle graphHandle, CIntPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new SaturationDegreeColoring<>(g), resColors, resColorsMap);
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "coloring_exec_color_refinement", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeColorRefinement(IsolateThread thread, ObjectHandle graphHandle, CLongPointer resColors,
+	public static int executeColorRefinement(IsolateThread thread, ObjectHandle graphHandle, CIntPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new ColorRefinementAlgorithm<>(g), resColors, resColorsMap);
 	}
 
 	private static int executeColoring(IsolateThread thread, ObjectHandle graphHandle,
-			Function<Graph<Long, Long>, VertexColoringAlgorithm<Long>> algProvider, CLongPointer resColors,
+			Function<Graph<Integer, Integer>, VertexColoringAlgorithm<Integer>> algProvider, CIntPointer resColors,
 			WordPointer resColorsMap) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		VertexColoringAlgorithm<Long> alg = algProvider.apply(g);
-		Coloring<Long> coloring = alg.getColoring();
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		VertexColoringAlgorithm<Integer> alg = algProvider.apply(g);
+		Coloring<Integer> coloring = alg.getColoring();
 
-		Map<Long, Long> colors = new LinkedHashMap<>();
+		Map<Integer, Integer> colors = new LinkedHashMap<>();
 		coloring.getColors().entrySet().stream().forEach(e -> {
-			colors.put(e.getKey(), (long) e.getValue());
+			colors.put(e.getKey(), e.getValue());
 		});
 
 		if (resColors.isNonNull()) {

@@ -21,32 +21,32 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int exists;
-    assert(jgrapht_capi_map_long_contains_key(thread, map, 4, &exists) == 0);
+    assert(jgrapht_capi_map_int_contains_key(thread, map, 4, &exists) == 0);
     assert(exists == 0);
-    assert(jgrapht_capi_map_long_contains_key(thread, map, 5, &exists) == 0);
+    assert(jgrapht_capi_map_int_contains_key(thread, map, 5, &exists) == 0);
     assert(exists == 0);
-    long long size;
+    int size;
     assert(jgrapht_capi_map_size(thread, map, &size) == 0);
     assert(size == 0);
 
     double dvalue;
-    assert(jgrapht_capi_map_long_double_get(thread, map, 5, &dvalue) == STATUS_ILLEGAL_ARGUMENT);
+    assert(jgrapht_capi_map_int_double_get(thread, map, 5, &dvalue) == STATUS_ILLEGAL_ARGUMENT);
     assert(jgrapht_capi_error_get_errno(thread) == STATUS_ILLEGAL_ARGUMENT);
     jgrapht_capi_error_clear_errno(thread);
     assert(jgrapht_capi_error_get_errno(thread) == STATUS_SUCCESS);
 
     int i;
     for(i = 0; i < 1000; i++) { 
-        jgrapht_capi_map_long_double_put(thread, map, i, 1000+i);
+        jgrapht_capi_map_int_double_put(thread, map, i, 1000+i);
         assert(jgrapht_capi_error_get_errno(thread) == 0);
     }
 
     for(i = 0; i < 1000; i++) { 
-        assert(jgrapht_capi_map_long_double_get(thread, map, i, &dvalue) == 0);
+        assert(jgrapht_capi_map_int_double_get(thread, map, i, &dvalue) == 0);
         assert(dvalue == 1000+i);
         assert(jgrapht_capi_error_get_errno(thread) == 0);
         int exists;
-        assert(jgrapht_capi_map_long_contains_key(thread, map, i, &exists) == 0);
+        assert(jgrapht_capi_map_int_contains_key(thread, map, i, &exists) == 0);
         assert(exists == 1);
         assert(jgrapht_capi_error_get_errno(thread) == 0);
     }
@@ -60,8 +60,8 @@ int main() {
         if (!hasnext) { 
             break;
         }
-        long long k;
-        jgrapht_capi_it_next_long(thread, kit, &k);
+        int k;
+        jgrapht_capi_it_next_int(thread, kit, &k);
         assert(k == n);
         n++;
     }
@@ -81,7 +81,7 @@ int main() {
     }
     jgrapht_capi_handles_destroy(thread, kit);
 
-    long long map_size;
+    int map_size;
     assert(jgrapht_capi_map_size(thread, map, &map_size) == 0);
     assert(map_size == 1000);
 
@@ -91,13 +91,13 @@ int main() {
     assert(map_size == 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_map_long_double_put(thread, map, 100, 150.0);
+    jgrapht_capi_map_int_double_put(thread, map, 100, 150.0);
     double v;
-    jgrapht_capi_map_long_double_get(thread, map, 100, &v);
+    jgrapht_capi_map_int_double_get(thread, map, 100, &v);
     assert(v == 150.0);
-    jgrapht_capi_map_long_double_remove(thread, map, 100, &v);
+    jgrapht_capi_map_int_double_remove(thread, map, 100, &v);
     assert(v == 150.0);
-    assert(jgrapht_capi_map_long_double_remove(thread, map, 100, &v) == STATUS_ILLEGAL_ARGUMENT);
+    assert(jgrapht_capi_map_int_double_remove(thread, map, 100, &v) == STATUS_ILLEGAL_ARGUMENT);
     jgrapht_capi_error_clear_errno(thread);
 
     jgrapht_capi_handles_destroy(thread, map);
