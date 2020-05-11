@@ -50,6 +50,16 @@ public class AttributesApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "attributes_store_put_int_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putIntAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
+			CCharPointer namePtr, int value) {
+		AttributesStore store = globalHandles.get(storeHandle);
+		String name = CTypeConversion.toJavaString(namePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "attributes_store_put_long_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putLongAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, long value) {
