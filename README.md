@@ -40,11 +40,16 @@ The build will succeed only if you have the following piece of software installe
 
  * GraalVM 20.0 with Java 11 support
  * Native Image component from GraalVM
- * Maven build tool
  * GNU C compiler or clang
+ * glibc-devel, zlib-devel (header files for the C library and zlib)
+ * Maven build tool
  * CMake
 
-For now only linux has been tested.
+For Windows you will need Microsoft Visual C++ (MSVC) 2017 15.5.5 or later. Build the 
+system using the proper
+[Developer Command Prompt](https://docs.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=vs-2019#developer_command_prompt_shortcuts)
+for your version of [Visual Studio](https://visualstudio.microsoft.com/vs/). This means 
+`x64 Native Tools Command Prompt`. Use Visual Studio 2017 or later.
 
 ## License
 
