@@ -34,7 +34,7 @@ int main() {
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;
 
-    if (thread, graal_create_isolate(NULL, &isolate, &thread) != 0) {
+    if (graal_create_isolate(NULL, &isolate, &thread) != 0) {
         fprintf(stderr, "graal_create_isolate error\n");
         exit(EXIT_FAILURE);
     }
