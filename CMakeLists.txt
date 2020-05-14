@@ -13,22 +13,30 @@ message(STATUS "native-image found at ${NativeImage}")
 
 include(GNUInstallDirs)
 
+SET(JGRAPHT_LIBRARY "${CMAKE_SHARED_LIBRARY_PREFIX}jgrapht_capi${CMAKE_SHARED_LIBRARY_SUFFIX}")
+
 add_custom_command(
     OUTPUT target/jgrapht-capi-0.1.jar
-    COMMAND cp ${CMAKE_SOURCE_DIR}/jgrapht-capi/pom.xml ${CMAKE_BINARY_DIR}/
-    COMMAND cp -r ${CMAKE_SOURCE_DIR}/jgrapht-capi/src ${CMAKE_BINARY_DIR}/
-    COMMAND mvn -f ${CMAKE_BINARY_DIR} package
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/jgrapht-capi/pom.xml ${CMAKE_BINARY_DIR}/
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/jgrapht-capi/src ${CMAKE_BINARY_DIR}/src
+    COMMAND mvn -B -f ${CMAKE_BINARY_DIR} package
     COMMENT "Building jar file with C native scopes"
 )
 
 add_custom_command(
-    OUTPUT libjgrapht_capi.so jgrapht_capi.h jgrapht_capi_dynamic.h graal_isolate.h graal_isolate_dynamic.h
+    OUTPUT ${JGRAPHT_LIBRARY} jgrapht_capi.h jgrapht_capi_dynamic.h graal_isolate.h graal_isolate_dynamic.h
     COMMAND native-image -cp ${CMAKE_BINARY_DIR}/target/jgrapht-capi-0.1.jar --no-fallback --initialize-at-build-time --no-server --shared
-    COMMAND cp ${CMAKE_BINARY_DIR}/jgrapht_capi.so ${CMAKE_BINARY_DIR}/libjgrapht_capi.so 
-    COMMAND rm ${CMAKE_BINARY_DIR}/jgrapht_capi.so
+    COMMAND ${CMAKE_COMMAND} -E rename ${CMAKE_BINARY_DIR}/jgrapht_capi${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_BINARY_DIR}/${JGRAPHT_LIBRARY}
     DEPENDS target/jgrapht-capi-0.1.jar
     COMMENT "Producing shared library from jar file"
 )
+
+if(APPLE)
+  add_custom_command(
+    OUTPUT ${JGRAPHT_LIBRARY} APPEND
+    COMMAND install_name_tool -id "@rpath/${JGRAPHT_LIBRARY}" ${CMAKE_BINARY_DIR}/${JGRAPHT_LIBRARY}
+  )
+endif(APPLE)
 
 add_custom_target(
     buildjar 
@@ -37,17 +45,20 @@ add_custom_target(
 
 add_custom_target(
     jgraphtsharedlib
-    SOURCES libjgrapht_capi.so
+    SOURCES ${JGRAPHT_LIBRARY}
 )
 
 set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/jgrapht_capi.h PROPERTY GENERATED 1)
 set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/jgrapht_capi_dynamic.h PROPERTY GENERATED 1)
 set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/graal_isolate.h PROPERTY GENERATED 1)
 set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/graal_isolate_dynamic.h PROPERTY GENERATED 1)
-set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/libjgrapht_capi.so PROPERTY GENERATED 1)
+set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/${JGRAPHT_LIBRARY} PROPERTY GENERATED 1)
 
 add_library(jgrapht_capi SHARED IMPORTED)
-set_property(TARGET jgrapht_capi PROPERTY IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/libjgrapht_capi.so)
+set_property(TARGET jgrapht_capi PROPERTY IMPORTED_LOCATION ${CMAKE_BINARY_DIR}/${JGRAPHT_LIBRARY})
+IF(WIN32)
+    set_property(TARGET jgrapht_capi PROPERTY IMPORTED_IMPLIB ${CMAKE_BINARY_DIR}/jgrapht_capi.lib)
+ENDIF(WIN32)
 
 add_dependencies(jgrapht_capi jgraphtsharedlib)
 
@@ -64,7 +75,7 @@ install(
 
 install(
     FILES
-    ${CMAKE_BINARY_DIR}/libjgrapht_capi.so
+    ${CMAKE_BINARY_DIR}/${JGRAPHT_LIBRARY}
     DESTINATION        
     ${CMAKE_INSTALL_LIBDIR}
 )
@@ -137,7 +148,10 @@ foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
     add_executable(${testname} test/${testsourcefile})
     target_include_directories(${testname} PUBLIC ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/jgrapht-capi/src/main/native)
-    target_link_libraries(${testname} jgrapht_capi m)
+    target_link_libraries(${testname} jgrapht_capi)
+    if(UNIX)
+      target_link_libraries(${testname} m)
+    endif(UNIX)
     add_test(NAME ${testname} COMMAND ${testname})
 endforeach(testsourcefile ${TEST_SOURCES})
 
