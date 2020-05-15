@@ -8,10 +8,10 @@ import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointer;
-import org.graalvm.nativeimage.c.type.CTypeConversion;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.StringUtils;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.nio.DefaultAttribute;
 
@@ -44,27 +44,27 @@ public class AttributesApi {
 	public static int putBooleanAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, boolean value) {
 		AttributesStore store = globalHandles.get(storeHandle);
-		String name = CTypeConversion.toJavaString(namePtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "attributes_store_put_int_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int putIntAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
-			CCharPointer namePtr, int value) {
+	public static int putIntAttribute(IsolateThread thread, ObjectHandle storeHandle, int element, CCharPointer namePtr,
+			int value) {
 		AttributesStore store = globalHandles.get(storeHandle);
-		String name = CTypeConversion.toJavaString(namePtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "attributes_store_put_long_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putLongAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, long value) {
 		AttributesStore store = globalHandles.get(storeHandle);
-		String name = CTypeConversion.toJavaString(namePtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -74,7 +74,7 @@ public class AttributesApi {
 	public static int putDoubleAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, double value) {
 		AttributesStore store = globalHandles.get(storeHandle);
-		String name = CTypeConversion.toJavaString(namePtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -84,8 +84,8 @@ public class AttributesApi {
 	public static int putStringAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, CCharPointer valuePtr) {
 		AttributesStore store = globalHandles.get(storeHandle);
-		String name = CTypeConversion.toJavaString(namePtr);
-		String value = CTypeConversion.toJavaString(valuePtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		String value = StringUtils.toJavaStringFromUtf8(valuePtr);
 		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -95,7 +95,7 @@ public class AttributesApi {
 	public static int removeAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr) {
 		AttributesStore store = globalHandles.get(storeHandle);
-		String name = CTypeConversion.toJavaString(namePtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		store.removeAttribute(element, name);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -122,8 +122,9 @@ public class AttributesApi {
 	public static int registerAttribute(IsolateThread thread, ObjectHandle registryHandle, CCharPointer name,
 			CCharPointer category, CCharPointer type, CCharPointer defaultValue) {
 		List<RegisteredAttribute> store = globalHandles.get(registryHandle);
-		store.add(new RegisteredAttribute(CTypeConversion.toJavaString(name), CTypeConversion.toJavaString(category),
-				CTypeConversion.toJavaString(type), CTypeConversion.toJavaString(defaultValue)));
+		store.add(new RegisteredAttribute(StringUtils.toJavaStringFromUtf8(name),
+				StringUtils.toJavaStringFromUtf8(category), StringUtils.toJavaStringFromUtf8(type),
+				StringUtils.toJavaStringFromUtf8(defaultValue)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -132,8 +133,9 @@ public class AttributesApi {
 	public static int unregisterAttribute(IsolateThread thread, ObjectHandle registryHandle, CCharPointer name,
 			CCharPointer category, CCharPointer type, CCharPointer defaultValue) {
 		List<RegisteredAttribute> store = globalHandles.get(registryHandle);
-		store.remove(new RegisteredAttribute(CTypeConversion.toJavaString(name), CTypeConversion.toJavaString(category),
-				CTypeConversion.toJavaString(type), CTypeConversion.toJavaString(defaultValue)));
+		store.remove(new RegisteredAttribute(StringUtils.toJavaStringFromUtf8(name),
+				StringUtils.toJavaStringFromUtf8(category), StringUtils.toJavaStringFromUtf8(type),
+				StringUtils.toJavaStringFromUtf8(defaultValue)));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 

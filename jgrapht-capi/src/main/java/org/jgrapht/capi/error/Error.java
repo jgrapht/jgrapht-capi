@@ -19,9 +19,9 @@ package org.jgrapht.capi.error;
 
 import java.util.Objects;
 
-import org.graalvm.nativeimage.c.type.CTypeConversion;
 import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.StringUtils;
 
 public class Error {
 
@@ -33,7 +33,7 @@ public class Error {
 	public Error(Status status, String message, Throwable throwable) {
 		this.status = Objects.requireNonNull(status, "Status cannot be null");
 		this.message = Objects.requireNonNull(message, "Message cannot be null");
-		this.messagePin = CTypeConversion.toCString(message);
+		this.messagePin = StringUtils.toCStringInUtf8(message);
 		this.throwable = throwable;
 	}
 

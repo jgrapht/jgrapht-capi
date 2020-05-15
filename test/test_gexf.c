@@ -81,6 +81,7 @@ int main() {
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;
 
+
     if (graal_create_isolate(NULL, &isolate, &thread) != 0) {
         fprintf(stderr, "graal_create_isolate error\n");
         exit(EXIT_FAILURE);
@@ -88,15 +89,18 @@ int main() {
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
+
     // import a gexf from string
     void *g;
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
+
     // test gml with extra attributes
     jgrapht_capi_import_string_gexf(thread, g, input, NULL, 1, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-    
+
+
     int vcount;
     jgrapht_capi_graph_vertices_count(thread, g, &vcount);
     assert(vcount == 3);
@@ -109,6 +113,7 @@ int main() {
 
     void *attrs_registry;
     jgrapht_capi_attributes_registry_create(thread, &attrs_registry);
+
     jgrapht_capi_attributes_registry_register_attribute(thread, attrs_registry, "cost", "edge", "double", NULL);
 
     void *attr_store;

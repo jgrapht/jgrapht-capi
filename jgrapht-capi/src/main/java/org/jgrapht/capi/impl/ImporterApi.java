@@ -27,7 +27,6 @@ import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointer;
-import org.graalvm.nativeimage.c.type.CTypeConversion;
 import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
@@ -35,6 +34,7 @@ import org.jgrapht.capi.JGraphTContext.ImportIdFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.ImporterExporterCSVFormat;
 import org.jgrapht.capi.JGraphTContext.NotifyAttributeFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.StringUtils;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.io.CustomDIMACSImporter;
 import org.jgrapht.nio.BaseEventDrivenImporter;
@@ -62,7 +62,7 @@ public class ImporterApi {
 		if (preserveIdsFromInput) {
 			importer.setVertexFactory(x -> Integer.valueOf(x));
 		}
-		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		importer.importGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
 
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -77,8 +77,7 @@ public class ImporterApi {
 		if (preserveIdsFromInput) {
 			importer.setVertexFactory(x -> Integer.valueOf(x));
 		}
-
-		String inputAsJava = CTypeConversion.toJavaString(input);
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
 			importer.importGraph(g, reader);
 		}
@@ -99,7 +98,7 @@ public class ImporterApi {
 
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
 
-		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		importer.importGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
 
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -118,7 +117,7 @@ public class ImporterApi {
 
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
 
-		String inputAsJava = CTypeConversion.toJavaString(input);
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
 			importer.importGraph(g, reader);
 		}
@@ -137,7 +136,7 @@ public class ImporterApi {
 
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
-				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(x);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
@@ -145,7 +144,7 @@ public class ImporterApi {
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction,
 				StringEscapeUtils.UNESCAPE_JSON);
 
-		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		importer.importGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
 
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -161,7 +160,7 @@ public class ImporterApi {
 
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
-				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(x);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
@@ -169,7 +168,7 @@ public class ImporterApi {
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction,
 				StringEscapeUtils.UNESCAPE_JSON);
 
-		String inputAsJava = CTypeConversion.toJavaString(input);
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
 			importer.importGraph(g, reader);
 		}
@@ -200,7 +199,7 @@ public class ImporterApi {
 
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
-				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(x);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
@@ -208,7 +207,7 @@ public class ImporterApi {
 		importer.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, import_edge_weights);
 		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
 		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
-		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		importer.importGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
 
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -237,7 +236,7 @@ public class ImporterApi {
 
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
-				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(x);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
@@ -246,7 +245,7 @@ public class ImporterApi {
 		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
 		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
 
-		String inputAsJava = CTypeConversion.toJavaString(input);
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
 			importer.importGraph(g, reader);
 		}
@@ -266,7 +265,7 @@ public class ImporterApi {
 
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
-				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(x);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
@@ -275,7 +274,7 @@ public class ImporterApi {
 
 		importer.setSchemaValidation(validate_schema);
 
-		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		importer.importGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
 
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -292,7 +291,7 @@ public class ImporterApi {
 
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
-				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(x);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
@@ -301,7 +300,7 @@ public class ImporterApi {
 
 		importer.setSchemaValidation(validate_schema);
 
-		String inputAsJava = CTypeConversion.toJavaString(input);
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
 			importer.importGraph(g, reader);
 		}
@@ -321,7 +320,7 @@ public class ImporterApi {
 
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
-				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(x);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
@@ -330,7 +329,7 @@ public class ImporterApi {
 
 		importer.setSchemaValidation(validate_schema);
 
-		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		importer.importGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
 
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -347,7 +346,7 @@ public class ImporterApi {
 
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
-				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(x);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
@@ -356,7 +355,7 @@ public class ImporterApi {
 
 		importer.setSchemaValidation(validate_schema);
 
-		String inputAsJava = CTypeConversion.toJavaString(input);
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
 			importer.importGraph(g, reader);
 		}
@@ -376,7 +375,7 @@ public class ImporterApi {
 
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
-				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(x);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
@@ -385,7 +384,7 @@ public class ImporterApi {
 
 		importer.setSchemaValidation(validate_schema);
 
-		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		importer.importGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
 
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -402,7 +401,7 @@ public class ImporterApi {
 
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
-				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(x);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
@@ -411,7 +410,7 @@ public class ImporterApi {
 
 		importer.setSchemaValidation(validate_schema);
 
-		String inputAsJava = CTypeConversion.toJavaString(input);
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
 			importer.importGraph(g, reader);
 		}
@@ -429,14 +428,14 @@ public class ImporterApi {
 
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
-				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(x);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
 
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
 
-		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		importer.importGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
 
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -452,14 +451,14 @@ public class ImporterApi {
 
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
-				CCharPointerHolder holder = CTypeConversion.toCString(x);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(x);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
 
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
 
-		String inputAsJava = CTypeConversion.toJavaString(input);
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
 			importer.importGraph(g, reader);
 		}
@@ -479,14 +478,14 @@ public class ImporterApi {
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
 				String xAsAString = String.valueOf(x);
-				CCharPointerHolder holder = CTypeConversion.toCString(xAsAString);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(xAsAString);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
 
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
 
-		importer.importGraph(g, new File(CTypeConversion.toJavaString(filename)));
+		importer.importGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
 
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -503,14 +502,14 @@ public class ImporterApi {
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> {
 				String xAsAString = String.valueOf(x);
-				CCharPointerHolder holder = CTypeConversion.toCString(xAsAString);
+				CCharPointerHolder holder = StringUtils.toCStringInUtf8(xAsAString);
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
 
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
 
-		String inputAsJava = CTypeConversion.toJavaString(input);
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
 			importer.importGraph(g, reader);
 		}
@@ -525,12 +524,12 @@ public class ImporterApi {
 			importer.addVertexAttributeConsumer((p, attr) -> {
 				int vertex = p.getFirst();
 				String key = p.getSecond();
-				CCharPointerHolder keyHolder = CTypeConversion.toCString(key);
+				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(key);
 				String value = attr.getValue();
 				if (unescapeTranslator != null) {
 					value = unescapeTranslator.translate(value);
 				}
-				CCharPointerHolder valueHolder = CTypeConversion.toCString(value);
+				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
 				vertexAttributeFunction.invoke(vertex, keyHolder.get(), valueHolder.get());
 			});
 		}
@@ -539,12 +538,12 @@ public class ImporterApi {
 			importer.addEdgeAttributeConsumer((p, attr) -> {
 				int edge = p.getFirst();
 				String key = p.getSecond();
-				CCharPointerHolder keyHolder = CTypeConversion.toCString(key);
+				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(key);
 				String value = attr.getValue();
 				if (unescapeTranslator != null) {
 					value = unescapeTranslator.translate(value);
 				}
-				CCharPointerHolder valueHolder = CTypeConversion.toCString(value);
+				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
 				edgeAttributeFunction.invoke(edge, keyHolder.get(), valueHolder.get());
 			});
 		}
