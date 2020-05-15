@@ -79,7 +79,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, cliqueit);
     jgrapht_capi_handles_destroy(thread, g);
 
-    if (thread, graal_detach_thread(thread) != 0) {
+    if (graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");
         exit(EXIT_FAILURE);
     }

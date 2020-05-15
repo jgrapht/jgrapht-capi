@@ -10,7 +10,7 @@ int main() {
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;
 
-    if (thread, graal_create_isolate(NULL, &isolate, &thread) != 0) {
+    if (graal_create_isolate(NULL, &isolate, &thread) != 0) {
         fprintf(stderr, "graal_create_isolate error\n");
         exit(EXIT_FAILURE);
     }
@@ -96,7 +96,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    if (thread, graal_detach_thread(thread) != 0) {
+    if (graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");
         exit(EXIT_FAILURE);
     }
