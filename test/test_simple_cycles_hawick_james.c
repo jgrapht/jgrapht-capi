@@ -69,7 +69,7 @@ int main() {
         sprintf(vastext, "%d", v);
         strcat(result, vastext);
     }
-    assert(strcmp(result, "3210") == 0);
+    assert(strcmp(result, "0123") == 0);
     jgrapht_capi_handles_destroy(thread, vit);
     jgrapht_capi_handles_destroy(thread, cycle);
 
@@ -94,7 +94,7 @@ int main() {
         strcat(result, vastext);
     }
     //printf("%s\n", result);
-    assert(strcmp(result, "325410") == 0);
+    assert(strcmp(result, "014523") == 0);
     jgrapht_capi_handles_destroy(thread, vit);
     jgrapht_capi_handles_destroy(thread, cycle);
 
