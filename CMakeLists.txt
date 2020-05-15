@@ -16,18 +16,23 @@ include(GNUInstallDirs)
 SET(JGRAPHT_LIBRARY "${CMAKE_SHARED_LIBRARY_PREFIX}jgrapht_capi${CMAKE_SHARED_LIBRARY_SUFFIX}")
 
 add_custom_command(
-    OUTPUT target/jgrapht-capi-0.1.jar
+    OUTPUT ${CMAKE_BINARY_DIR}/target/jgrapht-capi-0.1.jar
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/jgrapht-capi/pom.xml ${CMAKE_BINARY_DIR}/
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/jgrapht-capi/src ${CMAKE_BINARY_DIR}/src
     COMMAND mvn -B -f ${CMAKE_BINARY_DIR} package
     COMMENT "Building jar file with C native scopes"
 )
 
+add_custom_target(
+    build-jar 
+    DEPENDS ${CMAKE_BINARY_DIR}/target/jgrapht-capi-0.1.jar
+)
+
 add_custom_command(
     OUTPUT ${JGRAPHT_LIBRARY} jgrapht_capi.h jgrapht_capi_dynamic.h graal_isolate.h graal_isolate_dynamic.h
     COMMAND native-image -cp ${CMAKE_BINARY_DIR}/target/jgrapht-capi-0.1.jar --no-fallback --initialize-at-build-time --no-server --shared
     COMMAND ${CMAKE_COMMAND} -E rename ${CMAKE_BINARY_DIR}/jgrapht_capi${CMAKE_SHARED_LIBRARY_SUFFIX} ${CMAKE_BINARY_DIR}/${JGRAPHT_LIBRARY}
-    DEPENDS target/jgrapht-capi-0.1.jar
+    DEPENDS build-jar
     COMMENT "Producing shared library from jar file"
 )
 
@@ -39,13 +44,8 @@ if(APPLE)
 endif(APPLE)
 
 add_custom_target(
-    buildjar 
-    SOURCES target/jgrapht-capi-0.1.jar
-)
-
-add_custom_target(
-    jgraphtsharedlib
-    SOURCES ${JGRAPHT_LIBRARY}
+    build-jgrapht-sharedlib
+    DEPENDS ${JGRAPHT_LIBRARY}
 )
 
 set_property(SOURCE ${CMAKE_BINARY_DIR}/jgrapht-capi/jgrapht_capi.h PROPERTY GENERATED 1)
@@ -60,7 +60,7 @@ IF(WIN32)
     set_property(TARGET jgrapht_capi PROPERTY IMPORTED_IMPLIB ${CMAKE_BINARY_DIR}/jgrapht_capi.lib)
 ENDIF(WIN32)
 
-add_dependencies(jgrapht_capi jgraphtsharedlib)
+add_dependencies(jgrapht_capi build-jgrapht-sharedlib)
 
 install(
     FILES
