@@ -67,9 +67,6 @@ int main() {
     jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
     jgrapht_capi_graph_set_edge_weight(thread, g, 4, 20);
 
-    int v;
-    int e;
-
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
 

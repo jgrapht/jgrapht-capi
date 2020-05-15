@@ -21,8 +21,6 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g1);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    int v;
-    int e;
     jgrapht_capi_graph_add_vertex(thread, g1, NULL);
     jgrapht_capi_graph_add_vertex(thread, g1, NULL);
     jgrapht_capi_graph_add_vertex(thread, g1, NULL);

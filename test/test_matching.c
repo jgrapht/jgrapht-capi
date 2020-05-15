@@ -18,8 +18,6 @@ int main() {
     void *g;
     jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
 
-    int v;
-    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);

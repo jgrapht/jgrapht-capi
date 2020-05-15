@@ -21,9 +21,6 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-
-    int v;
-    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -46,6 +43,7 @@ int main() {
     void *it;
     jgrapht_capi_planarity_embedding_edges_around_vertex(thread, embedding, 0, &it);
 
+    int e;
     jgrapht_capi_it_next_int(thread, it, &e);
     assert (e == 5);
     jgrapht_capi_it_next_int(thread, it, &e);

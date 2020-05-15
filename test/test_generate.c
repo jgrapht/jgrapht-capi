@@ -89,7 +89,7 @@ int main() {
 
     // kleinberg
     jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
-    jgrapht_capi_generate_kleinberg_smallworld(thread, g, 10, 2, 1, 0.2, 17);
+    jgrapht_capi_generate_kleinberg_smallworld(thread, g, 10, 2, 1, 2, 17);
     jgrapht_capi_graph_vertices_count(thread, g, &vcount);
     assert(vcount == 100);
     jgrapht_capi_handles_destroy(thread, g);

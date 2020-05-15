@@ -66,9 +66,6 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    int v;
-    int e;
-
     int i;
     for(i = 0; i < 10; i++) {
         jgrapht_capi_graph_add_vertex(thread, g, NULL);

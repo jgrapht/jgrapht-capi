@@ -38,7 +38,6 @@ int main() {
         jgrapht_capi_graph_add_vertex(thread, g, &v);
     }
 
-    int e;
     jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
     jgrapht_capi_graph_add_edge(thread, g, 1, 2, NULL);
     jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);

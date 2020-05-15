@@ -21,8 +21,6 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    int v;
-    int e;
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
@@ -37,7 +35,6 @@ int main() {
     jgrapht_capi_graph_add_edge(thread, g, 3, 4, NULL);
 
     void *walk;
-    int exists;
     jgrapht_capi_cycles_chinese_postman_exec_edmonds_johnson(thread, g, &walk);
 
     double weight;
