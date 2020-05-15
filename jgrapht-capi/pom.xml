@@ -7,6 +7,10 @@
 	<version>0.1</version>
 	<name>JGraphT Library C-API</name>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.graalvm.nativeimage</groupId>
