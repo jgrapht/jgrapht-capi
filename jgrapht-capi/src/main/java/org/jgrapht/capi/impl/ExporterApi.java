@@ -19,6 +19,11 @@ package org.jgrapht.capi.impl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +47,8 @@ import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.BaseExporter;
+import org.jgrapht.nio.ExportException;
+import org.jgrapht.nio.GraphExporter;
 import org.jgrapht.nio.csv.CSVExporter;
 import org.jgrapht.nio.csv.CSVFormat;
 import org.jgrapht.nio.dimacs.DIMACSExporter;
@@ -80,7 +87,7 @@ public class ExporterApi {
 		}
 		DIMACSExporter<Integer, Integer> exporter = new DIMACSExporter<>(x -> String.valueOf(x + 1), actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
-		exporter.exportGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
+		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -106,9 +113,7 @@ public class ExporterApi {
 		DIMACSExporter<Integer, Integer> exporter = new DIMACSExporter<>(x -> String.valueOf(x + 1), actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		exporter.exportGraph(g, os);
-		CCharPointerHolder cString = StringUtils.toCString(os.toByteArray());
+		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(cString));
 		}
@@ -143,7 +148,7 @@ public class ExporterApi {
 			});
 		}
 
-		exporter.exportGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
+		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -176,9 +181,7 @@ public class ExporterApi {
 			});
 		}
 
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		exporter.exportGraph(g, os);
-		CCharPointerHolder cString = StringUtils.toCString(os.toByteArray());
+		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(cString));
 		}
@@ -195,7 +198,7 @@ public class ExporterApi {
 
 		setupAttributeStores(exporter, vertexLabelsStore, edgeLabelsStore);
 
-		exporter.exportGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
+		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -209,9 +212,7 @@ public class ExporterApi {
 
 		setupAttributeStores(exporter, vertexLabelsStore, edgeLabelsStore);
 
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		exporter.exportGraph(g, os);
-		CCharPointerHolder cString = StringUtils.toCString(os.toByteArray());
+		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(cString));
 		}
@@ -227,7 +228,8 @@ public class ExporterApi {
 		LemonExporter<Integer, Integer> exporter = new LemonExporter<>(x -> String.valueOf(x));
 		exporter.setParameter(LemonExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.setParameter(LemonExporter.Parameter.ESCAPE_STRINGS_AS_JAVA, escapeStringsAsJava);
-		exporter.exportGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
+
+		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -241,9 +243,7 @@ public class ExporterApi {
 		exporter.setParameter(LemonExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.setParameter(LemonExporter.Parameter.ESCAPE_STRINGS_AS_JAVA, escapeStringsAsJava);
 
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		exporter.exportGraph(g, os);
-		CCharPointerHolder cString = StringUtils.toCString(os.toByteArray());
+		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(cString));
 		}
@@ -270,7 +270,8 @@ public class ExporterApi {
 		exporter.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
 		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
-		exporter.exportGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
+
+		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -296,9 +297,7 @@ public class ExporterApi {
 		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
 		exporter.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
 
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		exporter.exportGraph(g, os);
-		CCharPointerHolder cString = StringUtils.toCString(os.toByteArray());
+		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(cString));
 		}
@@ -348,7 +347,7 @@ public class ExporterApi {
 			}
 		}
 
-		exporter.exportGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
+		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -378,9 +377,7 @@ public class ExporterApi {
 			}
 		}
 
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		exporter.exportGraph(g, os);
-		CCharPointerHolder cString = StringUtils.toCString(os.toByteArray());
+		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(cString));
 		}
@@ -396,7 +393,7 @@ public class ExporterApi {
 
 		setupAttributeStores(exporter, vertexAttributesStore, edgeAttributesStore);
 
-		exporter.exportGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
+		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -410,9 +407,7 @@ public class ExporterApi {
 
 		setupAttributeStores(exporter, vertexAttributesStore, edgeAttributesStore);
 
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		exporter.exportGraph(g, os);
-		CCharPointerHolder cString = StringUtils.toCString(os.toByteArray());
+		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(cString));
 		}
@@ -427,7 +422,7 @@ public class ExporterApi {
 		Graph6Sparse6Exporter<Integer, Integer> exporter = new Graph6Sparse6Exporter<>(
 				Graph6Sparse6Exporter.Format.GRAPH6);
 
-		exporter.exportGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
+		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -439,9 +434,7 @@ public class ExporterApi {
 		Graph6Sparse6Exporter<Integer, Integer> exporter = new Graph6Sparse6Exporter<>(
 				Graph6Sparse6Exporter.Format.GRAPH6);
 
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		exporter.exportGraph(g, os);
-		CCharPointerHolder cString = StringUtils.toCString(os.toByteArray());
+		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(cString));
 		}
@@ -456,7 +449,7 @@ public class ExporterApi {
 		Graph6Sparse6Exporter<Integer, Integer> exporter = new Graph6Sparse6Exporter<>(
 				Graph6Sparse6Exporter.Format.SPARSE6);
 
-		exporter.exportGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
+		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -468,9 +461,7 @@ public class ExporterApi {
 		Graph6Sparse6Exporter<Integer, Integer> exporter = new Graph6Sparse6Exporter<>(
 				Graph6Sparse6Exporter.Format.SPARSE6);
 
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		exporter.exportGraph(g, os);
-		CCharPointerHolder cString = StringUtils.toCString(os.toByteArray());
+		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(cString));
 		}
@@ -502,7 +493,7 @@ public class ExporterApi {
 			}
 		}
 
-		exporter.exportGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
+		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -531,9 +522,7 @@ public class ExporterApi {
 			}
 		}
 
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		exporter.exportGraph(g, os);
-		CCharPointerHolder cString = StringUtils.toCString(os.toByteArray());
+		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(cString));
 		}
@@ -555,6 +544,28 @@ public class ExporterApi {
 				return eStore.getAttributes(e);
 			});
 		}
+	}
+
+	private static void exportToFile(Graph<Integer, Integer> g, GraphExporter<Integer, Integer> exporter,
+			CCharPointer filename) {
+		File file = new File(StringUtils.toJavaStringFromUtf8(filename));
+		try (FileOutputStream outStream = new FileOutputStream(file);
+				Writer writer = new OutputStreamWriter(outStream, StandardCharsets.UTF_8)) {
+			exporter.exportGraph(g, outStream);
+		} catch (Exception e) {
+			throw new ExportException(e);
+		}
+	}
+
+	private static CCharPointerHolder exportToCString(Graph<Integer, Integer> g,
+			GraphExporter<Integer, Integer> exporter) {
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+		try (OutputStreamWriter writer = new OutputStreamWriter(os, StandardCharsets.UTF_8)) {
+			exporter.exportGraph(g, writer);
+		} catch (IOException e) {
+			throw new ExportException(e);
+		}
+		return StringUtils.toCString(os.toByteArray());
 	}
 
 }
