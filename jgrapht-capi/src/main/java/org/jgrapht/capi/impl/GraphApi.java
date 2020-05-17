@@ -20,6 +20,8 @@ package org.jgrapht.capi.impl;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
@@ -32,6 +34,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
+import org.jgrapht.capi.JGraphTContext.IntegerToBooleanFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.IntegerToDoubleFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.SafeEdgeSupplier;
@@ -39,7 +43,9 @@ import org.jgrapht.capi.graph.SafeVertexSupplier;
 import org.jgrapht.graph.AsUndirectedGraph;
 import org.jgrapht.graph.AsUnmodifiableGraph;
 import org.jgrapht.graph.AsUnweightedGraph;
+import org.jgrapht.graph.AsWeightedGraph;
 import org.jgrapht.graph.EdgeReversedGraph;
+import org.jgrapht.graph.MaskSubgraph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.opt.graph.sparse.SparseIntDirectedGraph;
 import org.jgrapht.opt.graph.sparse.SparseIntDirectedWeightedGraph;
@@ -483,6 +489,45 @@ public class GraphApi {
 	public static int asEdgeReversed(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
 		Graph<Integer, Integer> gOut = new EdgeReversedGraph<>(gIn);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(gOut));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_as_weighted", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int asWeighted(IsolateThread thread, ObjectHandle graphHandle,
+			IntegerToDoubleFunctionPointer weightFunctionPointer, boolean cacheWeights, boolean writeWeightsThrough,
+			WordPointer res) {
+		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
+
+		Function<Integer, Double> weightFunction = e -> {
+			return weightFunctionPointer.invoke(e);
+		};
+
+		Graph<Integer, Integer> gOut = new AsWeightedGraph<>(gIn, weightFunction, cacheWeights, writeWeightsThrough);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(gOut));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_as_masked_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int asMaskedSubgraph(IsolateThread thread, ObjectHandle graphHandle,
+			IntegerToBooleanFunctionPointer vertexMaskFunctionPointer,
+			IntegerToBooleanFunctionPointer edgeMaskFunctionPointer, WordPointer res) {
+		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
+
+		Predicate<Integer> vertexMask = x -> {
+			return vertexMaskFunctionPointer.invoke(x);
+		};
+		Predicate<Integer> edgeMask = x -> {
+			return edgeMaskFunctionPointer.invoke(x);
+		};
+
+		Graph<Integer, Integer> gOut = new MaskSubgraph<>(gIn, vertexMask, edgeMask);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}

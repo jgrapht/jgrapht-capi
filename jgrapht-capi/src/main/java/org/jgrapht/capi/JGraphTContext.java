@@ -74,6 +74,30 @@ public class JGraphTContext {
 
 	}
 
+	@CEnum("graph_event_t")
+	public enum GraphEvent {
+
+		// @formatter:off
+	    GRAPH_EVENT_BEFORE_VERTEX_ADDED,
+	    GRAPH_EVENT_BEFORE_VERTEX_REMOVED,
+	    GRAPH_EVENT_VERTEX_ADDED,
+	    GRAPH_EVENT_VERTEX_REMOVED,
+	    GRAPH_EVENT_BEFORE_EDGE_ADDED,
+	    GRAPH_EVENT_BEFORE_EDGE_REMOVED,
+	    GRAPH_EVENT_EDGE_ADDED,
+	    GRAPH_EVENT_EDGE_REMOVED,
+	    GRAPH_EVENT_EDGE_WEIGHT_UPDATED,
+		;
+		// @formatter:on
+
+		@CEnumValue
+		public native int toCEnum();
+
+		@CEnumLookup
+		public static native GraphEvent toJavaEnum(int value);
+
+	}
+
 	/* Import of a C function pointer type. */
 	public interface NotifyAttributeFunctionPointer extends CFunctionPointer {
 
@@ -110,6 +134,27 @@ public class JGraphTContext {
 
 		@InvokeCFunctionPointer
 		int invoke(int key);
+
+	}
+
+	public interface IntegerToDoubleFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		double invoke(int key);
+
+	}
+
+	public interface IntegerToBooleanFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		boolean invoke(int key);
+
+	}
+
+	public interface IIFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		void invoke(int key, int value);
 
 	}
 
