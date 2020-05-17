@@ -66,7 +66,7 @@ public class TourApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-
+	
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "tour_tsp_nearest_insertion_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int nearestInsertionHeuristic(IsolateThread thread, ObjectHandle handle, WordPointer res) {

@@ -80,6 +80,18 @@ int main() {
     assert(value == 1);
     jgrapht_capi_handles_destroy(thread, map);
 
+    int degeneracy;
+    jgrapht_capi_scoring_exec_coreness(thread, g, &degeneracy, &map);
+    jgrapht_capi_map_int_contains_key(thread, map, 0, &value);
+    assert(value == 1);
+    jgrapht_capi_handles_destroy(thread, map);
+
+    double global, avg;
+    jgrapht_capi_scoring_exec_clustering_coefficient(thread, g, &global, &avg, &map);
+    jgrapht_capi_map_int_contains_key(thread, map, 0, &value);
+    assert(value == 1);
+    jgrapht_capi_handles_destroy(thread, map);
+
     jgrapht_capi_handles_destroy(thread, g);
 
     if (graal_detach_thread(thread) != 0) {

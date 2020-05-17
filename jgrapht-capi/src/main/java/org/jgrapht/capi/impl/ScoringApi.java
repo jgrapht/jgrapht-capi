@@ -23,12 +23,16 @@ import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
+import org.graalvm.nativeimage.c.type.CDoublePointer;
+import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
 import org.jgrapht.alg.scoring.AlphaCentrality;
 import org.jgrapht.alg.scoring.BetweennessCentrality;
 import org.jgrapht.alg.scoring.ClosenessCentrality;
+import org.jgrapht.alg.scoring.ClusteringCoefficient;
+import org.jgrapht.alg.scoring.Coreness;
 import org.jgrapht.alg.scoring.HarmonicCentrality;
 import org.jgrapht.alg.scoring.PageRank;
 import org.jgrapht.capi.Constants;
@@ -185,7 +189,48 @@ public class ScoringApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	// TODO: Add clustering coefficient
-	// TODO: Add coreness
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "scoring_exec_coreness", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeCoreness(IsolateThread thread, ObjectHandle graphHandle, CIntPointer degeneracyRes,
+			WordPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+
+		Coreness<Integer, Integer> alg = new Coreness<>(g);
+
+		int degeneracy = alg.getDegeneracy();
+		Map<Integer, Integer> result = alg.getScores();
+
+		if (degeneracyRes.isNonNull()) {
+			degeneracyRes.write(degeneracy);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(result));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "scoring_exec_clustering_coefficient", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeClusteringCoefficient(IsolateThread thread, ObjectHandle graphHandle,
+			CDoublePointer globalRes, CDoublePointer avgRes, WordPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+
+		ClusteringCoefficient<Integer, Integer> alg = new ClusteringCoefficient<>(g);
+
+		Map<Integer, Double> result = alg.getScores();
+		double avg = alg.getAverageClusteringCoefficient();
+		double global = alg.getGlobalClusteringCoefficient();
+
+		if (avgRes.isNonNull()) {
+			avgRes.write(avg);
+		}
+		if (globalRes.isNonNull()) {
+			globalRes.write(global);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(result));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 }
