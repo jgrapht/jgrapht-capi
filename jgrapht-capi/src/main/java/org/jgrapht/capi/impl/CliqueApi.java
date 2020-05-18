@@ -28,6 +28,7 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.clique.BronKerboschCliqueFinder;
+import org.jgrapht.alg.clique.ChordalGraphMaxCliqueFinder;
 import org.jgrapht.alg.clique.DegeneracyBronKerboschCliqueFinder;
 import org.jgrapht.alg.clique.PivotBronKerboschCliqueFinder;
 import org.jgrapht.alg.interfaces.MaximalCliqueEnumerationAlgorithm;
@@ -72,11 +73,23 @@ public class CliqueApi {
 	public static int executeBrownKerboschPivotAndDegeneracyOrdering(IsolateThread thread, ObjectHandle graphHandle,
 			long timeoutSeconds, WordPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		MaximalCliqueEnumerationAlgorithm<Integer, Integer> alg = new DegeneracyBronKerboschCliqueFinder<>(g, timeoutSeconds,
-				TimeUnit.SECONDS);
+		MaximalCliqueEnumerationAlgorithm<Integer, Integer> alg = new DegeneracyBronKerboschCliqueFinder<>(g,
+				timeoutSeconds, TimeUnit.SECONDS);
 		Iterator<Set<Integer>> it = alg.iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "clique_exec_chordal_max_clique", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeChordalMaxCliqueFinder(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		ChordalGraphMaxCliqueFinder<Integer, Integer> alg = new ChordalGraphMaxCliqueFinder<>(g);
+		Set<Integer> clique = alg.getClique();
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(clique));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}

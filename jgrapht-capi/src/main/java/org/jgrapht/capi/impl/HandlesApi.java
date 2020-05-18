@@ -22,7 +22,11 @@ import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointerPointer;
+import org.graalvm.nativeimage.c.type.CDoublePointer;
+import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
+import org.jgrapht.alg.util.Pair;
+import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
@@ -52,7 +56,8 @@ public class HandlesApi {
 	 * @param res
 	 * @return
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "handles_get_ccharpointer", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "handles_get_ccharpointer", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsString(IsolateThread thread, ObjectHandle handle, CCharPointerPointer res) {
 		CCharPointerHolder cstr = globalHandles.get(handle);
 		if (cstr != null && res.isNonNull()) {
@@ -60,5 +65,40 @@ public class HandlesApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "handles_get_edge_pair", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getHandleAsEdgePair(IsolateThread thread, ObjectHandle handle, CIntPointer source,
+			CIntPointer target) {
+		Pair<Integer, Integer> pair = globalHandles.get(handle);
+		if (pair != null) {
+			if (source.isNonNull()) {
+				source.write(pair.getFirst());
+			}
+			if (target.isNonNull()) {
+				target.write(pair.getSecond());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "handles_get_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getHandleAsEdgeTriple(IsolateThread thread, ObjectHandle handle, CIntPointer source,
+			CIntPointer target, CDoublePointer weight) {
+		Triple<Integer, Integer, Double> triple = globalHandles.get(handle);
+		if (triple != null) {
+			if (source.isNonNull()) {
+				source.write(triple.getFirst());
+			}
+			if (target.isNonNull()) {
+				target.write(triple.getSecond());
+			}
+			if (weight.isNonNull()) {
+				weight.write(triple.getThird());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 }

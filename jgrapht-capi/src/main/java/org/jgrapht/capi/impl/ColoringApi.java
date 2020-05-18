@@ -30,6 +30,7 @@ import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.color.BrownBacktrackColoring;
+import org.jgrapht.alg.color.ChordalGraphColoring;
 import org.jgrapht.alg.color.ColorRefinementAlgorithm;
 import org.jgrapht.alg.color.GreedyColoring;
 import org.jgrapht.alg.color.LargestDegreeFirstColoring;
@@ -101,6 +102,13 @@ public class ColoringApi {
 	public static int executeColorRefinement(IsolateThread thread, ObjectHandle graphHandle, CIntPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new ColorRefinementAlgorithm<>(g), resColors, resColorsMap);
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "coloring_exec_chordal_minimum_coloring", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeChordalMinimumColoring(IsolateThread thread, ObjectHandle graphHandle,
+			CIntPointer resColors, WordPointer resColorsMap) {
+		return executeColoring(thread, graphHandle, g -> new ChordalGraphColoring<>(g), resColors, resColorsMap);
 	}
 
 	private static int executeColoring(IsolateThread thread, ObjectHandle graphHandle,
