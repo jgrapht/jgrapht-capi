@@ -6,6 +6,25 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
+double weightfunction(int e) { 
+    if (e < 3) { 
+        return 3.0;
+    } else { 
+        return 5.0;
+    }
+}
+
+int vertex_mask(int v) { 
+    if (v == 1) { 
+        return 1;
+    }
+    return 0;
+}
+
+int edge_mask(int e) { 
+    return 0;
+}
+
 int main() { 
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;
@@ -91,7 +110,20 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) != 0);
     assert(strcmp("this graph is unmodifiable", jgrapht_capi_error_get_errno_msg(thread))==0);
     jgrapht_capi_error_clear_errno(thread);
-    jgrapht_capi_handles_destroy(thread, g);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    jgrapht_capi_handles_destroy(thread, g1);
+
+    jgrapht_capi_graph_as_weighted(thread, g, weightfunction, 0, 0, &g1);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    jgrapht_capi_graph_get_edge_weight(thread, g1, e55_1, &w);
+    assert(w == 5.0);
+    jgrapht_capi_handles_destroy(thread, g1);
+
+    jgrapht_capi_graph_as_masked_subgraph(thread, g, vertex_mask, edge_mask, &g1);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    jgrapht_capi_graph_vertices_count(thread, g1, &vcount);
+    assert(vcount == 4);
+    jgrapht_capi_handles_destroy(thread, g1);
 
     jgrapht_capi_handles_destroy(thread, g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
