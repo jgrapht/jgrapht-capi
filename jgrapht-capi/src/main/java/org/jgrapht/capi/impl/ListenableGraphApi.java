@@ -53,13 +53,10 @@ public class ListenableGraphApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "listenable_create_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int createGraphListener(IsolateThread thread, IIFunctionPointer vertexAddedFunctionPointer,
-			IIFunctionPointer vertexRemovedFunctionPointer, IIFunctionPointer edgeAddedFunctionPointer,
-			IIFunctionPointer edgeRemovedFunctionPointer, IIFunctionPointer edgeWeightUpdatedFunctionPointer,
+	public static int createGraphListener(IsolateThread thread, IIFunctionPointer eventFunctionPointer,
 			WordPointer res) {
 
-		InvokeGraphListener listener = new InvokeGraphListener(vertexAddedFunctionPointer, vertexRemovedFunctionPointer,
-				edgeAddedFunctionPointer, edgeRemovedFunctionPointer, edgeWeightUpdatedFunctionPointer);
+		InvokeGraphListener listener = new InvokeGraphListener(eventFunctionPointer);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(listener));
 		}
@@ -86,54 +83,44 @@ public class ListenableGraphApi {
 
 	private static class InvokeGraphListener implements GraphListener<Integer, Integer> {
 
-		private IIFunctionPointer vertexAddedFunctionPointer;
-		private IIFunctionPointer vertexRemovedFunctionPointer;
-		private IIFunctionPointer edgeAddedFunctionPointer;
-		private IIFunctionPointer edgeRemovedFunctionPointer;
-		private IIFunctionPointer edgeWeightUpdatedFunctionPointer;
+		private IIFunctionPointer eventFunctionPointer;
 
-		public InvokeGraphListener(IIFunctionPointer vertexAddedFunctionPointer,
-				IIFunctionPointer vertexRemovedFunctionPointer, IIFunctionPointer edgeAddedFunctionPointer,
-				IIFunctionPointer edgeRemovedFunctionPointer, IIFunctionPointer edgeWeightUpdatedFunctionPointer) {
-			this.vertexAddedFunctionPointer = vertexAddedFunctionPointer;
-			this.vertexRemovedFunctionPointer = vertexRemovedFunctionPointer;
-			this.edgeAddedFunctionPointer = edgeAddedFunctionPointer;
-			this.edgeRemovedFunctionPointer = edgeRemovedFunctionPointer;
-			this.edgeWeightUpdatedFunctionPointer = edgeWeightUpdatedFunctionPointer;
+		public InvokeGraphListener(IIFunctionPointer eventFunctionPointer) {
+			this.eventFunctionPointer = eventFunctionPointer;
 		}
 
 		@Override
 		public void vertexAdded(GraphVertexChangeEvent<Integer> e) {
-			if (vertexAddedFunctionPointer.isNonNull()) {
-				vertexAddedFunctionPointer.invoke(e.getVertex(), e.getType());
+			if (eventFunctionPointer.isNonNull()) {
+				eventFunctionPointer.invoke(e.getVertex(), e.getType());
 			}
 		}
 
 		@Override
 		public void vertexRemoved(GraphVertexChangeEvent<Integer> e) {
-			if (vertexRemovedFunctionPointer.isNonNull()) {
-				vertexRemovedFunctionPointer.invoke(e.getVertex(), e.getType());
+			if (eventFunctionPointer.isNonNull()) {
+				eventFunctionPointer.invoke(e.getVertex(), e.getType());
 			}
 		}
 
 		@Override
 		public void edgeAdded(GraphEdgeChangeEvent<Integer, Integer> e) {
-			if (edgeAddedFunctionPointer.isNonNull()) {
-				edgeAddedFunctionPointer.invoke(e.getEdge(), e.getType());
+			if (eventFunctionPointer.isNonNull()) {
+				eventFunctionPointer.invoke(e.getEdge(), e.getType());
 			}
 		}
 
 		@Override
 		public void edgeRemoved(GraphEdgeChangeEvent<Integer, Integer> e) {
-			if (edgeRemovedFunctionPointer.isNonNull()) {
-				edgeRemovedFunctionPointer.invoke(e.getEdge(), e.getType());
+			if (eventFunctionPointer.isNonNull()) {
+				eventFunctionPointer.invoke(e.getEdge(), e.getType());
 			}
 		}
 
 		@Override
 		public void edgeWeightUpdated(GraphEdgeChangeEvent<Integer, Integer> e) {
-			if (edgeWeightUpdatedFunctionPointer.isNonNull()) {
-				edgeWeightUpdatedFunctionPointer.invoke(e.getEdge(), e.getType());
+			if (eventFunctionPointer.isNonNull()) {
+				eventFunctionPointer.invoke(e.getEdge(), e.getType());
 			}
 		}
 

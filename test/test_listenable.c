@@ -6,7 +6,7 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-void vertex_added(int v, int type) { 
+void event(int v, int type) { 
     assert(v == 0 && type == GRAPH_EVENT_VERTEX_ADDED);
 }
 
@@ -30,7 +30,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *listener;
-    jgrapht_capi_listenable_create_graph_listener(thread, vertex_added, NULL, NULL, NULL, NULL, &listener);
+    jgrapht_capi_listenable_create_graph_listener(thread, event, &listener);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_listenable_add_graph_listener(thread, gl, listener);
