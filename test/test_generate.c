@@ -94,6 +94,85 @@ int main() {
     assert(vcount == 100);
     jgrapht_capi_handles_destroy(thread, g);
 
+    // TODO: check complement
+
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    int v;
+    jgrapht_capi_graph_add_vertex(thread, g, &v);
+    jgrapht_capi_graph_add_vertex(thread, g, &v);
+    jgrapht_capi_graph_add_vertex(thread, g, &v);
+    jgrapht_capi_graph_add_edge(thread, g, 0, 1, &v);
+    void *gtarget;
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &gtarget);
+    jgrapht_capi_generate_complement(thread, gtarget, g, 0);
+    jgrapht_capi_graph_vertices_count(thread, gtarget, &vcount);
+    assert(vcount == 3);
+    jgrapht_capi_handles_destroy(thread, g);
+    jgrapht_capi_handles_destroy(thread, gtarget);
+
+    // generalized petersen
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_generalized_petersen(thread, g, 10, 4);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 20);
+    jgrapht_capi_handles_destroy(thread, g);
+
+    // grid
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_grid(thread, g, 5, 5);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 25);
+    jgrapht_capi_handles_destroy(thread, g);
+    
+    // hypercube
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_hypercube(thread, g, 3);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 8);
+    jgrapht_capi_handles_destroy(thread, g);
+
+    // linear
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_linear(thread, g, 10);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 10);
+    jgrapht_capi_handles_destroy(thread, g);
+
+    // random regular
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_random_regular(thread, g, 10, 3, 17);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 10);
+    jgrapht_capi_handles_destroy(thread, g);
+
+    // star
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_star(thread, g, 10);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 10);
+    jgrapht_capi_handles_destroy(thread, g);
+
+    // wheel
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_wheel(thread, g, 10, 0);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 10);
+    jgrapht_capi_handles_destroy(thread, g);
+
+    // windmill
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_windmill(thread, g, 3, 3, 0);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 7);
+    jgrapht_capi_handles_destroy(thread, g);
+
+    // linearized_chord_diagram
+    jgrapht_capi_graph_create(thread, 0, 1, 1, 1, &g);
+    jgrapht_capi_generate_linearized_chord_diagram(thread, g, 20, 5, 17);
+    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    assert(vcount == 20);
+    jgrapht_capi_handles_destroy(thread, g);
+
     if (graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");
         exit(EXIT_FAILURE);
