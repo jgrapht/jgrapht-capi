@@ -88,6 +88,9 @@ public class CliqueApi {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 		ChordalGraphMaxCliqueFinder<Integer, Integer> alg = new ChordalGraphMaxCliqueFinder<>(g);
 		Set<Integer> clique = alg.getClique();
+		if (clique == null) {
+			throw new IllegalArgumentException("Graph is not chordal");
+		}
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(clique));
 		}

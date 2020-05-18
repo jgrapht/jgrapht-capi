@@ -108,7 +108,26 @@ public class ColoringApi {
 			+ "coloring_exec_chordal_minimum_coloring", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeChordalMinimumColoring(IsolateThread thread, ObjectHandle graphHandle,
 			CIntPointer resColors, WordPointer resColorsMap) {
-		return executeColoring(thread, graphHandle, g -> new ChordalGraphColoring<>(g), resColors, resColorsMap);
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		VertexColoringAlgorithm<Integer> alg = new ChordalGraphColoring<>(g);
+		Coloring<Integer> coloring = alg.getColoring();
+
+		if (coloring == null) {
+			throw new IllegalArgumentException("Graph is not chordal");
+		}
+
+		Map<Integer, Integer> colors = new LinkedHashMap<>();
+		coloring.getColors().entrySet().stream().forEach(e -> {
+			colors.put(e.getKey(), e.getValue());
+		});
+
+		if (resColors.isNonNull()) {
+			resColors.write(coloring.getNumberColors());
+		}
+		if (resColorsMap.isNonNull()) {
+			resColorsMap.write(globalHandles.create(colors));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	private static int executeColoring(IsolateThread thread, ObjectHandle graphHandle,
