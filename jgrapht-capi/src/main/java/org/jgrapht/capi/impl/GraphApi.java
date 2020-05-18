@@ -503,7 +503,11 @@ public class GraphApi {
 		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
 
 		Function<Integer, Double> weightFunction = e -> {
-			return weightFunctionPointer.invoke(e);
+			if (weightFunctionPointer.isNonNull()) {
+				return weightFunctionPointer.invoke(e);
+			}
+			// return 1.0 by default
+			return 1d;
 		};
 
 		Graph<Integer, Integer> gOut = new AsWeightedGraph<>(gIn, weightFunction, cacheWeights, writeWeightsThrough);
@@ -521,10 +525,16 @@ public class GraphApi {
 		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
 
 		Predicate<Integer> vertexMask = x -> {
-			return vertexMaskFunctionPointer.invoke(x);
+			if (vertexMaskFunctionPointer.isNonNull()) {
+				return vertexMaskFunctionPointer.invoke(x);
+			}
+			return false;
 		};
 		Predicate<Integer> edgeMask = x -> {
-			return edgeMaskFunctionPointer.invoke(x);
+			if (edgeMaskFunctionPointer.isNonNull()) {
+				return edgeMaskFunctionPointer.invoke(x);
+			}
+			return false;
 		};
 
 		Graph<Integer, Integer> gOut = new MaskSubgraph<>(gIn, vertexMask, edgeMask);
