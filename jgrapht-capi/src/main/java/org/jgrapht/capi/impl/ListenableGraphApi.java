@@ -41,10 +41,10 @@ public class ListenableGraphApi {
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "listenable_create_listenable_graph", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int createListenable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+			+ "listenable_as_listenable", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int asListenable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
-		Graph<Integer, Integer> gOut = new DefaultListenableGraph<>(gIn);
+		ListenableGraph<Integer, Integer> gOut = new DefaultListenableGraph<>(gIn);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -69,18 +69,18 @@ public class ListenableGraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "listenable_add_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int addGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
-		ListenableGraph<Integer, Integer> gIn = globalHandles.get(graphHandle);
+		ListenableGraph<Integer, Integer> g = globalHandles.get(graphHandle);
 		InvokeGraphListener listener = globalHandles.get(listenerHandle);
-		gIn.addGraphListener(listener);
+		g.addGraphListener(listener);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "listenable_remove_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
-		ListenableGraph<Integer, Integer> gIn = globalHandles.get(graphHandle);
+		ListenableGraph<Integer, Integer> g = globalHandles.get(graphHandle);
 		InvokeGraphListener listener = globalHandles.get(listenerHandle);
-		gIn.removeGraphListener(listener);
+		g.removeGraphListener(listener);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
