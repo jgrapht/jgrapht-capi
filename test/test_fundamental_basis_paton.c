@@ -51,7 +51,7 @@ int main() {
 
     int start_vertex; 
     int end_vertex; 
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 4.0);
     jgrapht_capi_handles_destroy(thread, gp);
 
@@ -61,7 +61,7 @@ int main() {
     jgrapht_capi_it_next_object(thread, gpit, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 4.0);
     jgrapht_capi_handles_destroy(thread, gp);    
 

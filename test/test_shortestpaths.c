@@ -58,7 +58,7 @@ int main() {
 
     // test between vertices
     jgrapht_capi_sp_exec_dijkstra_get_path_between_vertices(thread, g, 0, 4, &gp);
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 42.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);
@@ -70,7 +70,7 @@ int main() {
 
     // bidirectional dijkstra between vertices
     jgrapht_capi_sp_exec_bidirectional_dijkstra_get_path_between_vertices(thread, g, 0, 4, &gp);
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 42.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);
@@ -80,13 +80,13 @@ int main() {
     void *singlesource;
     jgrapht_capi_sp_exec_dijkstra_get_singlesource_from_vertex(thread, g, 0, &singlesource);
     jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, singlesource, 4, &gp);
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 42.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);
     jgrapht_capi_handles_destroy(thread, gp);
     jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, singlesource, 3, &gp);
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 40.0);
     assert(start_vertex == 0);
     assert(end_vertex == 3);
@@ -96,13 +96,13 @@ int main() {
     // bellman ford with multiple queries
     jgrapht_capi_sp_exec_bellmanford_get_singlesource_from_vertex(thread, g, 0, &singlesource);
     jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, singlesource, 4, &gp);
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 42.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);
     jgrapht_capi_handles_destroy(thread, gp);
     jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, singlesource, 3, &gp);
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 40.0);
     assert(start_vertex == 0);
     assert(end_vertex == 3);
@@ -112,13 +112,13 @@ int main() {
     // bfs with multiple queries
     jgrapht_capi_sp_exec_bfs_get_singlesource_from_vertex(thread, g, 0, &singlesource);
     jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, singlesource, 4, &gp);
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 42.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);
     jgrapht_capi_handles_destroy(thread, gp);
     jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, singlesource, 3, &gp);
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 40.0);
     assert(start_vertex == 0);
     assert(end_vertex == 3);
@@ -129,14 +129,14 @@ int main() {
     void *allpairs;
     jgrapht_capi_sp_exec_johnson_get_allpairs(thread, g, &allpairs);
     jgrapht_capi_sp_allpairs_get_path_between_vertices(thread, allpairs, 0, 4, &gp);
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 42.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);
     jgrapht_capi_handles_destroy(thread, gp);
     jgrapht_capi_sp_allpairs_get_singlesource_from_vertex(thread, allpairs, 0, &singlesource);
     jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, singlesource, 4, &gp);
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 42.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);
@@ -146,14 +146,14 @@ int main() {
 
     jgrapht_capi_sp_exec_floydwarshall_get_allpairs(thread, g, &allpairs);
     jgrapht_capi_sp_allpairs_get_path_between_vertices(thread, allpairs, 0, 4, &gp);
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 42.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);
     jgrapht_capi_handles_destroy(thread, gp);
     jgrapht_capi_sp_allpairs_get_singlesource_from_vertex(thread, allpairs, 0, &singlesource);
     jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, singlesource, 4, &gp);
-    jgrapht_capi_graphpath_get_fields(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 42.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);

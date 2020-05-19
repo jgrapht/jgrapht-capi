@@ -41,7 +41,7 @@ int main() {
     int start_vertex;
     int end_vertex;
 
-    jgrapht_capi_graphpath_get_fields(thread, walk, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_handles_get_graphpath(thread, walk, &weight, &start_vertex, &end_vertex, NULL);
 
     assert(weight == 6.0);
 
