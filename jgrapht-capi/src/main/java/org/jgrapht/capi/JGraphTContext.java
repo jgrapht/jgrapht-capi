@@ -7,6 +7,7 @@ import org.graalvm.nativeimage.c.constant.CEnumValue;
 import org.graalvm.nativeimage.c.function.CFunctionPointer;
 import org.graalvm.nativeimage.c.function.InvokeCFunctionPointer;
 import org.graalvm.nativeimage.c.type.CCharPointer;
+import org.graalvm.nativeimage.c.type.CDoublePointer;
 
 @CContext(JGraphTDirectives.class)
 public class JGraphTContext {
@@ -148,6 +149,13 @@ public class JGraphTContext {
 
 		@InvokeCFunctionPointer
 		boolean invoke(int key);
+
+	}
+
+	public interface IntegerToCDoublePointerFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		CDoublePointer invoke(int key);
 
 	}
 

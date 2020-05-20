@@ -17,17 +17,23 @@
  */
 package org.jgrapht.capi.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
+import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.graalvm.word.WordFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.alg.interfaces.MultiObjectiveShortestPathAlgorithm;
+import org.jgrapht.alg.interfaces.MultiObjectiveShortestPathAlgorithm.MultiObjectiveSingleSourcePaths;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.alg.shortestpath.ALTAdmissibleHeuristic;
@@ -41,9 +47,11 @@ import org.jgrapht.alg.shortestpath.EppsteinKShortestPath;
 import org.jgrapht.alg.shortestpath.FloydWarshallShortestPaths;
 import org.jgrapht.alg.shortestpath.IntVertexDijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.JohnsonShortestPaths;
+import org.jgrapht.alg.shortestpath.MartinShortestPath;
 import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.AStarHeuristicFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.IntegerToCDoublePointerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
@@ -338,6 +346,74 @@ public class ShortestPathApi {
 			pathsRes.write(globalHandles.create(paths));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "multisp_exec_martin_get_multiobjectivesinglesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeMartin(IsolateThread thread, ObjectHandle graphHandle, int source,
+			IntegerToCDoublePointerFunctionPointer edgeWeightFunctionPointer, int dim, WordPointer pathsRes) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+
+		Function<Integer, double[]> edgeWeightFunction = cacheEdgeWeightFunction(g, edgeWeightFunctionPointer, dim);
+
+		MultiObjectiveShortestPathAlgorithm<Integer, Integer> alg = new MartinShortestPath<>(g, edgeWeightFunction);
+		MultiObjectiveSingleSourcePaths<Integer, Integer> paths = alg.getPaths(source);
+
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "multisp_exec_martin_get_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeMartin(IsolateThread thread, ObjectHandle graphHandle, int source, int target,
+			IntegerToCDoublePointerFunctionPointer edgeWeightFunctionPointer, int dim, WordPointer pathsRes) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+
+		if (dim <= 0) {
+			throw new IllegalArgumentException("Weight function dimension must be positive");
+		}
+		if (edgeWeightFunctionPointer.isNull()) {
+			throw new IllegalArgumentException("Weight function cannot be null");
+		}
+
+		Function<Integer, double[]> edgeWeightFunction = cacheEdgeWeightFunction(g, edgeWeightFunctionPointer, dim);
+
+		MultiObjectiveShortestPathAlgorithm<Integer, Integer> alg = new MartinShortestPath<>(g, edgeWeightFunction);
+		List<GraphPath<Integer, Integer>> paths = alg.getPaths(source, target);
+
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths.iterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "multisp_multiobjectsinglesource_get_path_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int multiObjectiveSingleSourceGetPathToVertex(IsolateThread thread, ObjectHandle sourceHandle,
+			int target, WordPointer pathsRes) {
+		MultiObjectiveSingleSourcePaths<Integer, Integer> source = globalHandles.get(sourceHandle);
+		List<GraphPath<Integer, Integer>> paths = source.getPaths(target);
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths.iterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	private static Function<Integer, double[]> cacheEdgeWeightFunction(Graph<Integer, Integer> g,
+			IntegerToCDoublePointerFunctionPointer edgeWeightFunctionPointer, int dim) {
+		// cache all function values
+		Map<Integer, double[]> edgeWeightMap = new HashMap<>();
+		for (Integer e : g.edgeSet()) {
+			CDoublePointer base = edgeWeightFunctionPointer.invoke(e);
+			double[] v = new double[dim];
+			for (int i = 0; i < dim; i++) {
+				v[i] = base.read(i);
+			}
+			edgeWeightMap.put(e, v);
+		}
+		return e -> edgeWeightMap.get(e);
 	}
 
 }
