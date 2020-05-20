@@ -103,7 +103,7 @@ int main() {
     void *multi;
     jgrapht_capi_multisp_exec_martin_get_multiobjectivesinglesource_from_vertex(thread, g, 0, cost_function, 2, &multi);
 
-    jgrapht_capi_multisp_multiobjectsinglesource_get_path_to_vertex(thread, multi, 4, &paths_it);
+    jgrapht_capi_multisp_multiobjectivesinglesource_get_paths_to_vertex(thread, multi, 4, &paths_it);
     paths = 0;
     while(1) { 
         jgrapht_capi_it_hasnext(thread, paths_it, &hasnext);

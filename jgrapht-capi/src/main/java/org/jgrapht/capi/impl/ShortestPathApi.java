@@ -390,7 +390,7 @@ public class ShortestPathApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "multisp_multiobjectsinglesource_get_path_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "multisp_multiobjectivesinglesource_get_paths_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int multiObjectiveSingleSourceGetPathToVertex(IsolateThread thread, ObjectHandle sourceHandle,
 			int target, WordPointer pathsRes) {
 		MultiObjectiveSingleSourcePaths<Integer, Integer> source = globalHandles.get(sourceHandle);
