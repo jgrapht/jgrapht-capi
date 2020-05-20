@@ -45,6 +45,10 @@ int main() {
     assert(flag == 1);
     assert(jgrapht_capi_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
     assert(flag == 1);
+    assert(jgrapht_capi_graph_is_allowing_cycles(thread, g, &flag) == 0);
+    assert(flag == 1);
+    assert(jgrapht_capi_graph_is_modifiable(thread, g, &flag) == 0);
+    assert(flag == 0);
 
     int count;
     jgrapht_capi_graph_vertices_count(thread, g, &count);
