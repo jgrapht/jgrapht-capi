@@ -42,7 +42,7 @@ public class GraphDagApi {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_dag_create", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int createDag(IsolateThread thread, boolean weighted, boolean allowMultipleEdges, WordPointer res) {
+	public static int createDag(IsolateThread thread, boolean allowMultipleEdges, boolean weighted, WordPointer res) {
 		SafeVertexSupplier vSupplier = new SafeVertexSupplier();
 		SafeEdgeSupplier eSupplier = new SafeEdgeSupplier();
 
