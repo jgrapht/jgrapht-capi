@@ -93,6 +93,30 @@ int main() {
     jgrapht_capi_handles_destroy(thread, gp);
     jgrapht_capi_handles_destroy(thread, singlesource);
 
+    // test delta stepping between vertices
+    jgrapht_capi_sp_exec_delta_stepping_get_path_between_vertices(thread, g, 0, 4, 5.0, 4, &gp);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    assert(weight == 42.0);
+    assert(start_vertex == 0);
+    assert(end_vertex == 4);
+    jgrapht_capi_handles_destroy(thread, gp);
+
+    // delta stepping will multiple queries
+    jgrapht_capi_sp_exec_delta_stepping_get_singlesource_from_vertex(thread, g, 0, 0.0, 4, &singlesource);
+    jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, singlesource, 4, &gp);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    assert(weight == 42.0);
+    assert(start_vertex == 0);
+    assert(end_vertex == 4);
+    jgrapht_capi_handles_destroy(thread, gp);
+    jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, singlesource, 3, &gp);
+    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    assert(weight == 40.0);
+    assert(start_vertex == 0);
+    assert(end_vertex == 3);
+    jgrapht_capi_handles_destroy(thread, gp);
+    jgrapht_capi_handles_destroy(thread, singlesource);
+
     // bellman ford with multiple queries
     jgrapht_capi_sp_exec_bellmanford_get_singlesource_from_vertex(thread, g, 0, &singlesource);
     jgrapht_capi_sp_singlesource_get_path_to_vertex(thread, singlesource, 4, &gp);
