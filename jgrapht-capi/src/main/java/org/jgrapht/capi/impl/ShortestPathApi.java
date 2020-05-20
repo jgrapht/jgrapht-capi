@@ -36,6 +36,7 @@ import org.jgrapht.alg.shortestpath.BFSShortestPath;
 import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.alg.shortestpath.BidirectionalAStarShortestPath;
 import org.jgrapht.alg.shortestpath.BidirectionalDijkstraShortestPath;
+import org.jgrapht.alg.shortestpath.DeltaSteppingShortestPath;
 import org.jgrapht.alg.shortestpath.EppsteinKShortestPath;
 import org.jgrapht.alg.shortestpath.FloydWarshallShortestPaths;
 import org.jgrapht.alg.shortestpath.IntVertexDijkstraShortestPath;
@@ -303,6 +304,38 @@ public class ShortestPathApi {
 
 		if (pathIteratorRes.isNonNull()) {
 			pathIteratorRes.write(globalHandles.create(paths.iterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "sp_exec_delta_stepping_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeDeltaSteppingBetween(IsolateThread thread, ObjectHandle graphHandle, int source,
+			int target, double delta, int parallelism, WordPointer pathRes) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+
+		ShortestPathAlgorithm<Integer, Integer> alg = new DeltaSteppingShortestPath<>(g, delta, parallelism);
+		GraphPath<Integer, Integer> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "sp_exec_delta_stepping_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeDeltaSteppingFrom(IsolateThread thread, ObjectHandle graphHandle, int source, double delta,
+			int parallelism, WordPointer pathsRes) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+
+		ShortestPathAlgorithm<Integer, Integer> alg = new DeltaSteppingShortestPath<>(g, delta, parallelism);
+		SingleSourcePaths<Integer, Integer> paths = alg.getPaths(source);
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
