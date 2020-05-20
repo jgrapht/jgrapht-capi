@@ -32,6 +32,8 @@ int main() {
     assert(flag == 0);
     assert(jgrapht_capi_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
     assert(flag == 1);
+    assert(jgrapht_capi_graph_is_allowing_cycles(thread, g, &flag) == 0);
+    assert(flag == 0);
 
     jgrapht_capi_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_graph_add_vertex(thread, g, NULL);

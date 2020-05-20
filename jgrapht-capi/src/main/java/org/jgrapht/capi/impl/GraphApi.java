@@ -361,6 +361,17 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_is_allowing_cycles", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int allowsCycles(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		boolean result = g.getType().isAllowingCycles();
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_get_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
