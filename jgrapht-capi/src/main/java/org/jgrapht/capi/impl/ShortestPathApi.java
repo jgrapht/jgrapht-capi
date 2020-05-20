@@ -36,9 +36,9 @@ import org.jgrapht.alg.shortestpath.BFSShortestPath;
 import org.jgrapht.alg.shortestpath.BellmanFordShortestPath;
 import org.jgrapht.alg.shortestpath.BidirectionalAStarShortestPath;
 import org.jgrapht.alg.shortestpath.BidirectionalDijkstraShortestPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.EppsteinKShortestPath;
 import org.jgrapht.alg.shortestpath.FloydWarshallShortestPaths;
+import org.jgrapht.alg.shortestpath.IntVertexDijkstraShortestPath;
 import org.jgrapht.alg.shortestpath.JohnsonShortestPaths;
 import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.capi.Constants;
@@ -56,7 +56,7 @@ public class ShortestPathApi {
 			WordPointer pathRes) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		DijkstraShortestPath<Integer, Integer> alg = new DijkstraShortestPath<>(g);
+		ShortestPathAlgorithm<Integer, Integer> alg = new IntVertexDijkstraShortestPath<>(g);
 		GraphPath<Integer, Integer> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
@@ -92,7 +92,7 @@ public class ShortestPathApi {
 			WordPointer pathsRes) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		ShortestPathAlgorithm<Integer, Integer> alg = new DijkstraShortestPath<>(g);
+		ShortestPathAlgorithm<Integer, Integer> alg = new IntVertexDijkstraShortestPath<>(g);
 		SingleSourcePaths<Integer, Integer> paths = alg.getPaths(source);
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));

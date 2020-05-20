@@ -144,6 +144,7 @@ set(
     "test_sparse_graph.c"
     "test_sparse_graph2.c"
     "test_listenable.c"
+    "test_dag.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})

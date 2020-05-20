@@ -31,15 +31,18 @@ import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
+import org.jgrapht.GraphType;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
+import org.jgrapht.capi.JGraphTContext.DDToDFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.IntegerToBooleanFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.IntegerToDoubleFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.SafeEdgeSupplier;
 import org.jgrapht.capi.graph.SafeVertexSupplier;
+import org.jgrapht.graph.AsGraphUnion;
 import org.jgrapht.graph.AsUndirectedGraph;
 import org.jgrapht.graph.AsUnmodifiableGraph;
 import org.jgrapht.graph.AsUnweightedGraph;
@@ -51,6 +54,7 @@ import org.jgrapht.opt.graph.sparse.SparseIntDirectedGraph;
 import org.jgrapht.opt.graph.sparse.SparseIntDirectedWeightedGraph;
 import org.jgrapht.opt.graph.sparse.SparseIntUndirectedGraph;
 import org.jgrapht.opt.graph.sparse.SparseIntUndirectedWeightedGraph;
+import org.jgrapht.util.WeightCombiner;
 
 /**
  * Basic graph operations
@@ -540,6 +544,36 @@ public class GraphApi {
 		Graph<Integer, Integer> gOut = new MaskSubgraph<>(gIn, vertexMask, edgeMask);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_as_graph_union", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int asGraphUnion(IsolateThread thread, ObjectHandle graph1Handle, ObjectHandle graph2Handle,
+			DDToDFunctionPointer weightCombinerFunctionPointer, WordPointer res) {
+		Graph<Integer, Integer> g1 = globalHandles.get(graph1Handle);
+		Graph<Integer, Integer> g2 = globalHandles.get(graph2Handle);
+
+		GraphType type1 = g1.getType();
+		GraphType type2 = g2.getType();
+		if (type1.isMixed() || type2.isMixed()) {
+			throw new IllegalArgumentException("Mixed graphs not supported.");
+		}
+		if (type1.isDirected() != type2.isDirected() || type1.isUndirected() != type2.isUndirected()) {
+			throw new IllegalArgumentException("Both graphs must be directed or both undirected.");
+		}
+
+		WeightCombiner weightFunction;
+		if (weightCombinerFunctionPointer.isNonNull()) {
+			weightFunction = (d1, d2) -> weightCombinerFunctionPointer.invoke(d1, d2);
+		} else {
+			weightFunction = (d1, d2) -> d1 + d2;
+		}
+
+		Graph<Integer, Integer> union = new AsGraphUnion<>(g1, g2, weightFunction);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(union));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}

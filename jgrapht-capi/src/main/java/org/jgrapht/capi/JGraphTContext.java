@@ -158,4 +158,11 @@ public class JGraphTContext {
 
 	}
 
+	public interface DDToDFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		double invoke(double d1, double d2);
+
+	}
+
 }
