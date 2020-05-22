@@ -6,6 +6,8 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
+char *expected="{\"creator\":\"JGraphT JSON Exporter\",\"version\":\"1\",\"nodes\":[{\"id\":\"0\",\"label\":\"label 0\",\"cost\":100.5},{\"id\":\"1\",\"label\":\"label 1\"},{\"id\":\"2\",\"label\":\"label 2\"}],\"edges\":[{\"source\":\"0\",\"target\":\"1\"},{\"source\":\"1\",\"target\":\"2\"}]}";
+
 void vertex_attribute(int v, char *key, char *value) { 
     if (v == 0) { 
         if (strcmp(key, "ID") == 0) { 
@@ -28,7 +30,7 @@ void vertex_attribute(int v, char *key, char *value) {
             assert(strcmp(value, "2") == 0);
         }
         if (strcmp(key, "label") == 0) { 
-            assert(strcmp(value, "κόμβος 2") == 0);
+            assert(strcmp(value, "label 2") == 0);
         }
     }
 }
@@ -61,50 +63,30 @@ int main() {
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    // first write a gml
+    // first write a json
     void *g;
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    int i;
-    for(i = 0; i < 10; i++) {
-        jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    }
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 2, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 3, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 4, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 5, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 6, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 7, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 8, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 9, NULL);
-
     jgrapht_capi_graph_add_edge(thread, g, 1, 2, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 3, 4, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 4, 5, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 5, 6, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 6, 7, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 7, 8, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 8, 9, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 9, 1, NULL);
-
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    // test json with extra attributes
+    // test gml with extra attributes
     void *attr_store;
     jgrapht_capi_attributes_store_create(thread, &attr_store);
     jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 0, "label", "label 0");
     jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 1, "label", "label 1");
-    jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 2, "label", "κόμβος 2");
+    jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 2, "label", "label 2");
     jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 0, "cost", 100.5);
 
-    jgrapht_capi_export_file_json(thread, g, "dummy2.json.out", attr_store, NULL);
-    assert(jgrapht_capi_error_get_errno(thread) == 0);
-    jgrapht_capi_handles_destroy(thread, attr_store);
+    jgrapht_capi_export_file_json(thread, g, "dummy.edgelist.json.out", attr_store, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_handles_destroy(thread, g);
@@ -115,12 +97,24 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test json with extra attributes
-    jgrapht_capi_import_file_json(thread, g, "dummy2.json.out", import_id_from_file, vertex_attribute, edge_attribute);
+    void *edgelist;
+    jgrapht_capi_import_edgelist_attrs_file_json(thread, "dummy.edgelist.json.out", import_id_from_file, vertex_attribute, edge_attribute, &edgelist);
 
-    int ecount;
-    jgrapht_capi_graph_edges_count(thread, g, &ecount);
-    assert(ecount == 18);
+    int size;
+    jgrapht_capi_set_size(thread, edgelist, &size);
+    assert(size == 2);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    jgrapht_capi_handles_destroy(thread, edgelist);
+    jgrapht_capi_handles_destroy(thread, attr_store);
 
+    // test json with no attributes
+    jgrapht_capi_import_edgelist_noattrs_file_json(thread, "dummy.edgelist.json.out", import_id_from_file, &edgelist);
+    jgrapht_capi_list_size(thread, edgelist, &size);
+    assert(size == 2);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    jgrapht_capi_handles_destroy(thread, edgelist);
+
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
     jgrapht_capi_handles_destroy(thread, g);
 
     if (graal_detach_thread(thread) != 0) {
