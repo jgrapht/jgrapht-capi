@@ -149,6 +149,7 @@ set(
     "test_independent.c"
     "test_multi_shortestpaths.c"
     "test_json_edgelist.c"
+    "test_gexf_edgelist.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
