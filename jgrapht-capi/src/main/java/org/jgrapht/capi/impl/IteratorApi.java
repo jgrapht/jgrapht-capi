@@ -26,6 +26,7 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
@@ -48,6 +49,24 @@ public class IteratorApi {
 		Iterator<Double> it = globalHandles.get(itHandle);
 		if (res.isNonNull()) {
 			res.write(it.next());
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "it_next_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int iteratorNextEdgeTriple(IsolateThread thread, ObjectHandle itHandle, CIntPointer source,
+			CIntPointer target, CDoublePointer weight) {
+		Iterator<Triple<Integer, Integer, Double>> it = globalHandles.get(itHandle);
+		Triple<Integer, Integer, Double> triple = it.next();
+		if (source.isNonNull()) {
+			source.write(triple.getFirst());
+		}
+		if (target.isNonNull()) {
+			target.write(triple.getSecond());
+		}
+		if (weight.isNonNull()) {
+			weight.write(triple.getThird());
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}

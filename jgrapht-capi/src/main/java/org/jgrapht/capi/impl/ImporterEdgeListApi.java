@@ -20,7 +20,7 @@ package org.jgrapht.capi.impl;
 import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +32,7 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.ImportIdFunctionPointer;
@@ -61,7 +62,7 @@ public class ImporterEdgeListApi {
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
 	// ------------------------- JSON ---------------------------------
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_noattrs_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromJsonFile(IsolateThread thread, CCharPointer filename,
@@ -103,15 +104,15 @@ public class ImporterEdgeListApi {
 	public static int importEdgelistWithAttrsFromJsonFile(IsolateThread thread, CCharPointer filename,
 			ImportIdFunctionPointer importIdFunctionPointer, NotifyAttributeFunctionPointer vertexAttributeFunction,
 			NotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
-		Map<Triple<Integer, Integer, Double>, Integer> edgelistWithIds = new LinkedHashMap<>();
+		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
 		JSONEventDrivenImporter importer = new JSONEventDrivenImporter();
 
-		setupImporterWithEdgeListWithIds(importer, edgelistWithIds, importIdFunctionPointer, vertexAttributeFunction,
+		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
 				edgeAttributeFunction, StringEscapeUtils.UNESCAPE_JSON);
 
 		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
 		if (res.isNonNull()) {
-			res.write(globalHandles.create(edgelistWithIds.keySet()));
+			res.write(globalHandles.create(edgelist));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -121,9 +122,9 @@ public class ImporterEdgeListApi {
 	public static int importEdgelistWithAttrsFromJsonString(IsolateThread thread, CCharPointer input,
 			ImportIdFunctionPointer importIdFunctionPointer, NotifyAttributeFunctionPointer vertexAttributeFunction,
 			NotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
-		Map<Triple<Integer, Integer, Double>, Integer> edgelistWithIds = new LinkedHashMap<>();
+		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
 		JSONEventDrivenImporter importer = new JSONEventDrivenImporter();
-		setupImporterWithEdgeListWithIds(importer, edgelistWithIds, importIdFunctionPointer, vertexAttributeFunction,
+		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
 				edgeAttributeFunction, StringEscapeUtils.UNESCAPE_JSON);
 
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
@@ -131,7 +132,7 @@ public class ImporterEdgeListApi {
 			importer.importInput(reader);
 		}
 		if (res.isNonNull()) {
-			res.write(globalHandles.create(edgelistWithIds.keySet()));
+			res.write(globalHandles.create(edgelist));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -155,7 +156,7 @@ public class ImporterEdgeListApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_noattrs_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGexfString(IsolateThread thread, CCharPointer input,
@@ -163,7 +164,7 @@ public class ImporterEdgeListApi {
 		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
 		SimpleGEXFEventDrivenImporter importer = new SimpleGEXFEventDrivenImporter();
 		importer.setSchemaValidation(validate_schema);
-		
+
 		setupImporterWithEdgeList(importer, edgelist, importIdFunctionPointer);
 
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
@@ -176,22 +177,23 @@ public class ImporterEdgeListApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_attrs_file_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGexfFile(IsolateThread thread, CCharPointer filename,
-			ImportIdFunctionPointer importIdFunctionPointer, boolean validate_schema, NotifyAttributeFunctionPointer vertexAttributeFunction,
+			ImportIdFunctionPointer importIdFunctionPointer, boolean validate_schema,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
 			NotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
-		Map<Triple<Integer, Integer, Double>, Integer> edgelistWithIds = new LinkedHashMap<>();
+		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
 		SimpleGEXFEventDrivenImporter importer = new SimpleGEXFEventDrivenImporter();
 		importer.setSchemaValidation(validate_schema);
 
-		setupImporterWithEdgeListWithIds(importer, edgelistWithIds, importIdFunctionPointer, vertexAttributeFunction,
+		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
 				edgeAttributeFunction, StringEscapeUtils.UNESCAPE_JSON);
 
 		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
 		if (res.isNonNull()) {
-			res.write(globalHandles.create(edgelistWithIds.keySet()));
+			res.write(globalHandles.create(edgelist));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -199,13 +201,14 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_attrs_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGexfString(IsolateThread thread, CCharPointer input,
-			ImportIdFunctionPointer importIdFunctionPointer, boolean validate_schema, NotifyAttributeFunctionPointer vertexAttributeFunction,
+			ImportIdFunctionPointer importIdFunctionPointer, boolean validate_schema,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
 			NotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
-		Map<Triple<Integer, Integer, Double>, Integer> edgelistWithIds = new LinkedHashMap<>();
+		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
 		SimpleGEXFEventDrivenImporter importer = new SimpleGEXFEventDrivenImporter();
 		importer.setSchemaValidation(validate_schema);
-		
-		setupImporterWithEdgeListWithIds(importer, edgelistWithIds, importIdFunctionPointer, vertexAttributeFunction,
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
 				edgeAttributeFunction, StringEscapeUtils.UNESCAPE_JSON);
 
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
@@ -213,13 +216,13 @@ public class ImporterEdgeListApi {
 			importer.importInput(reader);
 		}
 		if (res.isNonNull()) {
-			res.write(globalHandles.create(edgelistWithIds.keySet()));
+			res.write(globalHandles.create(edgelist));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	// ---------------------- utils -----------------------------------
-	
+
 	private static int vertexToInteger(ImportIdFunctionPointer importIdFunctionPointer, String vertex) {
 		CCharPointerHolder sourceHolder = StringUtils.toCStringInUtf8(vertex);
 		return importIdFunctionPointer.invoke(sourceHolder.get());
@@ -241,20 +244,26 @@ public class ImporterEdgeListApi {
 
 	private static void setupImporterWithEdgeListWithIds(
 			BaseEventDrivenImporter<String, Triple<String, String, Double>> importer,
-			Map<Triple<Integer, Integer, Double>, Integer> edgelistWithIds,
-			ImportIdFunctionPointer importIdFunctionPointer, NotifyAttributeFunctionPointer vertexAttributeFunction,
+			List<Triple<Integer, Integer, Double>> edgelist, ImportIdFunctionPointer importIdFunctionPointer,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
 			NotifyAttributeFunctionPointer edgeAttributeFunction, CharSequenceTranslator unescapeTranslator) {
 		if (importIdFunctionPointer.isNull()) {
 			throw new IllegalArgumentException("Need function to convert strings vertex ids to integers");
 		}
 		int[] count = new int[1];
 
+		Map<Triple<String, String, Double>, Integer> edgelistWithIds = new IdentityHashMap<>();
+
 		importer.addEdgeConsumer(e -> {
 			int sourceId = vertexToInteger(importIdFunctionPointer, e.getFirst());
 			int targetId = vertexToInteger(importIdFunctionPointer, e.getSecond());
 			Double weight = e.getThird();
+			if (weight == null) {
+				weight = Graph.DEFAULT_EDGE_WEIGHT;
+			}
 			int id = count[0]++;
-			edgelistWithIds.put(Triple.of(sourceId, targetId, weight), id);
+			edgelist.add(Triple.of(sourceId, targetId, weight));
+			edgelistWithIds.put(e, id);
 		});
 
 		if (vertexAttributeFunction.isNonNull()) {
@@ -276,7 +285,7 @@ public class ImporterEdgeListApi {
 				Triple<String, String, Double> edgeTriple = p.getFirst();
 
 				// lookup edge id (just the order that it was added in the list)
-				int edge = edgelistWithIds.get(edgeTriple);
+				int edgeIndex = edgelistWithIds.get(edgeTriple);
 
 				String key = p.getSecond();
 				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(key);
@@ -285,7 +294,7 @@ public class ImporterEdgeListApi {
 					value = unescapeTranslator.translate(value);
 				}
 				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
-				edgeAttributeFunction.invoke(edge, keyHolder.get(), valueHolder.get());
+				edgeAttributeFunction.invoke(edgeIndex, keyHolder.get(), valueHolder.get());
 			});
 		}
 	}
