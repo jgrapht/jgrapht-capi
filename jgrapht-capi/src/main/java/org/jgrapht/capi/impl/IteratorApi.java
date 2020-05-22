@@ -26,6 +26,7 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
@@ -66,7 +67,11 @@ public class IteratorApi {
 			target.write(triple.getSecond());
 		}
 		if (weight.isNonNull()) {
-			weight.write(triple.getThird());
+			Double edgeWeight = triple.getThird();
+			if (edgeWeight == null) { 
+				edgeWeight = Graph.DEFAULT_EDGE_WEIGHT;
+			}
+			weight.write(edgeWeight);
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
