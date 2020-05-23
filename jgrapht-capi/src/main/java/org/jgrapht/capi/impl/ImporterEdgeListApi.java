@@ -36,11 +36,14 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.ImportIdFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.ImporterExporterCSVFormat;
 import org.jgrapht.capi.JGraphTContext.NotifyAttributeFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.StringUtils;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.nio.BaseEventDrivenImporter;
+import org.jgrapht.nio.csv.CSVEventDrivenImporter;
+import org.jgrapht.nio.csv.CSVFormat;
 import org.jgrapht.nio.gexf.SimpleGEXFEventDrivenImporter;
 import org.jgrapht.nio.json.JSONEventDrivenImporter;
 
@@ -61,9 +64,6 @@ public class ImporterEdgeListApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	
-	
-	
 	// ------------------------- JSON ---------------------------------
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
@@ -129,6 +129,164 @@ public class ImporterEdgeListApi {
 		JSONEventDrivenImporter importer = new JSONEventDrivenImporter();
 		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
 				edgeAttributeFunction, StringEscapeUtils.UNESCAPE_JSON);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	// ------------------------- CSV ---------------------------------
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_edgelist_noattrs_file_csv", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithNoAttrsFromCsvFile(IsolateThread thread, CCharPointer filename,
+			ImportIdFunctionPointer importIdFunctionPointer, ImporterExporterCSVFormat format,
+			boolean import_edge_weights, boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge,
+			WordPointer res) {
+		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+
+		CSVFormat actualFormat = null;
+		switch (format) {
+		case CSV_FORMAT_ADJACENCY_LIST:
+			actualFormat = CSVFormat.ADJACENCY_LIST;
+			break;
+		case CSV_FORMAT_EDGE_LIST:
+			actualFormat = CSVFormat.EDGE_LIST;
+			break;
+		default:
+			actualFormat = CSVFormat.MATRIX;
+			break;
+		}
+
+		CSVEventDrivenImporter importer = new CSVEventDrivenImporter(actualFormat);
+
+		importer.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, import_edge_weights);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
+
+		setupImporterWithEdgeList(importer, edgelist, importIdFunctionPointer);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_edgelist_noattrs_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithNoAttrsFromCsvString(IsolateThread thread, CCharPointer input,
+			ImportIdFunctionPointer importIdFunctionPointer, ImporterExporterCSVFormat format,
+			boolean import_edge_weights, boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge,
+			WordPointer res) {
+		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+
+		CSVFormat actualFormat = null;
+		switch (format) {
+		case CSV_FORMAT_ADJACENCY_LIST:
+			actualFormat = CSVFormat.ADJACENCY_LIST;
+			break;
+		case CSV_FORMAT_EDGE_LIST:
+			actualFormat = CSVFormat.EDGE_LIST;
+			break;
+		default:
+			actualFormat = CSVFormat.MATRIX;
+			break;
+		}
+
+		CSVEventDrivenImporter importer = new CSVEventDrivenImporter(actualFormat);
+
+		importer.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, import_edge_weights);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
+
+		setupImporterWithEdgeList(importer, edgelist, importIdFunctionPointer);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_edgelist_attrs_file_csv", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromCsvFile(IsolateThread thread, CCharPointer filename,
+			ImportIdFunctionPointer importIdFunctionPointer, NotifyAttributeFunctionPointer vertexAttributeFunction,
+			NotifyAttributeFunctionPointer edgeAttributeFunction, ImporterExporterCSVFormat format,
+			boolean import_edge_weights, boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge,
+			WordPointer res) {
+		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+
+		CSVFormat actualFormat = null;
+		switch (format) {
+		case CSV_FORMAT_ADJACENCY_LIST:
+			actualFormat = CSVFormat.ADJACENCY_LIST;
+			break;
+		case CSV_FORMAT_EDGE_LIST:
+			actualFormat = CSVFormat.EDGE_LIST;
+			break;
+		default:
+			actualFormat = CSVFormat.MATRIX;
+			break;
+		}
+
+		CSVEventDrivenImporter importer = new CSVEventDrivenImporter(actualFormat);
+
+		importer.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, import_edge_weights);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
+				edgeAttributeFunction, null);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_edgelist_attrs_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromCsvString(IsolateThread thread, CCharPointer input,
+			ImportIdFunctionPointer importIdFunctionPointer, NotifyAttributeFunctionPointer vertexAttributeFunction,
+			NotifyAttributeFunctionPointer edgeAttributeFunction, ImporterExporterCSVFormat format,
+			boolean import_edge_weights, boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge,
+			WordPointer res) {
+		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+
+		CSVFormat actualFormat = null;
+		switch (format) {
+		case CSV_FORMAT_ADJACENCY_LIST:
+			actualFormat = CSVFormat.ADJACENCY_LIST;
+			break;
+		case CSV_FORMAT_EDGE_LIST:
+			actualFormat = CSVFormat.EDGE_LIST;
+			break;
+		default:
+			actualFormat = CSVFormat.MATRIX;
+			break;
+		}
+
+		CSVEventDrivenImporter importer = new CSVEventDrivenImporter(actualFormat);
+
+		importer.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, import_edge_weights);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
+				edgeAttributeFunction, null);
 
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
