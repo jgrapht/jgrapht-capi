@@ -62,8 +62,6 @@ public class ImporterApi {
 		CustomDIMACSImporter<Integer, Integer> importer = new CustomDIMACSImporter<>();
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
-		} else {
-			importer.setVertexFactory(x -> Integer.valueOf(x));
 		}
 		importer.importGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
 
@@ -79,8 +77,6 @@ public class ImporterApi {
 		CustomDIMACSImporter<Integer, Integer> importer = new CustomDIMACSImporter<>();
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
-		} else {
-			importer.setVertexFactory(x -> Integer.valueOf(x));
 		}
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
@@ -100,8 +96,6 @@ public class ImporterApi {
 		GmlImporter<Integer, Integer> importer = new GmlImporter<Integer, Integer>();
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
-		} else {
-			importer.setVertexFactory(x -> Integer.valueOf(x));
 		}
 
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
@@ -122,8 +116,6 @@ public class ImporterApi {
 		GmlImporter<Integer, Integer> importer = new GmlImporter<Integer, Integer>();
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
-		} else {
-			importer.setVertexFactory(x -> Integer.valueOf(x));
 		}
 
 		setupImportAttributes(importer, vertexAttributeFunction, edgeAttributeFunction, null);
