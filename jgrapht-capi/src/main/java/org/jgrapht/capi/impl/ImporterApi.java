@@ -32,6 +32,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.ImportIdFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.ImporterExporterCSVFormat;
+import org.jgrapht.capi.JGraphTContext.IntegerToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.NotifyAttributeFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.StringUtils;
@@ -55,11 +56,13 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			boolean preserveIdsFromInput) {
+			IntegerToIntegerFunctionPointer importIdFunctionPointer) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		CustomDIMACSImporter<Integer, Integer> importer = new CustomDIMACSImporter<>();
-		if (preserveIdsFromInput) {
+		if (importIdFunctionPointer.isNonNull()) {
+			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
+		} else {
 			importer.setVertexFactory(x -> Integer.valueOf(x));
 		}
 		importer.importGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
@@ -70,11 +73,13 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
-			boolean preserveIdsFromInput) {
+			IntegerToIntegerFunctionPointer importIdFunctionPointer) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		CustomDIMACSImporter<Integer, Integer> importer = new CustomDIMACSImporter<>();
-		if (preserveIdsFromInput) {
+		if (importIdFunctionPointer.isNonNull()) {
+			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
+		} else {
 			importer.setVertexFactory(x -> Integer.valueOf(x));
 		}
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
@@ -87,12 +92,15 @@ public class ImporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "import_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			boolean preserveIdsFromInput, NotifyAttributeFunctionPointer vertexAttributeFunction,
+			IntegerToIntegerFunctionPointer importIdFunctionPointer,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
 			NotifyAttributeFunctionPointer edgeAttributeFunction) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		GmlImporter<Integer, Integer> importer = new GmlImporter<Integer, Integer>();
-		if (preserveIdsFromInput) {
+		if (importIdFunctionPointer.isNonNull()) {
+			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
+		} else {
 			importer.setVertexFactory(x -> Integer.valueOf(x));
 		}
 
@@ -106,12 +114,15 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
-			boolean preserveIdsFromInput, NotifyAttributeFunctionPointer vertexAttributeFunction,
+			IntegerToIntegerFunctionPointer importIdFunctionPointer,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
 			NotifyAttributeFunctionPointer edgeAttributeFunction) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		GmlImporter<Integer, Integer> importer = new GmlImporter<Integer, Integer>();
-		if (preserveIdsFromInput) {
+		if (importIdFunctionPointer.isNonNull()) {
+			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
+		} else {
 			importer.setVertexFactory(x -> Integer.valueOf(x));
 		}
 

@@ -61,6 +61,9 @@ public class ImporterEdgeListApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
+	
+	
+	
 	// ------------------------- JSON ---------------------------------
 
 	@CEntryPoint(name = Constants.LIB_PREFIX

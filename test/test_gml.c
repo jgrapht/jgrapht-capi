@@ -80,6 +80,10 @@ void edge_attribute(int e, char *key, char *value) {
     }
 }
 
+int preserveid(int x) { 
+    return x;
+}
+
 int main() {
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;
@@ -124,7 +128,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test gml with extra attributes
-    jgrapht_capi_import_file_gml(thread, g, "dummy.gml.out", 1, vertex_attribute, edge_attribute);
+    jgrapht_capi_import_file_gml(thread, g, "dummy.gml.out", preserveid, vertex_attribute, edge_attribute);
 
     int ecount;
     jgrapht_capi_graph_edges_count(thread, g, &ecount);

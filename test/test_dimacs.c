@@ -8,6 +8,10 @@
 
 char *expected="c\nc SOURCE: Generated using the JGraphT library\nc\np edge 4 4\ne 1 2\ne 2 3\ne 3 4\ne 4 1\n";
 
+int preserveid(int x) { 
+    return x;
+}
+
 int main() {
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;
@@ -43,7 +47,7 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_import_file_dimacs(thread, g, "dummy.dimacs.out", 1);
+    jgrapht_capi_import_file_dimacs(thread, g, "dummy.dimacs.out", preserveid);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     assert(jgrapht_capi_error_get_errno(thread) == 0);
