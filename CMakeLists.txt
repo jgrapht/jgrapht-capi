@@ -153,6 +153,7 @@ set(
     "test_csv_edgelist.c"
     "test_gml_edgelist.c"
     "test_graphml_simple_edgelist.c"
+    "test_graphml_edgelist.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
