@@ -154,6 +154,8 @@ set(
     "test_gml_edgelist.c"
     "test_graphml_simple_edgelist.c"
     "test_graphml_edgelist.c"
+    "test_dot_edgelist.c"
+    "test_graph6_edgelist.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
