@@ -8,8 +8,8 @@
 
 char *expected= "G?qa`_";
 
-int import_id(const char* id) { 
-    return atoi(id);
+int import_id(int id) { 
+    return id;
 }
 
 void write_to_file(char* filename, char *str) { 
