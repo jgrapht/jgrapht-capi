@@ -46,6 +46,7 @@ import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.csv.CSVEventDrivenImporter;
 import org.jgrapht.nio.csv.CSVFormat;
+import org.jgrapht.nio.dimacs.DIMACSEventDrivenImporter;
 import org.jgrapht.nio.dot.DOTEventDrivenImporter;
 import org.jgrapht.nio.gexf.SimpleGEXFEventDrivenImporter;
 import org.jgrapht.nio.gml.GmlEventDrivenImporter;
@@ -70,6 +71,90 @@ import org.jgrapht.nio.json.JSONEventDrivenImporter;
 public class ImporterEdgeListApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
+
+	// ------------------------- DIMACS ------------------------------
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_edgelist_noattrs_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithNoAttrsFromDimacsFile(IsolateThread thread, CCharPointer filename,
+			IntegerToIntegerFunctionPointer importIdFunctionPointer, WordPointer res) {
+		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+		DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter().renumberVertices(false)
+				.zeroBasedNumbering(true);
+
+		setupImporterWithEdgeList(importer, edgelist, importIdFunctionPointer);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_edgelist_noattrs_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithNoAttrsFromDimacsString(IsolateThread thread, CCharPointer input,
+			IntegerToIntegerFunctionPointer importIdFunctionPointer, WordPointer res) {
+		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+		DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter().renumberVertices(false)
+				.zeroBasedNumbering(true);
+
+		setupImporterWithEdgeList(importer, edgelist, importIdFunctionPointer);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_edgelist_attrs_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromDimacsFile(IsolateThread thread, CCharPointer filename,
+			IntegerToIntegerFunctionPointer importIdFunctionPointer,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
+			NotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+		DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter().renumberVertices(false)
+				.zeroBasedNumbering(true);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
+				edgeAttributeFunction, null);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "import_edgelist_attrs_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromDimacsString(IsolateThread thread, CCharPointer input,
+			IntegerToIntegerFunctionPointer importIdFunctionPointer,
+			NotifyAttributeFunctionPointer vertexAttributeFunction,
+			NotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+		DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter().renumberVertices(false)
+				.zeroBasedNumbering(true);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
+				edgeAttributeFunction, null);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	// ------------------------- GML ---------------------------------
 
