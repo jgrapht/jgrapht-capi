@@ -17,6 +17,9 @@
  */
 package org.jgrapht.capi.impl;
 
+import java.util.Comparator;
+import java.util.Random;
+
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
@@ -25,12 +28,16 @@ import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
+import org.jgrapht.alg.drawing.CircularLayoutAlgorithm2D;
+import org.jgrapht.alg.drawing.FRLayoutAlgorithm2D;
+import org.jgrapht.alg.drawing.IndexedFRLayoutAlgorithm2D;
 import org.jgrapht.alg.drawing.RandomLayoutAlgorithm2D;
 import org.jgrapht.alg.drawing.model.Box2D;
 import org.jgrapht.alg.drawing.model.LayoutModel2D;
 import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
 import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.capi.Constants;
+import org.jgrapht.capi.JGraphTContext.IIToIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
@@ -122,8 +129,44 @@ public class DrawingApi {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 		LayoutModel2D<Integer> m = globalHandles.get(model);
 
-		RandomLayoutAlgorithm2D<Integer, Integer> alg = new RandomLayoutAlgorithm2D<>(seed);
-		alg.layout(g, m);
+		new RandomLayoutAlgorithm2D<Integer, Integer>(seed).layout(g, m);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "drawing_exec_circular_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeCircularLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
+			double radius, IIToIFunctionPointer vertexComparator) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		LayoutModel2D<Integer> m = globalHandles.get(model);
+
+		Comparator<Integer> comparator = null;
+		if (vertexComparator.isNonNull()) {
+			comparator = (a, b) -> vertexComparator.invoke(a, b);
+		}
+
+		new CircularLayoutAlgorithm2D<Integer, Integer>(radius, comparator).layout(g, m);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "drawing_exec_fr_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeFRLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
+			int iterations, double normalizationFactor, long seed) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		LayoutModel2D<Integer> m = globalHandles.get(model);
+		new FRLayoutAlgorithm2D<Integer, Integer>(iterations, normalizationFactor, new Random(seed)).layout(g, m);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "drawing_exec_indexed_fr_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeIndexedFRLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
+			int iterations, double normalizationFactor, long seed, double theta, double tolerance) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		LayoutModel2D<Integer> m = globalHandles.get(model);
+		new IndexedFRLayoutAlgorithm2D<Integer, Integer>(iterations, theta, normalizationFactor, new Random(seed),
+				tolerance).layout(g, m);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 

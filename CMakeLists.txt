@@ -158,6 +158,8 @@ set(
     "test_graph6_edgelist.c"
     "test_dimacs_edgelist.c"
     "test_draw_random.c"
+    "test_draw_circular.c"
+    "test_draw_fr.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
