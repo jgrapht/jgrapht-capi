@@ -63,16 +63,8 @@ public class GraphApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	/**
-	 * Create a graph and return its handle.
-	 *
-	 * @param thread the thread isolate
-	 * @return the graph handle
-	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges, boolean weighted, WordPointer res) {
-
+	public static Graph<Integer, Integer> createGraph(boolean directed, boolean allowingSelfLoops,
+			boolean allowingMultipleEdges, boolean weighted) {
 		SafeVertexSupplier vSupplier = new SafeVertexSupplier();
 		SafeEdgeSupplier eSupplier = new SafeEdgeSupplier();
 
@@ -90,6 +82,19 @@ public class GraphApi {
 		vSupplier.setGraph(graph);
 		eSupplier.setGraph(graph);
 
+		return graph;
+	}
+
+	/**
+	 * Create a graph and return its handle.
+	 *
+	 * @param thread the thread isolate
+	 * @return the graph handle
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
+			boolean allowingMultipleEdges, boolean weighted, WordPointer res) {
+		Graph<Integer, Integer> graph = createGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
 		}

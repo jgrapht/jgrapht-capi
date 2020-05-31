@@ -13,6 +13,8 @@ import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.flow.DinicMFImpl;
 import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
+import org.jgrapht.alg.flow.GusfieldEquivalentFlowTree;
+import org.jgrapht.alg.flow.GusfieldGomoryHuCutTree;
 import org.jgrapht.alg.flow.MaximumFlowAlgorithmBase;
 import org.jgrapht.alg.flow.PushRelabelMFImpl;
 import org.jgrapht.alg.flow.mincost.CapacityScalingMinimumCostFlow;
@@ -23,14 +25,16 @@ import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.IntegerToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
 public class FlowApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
 	private static int doRunMaxFlow(IsolateThread thread, ObjectHandle graphHandle,
-			Function<Graph<Integer, Integer>, MaximumFlowAlgorithmBase<Integer, Integer>> algProvider, int source, int sink,
-			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
+			Function<Graph<Integer, Integer>, MaximumFlowAlgorithmBase<Integer, Integer>> algProvider, int source,
+			int sink, CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 		MaximumFlowAlgorithmBase<Integer, Integer> alg = algProvider.apply(g);
 		MaximumFlow<Integer> maximumFlow = alg.getMaximumFlow(source, sink);
@@ -109,6 +113,122 @@ public class FlowApi {
 		}
 		if (dualSolutionRes.isNonNull()) {
 			dualSolutionRes.write(globalHandles.create(dualMap));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "gomoryhu_exec_gusfield", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeGomoryHuGusfield(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		GusfieldGomoryHuCutTree<Integer, Integer> alg = new GusfieldGomoryHuCutTree<>(g);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(alg));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "gomoryhu_min_st_cut", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int gomoryHuSTCut(IsolateThread thread, ObjectHandle gomoryHu, int source, int sink,
+			CDoublePointer valueRes, WordPointer cutSourcePartitionRes) {
+		GusfieldGomoryHuCutTree<Integer, Integer> alg = globalHandles.get(gomoryHu);
+		double cutValue = alg.calculateMinCut(source, sink);
+		Set<Integer> sourcePartition = alg.getSourcePartition();
+		if (valueRes.isNonNull()) {
+			valueRes.write(cutValue);
+		}
+		if (cutSourcePartitionRes.isNonNull()) {
+			cutSourcePartitionRes.write(globalHandles.create(sourcePartition));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "gomoryhu_min_cut", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int gomoryHuMinCut(IsolateThread thread, ObjectHandle gomoryHu, CDoublePointer valueRes,
+			WordPointer cutSourcePartitionRes) {
+		GusfieldGomoryHuCutTree<Integer, Integer> alg = globalHandles.get(gomoryHu);
+		double cutValue = alg.calculateMinCut();
+		Set<Integer> sourcePartition = alg.getSourcePartition();
+		if (valueRes.isNonNull()) {
+			valueRes.write(cutValue);
+		}
+		if (cutSourcePartitionRes.isNonNull()) {
+			cutSourcePartitionRes.write(globalHandles.create(sourcePartition));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "gomoryhu_tree", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int gomoryHuTree(IsolateThread thread, ObjectHandle gomoryHu, WordPointer treeRes) {
+		GusfieldGomoryHuCutTree<Integer, Integer> alg = globalHandles.get(gomoryHu);
+		SimpleWeightedGraph<Integer, DefaultWeightedEdge> origTree = alg.getGomoryHuTree();
+
+		// convert to integer vertices/edges
+		Graph<Integer, Integer> tree = GraphApi.createGraph(false, false, false, true);
+		for (Integer v : origTree.vertexSet()) {
+			tree.addVertex(v);
+		}
+		for (DefaultWeightedEdge e : origTree.edgeSet()) {
+			int s = origTree.getEdgeSource(e);
+			int t = origTree.getEdgeTarget(e);
+			double w = origTree.getEdgeWeight(e);
+			tree.setEdgeWeight(tree.addEdge(s, t), w);
+		}
+
+		// write result
+		if (treeRes.isNonNull()) {
+			treeRes.write(globalHandles.create(tree));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "equivalentflowtree_exec_gusfield", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeEFTGusfield(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		GusfieldEquivalentFlowTree<Integer, Integer> alg = new GusfieldEquivalentFlowTree<>(g);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(alg));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "equivalentflowtree_max_st_flow", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int eftMaxSTFlow(IsolateThread thread, ObjectHandle eft, int source, int sink,
+			CDoublePointer valueRes) {
+		GusfieldEquivalentFlowTree<Integer, Integer> alg = globalHandles.get(eft);
+		double flowValue = alg.getMaximumFlowValue(source, sink);
+		if (valueRes.isNonNull()) {
+			valueRes.write(flowValue);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "equivalentflowtree_tree", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int eftGetTree(IsolateThread thread, ObjectHandle eft, 
+			 WordPointer treeRes) {
+		GusfieldEquivalentFlowTree<Integer, Integer> alg = globalHandles.get(eft);
+		SimpleWeightedGraph<Integer, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
+
+		// convert to integer vertices/edges
+		Graph<Integer, Integer> tree = GraphApi.createGraph(false, false, false, true);
+		for (Integer v : origTree.vertexSet()) {
+			tree.addVertex(v);
+		}
+		for (DefaultWeightedEdge e : origTree.edgeSet()) {
+			int s = origTree.getEdgeSource(e);
+			int t = origTree.getEdgeTarget(e);
+			double w = origTree.getEdgeWeight(e);
+			tree.setEdgeWeight(tree.addEdge(s, t), w);
+		}
+
+		// write result
+		if (treeRes.isNonNull()) {
+			treeRes.write(globalHandles.create(tree));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
