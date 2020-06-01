@@ -162,6 +162,7 @@ set(
     "test_draw_fr.c"
     "test_gomoryhu.c"
     "test_equivalentflow.c"
+    "test_oddmincutset.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
