@@ -38,7 +38,7 @@ int main() {
     jgrapht_capi_graph_add_edge(thread, g, 3, 0, NULL);
 
     // write file
-    jgrapht_capi_export_file_csv(thread, g, "dummy.csv.out", CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0);
+    jgrapht_capi_export_file_csv(thread, g, "dummy.csv.out", CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0, NULL);
     jgrapht_capi_handles_destroy(thread, g);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
@@ -58,7 +58,7 @@ int main() {
 
     // test output to string
     void *out;
-    jgrapht_capi_export_string_csv(thread, g, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0, &out);
+    jgrapht_capi_export_string_csv(thread, g, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0, NULL, &out);
     char *str;
     jgrapht_capi_handles_get_ccharpointer(thread, out, &str);
     assert(strcmp(str, expected) == 0);

@@ -102,7 +102,7 @@ int main() {
     jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 2, "label", "κόμβος 2");
     jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 0, "cost", 100.5);
 
-    jgrapht_capi_export_file_json(thread, g, "dummy2.json.out", attr_store, NULL);
+    jgrapht_capi_export_file_json(thread, g, "dummy2.json.out", attr_store, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     jgrapht_capi_handles_destroy(thread, attr_store);
     assert(jgrapht_capi_error_get_errno(thread) == 0);

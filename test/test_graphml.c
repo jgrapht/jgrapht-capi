@@ -66,7 +66,7 @@ int main() {
     jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 1, "cost", 6.5);
     jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 2, "cost", 9.2);
 
-    jgrapht_capi_export_file_graphml(thread, g, "dummy.graphml.out", attrs_registry, NULL, attr_store, 0, 0, 0);
+    jgrapht_capi_export_file_graphml(thread, g, "dummy.graphml.out", attrs_registry, NULL, attr_store, NULL, 0, 0, 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_handles_destroy(thread, attr_store);
