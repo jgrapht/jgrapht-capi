@@ -41,7 +41,7 @@ int main() {
 
     void *mincut;
     double weight;
-    jgrapht_capi_cut_exec_stoer_wagner(thread, g, &weight, &mincut);
+    jgrapht_capi_cut_mincut_exec_stoer_wagner(thread, g, &weight, &mincut);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     assert(weight == 3.0);
 

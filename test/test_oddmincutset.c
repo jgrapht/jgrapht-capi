@@ -49,7 +49,7 @@ int main() {
     void *cutSourcePartition; 
     double cut_value;
 
-    jgrapht_capi_oddmincutset_exec_padberg_rao(thread, g, odd_vertices, 1, &cut_value, &cutSourcePartition);
+    jgrapht_capi_cut_oddmincutset_exec_padberg_rao(thread, g, odd_vertices, 1, &cut_value, &cutSourcePartition);
     assert(cut_value == 30.0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
