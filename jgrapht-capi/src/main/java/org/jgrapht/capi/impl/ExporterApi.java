@@ -86,7 +86,8 @@ public class ExporterApi {
 			actualFormat = DIMACSFormat.SHORTEST_PATH;
 			break;
 		}
-		DIMACSExporter<Integer, Integer> exporter = new DIMACSExporter<>(createIdProviderDimacs(vertexIdStore), actualFormat);
+		DIMACSExporter<Integer, Integer> exporter = new DIMACSExporter<>(createIdProviderDimacs(vertexIdStore),
+				actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
@@ -111,7 +112,8 @@ public class ExporterApi {
 			break;
 		}
 
-		DIMACSExporter<Integer, Integer> exporter = new DIMACSExporter<>(createIdProviderDimacs(vertexIdStore), actualFormat);
+		DIMACSExporter<Integer, Integer> exporter = new DIMACSExporter<>(createIdProviderDimacs(vertexIdStore),
+				actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 
 		CCharPointerHolder cString = exportToCString(g, exporter);
@@ -327,11 +329,12 @@ public class ExporterApi {
 			+ "export_file_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportGexfFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
-			ObjectHandle vertexIdStore, ObjectHandle edgeIdStore, boolean exportEdgeWeights, boolean exportEdgeLabels, boolean exportEdgeTypes,
-			boolean exportMeta) {
+			ObjectHandle vertexIdStore, ObjectHandle edgeIdStore, boolean exportEdgeWeights, boolean exportEdgeLabels,
+			boolean exportEdgeTypes, boolean exportMeta) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		GEXFExporter<Integer, Integer> exporter = new GEXFExporter<>(createIdProvider(vertexIdStore), createIdProvider(edgeIdStore));
+		GEXFExporter<Integer, Integer> exporter = new GEXFExporter<>(createIdProvider(vertexIdStore),
+				createIdProvider(edgeIdStore));
 
 		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_LABELS, exportEdgeLabels);
@@ -344,7 +347,7 @@ public class ExporterApi {
 		if (aRegistry != null) {
 			for (RegisteredAttribute ra : aRegistry) {
 				AttributeCategory aCategory = AttributeCategory.valueOf(ra.getCategory().toUpperCase());
-				GEXFAttributeType aType = ra.getType() == null ? null
+				GEXFAttributeType aType = ra.getType() == null ? GEXFAttributeType.STRING
 						: GEXFAttributeType.valueOf(ra.getType().toUpperCase());
 				exporter.registerAttribute(ra.getName(), aCategory, aType, ra.getDefaultValue());
 			}
@@ -357,12 +360,13 @@ public class ExporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportGexfString(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle attributesRegistry,
-			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore, ObjectHandle vertexIdStore, ObjectHandle edgeIdStore,
-			boolean exportEdgeWeights, boolean exportEdgeLabels, boolean exportEdgeTypes, boolean exportMeta,
-			WordPointer res) {
+			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore, ObjectHandle vertexIdStore,
+			ObjectHandle edgeIdStore, boolean exportEdgeWeights, boolean exportEdgeLabels, boolean exportEdgeTypes,
+			boolean exportMeta, WordPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		GEXFExporter<Integer, Integer> exporter = new GEXFExporter<>(createIdProvider(vertexIdStore), createIdProvider(edgeIdStore));
+		GEXFExporter<Integer, Integer> exporter = new GEXFExporter<>(createIdProvider(vertexIdStore),
+				createIdProvider(edgeIdStore));
 
 		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exporter.setParameter(GEXFExporter.Parameter.EXPORT_EDGE_LABELS, exportEdgeLabels);
@@ -375,7 +379,7 @@ public class ExporterApi {
 		if (aRegistry != null) {
 			for (RegisteredAttribute ra : aRegistry) {
 				AttributeCategory aCategory = AttributeCategory.valueOf(ra.getCategory().toUpperCase());
-				GEXFAttributeType aType = ra.getType() == null ? null
+				GEXFAttributeType aType = ra.getType() == null ? GEXFAttributeType.STRING
 						: GEXFAttributeType.valueOf(ra.getType().toUpperCase());
 				exporter.registerAttribute(ra.getName(), aCategory, aType, ra.getDefaultValue());
 			}
