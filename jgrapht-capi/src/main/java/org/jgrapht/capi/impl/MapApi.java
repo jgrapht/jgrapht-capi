@@ -187,6 +187,20 @@ public class MapApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_int_string_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapIntegerStringRemove(IsolateThread thread, ObjectHandle mapHandle, int key, WordPointer res) {
+		Map<Integer, String> map = globalHandles.get(mapHandle);
+		String value = map.remove(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			CCharPointerHolder cString = StringUtils.toCStringInUtf8(value);
+			res.write(globalHandles.create(cString));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_clear", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int clearMap(IsolateThread thread, ObjectHandle mapHandle) {
