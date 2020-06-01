@@ -25,11 +25,14 @@ import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
+import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
+import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.StringUtils;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class MapApi {
@@ -96,6 +99,14 @@ public class MapApi {
 		map.put(key, value);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_int_string_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapIntegerStringPut(IsolateThread thread, ObjectHandle mapHandle, int key, CCharPointer valuePtr) {
+		Map<Integer, String> map = globalHandles.get(mapHandle);
+		String value = StringUtils.toJavaStringFromUtf8(valuePtr);
+		map.put(key, value);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_int_double_get", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -124,6 +135,20 @@ public class MapApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_int_string_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapIntegerStringGet(IsolateThread thread, ObjectHandle mapHandle, int key, WordPointer res) {
+		Map<Integer, String> map = globalHandles.get(mapHandle);
+		String value = map.get(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		CCharPointerHolder cString = StringUtils.toCStringInUtf8(value);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(cString));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_int_contains_key", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int mapIntContains(IsolateThread thread, ObjectHandle mapHandle, int key, CIntPointer res) {

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
@@ -102,7 +103,26 @@ int main() {
 
     jgrapht_capi_handles_destroy(thread, map);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-   
+
+    // test with string as value
+    jgrapht_capi_map_linked_create(thread, &map);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    char *text = "hello world";
+    jgrapht_capi_map_int_string_put(thread, map, 1, text);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    assert(jgrapht_capi_map_size(thread, map, &map_size) == 0);
+    assert(map_size == 1);
+
+    void *val;
+    char *val_char;
+    jgrapht_capi_map_int_string_get(thread, map, 1, &val);
+    jgrapht_capi_handles_get_ccharpointer(thread, val, &val_char);
+    jgrapht_capi_handles_destroy(thread, val);
+    assert (strcmp(val_char, "hello world")==0);
+
+    jgrapht_capi_handles_destroy(thread, map);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+
     if (graal_detach_thread(thread) != 0) {
         fprintf(stderr, "graal_detach_thread error\n");
         exit(EXIT_FAILURE);
