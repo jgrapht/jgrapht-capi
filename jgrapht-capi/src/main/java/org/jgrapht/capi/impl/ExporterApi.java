@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -45,7 +44,6 @@ import org.jgrapht.capi.StringUtils;
 import org.jgrapht.capi.attributes.AttributesStore;
 import org.jgrapht.capi.attributes.RegisteredAttribute;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
-import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.BaseExporter;
 import org.jgrapht.nio.ExportException;
@@ -125,32 +123,19 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "export_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportGmlFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			boolean exportEdgeWeights, ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore,
-			ObjectHandle vertexIdStore) {
+			boolean exportEdgeWeights, boolean exportVertexLabels, boolean exportEdgeLabels,
+			ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore, ObjectHandle vertexIdStore) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		GmlExporter<Integer, Integer> exporter = new GmlExporter<>(createIdProvider(vertexIdStore));
+		
 		exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
+		exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_VERTEX_ATTRIBUTES, true);
+		exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_EDGE_ATTRIBUTES, true);
+		exporter.setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, exportVertexLabels);
+		exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS, exportEdgeLabels);
 
-		AttributesStore vStore = globalHandles.get(vertexLabelsStore);
-		if (vStore != null) {
-			exporter.setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, true);
-			exporter.setVertexAttributeProvider(v -> {
-				Map<String, Attribute> h = new HashMap<>();
-				h.put("label", vStore.getAttribute(v, "label"));
-				return h;
-			});
-		}
-
-		AttributesStore eStore = globalHandles.get(edgeLabelsStore);
-		if (eStore != null) {
-			exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS, true);
-			exporter.setEdgeAttributeProvider(e -> {
-				Map<String, Attribute> h = new HashMap<>();
-				h.put("label", eStore.getAttribute(e, "label"));
-				return h;
-			});
-		}
+		setupAttributeStores(exporter, vertexLabelsStore, edgeLabelsStore);
 
 		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
@@ -159,31 +144,19 @@ public class ExporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "export_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int exportGmlString(IsolateThread thread, ObjectHandle graphHandle, boolean exportEdgeWeights,
-			ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore, ObjectHandle vertexIdStore, WordPointer res) {
+			boolean exportVertexLabels, boolean exportEdgeLabels, ObjectHandle vertexLabelsStore,
+			ObjectHandle edgeLabelsStore, ObjectHandle vertexIdStore, WordPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		GmlExporter<Integer, Integer> exporter = new GmlExporter<>(createIdProvider(vertexIdStore));
+		
 		exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
+		exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_VERTEX_ATTRIBUTES, true);
+		exporter.setParameter(GmlExporter.Parameter.EXPORT_CUSTOM_EDGE_ATTRIBUTES, true);
+		exporter.setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, exportVertexLabels);
+		exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS, exportEdgeLabels);
 
-		AttributesStore vStore = globalHandles.get(vertexLabelsStore);
-		if (vStore != null) {
-			exporter.setParameter(GmlExporter.Parameter.EXPORT_VERTEX_LABELS, true);
-			exporter.setVertexAttributeProvider(v -> {
-				Map<String, Attribute> h = new HashMap<>();
-				h.put("label", vStore.getAttribute(v, "label"));
-				return h;
-			});
-		}
-
-		AttributesStore eStore = globalHandles.get(edgeLabelsStore);
-		if (eStore != null) {
-			exporter.setParameter(GmlExporter.Parameter.EXPORT_EDGE_LABELS, true);
-			exporter.setEdgeAttributeProvider(e -> {
-				Map<String, Attribute> h = new HashMap<>();
-				h.put("label", eStore.getAttribute(e, "label"));
-				return h;
-			});
-		}
+		setupAttributeStores(exporter, vertexLabelsStore, edgeLabelsStore);
 
 		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {

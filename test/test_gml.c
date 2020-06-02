@@ -117,7 +117,7 @@ int main() {
     jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 1, "label", "label 1");
     jgrapht_capi_attributes_store_put_string_attribute(thread, attr_store, 2, "label", "label 2");
 
-    jgrapht_capi_export_file_gml(thread, g, "dummy.gml.out", 0, attr_store, NULL, NULL);
+    jgrapht_capi_export_file_gml(thread, g, "dummy.gml.out", 0, 0, 0, attr_store, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_handles_destroy(thread, g);
@@ -136,10 +136,10 @@ int main() {
 
     // test output to string
     void *out;
-    jgrapht_capi_export_string_gml(thread, g, 0, attr_store, NULL, NULL, &out);
+    jgrapht_capi_export_string_gml(thread, g, 0, 0, 0, attr_store, NULL, NULL, &out);
     char *str;
     jgrapht_capi_handles_get_ccharpointer(thread, out, &str);
-    //printf("%s", str);
+    printf("%s", str);
     assert(strcmp(str, expected) == 0);
     jgrapht_capi_handles_destroy(thread, out);
 
