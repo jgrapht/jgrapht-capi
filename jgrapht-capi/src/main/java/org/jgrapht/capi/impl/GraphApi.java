@@ -40,15 +40,15 @@ import org.jgrapht.capi.JGraphTContext.IntegerToBooleanFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.IntegerToDoubleFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.CapiAsMaskSubgraph;
+import org.jgrapht.capi.graph.CapiAsUndirectedGraph;
+import org.jgrapht.capi.graph.CapiAsUnmodifiableGraph;
+import org.jgrapht.capi.graph.CapiAsUnweightedGraph;
+import org.jgrapht.capi.graph.CapiAsWeightedGraph;
+import org.jgrapht.capi.graph.CapiEdgeReversedGraph;
 import org.jgrapht.capi.graph.SafeEdgeSupplier;
 import org.jgrapht.capi.graph.SafeVertexSupplier;
 import org.jgrapht.graph.AsGraphUnion;
-import org.jgrapht.graph.AsUndirectedGraph;
-import org.jgrapht.graph.AsUnmodifiableGraph;
-import org.jgrapht.graph.AsUnweightedGraph;
-import org.jgrapht.graph.AsWeightedGraph;
-import org.jgrapht.graph.EdgeReversedGraph;
-import org.jgrapht.graph.MaskSubgraph;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.opt.graph.sparse.SparseIntDirectedGraph;
 import org.jgrapht.opt.graph.sparse.SparseIntDirectedWeightedGraph;
@@ -486,7 +486,7 @@ public class GraphApi {
 			+ "graph_as_undirected", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asUndirected(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
-		Graph<Integer, Integer> gOut = new AsUndirectedGraph<>(gIn);
+		Graph<Integer, Integer> gOut = new CapiAsUndirectedGraph(gIn);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -497,7 +497,7 @@ public class GraphApi {
 			+ "graph_as_unmodifiable", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asUnmodifiable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
-		Graph<Integer, Integer> gOut = new AsUnmodifiableGraph<>(gIn);
+		Graph<Integer, Integer> gOut = new CapiAsUnmodifiableGraph(gIn);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -508,7 +508,7 @@ public class GraphApi {
 			+ "graph_as_unweighted", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asUnweighted(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
-		Graph<Integer, Integer> gOut = new AsUnweightedGraph<>(gIn);
+		Graph<Integer, Integer> gOut = new CapiAsUnweightedGraph(gIn);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -519,7 +519,7 @@ public class GraphApi {
 			+ "graph_as_edgereversed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asEdgeReversed(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
-		Graph<Integer, Integer> gOut = new EdgeReversedGraph<>(gIn);
+		Graph<Integer, Integer> gOut = new CapiEdgeReversedGraph(gIn);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -541,7 +541,7 @@ public class GraphApi {
 			return 1d;
 		};
 
-		Graph<Integer, Integer> gOut = new AsWeightedGraph<>(gIn, weightFunction, cacheWeights, writeWeightsThrough);
+		Graph<Integer, Integer> gOut = new CapiAsWeightedGraph(gIn, weightFunction, cacheWeights, writeWeightsThrough);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -568,7 +568,7 @@ public class GraphApi {
 			return false;
 		};
 
-		Graph<Integer, Integer> gOut = new MaskSubgraph<>(gIn, vertexMask, edgeMask);
+		Graph<Integer, Integer> gOut = new CapiAsMaskSubgraph(gIn, vertexMask, edgeMask);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}

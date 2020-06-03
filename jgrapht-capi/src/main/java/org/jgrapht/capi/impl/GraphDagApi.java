@@ -26,6 +26,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.CapiGraphWrapper;
 import org.jgrapht.capi.graph.SafeEdgeSupplier;
 import org.jgrapht.capi.graph.SafeVertexSupplier;
 import org.jgrapht.graph.DirectedAcyclicGraph;
@@ -60,7 +61,7 @@ public class GraphDagApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "graph_dag_topological_it", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createTopoIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		DirectedAcyclicGraph<Integer, Integer> graph = globalHandles.get(graphHandle);
+		DirectedAcyclicGraph<Integer, Integer> graph = getSafeWrappedDag(graphHandle);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph.iterator()));
 		}
@@ -71,7 +72,7 @@ public class GraphDagApi {
 			+ "graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createVertexDescendants(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
-		DirectedAcyclicGraph<Integer, Integer> graph = globalHandles.get(graphHandle);
+		DirectedAcyclicGraph<Integer, Integer> graph = getSafeWrappedDag(graphHandle);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph.getDescendants(vertex)));
 		}
@@ -82,11 +83,27 @@ public class GraphDagApi {
 			+ "graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createVertexAncestors(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
-		DirectedAcyclicGraph<Integer, Integer> graph = globalHandles.get(graphHandle);
+		DirectedAcyclicGraph<Integer, Integer> graph = getSafeWrappedDag(graphHandle);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph.getAncestors(vertex)));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	private static DirectedAcyclicGraph<Integer, Integer> getSafeWrappedDag(Graph<Integer, Integer> graph) {
+		if (graph instanceof DirectedAcyclicGraph) {
+			return (DirectedAcyclicGraph<Integer,Integer>)graph;
+		} else if(graph instanceof CapiGraphWrapper) { 
+			CapiGraphWrapper<Integer, Integer> wrapper = (CapiGraphWrapper<Integer, Integer>)graph;
+			return getSafeWrappedDag(wrapper.getWrappedGraph());
+		}
+		throw new IllegalArgumentException("Graph does not look like a DAG");
+	}
+	
+	private static DirectedAcyclicGraph<Integer, Integer> getSafeWrappedDag(ObjectHandle graphHandle) { 
+		Graph<Integer, Integer> graph = globalHandles.get(graphHandle);
+		return getSafeWrappedDag(graph);
+	}
+	
 }

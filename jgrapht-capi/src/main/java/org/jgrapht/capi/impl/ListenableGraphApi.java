@@ -28,10 +28,10 @@ import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.IIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.CapiListenableGraph;
 import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
-import org.jgrapht.graph.DefaultListenableGraph;
 
 /**
  * Listenable graph API.
@@ -44,7 +44,7 @@ public class ListenableGraphApi {
 			+ "listenable_as_listenable", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asListenable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
-		ListenableGraph<Integer, Integer> gOut = new DefaultListenableGraph<>(gIn);
+		CapiListenableGraph<Integer, Integer> gOut = new CapiListenableGraph<>(gIn);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -55,7 +55,6 @@ public class ListenableGraphApi {
 			+ "listenable_create_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createGraphListener(IsolateThread thread, IIFunctionPointer eventFunctionPointer,
 			WordPointer res) {
-
 		InvokeGraphListener listener = new InvokeGraphListener(eventFunctionPointer);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(listener));
