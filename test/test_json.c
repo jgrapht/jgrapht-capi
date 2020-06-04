@@ -97,7 +97,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test gml with extra attributes
-    jgrapht_capi_import_file_json(thread, g, "dummy.json.out", import_id_from_file, vertex_attribute, edge_attribute);
+    jgrapht_capi_import_file_json(thread, g, "dummy.json.out", import_id_from_file, vertex_attribute, edge_attribute, NULL, NULL);
 
     int ecount;
     jgrapht_capi_graph_edges_count(thread, g, &ecount);

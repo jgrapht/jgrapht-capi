@@ -47,7 +47,7 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_import_file_csv(thread, g, "dummy.csv.out", import_id, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0);
+    jgrapht_capi_import_file_csv(thread, g, "dummy.csv.out", import_id, NULL, NULL, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     int count;

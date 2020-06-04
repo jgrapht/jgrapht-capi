@@ -159,6 +159,13 @@ public class JGraphTContext {
 
 	}
 
+	public interface IFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		void invoke(int key);
+
+	}
+	
 	public interface IIFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer

@@ -92,7 +92,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, g);
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
 
-    jgrapht_capi_import_file_graphml_simple(thread, g, "dummy.graphml.simple.out", import_id, 1, NULL, edge_attribute);
+    jgrapht_capi_import_file_graphml_simple(thread, g, "dummy.graphml.simple.out", import_id, 1, NULL, edge_attribute, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test output to string

@@ -97,7 +97,7 @@ int main() {
 
 
     // test gml with extra attributes
-    jgrapht_capi_import_string_gexf(thread, g, input, NULL, 1, NULL, NULL);
+    jgrapht_capi_import_string_gexf(thread, g, input, NULL, 1, NULL, NULL, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
 
@@ -129,7 +129,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, g);
     jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
 
-    jgrapht_capi_import_file_gexf(thread, g, "dummy.gexf.out", import_id, 1, NULL, edge_attribute);
+    jgrapht_capi_import_file_gexf(thread, g, "dummy.gexf.out", import_id, 1, NULL, edge_attribute, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test output to string
