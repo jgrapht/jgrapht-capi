@@ -125,6 +125,33 @@ int main() {
     assert(vcount == 4);
     jgrapht_capi_handles_destroy(thread, g1);
 
+    // test as_subgraph
+    void *vset;
+    void *eset;
+    jgrapht_capi_set_create(thread, &vset);
+    jgrapht_capi_set_int_add(thread, vset, v1, NULL);
+    jgrapht_capi_set_int_add(thread, vset, v2, NULL);
+    jgrapht_capi_set_int_add(thread, vset, v3, NULL);
+
+    jgrapht_capi_set_create(thread, &eset);
+    jgrapht_capi_set_int_add(thread, eset, e12, NULL);
+    jgrapht_capi_set_int_add(thread, eset, e23_2, NULL);
+
+    jgrapht_capi_graph_as_subgraph(thread, g, vset, eset, &g1);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    jgrapht_capi_graph_vertices_count(thread, g1, &vcount);
+    assert(vcount == 3);
+    int ecount = 0;
+    jgrapht_capi_graph_edges_count(thread, g1, &ecount);
+    assert(ecount == 2);
+    int contains=1;
+    jgrapht_capi_graph_contains_edge(thread, g1, e23_1, &contains);
+    assert(contains == 0);
+    jgrapht_capi_handles_destroy(thread, g1);
+
+    jgrapht_capi_handles_destroy(thread, vset);
+    jgrapht_capi_handles_destroy(thread, eset);
+
     jgrapht_capi_handles_destroy(thread, g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 

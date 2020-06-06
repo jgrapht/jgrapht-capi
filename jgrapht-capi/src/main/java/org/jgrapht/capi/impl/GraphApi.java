@@ -41,6 +41,7 @@ import org.jgrapht.capi.JGraphTContext.IntegerToDoubleFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.CapiAsMaskSubgraph;
+import org.jgrapht.capi.graph.CapiAsSubgraph;
 import org.jgrapht.capi.graph.CapiAsUndirectedGraph;
 import org.jgrapht.capi.graph.CapiAsUnmodifiableGraph;
 import org.jgrapht.capi.graph.CapiAsUnweightedGraph;
@@ -569,6 +570,22 @@ public class GraphApi {
 		};
 
 		Graph<Integer, Integer> gOut = new CapiAsMaskSubgraph(gIn, vertexMask, edgeMask);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(gOut));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "graph_as_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int asSubgraph(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle vertexSubsetHandle, ObjectHandle edgeSubsetHandle
+			, WordPointer res) {
+		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
+		Set<Integer> vertexSubset = globalHandles.get(vertexSubsetHandle);
+		Set<Integer> edgeSubset = globalHandles.get(edgeSubsetHandle);
+
+		Graph<Integer, Integer> gOut = new CapiAsSubgraph(gIn, vertexSubset, edgeSubset);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
