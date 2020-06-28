@@ -23,8 +23,10 @@ import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
+import org.graalvm.nativeimage.c.type.CCharPointerPointer;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
+import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Triple;
@@ -65,6 +67,28 @@ public class IteratorApi {
 		}
 		if (target.isNonNull()) {
 			target.write(triple.getSecond());
+		}
+		if (weight.isNonNull()) {
+			Double edgeWeight = triple.getThird();
+			if (edgeWeight == null) { 
+				edgeWeight = Graph.DEFAULT_EDGE_WEIGHT;
+			}
+			weight.write(edgeWeight);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "it_next_str_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int iteratorNextStrEdgeTriple(IsolateThread thread, ObjectHandle itHandle, CCharPointerPointer source,
+			CCharPointerPointer target, CDoublePointer weight) {
+		Iterator<Triple<CCharPointerHolder, CCharPointerHolder, Double>> it = globalHandles.get(itHandle);
+		Triple<CCharPointerHolder, CCharPointerHolder, Double> triple = it.next();
+		if (source.isNonNull()) {
+			source.write(triple.getFirst().get());
+		}
+		if (target.isNonNull()) {
+			target.write(triple.getSecond().get());
 		}
 		if (weight.isNonNull()) {
 			Double edgeWeight = triple.getThird();
