@@ -8,10 +8,6 @@
 
 char *expected="0,1,3\n1,0,2\n3,0,2\n2,1,3\n";
 
-int import_id(const char *id) { 
-    return atol(id);
-}
-
 int main() {
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;
@@ -26,8 +22,7 @@ int main() {
 
     // test read from string with extra attributes
     void *edgelist;
-    jgrapht_capi_import_edgelist_attrs_string_csv(thread, expected, import_id, NULL, NULL, 
-        CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0, &edgelist);
+    jgrapht_capi_import_edgelist_attrs_string_csv(thread, expected, NULL, NULL, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int count = 0;
@@ -38,8 +33,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     // no attrs
-    jgrapht_capi_import_edgelist_noattrs_string_csv(thread, expected, import_id, 
-        CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0, &edgelist);
+    jgrapht_capi_import_edgelist_noattrs_string_csv(thread, expected, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     count = 0;
@@ -48,7 +42,6 @@ int main() {
 
     jgrapht_capi_handles_destroy(thread, edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-
 
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
