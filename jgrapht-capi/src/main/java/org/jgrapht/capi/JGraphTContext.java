@@ -100,7 +100,7 @@ public class JGraphTContext {
 	}
 
 	/* Import of a C function pointer type. */
-	public interface NotifyAttributeFunctionPointer extends CFunctionPointer {
+	public interface IntegerIdNotifyAttributeFunctionPointer extends CFunctionPointer {
 
 		/*
 		 * Invocation of the function pointer. A call to the function is replaced with
@@ -108,6 +108,16 @@ public class JGraphTContext {
 		 */
 		@InvokeCFunctionPointer
 		void invoke(int element, CCharPointer key, CCharPointer value);
+	}
+
+	public interface StringIdNotifyAttributeFunctionPointer extends CFunctionPointer {
+
+		/*
+		 * Invocation of the function pointer. A call to the function is replaced with
+		 * an indirect call of the function pointer.
+		 */
+		@InvokeCFunctionPointer
+		void invoke(CCharPointer element, CCharPointer key, CCharPointer value);
 	}
 
 	/*
@@ -118,6 +128,13 @@ public class JGraphTContext {
 
 		@InvokeCFunctionPointer
 		int invoke(CCharPointer id);
+
+	}
+
+	public interface CCharPointerToCCharPointerFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		CCharPointer invoke(CCharPointer key);
 
 	}
 
@@ -165,7 +182,7 @@ public class JGraphTContext {
 		void invoke(int key);
 
 	}
-	
+
 	public interface IIFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer

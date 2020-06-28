@@ -102,6 +102,25 @@ public class HandlesApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "handles_get_str_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getHandleAsStringEdgeTriple(IsolateThread thread, ObjectHandle handle, CCharPointerPointer source,
+			CCharPointerPointer target, CDoublePointer weight) {
+		Triple<CCharPointerHolder, CCharPointerHolder, Double> triple = globalHandles.get(handle);
+		if (triple != null) {
+			if (source.isNonNull()) {
+				source.write(triple.getFirst().get());
+			}
+			if (target.isNonNull()) {
+				target.write(triple.getSecond().get());
+			}
+			if (weight.isNonNull()) {
+				weight.write(triple.getThird());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
