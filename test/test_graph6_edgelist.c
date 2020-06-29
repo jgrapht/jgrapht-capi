@@ -8,10 +8,6 @@
 
 char *expected= "G?qa`_";
 
-int import_id(int id) { 
-    return id;
-}
-
 void write_to_file(char* filename, char *str) { 
     FILE* fp = fopen(filename, "w");
     fprintf(fp, "%s", str);
@@ -31,7 +27,7 @@ int main() {
 
     // test read from string with extra attributes
     void *edgelist;
-    jgrapht_capi_import_edgelist_attrs_string_graph6sparse6(thread, expected, import_id, NULL, NULL, &edgelist);
+    jgrapht_capi_import_edgelist_attrs_string_graph6sparse6(thread, expected, NULL, NULL, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int count = 0;
@@ -42,7 +38,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     // no attrs
-    jgrapht_capi_import_edgelist_noattrs_string_graph6sparse6(thread, expected, import_id, &edgelist);
+    jgrapht_capi_import_edgelist_noattrs_string_graph6sparse6(thread, expected, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     count = 0;
@@ -55,7 +51,7 @@ int main() {
     // write to tmp file and read back
     write_to_file("test_edgelist.g6", expected);
 
-    jgrapht_capi_import_edgelist_attrs_file_graph6sparse6(thread, "test_edgelist.g6", import_id, NULL, NULL, &edgelist);
+    jgrapht_capi_import_edgelist_attrs_file_graph6sparse6(thread, "test_edgelist.g6", NULL, NULL, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     count = 0;
     jgrapht_capi_list_size(thread, edgelist, &count);
@@ -63,7 +59,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_import_edgelist_noattrs_file_graph6sparse6(thread, "test_edgelist.g6", import_id, &edgelist);
+    jgrapht_capi_import_edgelist_noattrs_file_graph6sparse6(thread, "test_edgelist.g6", &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     count = 0;
     jgrapht_capi_list_size(thread, edgelist, &count);

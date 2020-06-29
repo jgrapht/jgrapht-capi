@@ -9,10 +9,6 @@
 char *expected = "strict graph G {\n  0;\n  1;\n  2;\n  0 -- 1 [ cost=\"5.4\" ];\n  1 -- 2 [ cost=\"6.5\" ];\n  2 -- 0 [ cost=\"9.2\" ];\n}\n";
 
 
-int import_id(const char* id) { 
-    return atoi(id);
-}
-
 void write_to_file(char* filename, char *str) { 
     FILE* fp = fopen(filename, "w");
     fprintf(fp, "%s", str);
@@ -52,7 +48,7 @@ int main() {
 
     // test read from string with extra attributes
     void *edgelist;
-    jgrapht_capi_import_edgelist_attrs_string_dot(thread, expected, import_id, NULL, NULL, &edgelist);
+    jgrapht_capi_import_edgelist_attrs_string_dot(thread, expected, NULL, NULL, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int count = 0;
@@ -63,7 +59,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     // no attrs
-    jgrapht_capi_import_edgelist_noattrs_string_dot(thread, expected, import_id, &edgelist);
+    jgrapht_capi_import_edgelist_noattrs_string_dot(thread, expected, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     count = 0;
@@ -76,7 +72,7 @@ int main() {
     // write to tmp file and read back
     write_to_file("test_dot_edgelist.dot", expected);
 
-    jgrapht_capi_import_edgelist_attrs_file_dot(thread, "test_dot_edgelist.dot", import_id, NULL, edge_attribute, &edgelist);
+    jgrapht_capi_import_edgelist_attrs_file_dot(thread, "test_dot_edgelist.dot", NULL, edge_attribute, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     count = 0;
     jgrapht_capi_list_size(thread, edgelist, &count);
@@ -84,7 +80,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_import_edgelist_noattrs_file_dot(thread, "test_dot_edgelist.dot", import_id, &edgelist);
+    jgrapht_capi_import_edgelist_noattrs_file_dot(thread, "test_dot_edgelist.dot", &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     count = 0;
     jgrapht_capi_list_size(thread, edgelist, &count);

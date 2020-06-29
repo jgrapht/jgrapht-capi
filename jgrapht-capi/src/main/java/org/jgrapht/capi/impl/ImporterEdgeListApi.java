@@ -36,10 +36,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.JGraphTContext.ImportIdFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.ImporterExporterCSVFormat;
 import org.jgrapht.capi.JGraphTContext.IntegerIdNotifyAttributeFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.IntegerToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.JGraphTContext.StringIdNotifyAttributeFunctionPointer;
 import org.jgrapht.capi.StringUtils;
@@ -78,12 +76,13 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_noattrs_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromDimacsFile(IsolateThread thread, CCharPointer filename,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+			WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter().renumberVertices(false)
 				.zeroBasedNumbering(true);
 
-		setupImporterWithEdgeList(importer, edgelist, importIdFunctionPointer);
+		setupImporterWithEdgeList(importer, edgelist);
 
 		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
 
@@ -96,12 +95,13 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_noattrs_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromDimacsString(IsolateThread thread, CCharPointer input,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+			WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter().renumberVertices(false)
 				.zeroBasedNumbering(true);
 
-		setupImporterWithEdgeList(importer, edgelist, importIdFunctionPointer);
+		setupImporterWithEdgeList(importer, edgelist);
 
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
@@ -117,15 +117,14 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_attrs_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromDimacsFile(IsolateThread thread, CCharPointer filename,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer,
-			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter().renumberVertices(false)
 				.zeroBasedNumbering(true);
 
-		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
-				edgeAttributeFunction, null);
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
 
 		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
 		if (res.isNonNull()) {
@@ -137,15 +136,14 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_attrs_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromDimacsString(IsolateThread thread, CCharPointer input,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer,
-			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter().renumberVertices(false)
 				.zeroBasedNumbering(true);
 
-		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
-				edgeAttributeFunction, null);
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
 
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
@@ -162,11 +160,12 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_noattrs_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGmlFile(IsolateThread thread, CCharPointer filename,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+			WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		GmlEventDrivenImporter importer = new GmlEventDrivenImporter();
 
-		setupImporterWithEdgeList(importer, edgelist, importIdFunctionPointer);
+		setupImporterWithEdgeList(importer, edgelist);
 
 		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
 
@@ -179,11 +178,12 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_noattrs_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGmlString(IsolateThread thread, CCharPointer input,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+			WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		GmlEventDrivenImporter importer = new GmlEventDrivenImporter();
 
-		setupImporterWithEdgeList(importer, edgelist, importIdFunctionPointer);
+		setupImporterWithEdgeList(importer, edgelist);
 
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
@@ -199,14 +199,13 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_attrs_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGmlFile(IsolateThread thread, CCharPointer filename,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer,
-			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		GmlEventDrivenImporter importer = new GmlEventDrivenImporter();
 
-		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
-				edgeAttributeFunction, null);
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
 
 		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
 		if (res.isNonNull()) {
@@ -218,14 +217,13 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_attrs_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGmlString(IsolateThread thread, CCharPointer input,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer,
-			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		GmlEventDrivenImporter importer = new GmlEventDrivenImporter();
 
-		setupImporterWithEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
-				edgeAttributeFunction, null);
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
 
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
@@ -724,11 +722,12 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_noattrs_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromDotFile(IsolateThread thread, CCharPointer filename,
-			ImportIdFunctionPointer importIdFunctionPointer, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+			WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		DOTEventDrivenImporter importer = new DOTEventDrivenImporter();
 
-		setupImporterWithPairEdgeList(importer, edgelist, importIdFunctionPointer);
+		setupImporterWithPairEdgeList(importer, edgelist);
 
 		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
 
@@ -741,11 +740,12 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_noattrs_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromDotString(IsolateThread thread, CCharPointer input,
-			ImportIdFunctionPointer importIdFunctionPointer, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+			WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		DOTEventDrivenImporter importer = new DOTEventDrivenImporter();
 
-		setupImporterWithPairEdgeList(importer, edgelist, importIdFunctionPointer);
+		setupImporterWithPairEdgeList(importer, edgelist);
 
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
@@ -761,14 +761,13 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_attrs_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromDotFile(IsolateThread thread, CCharPointer filename,
-			ImportIdFunctionPointer importIdFunctionPointer,
-			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		DOTEventDrivenImporter importer = new DOTEventDrivenImporter();
 
-		setupImporterWithPairEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
-				edgeAttributeFunction, null);
+		setupImporterWithPairEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
 
 		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
 		if (res.isNonNull()) {
@@ -780,14 +779,13 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_attrs_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromDotString(IsolateThread thread, CCharPointer input,
-			ImportIdFunctionPointer importIdFunctionPointer,
-			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		DOTEventDrivenImporter importer = new DOTEventDrivenImporter();
 
-		setupImporterWithPairEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
-				edgeAttributeFunction, null);
+		setupImporterWithPairEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
 
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
@@ -804,11 +802,12 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_noattrs_file_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGraph6Sparse6File(IsolateThread thread, CCharPointer filename,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+			WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		Graph6Sparse6EventDrivenImporter importer = new Graph6Sparse6EventDrivenImporter();
 
-		setupImporterWithPairEdgeList(importer, edgelist, importIdFunctionPointer);
+		setupImporterWithPairEdgeList(importer, edgelist);
 
 		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
 
@@ -821,11 +820,12 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_noattrs_string_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGraph6Sparse6String(IsolateThread thread, CCharPointer input,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+			WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		Graph6Sparse6EventDrivenImporter importer = new Graph6Sparse6EventDrivenImporter();
 
-		setupImporterWithPairEdgeList(importer, edgelist, importIdFunctionPointer);
+		setupImporterWithPairEdgeList(importer, edgelist);
 
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
@@ -841,14 +841,13 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_attrs_file_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGraph6Sparse6File(IsolateThread thread, CCharPointer filename,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer,
-			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		Graph6Sparse6EventDrivenImporter importer = new Graph6Sparse6EventDrivenImporter();
 
-		setupImporterWithPairEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
-				edgeAttributeFunction, null);
+		setupImporterWithPairEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
 
 		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
 		if (res.isNonNull()) {
@@ -860,14 +859,13 @@ public class ImporterEdgeListApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_edgelist_attrs_string_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGraph6Sparse6String(IsolateThread thread, CCharPointer input,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer,
-			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
-		List<Triple<Integer, Integer, Double>> edgelist = new ArrayList<>();
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
 		Graph6Sparse6EventDrivenImporter importer = new Graph6Sparse6EventDrivenImporter();
 
-		setupImporterWithPairEdgeListWithIds(importer, edgelist, importIdFunctionPointer, vertexAttributeFunction,
-				edgeAttributeFunction, null);
+		setupImporterWithPairEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
 
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
@@ -881,229 +879,11 @@ public class ImporterEdgeListApi {
 
 	// ---------------------- utils -----------------------------------
 
-	private static int stringVertexToInteger(ImportIdFunctionPointer importIdFunctionPointer, String vertex) {
-		CCharPointerHolder sourceHolder = StringUtils.toCStringInUtf8(vertex);
-		return importIdFunctionPointer.invoke(sourceHolder.get());
-	}
-
-	private static int integerVertexToInteger(IntegerToIntegerFunctionPointer importIdFunctionPointer, Integer vertex) {
-		return importIdFunctionPointer.invoke(vertex);
-	}
-
-	private static void setupImporterWithEdgeList(
-			BaseEventDrivenImporter<Integer, Triple<Integer, Integer, Double>> importer,
-			List<Triple<Integer, Integer, Double>> edgelist, IntegerToIntegerFunctionPointer importIdFunctionPointer) {
-		if (importIdFunctionPointer.isNull()) {
-			throw new IllegalArgumentException("Need function to convert integer vertex ids to integers");
-		}
-		importer.addEdgeConsumer(e -> {
-			int sourceId = integerVertexToInteger(importIdFunctionPointer, e.getFirst());
-			int targetId = integerVertexToInteger(importIdFunctionPointer, e.getSecond());
-			Double weight = e.getThird();
-			if (weight == null) {
-				weight = Graph.DEFAULT_EDGE_WEIGHT;
-			}
-			edgelist.add(Triple.of(sourceId, targetId, weight));
-		});
-	}
-
-	private static void setupImporterWithPairEdgeList(BaseEventDrivenImporter<String, Pair<String, String>> importer,
-			List<Triple<Integer, Integer, Double>> edgelist, ImportIdFunctionPointer importIdFunctionPointer) {
-		if (importIdFunctionPointer.isNull()) {
-			throw new IllegalArgumentException("Need function to convert strings vertex ids to integers");
-		}
-		importer.addEdgeConsumer(e -> {
-			int sourceId = stringVertexToInteger(importIdFunctionPointer, e.getFirst());
-			int targetId = stringVertexToInteger(importIdFunctionPointer, e.getSecond());
-			edgelist.add(Triple.of(sourceId, targetId, 1.0d));
-		});
-	}
-
-	private static void setupImporterWithPairEdgeList(BaseEventDrivenImporter<Integer, Pair<Integer, Integer>> importer,
-			List<Triple<Integer, Integer, Double>> edgelist, IntegerToIntegerFunctionPointer importIdFunctionPointer) {
-		if (importIdFunctionPointer.isNull()) {
-			throw new IllegalArgumentException("Need function to convert strings vertex ids to integers");
-		}
-		importer.addEdgeConsumer(e -> {
-			int sourceId = integerVertexToInteger(importIdFunctionPointer, e.getFirst());
-			int targetId = integerVertexToInteger(importIdFunctionPointer, e.getSecond());
-			edgelist.add(Triple.of(sourceId, targetId, 1.0d));
-		});
-	}
-
-	private static void setupImporterWithEdgeListWithIds(
-			BaseEventDrivenImporter<Integer, Triple<Integer, Integer, Double>> importer,
-			List<Triple<Integer, Integer, Double>> edgelist, IntegerToIntegerFunctionPointer importIdFunctionPointer,
-			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
-			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, CharSequenceTranslator unescapeTranslator) {
-		if (importIdFunctionPointer.isNull()) {
-			throw new IllegalArgumentException("Need function to convert strings vertex ids to integers");
-		}
-		int[] count = new int[1];
-
-		Map<Triple<Integer, Integer, Double>, Integer> edgelistWithIds = new IdentityHashMap<>();
-
-		importer.addEdgeConsumer(e -> {
-			int sourceId = integerVertexToInteger(importIdFunctionPointer, e.getFirst());
-			int targetId = integerVertexToInteger(importIdFunctionPointer, e.getSecond());
-			Double weight = e.getThird();
-			if (weight == null) {
-				weight = Graph.DEFAULT_EDGE_WEIGHT;
-			}
-			int id = count[0]++;
-			edgelist.add(Triple.of(sourceId, targetId, weight));
-			edgelistWithIds.put(e, id);
-		});
-
-		if (vertexAttributeFunction.isNonNull()) {
-			importer.addVertexAttributeConsumer((p, attr) -> {
-				int vertex = integerVertexToInteger(importIdFunctionPointer, p.getFirst());
-				String key = p.getSecond();
-				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(key);
-				String value = attr.getValue();
-				if (unescapeTranslator != null) {
-					value = unescapeTranslator.translate(value);
-				}
-				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
-				vertexAttributeFunction.invoke(vertex, keyHolder.get(), valueHolder.get());
-			});
-		}
-
-		if (edgeAttributeFunction.isNonNull()) {
-			importer.addEdgeAttributeConsumer((p, attr) -> {
-				Triple<Integer, Integer, Double> edgeTriple = p.getFirst();
-
-				// lookup edge id (just the order that it was added in the list)
-				int edgeIndex = edgelistWithIds.get(edgeTriple);
-
-				String key = p.getSecond();
-				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(key);
-				String value = attr.getValue();
-				if (unescapeTranslator != null) {
-					value = unescapeTranslator.translate(value);
-				}
-				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
-				edgeAttributeFunction.invoke(edgeIndex, keyHolder.get(), valueHolder.get());
-			});
-		}
-	}
-
-	private static void setupImporterWithPairEdgeListWithIds(
-			BaseEventDrivenImporter<String, Pair<String, String>> importer,
-			List<Triple<Integer, Integer, Double>> edgelist, ImportIdFunctionPointer importIdFunctionPointer,
-			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
-			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, CharSequenceTranslator unescapeTranslator) {
-		if (importIdFunctionPointer.isNull()) {
-			throw new IllegalArgumentException("Need function to convert strings vertex ids to integers");
-		}
-		int[] count = new int[1];
-
-		Map<Pair<String, String>, Integer> edgelistWithIds = new IdentityHashMap<>();
-
-		importer.addEdgeConsumer(e -> {
-			int sourceId = stringVertexToInteger(importIdFunctionPointer, e.getFirst());
-			int targetId = stringVertexToInteger(importIdFunctionPointer, e.getSecond());
-			int id = count[0]++;
-			edgelist.add(Triple.of(sourceId, targetId, Graph.DEFAULT_EDGE_WEIGHT));
-			edgelistWithIds.put(e, id);
-		});
-
-		if (vertexAttributeFunction.isNonNull()) {
-			importer.addVertexAttributeConsumer((p, attr) -> {
-				int vertex = stringVertexToInteger(importIdFunctionPointer, p.getFirst());
-				String key = p.getSecond();
-				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(key);
-				String value = attr.getValue();
-				if (unescapeTranslator != null) {
-					value = unescapeTranslator.translate(value);
-				}
-				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
-				vertexAttributeFunction.invoke(vertex, keyHolder.get(), valueHolder.get());
-			});
-		}
-
-		if (edgeAttributeFunction.isNonNull()) {
-			importer.addEdgeAttributeConsumer((p, attr) -> {
-				Pair<String, String> edgeTuple = p.getFirst();
-
-				// lookup edge id (just the order that it was added in the list)
-				int edgeIndex = edgelistWithIds.get(edgeTuple);
-
-				String key = p.getSecond();
-				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(key);
-				String value = attr.getValue();
-				if (unescapeTranslator != null) {
-					value = unescapeTranslator.translate(value);
-				}
-				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
-				edgeAttributeFunction.invoke(edgeIndex, keyHolder.get(), valueHolder.get());
-			});
-		}
-	}
-
-	private static void setupImporterWithPairEdgeListWithIds(
-			BaseEventDrivenImporter<Integer, Pair<Integer, Integer>> importer,
-			List<Triple<Integer, Integer, Double>> edgelist, IntegerToIntegerFunctionPointer importIdFunctionPointer,
-			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
-			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, CharSequenceTranslator unescapeTranslator) {
-		if (importIdFunctionPointer.isNull()) {
-			throw new IllegalArgumentException("Need function to convert strings vertex ids to integers");
-		}
-		int[] count = new int[1];
-
-		Map<Pair<Integer, Integer>, Integer> edgelistWithIds = new IdentityHashMap<>();
-
-		importer.addEdgeConsumer(e -> {
-			int sourceId = integerVertexToInteger(importIdFunctionPointer, e.getFirst());
-			int targetId = integerVertexToInteger(importIdFunctionPointer, e.getSecond());
-			int id = count[0]++;
-			edgelist.add(Triple.of(sourceId, targetId, Graph.DEFAULT_EDGE_WEIGHT));
-			edgelistWithIds.put(e, id);
-		});
-
-		if (vertexAttributeFunction.isNonNull()) {
-			importer.addVertexAttributeConsumer((p, attr) -> {
-				int vertex = integerVertexToInteger(importIdFunctionPointer, p.getFirst());
-				String key = p.getSecond();
-				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(key);
-				String value = attr.getValue();
-				if (unescapeTranslator != null) {
-					value = unescapeTranslator.translate(value);
-				}
-				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
-				vertexAttributeFunction.invoke(vertex, keyHolder.get(), valueHolder.get());
-			});
-		}
-
-		if (edgeAttributeFunction.isNonNull()) {
-			importer.addEdgeAttributeConsumer((p, attr) -> {
-				Pair<Integer, Integer> edgeTuple = p.getFirst();
-
-				// lookup edge id (just the order that it was added in the list)
-				int edgeIndex = edgelistWithIds.get(edgeTuple);
-
-				String key = p.getSecond();
-				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(key);
-				String value = attr.getValue();
-				if (unescapeTranslator != null) {
-					value = unescapeTranslator.translate(value);
-				}
-				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
-				edgeAttributeFunction.invoke(edgeIndex, keyHolder.get(), valueHolder.get());
-			});
-		}
-	}
-
-	//
-
-	// ---------------------- utils string -----------------------------------
-
-	private static void setupImporterWithEdgeList(
-			BaseEventDrivenImporter<String, Triple<String, String, Double>> importer,
+	private static <V> void setupImporterWithEdgeList(BaseEventDrivenImporter<V, Triple<V, V, Double>> importer,
 			List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist) {
 		importer.addEdgeConsumer(e -> {
-			CCharPointerHolder sourceId = StringUtils.toCStringInUtf8(e.getFirst());
-			CCharPointerHolder targetId = StringUtils.toCStringInUtf8(e.getSecond());
+			CCharPointerHolder sourceId = StringUtils.toCStringInUtf8(String.valueOf(e.getFirst()));
+			CCharPointerHolder targetId = StringUtils.toCStringInUtf8(String.valueOf(e.getSecond()));
 			Double weight = e.getThird();
 			if (weight == null) {
 				weight = Graph.DEFAULT_EDGE_WEIGHT;
@@ -1112,18 +892,26 @@ public class ImporterEdgeListApi {
 		});
 	}
 
-	private static void setupImporterWithEdgeListWithIds(
-			BaseEventDrivenImporter<String, Triple<String, String, Double>> importer,
+	private static <V> void setupImporterWithPairEdgeList(BaseEventDrivenImporter<V, Pair<V, V>> importer,
+			List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist) {
+		importer.addEdgeConsumer(e -> {
+			CCharPointerHolder sourceId = StringUtils.toCStringInUtf8(String.valueOf(e.getFirst()));
+			CCharPointerHolder targetId = StringUtils.toCStringInUtf8(String.valueOf(e.getSecond()));
+			edgelist.add(Triple.of(sourceId, targetId, Graph.DEFAULT_EDGE_WEIGHT));
+		});
+	}
+
+	private static <V> void setupImporterWithEdgeListWithIds(BaseEventDrivenImporter<V, Triple<V, V, Double>> importer,
 			List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, CharSequenceTranslator unescapeTranslator) {
 		int[] count = new int[1];
 
-		Map<Triple<String, String, Double>, Integer> edgelistWithIds = new IdentityHashMap<>();
+		Map<Triple<V, V, Double>, Integer> edgelistWithIds = new IdentityHashMap<>();
 
 		importer.addEdgeConsumer(e -> {
-			CCharPointerHolder sourceId = StringUtils.toCStringInUtf8(e.getFirst());
-			CCharPointerHolder targetId = StringUtils.toCStringInUtf8(e.getSecond());
+			CCharPointerHolder sourceId = StringUtils.toCStringInUtf8(String.valueOf(e.getFirst()));
+			CCharPointerHolder targetId = StringUtils.toCStringInUtf8(String.valueOf(e.getSecond()));
 			Double weight = e.getThird();
 			if (weight == null) {
 				weight = Graph.DEFAULT_EDGE_WEIGHT;
@@ -1135,7 +923,7 @@ public class ImporterEdgeListApi {
 
 		if (vertexAttributeFunction.isNonNull()) {
 			importer.addVertexAttributeConsumer((p, attr) -> {
-				CCharPointerHolder vertexHolder = StringUtils.toCStringInUtf8(p.getFirst());
+				CCharPointerHolder vertexHolder = StringUtils.toCStringInUtf8(String.valueOf(p.getFirst()));
 				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(p.getSecond());
 				String value = attr.getValue();
 				if (unescapeTranslator != null) {
@@ -1148,7 +936,54 @@ public class ImporterEdgeListApi {
 
 		if (edgeAttributeFunction.isNonNull()) {
 			importer.addEdgeAttributeConsumer((p, attr) -> {
-				Triple<String, String, Double> edgeTriple = p.getFirst();
+				Triple<V, V, Double> edgeTriple = p.getFirst();
+
+				// lookup edge id (just the order that it was added in the list)
+				int edgeIndex = edgelistWithIds.get(edgeTriple);
+
+				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(p.getSecond());
+				String value = attr.getValue();
+				if (unescapeTranslator != null) {
+					value = unescapeTranslator.translate(value);
+				}
+				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
+				edgeAttributeFunction.invoke(edgeIndex, keyHolder.get(), valueHolder.get());
+			});
+		}
+	}
+
+	private static <V> void setupImporterWithPairEdgeListWithIds(BaseEventDrivenImporter<V, Pair<V, V>> importer,
+			List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, CharSequenceTranslator unescapeTranslator) {
+		int[] count = new int[1];
+
+		Map<Pair<V, V>, Integer> edgelistWithIds = new IdentityHashMap<>();
+
+		importer.addEdgeConsumer(e -> {
+			CCharPointerHolder sourceId = StringUtils.toCStringInUtf8(String.valueOf(e.getFirst()));
+			CCharPointerHolder targetId = StringUtils.toCStringInUtf8(String.valueOf(e.getSecond()));
+			int id = count[0]++;
+			edgelist.add(Triple.of(sourceId, targetId, Graph.DEFAULT_EDGE_WEIGHT));
+			edgelistWithIds.put(e, id);
+		});
+
+		if (vertexAttributeFunction.isNonNull()) {
+			importer.addVertexAttributeConsumer((p, attr) -> {
+				CCharPointerHolder vertexHolder = StringUtils.toCStringInUtf8(String.valueOf(p.getFirst()));
+				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(p.getSecond());
+				String value = attr.getValue();
+				if (unescapeTranslator != null) {
+					value = unescapeTranslator.translate(value);
+				}
+				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
+				vertexAttributeFunction.invoke(vertexHolder.get(), keyHolder.get(), valueHolder.get());
+			});
+		}
+
+		if (edgeAttributeFunction.isNonNull()) {
+			importer.addEdgeAttributeConsumer((p, attr) -> {
+				Pair<V, V> edgeTriple = p.getFirst();
 
 				// lookup edge id (just the order that it was added in the list)
 				int edgeIndex = edgelistWithIds.get(edgeTriple);
