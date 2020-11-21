@@ -109,6 +109,7 @@ set(
     "test_spanner.c"
     "test_tour.c"
     "test_shortestpaths.c"
+    "test_contraction_hierarchy.c"
     "test_k_shortestpaths.c"
     "test_clique.c"
     "test_dimacs.c"

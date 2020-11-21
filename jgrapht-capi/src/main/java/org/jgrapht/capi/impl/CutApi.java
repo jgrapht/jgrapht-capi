@@ -26,9 +26,9 @@ public class CutApi {
 			+ "cut_mincut_exec_stoer_wagner", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeStoerWagner(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer valueRes,
 			WordPointer cutSourcePartitionRes) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 
-		StoerWagnerMinimumCut<Integer, Integer> alg = new StoerWagnerMinimumCut<>(g);
+		StoerWagnerMinimumCut<Integer, ?> alg = new StoerWagnerMinimumCut<>(g);
 		double weight = alg.minCutWeight();
 		Set<Integer> cutSourcePartition = alg.minCut();
 
@@ -44,8 +44,8 @@ public class CutApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "cut_gomoryhu_exec_gusfield", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeGomoryHuGusfield(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		GusfieldGomoryHuCutTree<Integer, Integer> alg = new GusfieldGomoryHuCutTree<>(g);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
+		GusfieldGomoryHuCutTree<Integer, ?> alg = new GusfieldGomoryHuCutTree<>(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(alg));
 		}
@@ -56,7 +56,7 @@ public class CutApi {
 			+ "cut_gomoryhu_min_st_cut", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int gomoryHuSTCut(IsolateThread thread, ObjectHandle gomoryHu, int source, int sink,
 			CDoublePointer valueRes, WordPointer cutSourcePartitionRes) {
-		GusfieldGomoryHuCutTree<Integer, Integer> alg = globalHandles.get(gomoryHu);
+		GusfieldGomoryHuCutTree<Integer, ?> alg = globalHandles.get(gomoryHu);
 		double cutValue = alg.calculateMinCut(source, sink);
 		Set<Integer> sourcePartition = alg.getSourcePartition();
 		if (valueRes.isNonNull()) {
@@ -72,7 +72,7 @@ public class CutApi {
 			+ "cut_gomoryhu_min_cut", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int gomoryHuMinCut(IsolateThread thread, ObjectHandle gomoryHu, CDoublePointer valueRes,
 			WordPointer cutSourcePartitionRes) {
-		GusfieldGomoryHuCutTree<Integer, Integer> alg = globalHandles.get(gomoryHu);
+		GusfieldGomoryHuCutTree<Integer, ?> alg = globalHandles.get(gomoryHu);
 		double cutValue = alg.calculateMinCut();
 		Set<Integer> sourcePartition = alg.getSourcePartition();
 		if (valueRes.isNonNull()) {
@@ -84,9 +84,10 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "cut_gomoryhu_tree", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "cut_gomoryhu_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int gomoryHuTree(IsolateThread thread, ObjectHandle gomoryHu, WordPointer treeRes) {
-		GusfieldGomoryHuCutTree<Integer, Integer> alg = globalHandles.get(gomoryHu);
+		GusfieldGomoryHuCutTree<Integer, ?> alg = globalHandles.get(gomoryHu);
 		SimpleWeightedGraph<Integer, DefaultWeightedEdge> origTree = alg.getGomoryHuTree();
 
 		// convert to integer vertices/edges
@@ -112,9 +113,9 @@ public class CutApi {
 			+ "cut_oddmincutset_exec_padberg_rao", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executePadbergRao(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle oddVerticesHandle,
 			boolean useTreeCompression, CDoublePointer valueRes, WordPointer sourcePartitionRes) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 		Set<Integer> oddVertices = globalHandles.get(oddVerticesHandle);
-		PadbergRaoOddMinimumCutset<Integer, Integer> alg = new PadbergRaoOddMinimumCutset<>(g);
+		PadbergRaoOddMinimumCutset<Integer, ?> alg = new PadbergRaoOddMinimumCutset<>(g);
 		double value = alg.calculateMinCut(oddVertices, useTreeCompression);
 		if (valueRes.isNonNull()) {
 			valueRes.write(value);

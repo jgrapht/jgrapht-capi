@@ -44,8 +44,8 @@ public class CliqueApi {
 			+ "clique_exec_bron_kerbosch", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBrownKerbosch(IsolateThread thread, ObjectHandle graphHandle, long timeoutSeconds,
 			WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		MaximalCliqueEnumerationAlgorithm<Integer, Integer> alg = new BronKerboschCliqueFinder<>(g, timeoutSeconds,
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
+		MaximalCliqueEnumerationAlgorithm<Integer, ?> alg = new BronKerboschCliqueFinder<>(g, timeoutSeconds,
 				TimeUnit.SECONDS);
 		Iterator<Set<Integer>> it = alg.iterator();
 		if (res.isNonNull()) {
@@ -58,8 +58,8 @@ public class CliqueApi {
 			+ "clique_exec_bron_kerbosch_pivot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBrownKerboschWithPivot(IsolateThread thread, ObjectHandle graphHandle, long timeoutSeconds,
 			WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		MaximalCliqueEnumerationAlgorithm<Integer, Integer> alg = new PivotBronKerboschCliqueFinder<>(g, timeoutSeconds,
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
+		MaximalCliqueEnumerationAlgorithm<Integer, ?> alg = new PivotBronKerboschCliqueFinder<>(g, timeoutSeconds,
 				TimeUnit.SECONDS);
 		Iterator<Set<Integer>> it = alg.iterator();
 		if (res.isNonNull()) {
@@ -72,9 +72,9 @@ public class CliqueApi {
 			+ "clique_exec_bron_kerbosch_pivot_degeneracy_ordering", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBrownKerboschPivotAndDegeneracyOrdering(IsolateThread thread, ObjectHandle graphHandle,
 			long timeoutSeconds, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		MaximalCliqueEnumerationAlgorithm<Integer, Integer> alg = new DegeneracyBronKerboschCliqueFinder<>(g,
-				timeoutSeconds, TimeUnit.SECONDS);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
+		MaximalCliqueEnumerationAlgorithm<Integer, ?> alg = new DegeneracyBronKerboschCliqueFinder<>(g, timeoutSeconds,
+				TimeUnit.SECONDS);
 		Iterator<Set<Integer>> it = alg.iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
@@ -85,8 +85,8 @@ public class CliqueApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clique_exec_chordal_max_clique", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeChordalMaxCliqueFinder(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		ChordalGraphMaxCliqueFinder<Integer, Integer> alg = new ChordalGraphMaxCliqueFinder<>(g);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
+		ChordalGraphMaxCliqueFinder<Integer, ?> alg = new ChordalGraphMaxCliqueFinder<>(g);
 		Set<Integer> clique = alg.getClique();
 		if (clique == null) {
 			throw new IllegalArgumentException("Graph is not chordal");

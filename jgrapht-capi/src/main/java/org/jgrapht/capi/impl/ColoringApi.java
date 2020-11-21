@@ -108,7 +108,7 @@ public class ColoringApi {
 			+ "coloring_exec_chordal_minimum_coloring", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeChordalMinimumColoring(IsolateThread thread, ObjectHandle graphHandle,
 			CIntPointer resColors, WordPointer resColorsMap) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 		VertexColoringAlgorithm<Integer> alg = new ChordalGraphColoring<>(g);
 		Coloring<Integer> coloring = alg.getColoring();
 
@@ -131,9 +131,9 @@ public class ColoringApi {
 	}
 
 	private static int executeColoring(IsolateThread thread, ObjectHandle graphHandle,
-			Function<Graph<Integer, Integer>, VertexColoringAlgorithm<Integer>> algProvider, CIntPointer resColors,
+			Function<Graph<Integer, ?>, VertexColoringAlgorithm<Integer>> algProvider, CIntPointer resColors,
 			WordPointer resColorsMap) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 		VertexColoringAlgorithm<Integer> alg = algProvider.apply(g);
 		Coloring<Integer> coloring = alg.getColoring();
 

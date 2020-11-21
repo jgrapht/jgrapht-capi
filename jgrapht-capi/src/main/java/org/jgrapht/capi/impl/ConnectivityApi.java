@@ -25,9 +25,9 @@ public class ConnectivityApi {
 			+ "connectivity_strong_exec_kosaraju", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeKosaraju(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 
-		KosarajuStrongConnectivityInspector<Integer, Integer> alg = new KosarajuStrongConnectivityInspector<>(g);
+		KosarajuStrongConnectivityInspector<Integer, ?> alg = new KosarajuStrongConnectivityInspector<>(g);
 
 		boolean result = alg.isStronglyConnected();
 		List<Set<Integer>> connectedSets = alg.stronglyConnectedSets();
@@ -45,9 +45,9 @@ public class ConnectivityApi {
 			+ "connectivity_strong_exec_gabow", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeGabow(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 
-		GabowStrongConnectivityInspector<Integer, Integer> alg = new GabowStrongConnectivityInspector<>(g);
+		GabowStrongConnectivityInspector<Integer, ?> alg = new GabowStrongConnectivityInspector<>(g);
 
 		boolean result = alg.isStronglyConnected();
 		List<Set<Integer>> connectedSets = alg.stronglyConnectedSets();
@@ -65,9 +65,9 @@ public class ConnectivityApi {
 			+ "connectivity_weak_exec_bfs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeWeakBfs(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 
-		ConnectivityInspector<Integer, Integer> alg = new ConnectivityInspector<>(g);
+		ConnectivityInspector<Integer, ?> alg = new ConnectivityInspector<>(g);
 
 		boolean result = alg.isConnected();
 		List<Set<Integer>> connectedSets = alg.connectedSets();

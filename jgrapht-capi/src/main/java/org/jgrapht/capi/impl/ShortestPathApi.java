@@ -55,6 +55,9 @@ import org.jgrapht.capi.JGraphTContext.IntegerToCDoublePointerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
+/**
+ * Shortest paths API
+ */
 public class ShortestPathApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();

@@ -42,7 +42,7 @@ public class ClusteringApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clustering_exec_k_spanning_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeKSpanningTree(IsolateThread thread, ObjectHandle graphHandle, int k, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 		ClusteringAlgorithm<Integer> alg = new KSpanningTreeClustering<>(g, k);
 		Clustering<Integer> clustering = alg.getClustering();
 		if (res.isNonNull()) {
@@ -55,7 +55,7 @@ public class ClusteringApi {
 			+ "clustering_exec_label_propagation", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeLabelPropagationTree(IsolateThread thread, ObjectHandle graphHandle, int maxIterations,
 			long seed, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 		ClusteringAlgorithm<Integer> alg = new LabelPropagationClustering<>(g, maxIterations, new Random(seed));
 		Clustering<Integer> clustering = alg.getClustering();
 		if (res.isNonNull()) {
