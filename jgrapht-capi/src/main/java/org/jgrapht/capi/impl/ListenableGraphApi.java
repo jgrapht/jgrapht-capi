@@ -26,6 +26,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.IIFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.LIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.CapiListenableGraph;
@@ -43,8 +44,8 @@ public class ListenableGraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "listenable_as_listenable", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asListenable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
-		CapiListenableGraph<Integer, Integer> gOut = new CapiListenableGraph<>(gIn);
+		Graph<?, ?> gIn = globalHandles.get(graphHandle);
+		CapiListenableGraph<?, ?> gOut = new CapiListenableGraph<>(gIn);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -61,12 +62,32 @@ public class ListenableGraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_listenable_create_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longCreateGraphListener(IsolateThread thread, LIFunctionPointer eventFunctionPointer,
+			WordPointer res) {
+		LongInvokeGraphListener listener = new LongInvokeGraphListener(eventFunctionPointer);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(listener));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "listenable_add_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int addGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
 		ListenableGraph<Integer, Integer> g = globalHandles.get(graphHandle);
 		InvokeGraphListener listener = globalHandles.get(listenerHandle);
+		g.addGraphListener(listener);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_listenable_add_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longAddGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
+		ListenableGraph<Long, Long> g = globalHandles.get(graphHandle);
+		LongInvokeGraphListener listener = globalHandles.get(listenerHandle);
 		g.addGraphListener(listener);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -80,6 +101,15 @@ public class ListenableGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_listenable_remove_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longRemoveGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
+		ListenableGraph<Long, Long> g = globalHandles.get(graphHandle);
+		LongInvokeGraphListener listener = globalHandles.get(listenerHandle);
+		g.removeGraphListener(listener);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
 	private static class InvokeGraphListener implements GraphListener<Integer, Integer> {
 
 		private IIFunctionPointer eventFunctionPointer;
@@ -118,6 +148,51 @@ public class ListenableGraphApi {
 
 		@Override
 		public void edgeWeightUpdated(GraphEdgeChangeEvent<Integer, Integer> e) {
+			if (eventFunctionPointer.isNonNull()) {
+				eventFunctionPointer.invoke(e.getEdge(), e.getType());
+			}
+		}
+
+	}
+	
+	private static class LongInvokeGraphListener implements GraphListener<Long, Long> {
+
+		private LIFunctionPointer eventFunctionPointer;
+
+		public LongInvokeGraphListener(LIFunctionPointer eventFunctionPointer) {
+			this.eventFunctionPointer = eventFunctionPointer;
+		}
+
+		@Override
+		public void vertexAdded(GraphVertexChangeEvent<Long> e) {
+			if (eventFunctionPointer.isNonNull()) {
+				eventFunctionPointer.invoke(e.getVertex(), e.getType());
+			}
+		}
+
+		@Override
+		public void vertexRemoved(GraphVertexChangeEvent<Long> e) {
+			if (eventFunctionPointer.isNonNull()) {
+				eventFunctionPointer.invoke(e.getVertex(), e.getType());
+			}
+		}
+
+		@Override
+		public void edgeAdded(GraphEdgeChangeEvent<Long, Long> e) {
+			if (eventFunctionPointer.isNonNull()) {
+				eventFunctionPointer.invoke(e.getEdge(), e.getType());
+			}
+		}
+
+		@Override
+		public void edgeRemoved(GraphEdgeChangeEvent<Long, Long> e) {
+			if (eventFunctionPointer.isNonNull()) {
+				eventFunctionPointer.invoke(e.getEdge(), e.getType());
+			}
+		}
+
+		@Override
+		public void edgeWeightUpdated(GraphEdgeChangeEvent<Long, Long> e) {
 			if (eventFunctionPointer.isNonNull()) {
 				eventFunctionPointer.invoke(e.getEdge(), e.getType());
 			}

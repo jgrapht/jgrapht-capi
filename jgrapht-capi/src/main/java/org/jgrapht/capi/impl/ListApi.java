@@ -71,6 +71,16 @@ public class ListApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "list_long_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listLongAdd(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
+		List<Long> list = globalHandles.get(handle);
+		boolean result = list.add(value);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "list_double_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listDoubleAdd(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
@@ -93,6 +103,18 @@ public class ListApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_list_edge_pair_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longListEdgePairAdd(IsolateThread thread, ObjectHandle handle, long source, long target,
+			CIntPointer res) {
+		List<Pair<Long, Long>> list = globalHandles.get(handle);
+		boolean result = list.add(Pair.of(source, target));
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "list_edge_triple_add", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -105,11 +127,31 @@ public class ListApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_list_edge_triple_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longListEdgeTripleAdd(IsolateThread thread, ObjectHandle handle, long source, long target,
+			double weight, CIntPointer res) {
+		List<Triple<Long, Long, Double>> list = globalHandles.get(handle);
+		boolean result = list.add(Triple.of(source, target, weight));
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "list_int_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listIntegerRemove(IsolateThread thread, ObjectHandle handle, int value) {
 		List<Integer> list = globalHandles.get(handle);
 		Integer objectToRemove = value;
+		list.remove(objectToRemove);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "list_long_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listLongRemove(IsolateThread thread, ObjectHandle handle, long value) {
+		List<Long> list = globalHandles.get(handle);
+		Long objectToRemove = value;
 		list.remove(objectToRemove);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -126,6 +168,17 @@ public class ListApi {
 			+ "list_int_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listIntegerContains(IsolateThread thread, ObjectHandle handle, int value, CIntPointer res) {
 		List<Integer> list = globalHandles.get(handle);
+		boolean result = list.contains(value);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "list_long_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listLongContains(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
+		List<Long> list = globalHandles.get(handle);
 		boolean result = list.contains(value);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);

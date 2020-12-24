@@ -58,10 +58,36 @@ public class ShortestPathCHApi {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_manytomany_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int manyToManyGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, int source,
+	public static <E> int manyToManyGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, int source,
 			int target, WordPointer res) {
-		ManyToManyShortestPaths<Integer, Integer> alg = globalHandles.get(handle);
-		GraphPath<Integer, Integer> path = alg.getPath(source, target);
+		ManyToManyShortestPaths<Integer, E> alg = globalHandles.get(handle);
+		GraphPath<Integer, E> path = alg.getPath(source, target);
+		if (res.isNonNull()) {
+			if (path != null) {
+				res.write(globalHandles.create(path));
+			} else {
+				res.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	/**
+	 * Given a {@link ManyToManyShortestPaths} get a path.
+	 * 
+	 * @param thread the thread
+	 * @param handle the {@link ManyToManyShortestPaths} handle
+	 * @param source source vertex
+	 * @param target target vertex
+	 * @param res    a {@link GraphPath} handle
+	 * @return status
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_sp_manytomany_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <E> int longManyToManyGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, long source,
+			long target, WordPointer res) {
+		ManyToManyShortestPaths<Long, E> alg = globalHandles.get(handle);
+		GraphPath<Long, E> path = alg.getPath(source, target);
 		if (res.isNonNull()) {
 			if (path != null) {
 				res.write(globalHandles.create(path));
@@ -84,17 +110,17 @@ public class ShortestPathCHApi {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_exec_contraction_hierarchy", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeCH(IsolateThread thread, ObjectHandle graphHandle, int parallelism, long seed,
+	public static <V,E> int executeCH(IsolateThread thread, ObjectHandle graphHandle, int parallelism, long seed,
 			WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
 		if (parallelism < 1) {
 			throw new IllegalArgumentException("Parallelism must be positive");
 		}
 
-		ContractionHierarchyPrecomputation<Integer, Integer> chp = new ContractionHierarchyPrecomputation<>(g,
+		ContractionHierarchyPrecomputation<V, E> chp = new ContractionHierarchyPrecomputation<>(g,
 				parallelism, new SingleRandomToManySupplier(seed));
-		ContractionHierarchy<Integer, Integer> ch = chp.computeContractionHierarchy();
+		ContractionHierarchy<V, E> ch = chp.computeContractionHierarchy();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(ch));
@@ -114,13 +140,13 @@ public class ShortestPathCHApi {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "sp_exec_contraction_hierarchy_get_manytomany", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeCHManyToMany(IsolateThread thread, ObjectHandle chHandle, ObjectHandle sourcesHandle,
+	public static <V,E> int executeCHManyToMany(IsolateThread thread, ObjectHandle chHandle, ObjectHandle sourcesHandle,
 			ObjectHandle targetsHandle, WordPointer res) {
-		ContractionHierarchy<Integer, Integer> ch = globalHandles.get(chHandle);
-		Set<Integer> sources = globalHandles.get(sourcesHandle);
-		Set<Integer> targets = globalHandles.get(targetsHandle);
-		CHManyToManyShortestPaths<Integer, Integer> mm = new CHManyToManyShortestPaths<Integer, Integer>(ch);
-		ManyToManyShortestPaths<Integer, Integer> mmPaths = mm.getManyToManyPaths(sources, targets);
+		ContractionHierarchy<V, E> ch = globalHandles.get(chHandle);
+		Set<V> sources = globalHandles.get(sourcesHandle);
+		Set<V> targets = globalHandles.get(targetsHandle);
+		CHManyToManyShortestPaths<V, E> mm = new CHManyToManyShortestPaths<>(ch);
+		ManyToManyShortestPaths<V, E> mmPaths = mm.getManyToManyPaths(sources, targets);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(mmPaths));
 		}
@@ -157,6 +183,36 @@ public class ShortestPathCHApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	/**
+	 * Given a contraction hierarchy get a {@link GraphPath} using bidirectional
+	 * dijkstra.
+	 * 
+	 * @param thread   the thread
+	 * @param chHandle the contraction hierarchy handle
+	 * @param source   the source vertex
+	 * @param target   the target vertex
+	 * @param res      handle to a {@link GraphPath}.
+	 * @return status
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longExecuteCHBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle chHandle, long source,
+			long target, double radius, WordPointer pathRes) {
+		ContractionHierarchy<Long, Long> ch = globalHandles.get(chHandle);
+
+		ContractionHierarchyBidirectionalDijkstra<Long, Long> alg = new ContractionHierarchyBidirectionalDijkstra<>(
+				ch, radius, PairingHeap::new);
+		GraphPath<Long, Long> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
 	/**
 	 * Helper to return different random instances from a single random seed.
 	 */

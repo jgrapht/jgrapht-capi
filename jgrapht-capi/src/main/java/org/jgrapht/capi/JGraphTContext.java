@@ -180,6 +180,13 @@ public class JGraphTContext {
 		void invoke(int key, int value);
 
 	}
+	
+	public interface LIFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		void invoke(long key, int value);
+
+	}
 
 	public interface IIToIFunctionPointer extends CFunctionPointer {
 

@@ -108,15 +108,20 @@ public class ColoringApi {
 			+ "coloring_exec_chordal_minimum_coloring", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeChordalMinimumColoring(IsolateThread thread, ObjectHandle graphHandle,
 			CIntPointer resColors, WordPointer resColorsMap) {
-		Graph<Integer, ?> g = globalHandles.get(graphHandle);
-		VertexColoringAlgorithm<Integer> alg = new ChordalGraphColoring<>(g);
-		Coloring<Integer> coloring = alg.getColoring();
+		return executeChordalColoring(graphHandle, resColors, resColorsMap);
+	}
+
+	private static <V> int executeChordalColoring(ObjectHandle graphHandle, CIntPointer resColors,
+			WordPointer resColorsMap) {
+		Graph<V, ?> g = globalHandles.get(graphHandle);
+		VertexColoringAlgorithm<V> alg = new ChordalGraphColoring<>(g);
+		Coloring<V> coloring = alg.getColoring();
 
 		if (coloring == null) {
 			throw new IllegalArgumentException("Graph is not chordal");
 		}
 
-		Map<Integer, Integer> colors = new LinkedHashMap<>();
+		Map<V, Integer> colors = new LinkedHashMap<>();
 		coloring.getColors().entrySet().stream().forEach(e -> {
 			colors.put(e.getKey(), e.getValue());
 		});
@@ -130,14 +135,14 @@ public class ColoringApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	private static int executeColoring(IsolateThread thread, ObjectHandle graphHandle,
-			Function<Graph<Integer, ?>, VertexColoringAlgorithm<Integer>> algProvider, CIntPointer resColors,
+	private static <V> int executeColoring(IsolateThread thread, ObjectHandle graphHandle,
+			Function<Graph<V, ?>, VertexColoringAlgorithm<V>> algProvider, CIntPointer resColors,
 			WordPointer resColorsMap) {
-		Graph<Integer, ?> g = globalHandles.get(graphHandle);
-		VertexColoringAlgorithm<Integer> alg = algProvider.apply(g);
-		Coloring<Integer> coloring = alg.getColoring();
+		Graph<V, ?> g = globalHandles.get(graphHandle);
+		VertexColoringAlgorithm<V> alg = algProvider.apply(g);
+		Coloring<V> coloring = alg.getColoring();
 
-		Map<Integer, Integer> colors = new LinkedHashMap<>();
+		Map<V, Integer> colors = new LinkedHashMap<>();
 		coloring.getColors().entrySet().stream().forEach(e -> {
 			colors.put(e.getKey(), e.getValue());
 		});

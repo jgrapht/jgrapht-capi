@@ -109,6 +109,29 @@ public class MapApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "map_long_double_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongDoublePut(IsolateThread thread, ObjectHandle mapHandle, long key, double value) {
+		Map<Long, Double> map = globalHandles.get(mapHandle);
+		map.put(key, value);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_int_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongIntegerPut(IsolateThread thread, ObjectHandle mapHandle, long key, int value) {
+		Map<Long, Integer> map = globalHandles.get(mapHandle);
+		map.put(key, value);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_string_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongStringPut(IsolateThread thread, ObjectHandle mapHandle, long key, CCharPointer valuePtr) {
+		Map<Long, String> map = globalHandles.get(mapHandle);
+		String value = StringUtils.toJavaStringFromUtf8(valuePtr);
+		map.put(key, value);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_int_double_get", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int mapIntDoubleGet(IsolateThread thread, ObjectHandle mapHandle, int key, CDoublePointer res) {
 		Map<Integer, Double> map = globalHandles.get(mapHandle);
@@ -150,9 +173,60 @@ public class MapApi {
 	}
 	
 	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "map_long_double_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongDoubleGet(IsolateThread thread, ObjectHandle mapHandle, long key, CDoublePointer res) {
+		Map<Long, Double> map = globalHandles.get(mapHandle);
+		Double value = map.get(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(value);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_int_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongIntegerGet(IsolateThread thread, ObjectHandle mapHandle, long key, CIntPointer res) {
+		Map<Long, Integer> map = globalHandles.get(mapHandle);
+		Integer value = map.get(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(value);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_string_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongStringGet(IsolateThread thread, ObjectHandle mapHandle, long key, WordPointer res) {
+		Map<Long, String> map = globalHandles.get(mapHandle);
+		String value = map.get(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		CCharPointerHolder cString = StringUtils.toCStringInUtf8(value);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(cString));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "map_int_contains_key", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int mapIntContains(IsolateThread thread, ObjectHandle mapHandle, int key, CIntPointer res) {
 		Map<Integer, ?> map = globalHandles.get(mapHandle);
+		if (res.isNonNull()) {
+			res.write(map.containsKey(key) ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "map_long_contains_key", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongContains(IsolateThread thread, ObjectHandle mapHandle, long key, CIntPointer res) {
+		Map<Long, ?> map = globalHandles.get(mapHandle);
 		if (res.isNonNull()) {
 			res.write(map.containsKey(key) ? 1 : 0);
 		}
@@ -202,6 +276,49 @@ public class MapApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "map_long_double_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongDoubleRemove(IsolateThread thread, ObjectHandle mapHandle, long key,
+			CDoublePointer res) {
+		Map<Long, Double> map = globalHandles.get(mapHandle);
+		Double value = map.remove(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(value);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "map_long_int_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongIntegerRemove(IsolateThread thread, ObjectHandle mapHandle, long key, CIntPointer res) {
+		Map<Long, Integer> map = globalHandles.get(mapHandle);
+		Integer value = map.remove(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(value);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "map_long_string_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongStringRemove(IsolateThread thread, ObjectHandle mapHandle, long key, WordPointer res) {
+		Map<Long, String> map = globalHandles.get(mapHandle);
+		String value = map.remove(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			CCharPointerHolder cString = StringUtils.toCStringInUtf8(value);
+			res.write(globalHandles.create(cString));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
 	@CEntryPoint(name = Constants.LIB_PREFIX + "map_clear", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int clearMap(IsolateThread thread, ObjectHandle mapHandle) {
 		Map<?, ?> map = globalHandles.get(mapHandle);
