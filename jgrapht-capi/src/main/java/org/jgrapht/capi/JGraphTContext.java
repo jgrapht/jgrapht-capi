@@ -16,19 +16,9 @@ public class JGraphTContext {
 	public enum Status {
 
 		// @formatter:off
-		STATUS_SUCCESS, 
-		STATUS_ERROR,
-		STATUS_ILLEGAL_ARGUMENT,
-		STATUS_UNSUPPORTED_OPERATION,
-		STATUS_INDEX_OUT_OF_BOUNDS,
-		STATUS_NO_SUCH_ELEMENT,
-		STATUS_NULL_POINTER,
-		STATUS_CLASS_CAST,
-		STATUS_IO_ERROR,
-		STATUS_EXPORT_ERROR, 
-		STATUS_IMPORT_ERROR,
-		STATUS_NEGATIVE_CYCLE_DETECTED,
-		;
+		STATUS_SUCCESS, STATUS_ERROR, STATUS_ILLEGAL_ARGUMENT, STATUS_UNSUPPORTED_OPERATION, STATUS_INDEX_OUT_OF_BOUNDS,
+		STATUS_NO_SUCH_ELEMENT, STATUS_NULL_POINTER, STATUS_CLASS_CAST, STATUS_IO_ERROR, STATUS_EXPORT_ERROR,
+		STATUS_IMPORT_ERROR, STATUS_NEGATIVE_CYCLE_DETECTED,;
 		// @formatter:on
 
 		@CEnumValue
@@ -43,10 +33,7 @@ public class JGraphTContext {
 	public enum ExporterDIMACSFormat {
 
 		// @formatter:off
-		DIMACS_FORMAT_SHORTEST_PATH, 
-		DIMACS_FORMAT_MAX_CLIQUE,
-		DIMACS_FORMAT_COLORING,
-		;
+		DIMACS_FORMAT_SHORTEST_PATH, DIMACS_FORMAT_MAX_CLIQUE, DIMACS_FORMAT_COLORING,;
 		// @formatter:on
 
 		@CEnumValue
@@ -61,10 +48,7 @@ public class JGraphTContext {
 	public enum ImporterExporterCSVFormat {
 
 		// @formatter:off
-	    CSV_FORMAT_EDGE_LIST,
-	    CSV_FORMAT_ADJACENCY_LIST,
-	    CSV_FORMAT_MATRIX,
-		;
+		CSV_FORMAT_EDGE_LIST, CSV_FORMAT_ADJACENCY_LIST, CSV_FORMAT_MATRIX,;
 		// @formatter:on
 
 		@CEnumValue
@@ -79,16 +63,9 @@ public class JGraphTContext {
 	public enum GraphEvent {
 
 		// @formatter:off
-	    GRAPH_EVENT_BEFORE_VERTEX_ADDED,
-	    GRAPH_EVENT_BEFORE_VERTEX_REMOVED,
-	    GRAPH_EVENT_VERTEX_ADDED,
-	    GRAPH_EVENT_VERTEX_REMOVED,
-	    GRAPH_EVENT_BEFORE_EDGE_ADDED,
-	    GRAPH_EVENT_BEFORE_EDGE_REMOVED,
-	    GRAPH_EVENT_EDGE_ADDED,
-	    GRAPH_EVENT_EDGE_REMOVED,
-	    GRAPH_EVENT_EDGE_WEIGHT_UPDATED,
-		;
+		GRAPH_EVENT_BEFORE_VERTEX_ADDED, GRAPH_EVENT_BEFORE_VERTEX_REMOVED, GRAPH_EVENT_VERTEX_ADDED,
+		GRAPH_EVENT_VERTEX_REMOVED, GRAPH_EVENT_BEFORE_EDGE_ADDED, GRAPH_EVENT_BEFORE_EDGE_REMOVED,
+		GRAPH_EVENT_EDGE_ADDED, GRAPH_EVENT_EDGE_REMOVED, GRAPH_EVENT_EDGE_WEIGHT_UPDATED,;
 		// @formatter:on
 
 		@CEnumValue
@@ -173,6 +150,20 @@ public class JGraphTContext {
 
 		@InvokeCFunctionPointer
 		CDoublePointer invoke(int key);
+
+	}
+
+	public interface LongToDoubleFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		double invoke(long key);
+
+	}
+	
+	public interface LongToBooleanFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		boolean invoke(long key);
 
 	}
 

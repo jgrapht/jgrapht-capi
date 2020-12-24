@@ -79,6 +79,16 @@ public class SetApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "set_long_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int setLongAdd(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
+		Set<Long> set = globalHandles.get(handle);
+		boolean result = set.add(value);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_double_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setDoubleAdd(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
@@ -93,6 +103,13 @@ public class SetApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_int_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setIntRemove(IsolateThread thread, ObjectHandle handle, int value) {
 		Set<Integer> set = globalHandles.get(handle);
+		set.remove(value);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "set_long_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int setLongRemove(IsolateThread thread, ObjectHandle handle, long value) {
+		Set<Long> set = globalHandles.get(handle);
 		set.remove(value);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -116,6 +133,17 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "set_long_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int setLongContains(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
+		Set<Long> set = globalHandles.get(handle);
+		boolean result = set.contains(value);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "set_double_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setDoubleContains(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {

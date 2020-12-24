@@ -42,9 +42,9 @@ public class ClusteringApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clustering_exec_k_spanning_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeKSpanningTree(IsolateThread thread, ObjectHandle graphHandle, int k, WordPointer res) {
-		Graph<Integer, ?> g = globalHandles.get(graphHandle);
-		ClusteringAlgorithm<Integer> alg = new KSpanningTreeClustering<>(g, k);
-		Clustering<Integer> clustering = alg.getClustering();
+		Graph<?, ?> g = globalHandles.get(graphHandle);
+		ClusteringAlgorithm<?> alg = new KSpanningTreeClustering<>(g, k);
+		Clustering<?> clustering = alg.getClustering();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(clustering));
 		}
@@ -55,9 +55,9 @@ public class ClusteringApi {
 			+ "clustering_exec_label_propagation", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeLabelPropagationTree(IsolateThread thread, ObjectHandle graphHandle, int maxIterations,
 			long seed, WordPointer res) {
-		Graph<Integer, ?> g = globalHandles.get(graphHandle);
-		ClusteringAlgorithm<Integer> alg = new LabelPropagationClustering<>(g, maxIterations, new Random(seed));
-		Clustering<Integer> clustering = alg.getClustering();
+		Graph<?, ?> g = globalHandles.get(graphHandle);
+		ClusteringAlgorithm<?> alg = new LabelPropagationClustering<>(g, maxIterations, new Random(seed));
+		Clustering<?> clustering = alg.getClustering();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(clustering));
 		}
@@ -67,7 +67,7 @@ public class ClusteringApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clustering_get_number_clusters", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getNumberOfClusters(IsolateThread thread, ObjectHandle cHandle, CIntPointer res) {
-		Clustering<Integer> c = globalHandles.get(cHandle);
+		Clustering<?> c = globalHandles.get(cHandle);
 		if (res.isNonNull()) {
 			res.write(c.getNumberClusters());
 		}
@@ -78,8 +78,8 @@ public class ClusteringApi {
 			+ "clustering_ith_cluster_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getClusterWithIndexVertexIterator(IsolateThread thread, ObjectHandle cHandle, int i,
 			WordPointer res) {
-		Clustering<Integer> c = globalHandles.get(cHandle);
-		Iterator<Integer> it = c.getClusters().get(i).iterator();
+		Clustering<?> c = globalHandles.get(cHandle);
+		Iterator<?> it = c.getClusters().get(i).iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}

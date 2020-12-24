@@ -110,12 +110,12 @@ public class VertexCoverApi {
 				(g, weights) -> new RecursiveExactVCImpl<>(g, weights), weightRes, res);
 	}
 
-	private static int executeVertexCover(IsolateThread thread, ObjectHandle graphHandle,
-			Function<Graph<Integer, Integer>, VertexCoverAlgorithm<Integer>> algProvider, CDoublePointer weightRes,
+	private static <V,E> int executeVertexCover(IsolateThread thread, ObjectHandle graphHandle,
+			Function<Graph<V, E>, VertexCoverAlgorithm<V>> algProvider, CDoublePointer weightRes,
 			WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		VertexCoverAlgorithm<Integer> alg = algProvider.apply(g);
-		VertexCover<Integer> vertexCover = alg.getVertexCover();
+		Graph<V, E> g = globalHandles.get(graphHandle);
+		VertexCoverAlgorithm<V> alg = algProvider.apply(g);
+		VertexCover<V> vertexCover = alg.getVertexCover();
 		if (weightRes.isNonNull()) {
 			weightRes.write(vertexCover.getWeight());
 		}
@@ -125,14 +125,14 @@ public class VertexCoverApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	private static int executeVertexCoverWeighted(IsolateThread thread, ObjectHandle graphHandle,
+	private static <V,E> int executeVertexCoverWeighted(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle mapHandle,
-			BiFunction<Graph<Integer, Integer>, Map<Integer, Double>, VertexCoverAlgorithm<Integer>> algProvider,
+			BiFunction<Graph<V, E>, Map<V, Double>, VertexCoverAlgorithm<V>> algProvider,
 			CDoublePointer weightRes, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		Map<Integer, Double> vertexWeights = globalHandles.get(mapHandle);
-		VertexCoverAlgorithm<Integer> alg = algProvider.apply(g, vertexWeights);
-		VertexCover<Integer> vertexCover = alg.getVertexCover();
+		Graph<V, E> g = globalHandles.get(graphHandle);
+		Map<V, Double> vertexWeights = globalHandles.get(mapHandle);
+		VertexCoverAlgorithm<V> alg = algProvider.apply(g, vertexWeights);
+		VertexCover<V> vertexCover = alg.getVertexCover();
 		if (weightRes.isNonNull()) {
 			weightRes.write(vertexCover.getWeight());
 		}

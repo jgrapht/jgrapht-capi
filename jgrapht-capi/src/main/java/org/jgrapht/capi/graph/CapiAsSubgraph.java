@@ -5,19 +5,19 @@ import java.util.Set;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.AsSubgraph;
 
-public class CapiAsSubgraph extends AsSubgraph<Integer, Integer>
-		implements CapiGraphWrapper<Integer, Integer> {
+public class CapiAsSubgraph<V,E> extends AsSubgraph<V, E>
+		implements CapiGraphWrapper<V, E> {
 	private static final long serialVersionUID = 1L;
 
-	private Graph<Integer, Integer> wrappedGraph;
+	private Graph<V, E> wrappedGraph;
 
-	public CapiAsSubgraph(Graph<Integer, Integer> g, Set<? extends Integer> vertexSubset, Set<? extends Integer> edgeSubset) {
+	public CapiAsSubgraph(Graph<V, E> g, Set<? extends V> vertexSubset, Set<? extends E> edgeSubset) {
 		super(g, vertexSubset, edgeSubset);
 		this.wrappedGraph = g;
 	}
 
 	@Override
-	public Graph<Integer, Integer> getWrappedGraph() {
+	public Graph<V, E> getWrappedGraph() {
 		return wrappedGraph;
 	}
 

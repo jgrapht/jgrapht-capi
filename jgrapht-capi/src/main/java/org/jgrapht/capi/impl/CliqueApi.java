@@ -17,7 +17,6 @@
  */
 package org.jgrapht.capi.impl;
 
-import java.util.Iterator;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -44,50 +43,50 @@ public class CliqueApi {
 			+ "clique_exec_bron_kerbosch", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBrownKerbosch(IsolateThread thread, ObjectHandle graphHandle, long timeoutSeconds,
 			WordPointer res) {
-		Graph<Integer, ?> g = globalHandles.get(graphHandle);
-		MaximalCliqueEnumerationAlgorithm<Integer, ?> alg = new BronKerboschCliqueFinder<>(g, timeoutSeconds,
+		Graph<?, ?> g = globalHandles.get(graphHandle);
+		MaximalCliqueEnumerationAlgorithm<?, ?> alg = new BronKerboschCliqueFinder<>(g, timeoutSeconds,
 				TimeUnit.SECONDS);
-		Iterator<Set<Integer>> it = alg.iterator();
+		Object it = alg.iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-
+	
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clique_exec_bron_kerbosch_pivot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBrownKerboschWithPivot(IsolateThread thread, ObjectHandle graphHandle, long timeoutSeconds,
 			WordPointer res) {
-		Graph<Integer, ?> g = globalHandles.get(graphHandle);
-		MaximalCliqueEnumerationAlgorithm<Integer, ?> alg = new PivotBronKerboschCliqueFinder<>(g, timeoutSeconds,
+		Graph<?, ?> g = globalHandles.get(graphHandle);
+		MaximalCliqueEnumerationAlgorithm<?, ?> alg = new PivotBronKerboschCliqueFinder<>(g, timeoutSeconds,
 				TimeUnit.SECONDS);
-		Iterator<Set<Integer>> it = alg.iterator();
+		Object it = alg.iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-
+	
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clique_exec_bron_kerbosch_pivot_degeneracy_ordering", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBrownKerboschPivotAndDegeneracyOrdering(IsolateThread thread, ObjectHandle graphHandle,
 			long timeoutSeconds, WordPointer res) {
-		Graph<Integer, ?> g = globalHandles.get(graphHandle);
-		MaximalCliqueEnumerationAlgorithm<Integer, ?> alg = new DegeneracyBronKerboschCliqueFinder<>(g, timeoutSeconds,
+		Graph<?, ?> g = globalHandles.get(graphHandle);
+		MaximalCliqueEnumerationAlgorithm<?, ?> alg = new DegeneracyBronKerboschCliqueFinder<>(g, timeoutSeconds,
 				TimeUnit.SECONDS);
-		Iterator<Set<Integer>> it = alg.iterator();
+		Object it = alg.iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-
+	
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "clique_exec_chordal_max_clique", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeChordalMaxCliqueFinder(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, ?> g = globalHandles.get(graphHandle);
-		ChordalGraphMaxCliqueFinder<Integer, ?> alg = new ChordalGraphMaxCliqueFinder<>(g);
-		Set<Integer> clique = alg.getClique();
+		Graph<?, ?> g = globalHandles.get(graphHandle);
+		ChordalGraphMaxCliqueFinder<?, ?> alg = new ChordalGraphMaxCliqueFinder<>(g);
+		Set<?> clique = alg.getClique();
 		if (clique == null) {
 			throw new IllegalArgumentException("Graph is not chordal");
 		}
