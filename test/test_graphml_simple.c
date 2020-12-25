@@ -60,16 +60,16 @@ int main() {
 
     // import a gexf from string
     void *g;
-    jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
 
-    jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 1, 2, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 2, 0, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 1, 2, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 2, 0, NULL);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
@@ -90,7 +90,7 @@ int main() {
 
     // now read back 
     jgrapht_capi_handles_destroy(thread, g);
-    jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, &g);
 
     jgrapht_capi_import_file_graphml_simple(thread, g, "dummy.graphml.simple.out", import_id, 1, NULL, edge_attribute, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);

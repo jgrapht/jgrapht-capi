@@ -18,28 +18,28 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
-    jgrapht_capi_graph_create(thread, 1, 0, 0, 1, &g);
+    jgrapht_capi_ii_graph_create(thread, 1, 0, 0, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
 
-    jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 0, 5.0);
-    jgrapht_capi_graph_add_edge(thread, g, 1, 2, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 1, 2.0);
-    jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 2, 100.0);
-    jgrapht_capi_graph_add_edge(thread, g, 3, 4, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 3, 2.0);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 5, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 4, 20.0);
-    jgrapht_capi_graph_add_edge(thread, g, 5, 3, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 5, 20.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 0, 5.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 1, 2, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 1, 2.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 2, 3, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 2, 100.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 3, 4, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 3, 2.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 5, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 4, 20.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 5, 3, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 5, 20.0);
     
     void *gp;
     double weight; 
@@ -47,7 +47,7 @@ int main() {
 
     // test yen
     void *gpit;
-    jgrapht_capi_sp_exec_yen_get_k_loopless_paths_between_vertices(thread, g, 0, 4, 2, &gpit);
+    jgrapht_capi_ii_sp_exec_yen_get_k_loopless_paths_between_vertices(thread, g, 0, 4, 2, &gpit);
     assert(jgrapht_capi_error_get_errno(thread) == 0);    
 
     int hasnext = 0;
@@ -56,7 +56,7 @@ int main() {
     jgrapht_capi_it_next_object(thread, gpit, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);    
 
-    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_ii_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 42.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);
@@ -68,7 +68,7 @@ int main() {
     jgrapht_capi_it_next_object(thread, gpit, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_ii_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 109.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);
@@ -78,7 +78,7 @@ int main() {
 
 
     // test eppstein
-    jgrapht_capi_sp_exec_eppstein_get_k_paths_between_vertices(thread, g, 0, 4, 2, &gpit);
+    jgrapht_capi_ii_sp_exec_eppstein_get_k_paths_between_vertices(thread, g, 0, 4, 2, &gpit);
     assert(jgrapht_capi_error_get_errno(thread) == 0);    
 
     jgrapht_capi_it_hasnext(thread, gpit, &hasnext);
@@ -86,7 +86,7 @@ int main() {
     jgrapht_capi_it_next_object(thread, gpit, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);    
 
-    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_ii_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 42.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);
@@ -98,7 +98,7 @@ int main() {
     jgrapht_capi_it_next_object(thread, gpit, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_ii_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 109.0);
     assert(start_vertex == 0);
     assert(end_vertex == 4);

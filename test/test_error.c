@@ -18,28 +18,28 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
-    jgrapht_capi_graph_create(thread, 1, 0, 0, 0, &g);
+    jgrapht_capi_ii_graph_create(thread, 1, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int v0;
-    jgrapht_capi_graph_add_vertex(thread, g, &v0);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, &v0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     int v1;
-    jgrapht_capi_graph_add_vertex(thread, g, &v1);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, &v1);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     int v2 = 2;
 
-    jgrapht_capi_graph_add_edge(thread, g, v0, v2, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, v0, v2, NULL);
     assert(jgrapht_capi_error_get_errno(thread) != 0);
     assert(strcmp("no such vertex in graph: 2", jgrapht_capi_error_get_errno_msg(thread)) == 0);
     jgrapht_capi_error_clear_errno(thread);
     assert(jgrapht_capi_error_get_errno(thread) == 0);    
 
     int e01;
-    jgrapht_capi_graph_add_edge(thread, g, v0, v1, &e01);
+    jgrapht_capi_ii_graph_add_edge(thread, g, v0, v1, &e01);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_graph_set_edge_weight(thread, g, e01, 15.0);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, e01, 15.0);
     assert(jgrapht_capi_error_get_errno(thread) == STATUS_UNSUPPORTED_OPERATION);
     assert(strcmp("Error (UnsupportedOperationException)", jgrapht_capi_error_get_errno_msg(thread)) == 0);    
     jgrapht_capi_error_clear_errno(thread);

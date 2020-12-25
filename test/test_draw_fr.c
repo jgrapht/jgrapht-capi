@@ -18,20 +18,20 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
-    jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int i;
     for(i = 0; i < 7; i++) { 
-        jgrapht_capi_graph_add_vertex(thread, g, NULL);
+        jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
     }
 
-    jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 2, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 3, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 4, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 5, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 6, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 2, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 3, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 4, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 5, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 6, NULL);
 
     // create model
     void *model;

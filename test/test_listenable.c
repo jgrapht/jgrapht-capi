@@ -22,25 +22,25 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
-    jgrapht_capi_graph_create(thread, 1, 1, 1, 1, &g);
+    jgrapht_capi_ii_graph_create(thread, 1, 1, 1, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *gl;
-    jgrapht_capi_listenable_as_listenable(thread, g, &gl);
+    jgrapht_capi_xx_listenable_as_listenable(thread, g, &gl);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *listener;
-    jgrapht_capi_listenable_create_graph_listener(thread, event, &listener);
+    jgrapht_capi_ii_listenable_create_graph_listener(thread, event, &listener);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_listenable_add_graph_listener(thread, gl, listener);
+    jgrapht_capi_ii_listenable_add_graph_listener(thread, gl, listener);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int v; 
-    jgrapht_capi_graph_add_vertex(thread, gl, &v);
+    jgrapht_capi_ii_graph_add_vertex(thread, gl, &v);
     assert( v == 0);
 
-    jgrapht_capi_listenable_remove_graph_listener(thread, gl, listener);
+    jgrapht_capi_ii_listenable_remove_graph_listener(thread, gl, listener);
     jgrapht_capi_handles_destroy(thread, gl);
     jgrapht_capi_handles_destroy(thread, g);
 

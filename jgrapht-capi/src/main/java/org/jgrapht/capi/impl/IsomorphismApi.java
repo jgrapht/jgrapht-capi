@@ -19,7 +19,7 @@ public class IsomorphismApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "isomorphism_exec_vf2", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executeVF2(IsolateThread thread, ObjectHandle graph1Handle, ObjectHandle graph2Handle,
 			CIntPointer existsRes, WordPointer graphMappingIteratorRes) {
@@ -44,7 +44,7 @@ public class IsomorphismApi {
 	 * subgraphs</a> of a larger graph. It does not find isomorphisms between the
 	 * smaller graph and arbitrary subgraphs of the larger graph.
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "isomorphism_exec_vf2_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executeVF2Subgraph(IsolateThread thread, ObjectHandle graph1Handle, ObjectHandle graph2Handle,
 			CIntPointer existsRes, WordPointer graphMappingIteratorRes) {
@@ -62,7 +62,7 @@ public class IsomorphismApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "isomorphism_graph_mapping_edge_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphMappingEdge(IsolateThread thread, ObjectHandle mappingHandle, int edge, boolean forward,
 			CIntPointer existsEdgeRes, CIntPointer edgeRes) {
@@ -82,9 +82,9 @@ public class IsomorphismApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_isomorphism_graph_mapping_edge_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longGraphMappingEdge(IsolateThread thread, ObjectHandle mappingHandle, long edge, boolean forward,
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "isomorphism_graph_mapping_edge_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int graphMappingEdge(IsolateThread thread, ObjectHandle mappingHandle, long edge, boolean forward,
 			CIntPointer existsEdgeRes, CLongPointer edgeRes) {
 		GraphMapping<Long, Long> graphMapping = globalHandles.get(mappingHandle);
 
@@ -102,7 +102,7 @@ public class IsomorphismApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "isomorphism_graph_mapping_vertex_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphMappingVertex(IsolateThread thread, ObjectHandle mappingHandle, int vertex, boolean forward,
 			CIntPointer existsVertexRes, CIntPointer vertexRes) {
@@ -122,9 +122,9 @@ public class IsomorphismApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_isomorphism_graph_mapping_vertex_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longGraphMappingVertex(IsolateThread thread, ObjectHandle mappingHandle, long vertex, boolean forward,
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "isomorphism_graph_mapping_vertex_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int graphMappingVertex(IsolateThread thread, ObjectHandle mappingHandle, long vertex, boolean forward,
 			CIntPointer existsVertexRes, CLongPointer vertexRes) {
 		GraphMapping<Long, Long> graphMapping = globalHandles.get(mappingHandle);
 

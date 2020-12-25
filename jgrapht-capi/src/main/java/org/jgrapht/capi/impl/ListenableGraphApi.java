@@ -41,7 +41,7 @@ public class ListenableGraphApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "listenable_as_listenable", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asListenable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> gIn = globalHandles.get(graphHandle);
@@ -52,7 +52,7 @@ public class ListenableGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "listenable_create_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createGraphListener(IsolateThread thread, IIFunctionPointer eventFunctionPointer,
 			WordPointer res) {
@@ -63,9 +63,9 @@ public class ListenableGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_listenable_create_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longCreateGraphListener(IsolateThread thread, LIFunctionPointer eventFunctionPointer,
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "listenable_create_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createGraphListener(IsolateThread thread, LIFunctionPointer eventFunctionPointer,
 			WordPointer res) {
 		LongInvokeGraphListener listener = new LongInvokeGraphListener(eventFunctionPointer);
 		if (res.isNonNull()) {
@@ -74,7 +74,7 @@ public class ListenableGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "listenable_add_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int addGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
 		ListenableGraph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -83,16 +83,16 @@ public class ListenableGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_listenable_add_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longAddGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "listenable_add_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int llAddGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
 		ListenableGraph<Long, Long> g = globalHandles.get(graphHandle);
 		LongInvokeGraphListener listener = globalHandles.get(listenerHandle);
 		g.addGraphListener(listener);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "listenable_remove_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
 		ListenableGraph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -101,9 +101,9 @@ public class ListenableGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_listenable_remove_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longRemoveGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "listenable_remove_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int llRemoveGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
 		ListenableGraph<Long, Long> g = globalHandles.get(graphHandle);
 		LongInvokeGraphListener listener = globalHandles.get(listenerHandle);
 		g.removeGraphListener(listener);

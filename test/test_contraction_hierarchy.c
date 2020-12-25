@@ -18,40 +18,40 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
-    jgrapht_capi_graph_create(thread, 1, 0, 0, 1, &g);
+    jgrapht_capi_ii_graph_create(thread, 1, 0, 0, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
 
-    jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 0, 5.0);
-    jgrapht_capi_graph_add_edge(thread, g, 1, 2, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 1, 2.0);
-    jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 2, 100.0);
-    jgrapht_capi_graph_add_edge(thread, g, 3, 4, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 3, 2.0);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 5, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 4, 20.0);
-    jgrapht_capi_graph_add_edge(thread, g, 5, 3, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 5, 20.0);
-    jgrapht_capi_graph_add_edge(thread, g, 6, 7, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 6, 50.0);
-    jgrapht_capi_graph_add_edge(thread, g, 3, 6, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 7, 40.0);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 7, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 8, 70.0);
-    jgrapht_capi_graph_add_edge(thread, g, 5, 7, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 9, 10.0);
-    jgrapht_capi_graph_add_edge(thread, g, 5, 6, NULL);
-    jgrapht_capi_graph_set_edge_weight(thread, g, 10, 100.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 0, 5.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 1, 2, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 1, 2.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 2, 3, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 2, 100.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 3, 4, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 3, 2.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 5, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 4, 20.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 5, 3, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 5, 20.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 6, 7, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 6, 50.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 3, 6, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 7, 40.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 7, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 8, 70.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 5, 7, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 9, 10.0);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 5, 6, NULL);
+    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 10, 100.0);
 
     
     // create CH
@@ -68,7 +68,7 @@ int main() {
     double weight; 
     int start_vertex;
     int end_vertex;
-    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_ii_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 80.0);
     assert(start_vertex == 0);
     assert(end_vertex == 6);
@@ -93,7 +93,7 @@ int main() {
     // query with many to many
     jgrapht_capi_sp_manytomany_get_path_between_vertices(thread, mm, 0, 6, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_ii_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 80.0);
     assert(start_vertex == 0);
     assert(end_vertex == 6);
@@ -101,7 +101,7 @@ int main() {
 
     jgrapht_capi_sp_manytomany_get_path_between_vertices(thread, mm, 1, 7, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-    jgrapht_capi_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_ii_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     printf("%lf\n", weight);
     assert(weight == 192.0);
     assert(start_vertex == 1);

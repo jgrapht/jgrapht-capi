@@ -119,7 +119,8 @@ public class GraphApi {
 	 * @param thread the thread isolate
 	 * @return the graph handle
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
 			boolean allowingMultipleEdges, boolean weighted, WordPointer res) {
 		Graph<Integer, Integer> graph = createGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted);
@@ -135,7 +136,8 @@ public class GraphApi {
 	 * @param thread the thread isolate
 	 * @return the graph handle
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "ll_graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createLongGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
 			boolean allowingMultipleEdges, boolean weighted, WordPointer res) {
 		Graph<Long, Long> graph = createLongGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted);
@@ -151,7 +153,7 @@ public class GraphApi {
 	 * @param thread the thread isolate
 	 * @return the graph handle
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_sparse_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createSparseGraph(IsolateThread thread, boolean directed, boolean weighted, int numVertices,
 			ObjectHandle edgesListHandle, WordPointer res) {
@@ -177,7 +179,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_vertices_count", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int verticesCount(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -187,10 +189,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_vertices_count", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int verticesLongCount(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_vertices_count", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int verticesCount(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		long result = g.vertexSet().size();
 		if (res.isNonNull()) {
@@ -199,7 +201,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_edges_count", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgesCount(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -209,10 +211,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_edges_count", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int edgesLongCount(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_edges_count", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgesCount(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
 		long result = g.edgeSet().size();
 		if (res.isNonNull()) {
@@ -221,7 +223,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_add_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int addVertex(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -232,9 +234,9 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_add_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int addLongVertex(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_add_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int addVertex(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		long result = g.addVertex();
 		if (res.isNonNull()) {
@@ -243,7 +245,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_add_given_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int addGivenVertex(IsolateThread thread, ObjectHandle graphHandle, int vertex, CIntPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -254,9 +256,9 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_add_given_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int addGivenLongVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, CIntPointer res) {
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_add_given_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int addGivenVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		boolean result = g.addVertex(vertex);
 		if (res.isNonNull()) {
@@ -265,7 +267,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_remove_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeVertex(IsolateThread thread, ObjectHandle graphHandle, int vertex, CIntPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -275,10 +277,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_remove_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int removeLongVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, CIntPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_remove_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int removeVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		boolean result = g.removeVertex(vertex);
 		if (res.isNonNull()) {
@@ -287,7 +289,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_contains_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsVertex(IsolateThread thread, ObjectHandle graphHandle, int vertex, CIntPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -297,10 +299,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_contains_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int containsLongVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, CIntPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_contains_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int containsVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		boolean result = g.containsVertex(vertex);
 		if (res.isNonNull()) {
@@ -309,7 +311,8 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_add_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "graph_add_edge", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int addEdge(IsolateThread thread, ObjectHandle graphHandle, int source, int target, CIntPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 		Integer result = g.addEdge(source, target);
@@ -321,9 +324,11 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX + "ll_graph_add_edge", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int addLongEdge(IsolateThread thread, ObjectHandle graphHandle, long source, long target, CLongPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_add_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int addEdge(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
+			CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Long result = g.addEdge(source, target);
 		if (result == null) {
@@ -335,7 +340,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_add_given_edge", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int addGivenEdge(IsolateThread thread, ObjectHandle graphHandle, int source, int target, int edge,
 			CIntPointer res) {
@@ -346,10 +351,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_add_given_edge", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int addGivenLongEdge(IsolateThread thread, ObjectHandle graphHandle, long source, long target, long edge,
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_add_given_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int addGivenEdge(IsolateThread thread, ObjectHandle graphHandle, long source, long target, long edge,
 			CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		boolean result = g.addEdge(source, target, edge);
@@ -359,7 +364,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_remove_edge", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeEdge(IsolateThread thread, ObjectHandle graphHandle, int edge, CIntPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -369,10 +374,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_remove_edge", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int removeLongEdge(IsolateThread thread, ObjectHandle graphHandle, long edge, CIntPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_remove_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int removeEdge(IsolateThread thread, ObjectHandle graphHandle, long edge, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		boolean result = g.removeEdge(edge);
 		if (res.isNonNull()) {
@@ -381,7 +386,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_contains_edge", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsEdge(IsolateThread thread, ObjectHandle graphHandle, int edge, CIntPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -391,10 +396,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_contains_edge", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int containsLongEdge(IsolateThread thread, ObjectHandle graphHandle, long edge, CIntPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_contains_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int containsEdge(IsolateThread thread, ObjectHandle graphHandle, long edge, CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		boolean result = g.containsEdge(edge);
 		if (res.isNonNull()) {
@@ -403,7 +408,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_contains_edge_between", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsEdgeBetween(IsolateThread thread, ObjectHandle graphHandle, int source, int target,
 			CIntPointer res) {
@@ -414,10 +419,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_contains_edge_between", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int containsLongEdgeBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_contains_edge_between", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int containsEdgeBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
 			CIntPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		boolean result = g.containsEdge(source, target);
@@ -427,7 +432,8 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "graph_degree_of", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "graph_degree_of", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int degreeOf(IsolateThread thread, ObjectHandle graphHandle, int vertex, CIntPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 		int result = g.degreeOf(vertex);
@@ -436,9 +442,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX + "ll_graph_degree_of", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex, CLongPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_degree_of", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int degreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		long result = g.degreeOf(vertex);
 		if (res.isNonNull()) {
@@ -447,7 +454,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_indegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int inDegreeOf(IsolateThread thread, ObjectHandle graphHandle, int vertex, CIntPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -457,10 +464,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_indegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longInDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex, CLongPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_indegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int inDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		long result = g.inDegreeOf(vertex);
 		if (res.isNonNull()) {
@@ -469,7 +476,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_outdegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int outDegreeOf(IsolateThread thread, ObjectHandle graphHandle, int vertex, CIntPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -479,10 +486,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_outdegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longOutDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex, CLongPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_outdegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int outDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		long result = g.outDegreeOf(vertex);
 		if (res.isNonNull()) {
@@ -491,7 +498,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_edge_source", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgeSource(IsolateThread thread, ObjectHandle graphHandle, int edge, CIntPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -501,10 +508,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_edge_source", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longEdgeSource(IsolateThread thread, ObjectHandle graphHandle, long edge, CLongPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_edge_source", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgeSource(IsolateThread thread, ObjectHandle graphHandle, long edge, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		long result = g.getEdgeSource(edge);
 		if (res.isNonNull()) {
@@ -513,7 +520,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_edge_target", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgeTarget(IsolateThread thread, ObjectHandle graphHandle, int edge, CIntPointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -523,10 +530,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_edge_target", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longEdgeTarget(IsolateThread thread, ObjectHandle graphHandle, long edge, CLongPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_edge_target", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgeTarget(IsolateThread thread, ObjectHandle graphHandle, long edge, CLongPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		long result = g.getEdgeTarget(edge);
 		if (res.isNonNull()) {
@@ -535,7 +542,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_is_weighted", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int isWeighted(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -546,7 +553,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_is_directed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int isDirected(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -557,7 +564,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_is_undirected", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int isUndirected(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -568,7 +575,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_is_allowing_selfloops", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int allowSelfLoops(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -579,7 +586,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_is_allowing_multipleedges", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int allowMultipleEdges(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -590,7 +597,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_is_allowing_cycles", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int allowsCycles(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -601,7 +608,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_is_modifiable", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int isModifiable(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -612,7 +619,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_get_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getEdgeWeight(IsolateThread thread, ObjectHandle graphHandle, int edge, CDoublePointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -622,10 +629,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_get_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longGetEdgeWeight(IsolateThread thread, ObjectHandle graphHandle, long edge, CDoublePointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_get_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getEdgeWeight(IsolateThread thread, ObjectHandle graphHandle, long edge, CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		double result = g.getEdgeWeight(edge);
 		if (res.isNonNull()) {
@@ -634,23 +641,23 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_set_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setEdgeWeight(IsolateThread thread, ObjectHandle graphHandle, int edge, double weight) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 		g.setEdgeWeight(edge, weight);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_set_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longSetEdgeWeight(IsolateThread thread, ObjectHandle graphHandle, long edge, double weight) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_set_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int setEdgeWeight(IsolateThread thread, ObjectHandle graphHandle, long edge, double weight) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		g.setEdgeWeight(edge, weight);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_create_all_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createAllVerticesIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -660,8 +667,8 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_create_all_eit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createAllEdgesIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -672,7 +679,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_create_between_eit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createEdgesBetweenIterator(IsolateThread thread, ObjectHandle graphHandle, int source, int target,
 			WordPointer res) {
@@ -687,11 +694,11 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_create_between_eit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longCreateEdgesBetweenIterator(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
-			WordPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_create_between_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createEdgesBetweenIterator(IsolateThread thread, ObjectHandle graphHandle, long source,
+			long target, WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Set<Long> edges = g.getAllEdges(source, target);
 		if (edges == null) {
@@ -704,7 +711,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_vertex_create_eit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createVertexEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
@@ -715,10 +722,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_vertex_create_eit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longCreateVertexEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, long vertex,
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_vertex_create_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createVertexEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = g.edgesOf(vertex).iterator();
@@ -728,7 +735,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_vertex_create_out_eit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createVertexOutEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
@@ -739,10 +746,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_vertex_create_out_eit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longCreateVertexOutEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, long vertex,
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_vertex_create_out_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createVertexOutEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = g.outgoingEdgesOf(vertex).iterator();
@@ -752,7 +759,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_vertex_create_in_eit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createVertexInEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
@@ -763,10 +770,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_vertex_create_in_eit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longCreateVertexInEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, long vertex,
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_vertex_create_in_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createVertexInEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = g.incomingEdgesOf(vertex).iterator();
@@ -776,7 +783,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_as_undirected", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asUndirected(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> gIn = globalHandles.get(graphHandle);
@@ -787,7 +794,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_as_unmodifiable", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asUnmodifiable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> gIn = globalHandles.get(graphHandle);
@@ -798,7 +805,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_as_unweighted", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asUnweighted(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> gIn = globalHandles.get(graphHandle);
@@ -809,7 +816,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_as_edgereversed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asEdgeReversed(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> gIn = globalHandles.get(graphHandle);
@@ -820,7 +827,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_as_weighted", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asWeighted(IsolateThread thread, ObjectHandle graphHandle,
 			IntegerToDoubleFunctionPointer weightFunctionPointer, boolean cacheWeights, boolean writeWeightsThrough,
@@ -835,16 +842,17 @@ public class GraphApi {
 			return 1d;
 		};
 
-		Graph<Integer, Integer> gOut = new CapiAsWeightedGraph<>(gIn, weightFunction, cacheWeights, writeWeightsThrough);
+		Graph<Integer, Integer> gOut = new CapiAsWeightedGraph<>(gIn, weightFunction, cacheWeights,
+				writeWeightsThrough);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_as_weighted", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longAsWeighted(IsolateThread thread, ObjectHandle graphHandle,
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_as_weighted", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int asWeighted(IsolateThread thread, ObjectHandle graphHandle,
 			LongToDoubleFunctionPointer weightFunctionPointer, boolean cacheWeights, boolean writeWeightsThrough,
 			WordPointer res) {
 		Graph<Long, Long> gIn = globalHandles.get(graphHandle);
@@ -864,7 +872,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_as_masked_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asMaskedSubgraph(IsolateThread thread, ObjectHandle graphHandle,
 			IntegerToBooleanFunctionPointer vertexMaskFunctionPointer,
@@ -890,10 +898,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_as_masked_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longAsMaskedSubgraph(IsolateThread thread, ObjectHandle graphHandle,
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_as_masked_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int asMaskedSubgraph(IsolateThread thread, ObjectHandle graphHandle,
 			LongToBooleanFunctionPointer vertexMaskFunctionPointer,
 			LongToBooleanFunctionPointer edgeMaskFunctionPointer, WordPointer res) {
 		Graph<Long, Long> gIn = globalHandles.get(graphHandle);
@@ -918,7 +926,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_as_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asSubgraph(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle vertexSubsetHandle,
 			ObjectHandle edgeSubsetHandle, WordPointer res) {
@@ -932,10 +940,10 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_as_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longAsSubgraph(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle vertexSubsetHandle,
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_as_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int llAsSubgraph(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle vertexSubsetHandle,
 			ObjectHandle edgeSubsetHandle, WordPointer res) {
 		Graph<Long, Long> gIn = globalHandles.get(graphHandle);
 		Set<Long> vertexSubset = globalHandles.get(vertexSubsetHandle);
@@ -948,7 +956,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_as_graph_union", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asGraphUnion(IsolateThread thread, ObjectHandle graph1Handle, ObjectHandle graph2Handle,
 			DDToDFunctionPointer weightCombinerFunctionPointer, WordPointer res) {
@@ -978,9 +986,9 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_as_graph_union", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longAsGraphUnion(IsolateThread thread, ObjectHandle graph1Handle, ObjectHandle graph2Handle,
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_as_graph_union", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int llAsGraphUnion(IsolateThread thread, ObjectHandle graph1Handle, ObjectHandle graph2Handle,
 			DDToDFunctionPointer weightCombinerFunctionPointer, WordPointer res) {
 		Graph<Long, Long> g1 = globalHandles.get(graph1Handle);
 		Graph<Long, Long> g2 = globalHandles.get(graph2Handle);
@@ -1007,5 +1015,5 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 }

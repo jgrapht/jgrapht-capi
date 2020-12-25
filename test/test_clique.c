@@ -15,23 +15,23 @@ int main() {
     }
 
     void *g;
-    jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, &g);
 
     int v;
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
 
-    jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 2, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 1, 2, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 3, 4, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 4, 5, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 3, 5, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 2, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 1, 2, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 3, 4, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 4, 5, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 3, 5, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 2, 3, NULL);
 
     void *cliqueit;
     jgrapht_capi_xx_clique_exec_bron_kerbosch(thread, g, 0, &cliqueit);
@@ -81,22 +81,22 @@ int main() {
 
     // check chordal graph
 
-    jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, &g);
 
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
 
-    jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 2, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 1, 2, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 3, 4, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 4, 5, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 3, 5, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 2, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 1, 2, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 3, 4, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 4, 5, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 3, 5, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 2, 3, NULL);
 
 
     jgrapht_capi_xx_clique_exec_chordal_max_clique(thread, g, &clique);

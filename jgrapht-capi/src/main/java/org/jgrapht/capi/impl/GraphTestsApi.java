@@ -32,7 +32,7 @@ public class GraphTestsApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_empty", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isEmpty(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -42,7 +42,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_simple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isSimple(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -52,7 +52,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_has_selfloops", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int hasSelfLoops(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -62,7 +62,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_has_multipleedges", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int hasMultipleEdges(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -72,7 +72,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_complete", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isComplete(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -82,7 +82,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_weakly_connected", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isWeaklyConnected(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -92,7 +92,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_strongly_connected", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isStronglyConnected(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -102,7 +102,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isTree(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -112,7 +112,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_forest", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isForest(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -122,7 +122,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_overfull", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isOverfull(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -132,7 +132,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_split", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isSplit(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -142,7 +142,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_bipartite", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isBipartite(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -152,7 +152,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_cubic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isCubic(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -162,7 +162,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_eulerian", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isEulerian(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -172,7 +172,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_chordal", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isChordal(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -182,7 +182,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_weakly_chordal", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isWeaklyChordal(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -192,7 +192,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_has_ore", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int hasOreProperty(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -202,7 +202,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_trianglefree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isTriangleFree(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -212,7 +212,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_perfect", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isPerfect(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -222,7 +222,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_planar", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isPlanar(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -232,7 +232,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_kuratowski_subdivision", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isKuratowskiSubdivision(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -242,7 +242,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_k33_subdivision", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isK33Subdivision(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -252,7 +252,7 @@ public class GraphTestsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_test_is_k5_subdivision", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int isK5Subdivision(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);

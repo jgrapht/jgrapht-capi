@@ -56,7 +56,7 @@ public class ShortestPathCHApi {
 	 * @param res    a {@link GraphPath} handle
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "sp_manytomany_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int manyToManyGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, int source,
 			int target, WordPointer res) {
@@ -71,7 +71,7 @@ public class ShortestPathCHApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	/**
 	 * Given a {@link ManyToManyShortestPaths} get a path.
 	 * 
@@ -82,9 +82,9 @@ public class ShortestPathCHApi {
 	 * @param res    a {@link GraphPath} handle
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_sp_manytomany_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <E> int longManyToManyGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, long source,
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "sp_manytomany_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <E> int manyToManyGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, long source,
 			long target, WordPointer res) {
 		ManyToManyShortestPaths<Long, E> alg = globalHandles.get(handle);
 		GraphPath<Long, E> path = alg.getPath(source, target);
@@ -108,9 +108,9 @@ public class ShortestPathCHApi {
 	 * @param res         the {@link ContractionHierarchy} handle
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "sp_exec_contraction_hierarchy", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeCH(IsolateThread thread, ObjectHandle graphHandle, int parallelism, long seed,
+	public static <V, E> int executeCH(IsolateThread thread, ObjectHandle graphHandle, int parallelism, long seed,
 			WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
@@ -118,8 +118,8 @@ public class ShortestPathCHApi {
 			throw new IllegalArgumentException("Parallelism must be positive");
 		}
 
-		ContractionHierarchyPrecomputation<V, E> chp = new ContractionHierarchyPrecomputation<>(g,
-				parallelism, new SingleRandomToManySupplier(seed));
+		ContractionHierarchyPrecomputation<V, E> chp = new ContractionHierarchyPrecomputation<>(g, parallelism,
+				new SingleRandomToManySupplier(seed));
 		ContractionHierarchy<V, E> ch = chp.computeContractionHierarchy();
 
 		if (res.isNonNull()) {
@@ -138,10 +138,10 @@ public class ShortestPathCHApi {
 	 * @param res           handle to a {@link ManyToManyShortestPaths}.
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "sp_exec_contraction_hierarchy_get_manytomany", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeCHManyToMany(IsolateThread thread, ObjectHandle chHandle, ObjectHandle sourcesHandle,
-			ObjectHandle targetsHandle, WordPointer res) {
+	public static <V, E> int executeCHManyToMany(IsolateThread thread, ObjectHandle chHandle,
+			ObjectHandle sourcesHandle, ObjectHandle targetsHandle, WordPointer res) {
 		ContractionHierarchy<V, E> ch = globalHandles.get(chHandle);
 		Set<V> sources = globalHandles.get(sourcesHandle);
 		Set<V> targets = globalHandles.get(targetsHandle);
@@ -164,7 +164,7 @@ public class ShortestPathCHApi {
 	 * @param res      handle to a {@link GraphPath}.
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCHBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle chHandle, int source,
 			int target, double radius, WordPointer pathRes) {
@@ -194,14 +194,14 @@ public class ShortestPathCHApi {
 	 * @param res      handle to a {@link GraphPath}.
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longExecuteCHBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle chHandle, long source,
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeCHBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle chHandle, long source,
 			long target, double radius, WordPointer pathRes) {
 		ContractionHierarchy<Long, Long> ch = globalHandles.get(chHandle);
 
-		ContractionHierarchyBidirectionalDijkstra<Long, Long> alg = new ContractionHierarchyBidirectionalDijkstra<>(
-				ch, radius, PairingHeap::new);
+		ContractionHierarchyBidirectionalDijkstra<Long, Long> alg = new ContractionHierarchyBidirectionalDijkstra<>(ch,
+				radius, PairingHeap::new);
 		GraphPath<Long, Long> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
@@ -212,7 +212,7 @@ public class ShortestPathCHApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	/**
 	 * Helper to return different random instances from a single random seed.
 	 */

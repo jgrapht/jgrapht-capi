@@ -22,49 +22,49 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int flag;
-    assert(jgrapht_capi_graph_is_directed(thread, g, &flag) == 0);
+    assert(jgrapht_capi_xx_graph_is_directed(thread, g, &flag) == 0);
     assert(flag == 1);
-    assert(jgrapht_capi_graph_is_undirected(thread, g, &flag) == 0);
+    assert(jgrapht_capi_xx_graph_is_undirected(thread, g, &flag) == 0);
     assert(flag == 0);
-    assert(jgrapht_capi_graph_is_weighted(thread, g, &flag) == 0);
+    assert(jgrapht_capi_xx_graph_is_weighted(thread, g, &flag) == 0);
     assert(flag == 1);
-    assert(jgrapht_capi_graph_is_allowing_selfloops(thread, g, &flag) == 0);
+    assert(jgrapht_capi_xx_graph_is_allowing_selfloops(thread, g, &flag) == 0);
     assert(flag == 0);
-    assert(jgrapht_capi_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
+    assert(jgrapht_capi_xx_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
     assert(flag == 1);
-    assert(jgrapht_capi_graph_is_allowing_cycles(thread, g, &flag) == 0);
+    assert(jgrapht_capi_xx_graph_is_allowing_cycles(thread, g, &flag) == 0);
     assert(flag == 0);
-    assert(jgrapht_capi_graph_is_modifiable(thread, g, &flag) == 0);
+    assert(jgrapht_capi_xx_graph_is_modifiable(thread, g, &flag) == 0);
     assert(flag == 1);
 
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
 
     int count;
-    jgrapht_capi_graph_vertices_count(thread, g, &count);
+    jgrapht_capi_ii_graph_vertices_count(thread, g, &count);
     assert(count == 6);
 
-    jgrapht_capi_graph_add_edge(thread, g, 0, 1, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 0, 2, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 1, 3, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 2, 4, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 4, 5, NULL);
-    jgrapht_capi_graph_add_edge(thread, g, 3, 5, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 0, 2, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 1, 3, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 2, 4, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 4, 5, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 3, 5, NULL);
 
     jgrapht_capi_error_print_stack_trace(thread);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_graph_edges_count(thread, g, &count);
+    jgrapht_capi_ii_graph_edges_count(thread, g, &count);
     assert(count == 6);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // add edge which would create cycle
-    jgrapht_capi_graph_add_edge(thread, g, 5, 2, NULL);
+    jgrapht_capi_ii_graph_add_edge(thread, g, 5, 2, NULL);
     assert(jgrapht_capi_error_get_errno(thread) != 0);
     jgrapht_capi_error_clear_errno(thread);
 

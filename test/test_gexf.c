@@ -92,7 +92,7 @@ int main() {
 
     // import a gexf from string
     void *g;
-    jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
 
@@ -102,11 +102,11 @@ int main() {
 
 
     int vcount;
-    jgrapht_capi_graph_vertices_count(thread, g, &vcount);
+    jgrapht_capi_ii_graph_vertices_count(thread, g, &vcount);
     assert(vcount == 3);
 
     int ecount;
-    jgrapht_capi_graph_edges_count(thread, g, &ecount);
+    jgrapht_capi_ii_graph_edges_count(thread, g, &ecount);
     assert(ecount == 3);
 
     // write it to file
@@ -127,7 +127,7 @@ int main() {
 
     // now read back 
     jgrapht_capi_handles_destroy(thread, g);
-    jgrapht_capi_graph_create(thread, 0, 0, 0, 0, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, &g);
 
     jgrapht_capi_import_file_gexf(thread, g, "dummy.gexf.out", import_id, 1, NULL, edge_attribute, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);

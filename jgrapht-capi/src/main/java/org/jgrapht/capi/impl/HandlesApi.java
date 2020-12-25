@@ -158,7 +158,7 @@ public class HandlesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
 			CIntPointer startVertexRes, CIntPointer endVertexRes, WordPointer edgeItRes) {
@@ -178,9 +178,9 @@ public class HandlesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longGetHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
 			CLongPointer startVertexRes, CLongPointer endVertexRes, WordPointer edgeItRes) {
 		GraphPath<Long, Long> gp = globalHandles.get(handle);
 		if (weightRes.isNonNull()) {
