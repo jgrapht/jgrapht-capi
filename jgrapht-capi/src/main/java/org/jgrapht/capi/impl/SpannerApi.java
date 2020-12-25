@@ -35,9 +35,9 @@ public class SpannerApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "spanner_exec_greedy_multiplicative", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeGreedyMultiplicativeSpanner(IsolateThread thread, ObjectHandle graph, int k,
+	public static <V, E> int executeGreedyMultiplicativeSpanner(IsolateThread thread, ObjectHandle graph, int k,
 			CDoublePointer weightRes, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graph);
 		SpannerAlgorithm<E> spannerAlg = new GreedyMultiplicativeSpanner<>(g, k);

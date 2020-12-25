@@ -42,7 +42,7 @@ public class TraverseApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "traverse_create_bfs_from_all_vertices_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int bfsAll(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -53,7 +53,7 @@ public class TraverseApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "traverse_create_bfs_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int bfsFromVertex(IsolateThread thread, ObjectHandle graphHandle, int vertex, WordPointer res) {
 		Graph<Integer, ?> g = globalHandles.get(graphHandle);
@@ -63,10 +63,10 @@ public class TraverseApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_traverse_create_bfs_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longBfsFromVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, WordPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "traverse_create_bfs_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int bfsFromVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = new BreadthFirstIterator<>(g, vertex);
 		if (res.isNonNull()) {
@@ -75,7 +75,7 @@ public class TraverseApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "traverse_create_lex_bfs_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int lexBFSIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -86,7 +86,7 @@ public class TraverseApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "traverse_create_dfs_from_all_vertices_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int dfsAll(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -97,7 +97,7 @@ public class TraverseApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "traverse_create_dfs_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int dfsFromVertex(IsolateThread thread, ObjectHandle graphHandle, int vertex, WordPointer res) {
 		Graph<Integer, ?> g = globalHandles.get(graphHandle);
@@ -107,10 +107,10 @@ public class TraverseApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_traverse_create_dfs_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longDfsFromVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, WordPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "traverse_create_dfs_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int dfsFromVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex, WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = new DepthFirstIterator<>(g, vertex);
 		if (res.isNonNull()) {
@@ -119,7 +119,7 @@ public class TraverseApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "traverse_create_topological_order_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int topo(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -130,7 +130,7 @@ public class TraverseApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "traverse_create_random_walk_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int randomWalkFromVertex(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
@@ -141,10 +141,10 @@ public class TraverseApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_traverse_create_random_walk_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longRandomWalkFromVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex,
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "traverse_create_random_walk_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int randomWalkFromVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = new RandomWalkIterator<>(g, vertex, false);
@@ -154,7 +154,7 @@ public class TraverseApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "traverse_create_custom_random_walk_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int customRandomWalkFromVertex(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			boolean weighted, long maxSteps, long seed, WordPointer res) {
@@ -165,10 +165,10 @@ public class TraverseApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_traverse_create_custom_random_walk_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longCustomRandomWalkFromVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex,
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "traverse_create_custom_random_walk_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int customRandomWalkFromVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			boolean weighted, long maxSteps, long seed, WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = new RandomWalkIterator<>(g, vertex, weighted, maxSteps, new Random(seed));
@@ -178,7 +178,7 @@ public class TraverseApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "traverse_create_max_cardinality_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int maxCardItVertex(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -189,7 +189,7 @@ public class TraverseApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "traverse_create_degeneracy_ordering_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int degeneracyOrderingIt(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -200,7 +200,7 @@ public class TraverseApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "traverse_create_closest_first_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int closestFirst(IsolateThread thread, ObjectHandle graphHandle, int vertex, WordPointer res) {
 		Graph<Integer, ?> g = globalHandles.get(graphHandle);
@@ -210,10 +210,10 @@ public class TraverseApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_traverse_create_closest_first_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longClosestFirst(IsolateThread thread, ObjectHandle graphHandle, long vertex, WordPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "traverse_create_closest_first_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int closestFirst(IsolateThread thread, ObjectHandle graphHandle, long vertex, WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 		Iterator<?> it = new ClosestFirstIterator<>(g, vertex);
 		if (res.isNonNull()) {
@@ -222,7 +222,7 @@ public class TraverseApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "traverse_create_custom_closest_first_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int customClosestFirst(IsolateThread thread, ObjectHandle graphHandle, int vertex, double radius,
 			WordPointer res) {
@@ -234,9 +234,9 @@ public class TraverseApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_traverse_create_custom_closest_first_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longCustomClosestFirst(IsolateThread thread, ObjectHandle graphHandle, long vertex, double radius,
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "traverse_create_custom_closest_first_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int customClosestFirst(IsolateThread thread, ObjectHandle graphHandle, long vertex, double radius,
 			WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 		Iterator<Long> it = new ClosestFirstIterator<>(g, vertex, radius);
@@ -245,5 +245,5 @@ public class TraverseApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 }

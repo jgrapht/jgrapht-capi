@@ -29,7 +29,7 @@ int main() {
 
     int isbipartite;
     void * part1, * part2;
-    jgrapht_capi_partition_exec_bipartite(thread, g, &isbipartite, &part1, &part2);
+    jgrapht_capi_xx_partition_exec_bipartite(thread, g, &isbipartite, &part1, &part2);
     assert(isbipartite == 1);
 
     int contains;

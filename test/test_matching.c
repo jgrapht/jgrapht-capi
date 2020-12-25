@@ -116,7 +116,7 @@ int main() {
 
     int isbipartite;
     
-    jgrapht_capi_partition_exec_bipartite(thread, g, &isbipartite, &part1, &part2);
+    jgrapht_capi_xx_partition_exec_bipartite(thread, g, &isbipartite, &part1, &part2);
     assert(isbipartite == 1);
 
     jgrapht_capi_matching_exec_bipartite_perfect_min_weight(thread, g, part1, part2, &weight, &m);

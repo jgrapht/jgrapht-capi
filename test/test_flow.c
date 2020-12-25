@@ -42,7 +42,7 @@ int main() {
     double flow_value;
 
     // dinic
-    jgrapht_capi_maxflow_exec_dinic(thread, g, 0, 3, &flow_value, &flow, &cutSourcePartition);
+    jgrapht_capi_ii_maxflow_exec_dinic(thread, g, 0, 3, &flow_value, &flow, &cutSourcePartition);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     assert(flow_value == 30.0);
 
@@ -66,7 +66,7 @@ int main() {
 
 
     // push relabel
-    jgrapht_capi_maxflow_exec_push_relabel(thread, g, 0, 3, &flow_value, &flow, &cutSourcePartition);
+    jgrapht_capi_ii_maxflow_exec_push_relabel(thread, g, 0, 3, &flow_value, &flow, &cutSourcePartition);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     assert(flow_value == 30.0);
 
@@ -88,7 +88,7 @@ int main() {
 
 
     // edmonds karp
-    jgrapht_capi_maxflow_exec_edmonds_karp(thread, g, 0, 3, &flow_value, &flow, &cutSourcePartition);
+    jgrapht_capi_ii_maxflow_exec_edmonds_karp(thread, g, 0, 3, &flow_value, &flow, &cutSourcePartition);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     assert(flow_value == 30.0);
 

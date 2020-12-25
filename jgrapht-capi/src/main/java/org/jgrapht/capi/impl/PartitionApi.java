@@ -34,10 +34,10 @@ public class PartitionApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "partition_exec_bipartite", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeBipartitePartitioner(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res,
-			WordPointer part1, WordPointer part2) {
+	public static <V, E> int executeBipartitePartitioner(IsolateThread thread, ObjectHandle graphHandle,
+			CIntPointer res, WordPointer part1, WordPointer part2) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
 		BipartitePartitioning<V, E> p = new BipartitePartitioning<>(g);

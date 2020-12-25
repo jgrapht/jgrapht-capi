@@ -54,7 +54,7 @@ int main() {
     // run 
     void *spanner;
     double weight;
-    assert(jgrapht_capi_spanner_exec_greedy_multiplicative(thread, g, 3, &weight, &spanner)==0);
+    assert(jgrapht_capi_xx_spanner_exec_greedy_multiplicative(thread, g, 3, &weight, &spanner)==0);
     assert(weight == 4.0);
     int size;
     jgrapht_capi_set_size(thread, spanner, &size);

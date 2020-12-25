@@ -43,9 +43,9 @@ public class MstApi {
 	 * @param graphHandle the graph handle
 	 * @return a handle on the result
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "mst_exec_kruskal", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeMSTKruskal(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
+	public static <V, E> int executeMSTKruskal(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
 			WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graph);
 		SpanningTree<E> mst = new KruskalMinimumSpanningTree<>(g).getSpanningTree();
@@ -65,8 +65,9 @@ public class MstApi {
 	 * @param graphHandle the graph handle
 	 * @return a handle on the result
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "mst_exec_prim", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeMSTPrim(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+			+ "mst_exec_prim", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <V, E> int executeMSTPrim(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
 			WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graph);
 		SpanningTree<E> mst = new PrimMinimumSpanningTree<>(g).getSpanningTree();
@@ -86,9 +87,9 @@ public class MstApi {
 	 * @param graphHandle the graph handle
 	 * @return a handle on the result
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "mst_exec_boruvka", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeMSTBoruvka(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
+	public static <V, E> int executeMSTBoruvka(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
 			WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graph);
 		SpanningTree<E> mst = new BoruvkaMinimumSpanningTree<>(g).getSpanningTree();

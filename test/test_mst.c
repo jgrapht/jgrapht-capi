@@ -54,7 +54,7 @@ int main() {
     // run kruskal
     void *mst;
     double weight;
-    assert(jgrapht_capi_mst_exec_kruskal(thread, g, &weight, &mst) == 0);
+    assert(jgrapht_capi_xx_mst_exec_kruskal(thread, g, &weight, &mst) == 0);
     assert(weight == 10.0);
     int size;
     jgrapht_capi_set_size(thread, mst, &size);
@@ -71,7 +71,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread,  mst);
 
     // run prim
-    assert(jgrapht_capi_mst_exec_prim(thread, g, &weight, &mst) == 0);
+    assert(jgrapht_capi_xx_mst_exec_prim(thread, g, &weight, &mst) == 0);
     assert(weight == 10.0);
     jgrapht_capi_set_size(thread, mst, &size);
     assert(size == 4);
@@ -86,7 +86,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread,  mst);
 
     // run boruvka
-    assert(jgrapht_capi_mst_exec_boruvka(thread, g, &weight, &mst) == 0);
+    assert(jgrapht_capi_xx_mst_exec_boruvka(thread, g, &weight, &mst) == 0);
     assert(weight == 10.0);
     jgrapht_capi_handles_destroy(thread,  mst);
 

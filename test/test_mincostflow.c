@@ -72,7 +72,7 @@ int main() {
 
     void *dual, *flow; 
     double flow_cost;
-    jgrapht_capi_mincostflow_exec_capacity_scaling(thread, g, vertex_supply, edge_lower_bound, edge_upper_bound, 8, &flow_cost, &flow, &dual);
+    jgrapht_capi_ii_mincostflow_exec_capacity_scaling(thread, g, vertex_supply, edge_lower_bound, edge_upper_bound, 8, &flow_cost, &flow, &dual);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 

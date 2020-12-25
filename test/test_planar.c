@@ -37,11 +37,11 @@ int main() {
     void *embedding, *kuratowski_subdivision;
     int is_planar = 0;
 
-    jgrapht_capi_planarity_exec_boyer_myrvold(thread, g, &is_planar, &embedding, &kuratowski_subdivision);
+    jgrapht_capi_xx_planarity_exec_boyer_myrvold(thread, g, &is_planar, &embedding, &kuratowski_subdivision);
     assert (is_planar);
 
     void *it;
-    jgrapht_capi_planarity_embedding_edges_around_vertex(thread, embedding, 0, &it);
+    jgrapht_capi_ii_planarity_embedding_edges_around_vertex(thread, embedding, 0, &it);
 
     int e;
     jgrapht_capi_it_next_int(thread, it, &e);

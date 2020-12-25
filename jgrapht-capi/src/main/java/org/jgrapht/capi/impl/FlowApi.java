@@ -32,97 +32,55 @@ public class FlowApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	private static int doRunMaxFlow(IsolateThread thread, ObjectHandle graphHandle,
-			Function<Graph<Integer, Integer>, MaximumFlowAlgorithmBase<Integer, Integer>> algProvider, int source,
-			int sink, CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		MaximumFlowAlgorithmBase<Integer, Integer> alg = algProvider.apply(g);
-		MaximumFlow<Integer> maximumFlow = alg.getMaximumFlow(source, sink);
-		Map<Integer, Double> flowMap = maximumFlow.getFlowMap();
-		Set<Integer> cutSourcePartition = alg.getSourcePartition();
-		double flowValue = maximumFlow.getValue();
-		if (valueRes.isNonNull()) {
-			valueRes.write(flowValue);
-		}
-		if (flowRes.isNonNull()) {
-			flowRes.write(globalHandles.create(flowMap));
-		}
-		if (cutSourcePartitionRes.isNonNull()) {
-			cutSourcePartitionRes.write(globalHandles.create(cutSourcePartition));
-		}
-		return Status.STATUS_SUCCESS.getCValue();
-	}
-	
-	private static int doRunLongMaxFlow(IsolateThread thread, ObjectHandle graphHandle,
-			Function<Graph<Long, Long>, MaximumFlowAlgorithmBase<Long, Long>> algProvider, long source,
-			long sink, CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		MaximumFlowAlgorithmBase<Long, Long> alg = algProvider.apply(g);
-		MaximumFlow<Long> maximumFlow = alg.getMaximumFlow(source, sink);
-		Map<Long, Double> flowMap = maximumFlow.getFlowMap();
-		Set<Long> cutSourcePartition = alg.getSourcePartition();
-		double flowValue = maximumFlow.getValue();
-		if (valueRes.isNonNull()) {
-			valueRes.write(flowValue);
-		}
-		if (flowRes.isNonNull()) {
-			flowRes.write(globalHandles.create(flowMap));
-		}
-		if (cutSourcePartitionRes.isNonNull()) {
-			cutSourcePartitionRes.write(globalHandles.create(cutSourcePartition));
-		}
-		return Status.STATUS_SUCCESS.getCValue();
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "maxflow_exec_push_relabel", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executePushRelabel(IsolateThread thread, ObjectHandle graphHandle, int source, int sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
 		return doRunMaxFlow(thread, graphHandle, PushRelabelMFImpl::new, source, sink, valueRes, flowRes,
 				cutSourcePartitionRes);
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_maxflow_exec_push_relabel", exceptionHandler = StatusReturnExceptionHandler.class)
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "maxflow_exec_push_relabel", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executePushRelabel(IsolateThread thread, ObjectHandle graphHandle, long source, long sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
 		return doRunLongMaxFlow(thread, graphHandle, PushRelabelMFImpl::new, source, sink, valueRes, flowRes,
 				cutSourcePartitionRes);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "maxflow_exec_dinic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDinic(IsolateThread thread, ObjectHandle graphHandle, int source, int sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
 		return doRunMaxFlow(thread, graphHandle, DinicMFImpl::new, source, sink, valueRes, flowRes,
 				cutSourcePartitionRes);
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_maxflow_exec_dinic", exceptionHandler = StatusReturnExceptionHandler.class)
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "maxflow_exec_dinic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDinic(IsolateThread thread, ObjectHandle graphHandle, long source, long sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
 		return doRunLongMaxFlow(thread, graphHandle, DinicMFImpl::new, source, sink, valueRes, flowRes,
 				cutSourcePartitionRes);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "maxflow_exec_edmonds_karp", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeEdmondsKarp(IsolateThread thread, ObjectHandle graphHandle, int source, int sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
 		return doRunMaxFlow(thread, graphHandle, EdmondsKarpMFImpl::new, source, sink, valueRes, flowRes,
 				cutSourcePartitionRes);
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_maxflow_exec_edmonds_karp", exceptionHandler = StatusReturnExceptionHandler.class)
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "maxflow_exec_edmonds_karp", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeEdmondsKarp(IsolateThread thread, ObjectHandle graphHandle, long source, long sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
 		return doRunLongMaxFlow(thread, graphHandle, EdmondsKarpMFImpl::new, source, sink, valueRes, flowRes,
 				cutSourcePartitionRes);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "mincostflow_exec_capacity_scaling", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCapacityScaling(IsolateThread thread, ObjectHandle graphHandle,
 			IntegerToIntegerFunctionPointer nodeSupplyFunction,
@@ -161,9 +119,9 @@ public class FlowApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_mincostflow_exec_capacity_scaling", exceptionHandler = StatusReturnExceptionHandler.class)
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "mincostflow_exec_capacity_scaling", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCapacityScaling(IsolateThread thread, ObjectHandle graphHandle,
 			LongToIntegerFunctionPointer nodeSupplyFunction,
 			LongToIntegerFunctionPointer arcCapacityLowerBoundsFunction,
@@ -202,10 +160,9 @@ public class FlowApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "equivalentflowtree_exec_gusfield", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeEFTGusfield(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+	public static <V, E> int executeEFTGusfield(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 		GusfieldEquivalentFlowTree<V, E> alg = new GusfieldEquivalentFlowTree<>(g);
 		if (res.isNonNull()) {
@@ -214,7 +171,7 @@ public class FlowApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "equivalentflowtree_max_st_flow", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int eftMaxSTFlow(IsolateThread thread, ObjectHandle eft, int source, int sink,
 			CDoublePointer valueRes) {
@@ -225,9 +182,9 @@ public class FlowApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_equivalentflowtree_max_st_flow", exceptionHandler = StatusReturnExceptionHandler.class)
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "equivalentflowtree_max_st_flow", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int eftMaxSTFlow(IsolateThread thread, ObjectHandle eft, long source, long sink,
 			CDoublePointer valueRes) {
 		GusfieldEquivalentFlowTree<Long, Long> alg = globalHandles.get(eft);
@@ -238,7 +195,7 @@ public class FlowApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "equivalentflowtree_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int eftGetTree(IsolateThread thread, ObjectHandle eft, WordPointer treeRes) {
 		GusfieldEquivalentFlowTree<Integer, Integer> alg = globalHandles.get(eft);
@@ -262,9 +219,9 @@ public class FlowApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_equivalentflowtree_tree", exceptionHandler = StatusReturnExceptionHandler.class)
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "equivalentflowtree_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int llEftGetTree(IsolateThread thread, ObjectHandle eft, WordPointer treeRes) {
 		GusfieldEquivalentFlowTree<Long, Long> alg = globalHandles.get(eft);
 		SimpleWeightedGraph<Long, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
@@ -284,6 +241,48 @@ public class FlowApi {
 		// write result
 		if (treeRes.isNonNull()) {
 			treeRes.write(globalHandles.create(tree));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	private static int doRunMaxFlow(IsolateThread thread, ObjectHandle graphHandle,
+			Function<Graph<Integer, Integer>, MaximumFlowAlgorithmBase<Integer, Integer>> algProvider, int source,
+			int sink, CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		MaximumFlowAlgorithmBase<Integer, Integer> alg = algProvider.apply(g);
+		MaximumFlow<Integer> maximumFlow = alg.getMaximumFlow(source, sink);
+		Map<Integer, Double> flowMap = maximumFlow.getFlowMap();
+		Set<Integer> cutSourcePartition = alg.getSourcePartition();
+		double flowValue = maximumFlow.getValue();
+		if (valueRes.isNonNull()) {
+			valueRes.write(flowValue);
+		}
+		if (flowRes.isNonNull()) {
+			flowRes.write(globalHandles.create(flowMap));
+		}
+		if (cutSourcePartitionRes.isNonNull()) {
+			cutSourcePartitionRes.write(globalHandles.create(cutSourcePartition));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	private static int doRunLongMaxFlow(IsolateThread thread, ObjectHandle graphHandle,
+			Function<Graph<Long, Long>, MaximumFlowAlgorithmBase<Long, Long>> algProvider, long source, long sink,
+			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		MaximumFlowAlgorithmBase<Long, Long> alg = algProvider.apply(g);
+		MaximumFlow<Long> maximumFlow = alg.getMaximumFlow(source, sink);
+		Map<Long, Double> flowMap = maximumFlow.getFlowMap();
+		Set<Long> cutSourcePartition = alg.getSourcePartition();
+		double flowValue = maximumFlow.getValue();
+		if (valueRes.isNonNull()) {
+			valueRes.write(flowValue);
+		}
+		if (flowRes.isNonNull()) {
+			flowRes.write(globalHandles.create(flowMap));
+		}
+		if (cutSourcePartitionRes.isNonNull()) {
+			cutSourcePartitionRes.write(globalHandles.create(cutSourcePartition));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}

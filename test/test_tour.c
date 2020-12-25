@@ -38,35 +38,35 @@ int main() {
     jgrapht_capi_graph_create(thread, 0, 0, 0, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_generate_complete(thread, g, 8);
+    jgrapht_capi_xx_generate_complete(thread, g, 8);
 
     // run 
     void *tour;
-    assert(jgrapht_capi_tour_tsp_greedy_heuristic(thread, g, &tour) == 0);
+    assert(jgrapht_capi_xx_tour_tsp_greedy_heuristic(thread, g, &tour) == 0);
     assert(check_tour(thread, tour, 8.0));
     jgrapht_capi_handles_destroy(thread,  tour);
 
-    assert(jgrapht_capi_tour_tsp_nearest_insertion_heuristic(thread, g, &tour) == 0);
+    assert(jgrapht_capi_xx_tour_tsp_nearest_insertion_heuristic(thread, g, &tour) == 0);
     assert(check_tour(thread, tour, 8.0));
     jgrapht_capi_handles_destroy(thread,  tour);
 
-    assert(jgrapht_capi_tour_tsp_nearest_neighbor_heuristic(thread, g, 17, &tour) == 0);
+    assert(jgrapht_capi_xx_tour_tsp_nearest_neighbor_heuristic(thread, g, 17, &tour) == 0);
     assert(check_tour(thread, tour, 8.0));
     jgrapht_capi_handles_destroy(thread,  tour);
 
-    assert(jgrapht_capi_tour_tsp_random(thread, g, 17, &tour) == 0);
+    assert(jgrapht_capi_xx_tour_tsp_random(thread, g, 17, &tour) == 0);
     assert(check_tour(thread, tour, 8.0));
     jgrapht_capi_handles_destroy(thread,  tour);
 
-    assert(jgrapht_capi_tour_metric_tsp_christofides(thread, g, &tour) == 0);
+    assert(jgrapht_capi_xx_tour_metric_tsp_christofides(thread, g, &tour) == 0);
     assert(check_tour(thread, tour, 8.0));
     jgrapht_capi_handles_destroy(thread,  tour);
 
-    assert(jgrapht_capi_tour_metric_tsp_two_approx(thread, g, &tour) == 0);
+    assert(jgrapht_capi_xx_tour_metric_tsp_two_approx(thread, g, &tour) == 0);
     assert(check_tour(thread, tour, 8.0));
     jgrapht_capi_handles_destroy(thread,  tour);
 
-    assert(jgrapht_capi_tour_tsp_held_karp(thread, g, &tour) == 0);
+    assert(jgrapht_capi_xx_tour_tsp_held_karp(thread, g, &tour) == 0);
     assert(check_tour(thread, tour, 8.0));
     jgrapht_capi_handles_destroy(thread,  tour);
 

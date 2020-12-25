@@ -19,9 +19,9 @@ public class PlanarityApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "planarity_exec_boyer_myrvold", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeBoryerMyrvold(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res,
+	public static <V, E> int executeBoryerMyrvold(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res,
 			WordPointer embeddingRes, WordPointer kuratowskiSubdivisionRes) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
@@ -45,7 +45,7 @@ public class PlanarityApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "planarity_embedding_edges_around_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgesAround(IsolateThread thread, ObjectHandle embeddingHandle, int vertex, WordPointer res) {
 		Embedding<Integer, Integer> embedding = globalHandles.get(embeddingHandle);
@@ -55,10 +55,10 @@ public class PlanarityApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_planarity_embedding_edges_around_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longEdgesAround(IsolateThread thread, ObjectHandle embeddingHandle, long vertex, WordPointer res) {
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "planarity_embedding_edges_around_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgesAround(IsolateThread thread, ObjectHandle embeddingHandle, long vertex, WordPointer res) {
 		Embedding<Long, Long> embedding = globalHandles.get(embeddingHandle);
 		List<Long> list = embedding.getEdgesAround(vertex);
 		if (list != null && res.isNonNull()) {
