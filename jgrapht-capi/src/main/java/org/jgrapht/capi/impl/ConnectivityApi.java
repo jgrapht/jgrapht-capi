@@ -23,14 +23,14 @@ public class ConnectivityApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "connectivity_strong_exec_kosaraju", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeKosaraju(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
+	public static <V,E> int executeKosaraju(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
-		Graph<Integer, ?> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		KosarajuStrongConnectivityInspector<Integer, ?> alg = new KosarajuStrongConnectivityInspector<>(g);
+		KosarajuStrongConnectivityInspector<V, E> alg = new KosarajuStrongConnectivityInspector<>(g);
 
 		boolean result = alg.isStronglyConnected();
-		List<Set<Integer>> connectedSets = alg.stronglyConnectedSets();
+		List<Set<V>> connectedSets = alg.stronglyConnectedSets();
 
 		if (valueRes.isNonNull()) {
 			valueRes.write(result ? 1 : 0);
@@ -43,14 +43,14 @@ public class ConnectivityApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "connectivity_strong_exec_gabow", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeGabow(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
+	public static <V,E> int executeGabow(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
-		Graph<Integer, ?> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		GabowStrongConnectivityInspector<Integer, ?> alg = new GabowStrongConnectivityInspector<>(g);
+		GabowStrongConnectivityInspector<V, E> alg = new GabowStrongConnectivityInspector<>(g);
 
 		boolean result = alg.isStronglyConnected();
-		List<Set<Integer>> connectedSets = alg.stronglyConnectedSets();
+		List<Set<V>> connectedSets = alg.stronglyConnectedSets();
 
 		if (valueRes.isNonNull()) {
 			valueRes.write(result ? 1 : 0);
@@ -63,14 +63,14 @@ public class ConnectivityApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "connectivity_weak_exec_bfs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeWeakBfs(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
+	public static <V,E> int executeWeakBfs(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
-		Graph<Integer, ?> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		ConnectivityInspector<Integer, ?> alg = new ConnectivityInspector<>(g);
+		ConnectivityInspector<V, E> alg = new ConnectivityInspector<>(g);
 
 		boolean result = alg.isConnected();
-		List<Set<Integer>> connectedSets = alg.connectedSets();
+		List<Set<V>> connectedSets = alg.connectedSets();
 
 		if (valueRes.isNonNull()) {
 			valueRes.write(result ? 1 : 0);

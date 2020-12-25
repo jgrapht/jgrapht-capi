@@ -28,6 +28,8 @@ import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.CapiGraphWrapper;
 import org.jgrapht.capi.graph.SafeEdgeSupplier;
+import org.jgrapht.capi.graph.SafeLongEdgeSupplier;
+import org.jgrapht.capi.graph.SafeLongVertexSupplier;
 import org.jgrapht.capi.graph.SafeVertexSupplier;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 
@@ -42,7 +44,8 @@ public class GraphDagApi {
 	 * @return the graph handle
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_dag_create", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "ii_graph_dag_create", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
+					"Create a (int-int) dag and return its handle." })
 	public static int createDag(IsolateThread thread, boolean allowMultipleEdges, boolean weighted, WordPointer res) {
 		SafeVertexSupplier vSupplier = new SafeVertexSupplier();
 		SafeEdgeSupplier eSupplier = new SafeEdgeSupplier();
@@ -58,10 +61,36 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	/**
+	 * Create a dag and return its handle.
+	 *
+	 * @param thread the thread isolate
+	 * @return the graph handle
+	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_dag_topological_it", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int createTopoIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		DirectedAcyclicGraph<Integer, Integer> graph = getSafeWrappedDag(graphHandle);
+			+ "ll_graph_dag_create", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
+					"Create a (long-long) dag and return its handle." })
+	public static int createLongDag(IsolateThread thread, boolean allowMultipleEdges, boolean weighted,
+			WordPointer res) {
+		SafeLongVertexSupplier vSupplier = new SafeLongVertexSupplier();
+		SafeLongEdgeSupplier eSupplier = new SafeLongEdgeSupplier();
+
+		Graph<Long, Long> graph = new DirectedAcyclicGraph<>(vSupplier, eSupplier, weighted, allowMultipleEdges);
+
+		vSupplier.setGraph(graph);
+		eSupplier.setGraph(graph);
+
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "xx_graph_dag_topological_it", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
+					"Given a dag create a topological iterator and return its handle." })
+	public static <V, E> int createTopoIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		DirectedAcyclicGraph<V, E> graph = getSafeWrappedDag(graphHandle);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph.iterator()));
 		}
@@ -69,7 +98,7 @@ public class GraphDagApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "ii_graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (int-int) dag and a vertex returns its descendants.")
 	public static int createVertexDescendants(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
 		DirectedAcyclicGraph<Integer, Integer> graph = getSafeWrappedDag(graphHandle);
@@ -80,7 +109,18 @@ public class GraphDagApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "ll_graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (long-long) dag and a vertex returns its descendants.")
+	public static int createVertexDescendants(IsolateThread thread, ObjectHandle graphHandle, long vertex,
+			WordPointer res) {
+		DirectedAcyclicGraph<Long, Long> graph = getSafeWrappedDag(graphHandle);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph.getDescendants(vertex)));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ii_graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (int-int) dag and a vertex returns its ancestors.")
 	public static int createVertexAncestors(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
 		DirectedAcyclicGraph<Integer, Integer> graph = getSafeWrappedDag(graphHandle);
@@ -89,21 +129,32 @@ public class GraphDagApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (long-long) dag and a vertex returns its ancestors.")
+	public static int createVertexAncestors(IsolateThread thread, ObjectHandle graphHandle, long vertex,
+			WordPointer res) {
+		DirectedAcyclicGraph<Long, Long> graph = getSafeWrappedDag(graphHandle);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph.getAncestors(vertex)));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@SuppressWarnings("unchecked")
-	private static DirectedAcyclicGraph<Integer, Integer> getSafeWrappedDag(Graph<Integer, Integer> graph) {
+	private static <V, E> DirectedAcyclicGraph<V, E> getSafeWrappedDag(Graph<V, E> graph) {
 		if (graph instanceof DirectedAcyclicGraph) {
-			return (DirectedAcyclicGraph<Integer,Integer>)graph;
-		} else if(graph instanceof CapiGraphWrapper) { 
-			CapiGraphWrapper<Integer, Integer> wrapper = (CapiGraphWrapper<Integer, Integer>)graph;
+			return (DirectedAcyclicGraph<V, E>) graph;
+		} else if (graph instanceof CapiGraphWrapper) {
+			CapiGraphWrapper<V, E> wrapper = (CapiGraphWrapper<V, E>) graph;
 			return getSafeWrappedDag(wrapper.getWrappedGraph());
 		}
 		throw new IllegalArgumentException("Graph does not look like a DAG");
 	}
-	
-	private static DirectedAcyclicGraph<Integer, Integer> getSafeWrappedDag(ObjectHandle graphHandle) { 
-		Graph<Integer, Integer> graph = globalHandles.get(graphHandle);
+
+	private static <V, E> DirectedAcyclicGraph<V, E> getSafeWrappedDag(ObjectHandle graphHandle) {
+		Graph<V, E> graph = globalHandles.get(graphHandle);
 		return getSafeWrappedDag(graph);
 	}
-	
+
 }

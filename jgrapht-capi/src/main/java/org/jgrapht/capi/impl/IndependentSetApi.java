@@ -36,10 +36,10 @@ public class IndependentSetApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "independent_set_exec_chordal_max_independent_set", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeChordalMaxIndependentSet(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		ChordalGraphIndependentSetFinder<Integer, Integer> alg = new ChordalGraphIndependentSetFinder<>(g);
-		Set<Integer> result = alg.getIndependentSet();
+	public static <V,E> int executeChordalMaxIndependentSet(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
+		ChordalGraphIndependentSetFinder<V, E> alg = new ChordalGraphIndependentSetFinder<>(g);
+		Set<V> result = alg.getIndependentSet();
 		if (result == null) {
 			throw new IllegalArgumentException("Graph is not chordal");
 		}

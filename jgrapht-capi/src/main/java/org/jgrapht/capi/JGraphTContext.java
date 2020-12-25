@@ -124,6 +124,16 @@ public class JGraphTContext {
 		double invoke(int source, int target);
 
 	}
+	
+	/*
+	 * Function pointer for A* heuristic functions.
+	 */
+	public interface AStarHeuristicLLFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		double invoke(long source, long target);
+
+	}
 
 	public interface IntegerToIntegerFunctionPointer extends CFunctionPointer {
 
@@ -152,7 +162,21 @@ public class JGraphTContext {
 		CDoublePointer invoke(int key);
 
 	}
+	
+	public interface LongToCDoublePointerFunctionPointer extends CFunctionPointer {
 
+		@InvokeCFunctionPointer
+		CDoublePointer invoke(long key);
+
+	}
+
+	public interface LongToIntegerFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		int invoke(long key);
+
+	}
+	
 	public interface LongToDoubleFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
@@ -192,6 +216,13 @@ public class JGraphTContext {
 
 		@InvokeCFunctionPointer
 		int invoke(int d1, int d2);
+
+	}
+	
+	public interface LLToIFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		int invoke(long d1, long d2);
 
 	}
 

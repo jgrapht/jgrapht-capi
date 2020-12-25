@@ -36,17 +36,17 @@ public class PartitionApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "partition_exec_bipartite", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeBipartitePartitioner(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res,
+	public static <V,E> int executeBipartitePartitioner(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res,
 			WordPointer part1, WordPointer part2) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		BipartitePartitioning<Integer, Integer> p = new BipartitePartitioning<>(g);
+		BipartitePartitioning<V, E> p = new BipartitePartitioning<>(g);
 		boolean result = p.isBipartite();
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
 		if (result) {
-			Partitioning<Integer> partitioning = p.getPartitioning();
+			Partitioning<V> partitioning = p.getPartitioning();
 			if (part1.isNonNull()) {
 				part1.write(globalHandles.create(partitioning.getPartition(0)));
 			}

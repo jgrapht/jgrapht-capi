@@ -45,11 +45,11 @@ public class ScoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "scoring_exec_alpha_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeAlphaCentrality(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+	public static <V,E> int executeAlphaCentrality(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		VertexScoringAlgorithm<Integer, Double> alg = new AlphaCentrality<>(g);
-		Map<Integer, Double> result = alg.getScores();
+		VertexScoringAlgorithm<V, Double> alg = new AlphaCentrality<>(g);
+		Map<V, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
@@ -59,13 +59,13 @@ public class ScoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "scoring_exec_custom_alpha_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeCustomAlphaCentrality(IsolateThread thread, ObjectHandle graphHandle, double dampingFactor,
+	public static <V,E> int executeCustomAlphaCentrality(IsolateThread thread, ObjectHandle graphHandle, double dampingFactor,
 			double exogenousFactor, int maxIterations, double tolerance, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		VertexScoringAlgorithm<Integer, Double> alg = new AlphaCentrality<>(g, dampingFactor, exogenousFactor,
+		VertexScoringAlgorithm<V, Double> alg = new AlphaCentrality<>(g, dampingFactor, exogenousFactor,
 				maxIterations, tolerance);
-		Map<Integer, Double> result = alg.getScores();
+		Map<V, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
@@ -75,11 +75,11 @@ public class ScoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "scoring_exec_betweenness_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeBetweennessCentrality(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+	public static <V,E> int executeBetweennessCentrality(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		VertexScoringAlgorithm<Integer, Double> alg = new BetweennessCentrality<>(g);
-		Map<Integer, Double> result = alg.getScores();
+		VertexScoringAlgorithm<V, Double> alg = new BetweennessCentrality<>(g);
+		Map<V, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
@@ -89,12 +89,12 @@ public class ScoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "scoring_exec_custom_betweenness_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeCustomBetweennessCentrality(IsolateThread thread, ObjectHandle graphHandle,
+	public static <V,E> int executeCustomBetweennessCentrality(IsolateThread thread, ObjectHandle graphHandle,
 			boolean normalize, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		VertexScoringAlgorithm<Integer, Double> alg = new BetweennessCentrality<>(g, normalize);
-		Map<Integer, Double> result = alg.getScores();
+		VertexScoringAlgorithm<V, Double> alg = new BetweennessCentrality<>(g, normalize);
+		Map<V, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
@@ -104,11 +104,11 @@ public class ScoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "scoring_exec_closeness_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeClosenessCentrality(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+	public static <V,E> int executeClosenessCentrality(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		VertexScoringAlgorithm<Integer, Double> alg = new ClosenessCentrality<>(g);
-		Map<Integer, Double> result = alg.getScores();
+		VertexScoringAlgorithm<V, Double> alg = new ClosenessCentrality<>(g);
+		Map<V, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
@@ -118,12 +118,12 @@ public class ScoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "scoring_exec_custom_closeness_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeCustomClosenessCentrality(IsolateThread thread, ObjectHandle graphHandle, boolean incoming,
+	public static <V,E> int executeCustomClosenessCentrality(IsolateThread thread, ObjectHandle graphHandle, boolean incoming,
 			boolean normalize, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		VertexScoringAlgorithm<Integer, Double> alg = new ClosenessCentrality<>(g, incoming, normalize);
-		Map<Integer, Double> result = alg.getScores();
+		VertexScoringAlgorithm<V, Double> alg = new ClosenessCentrality<>(g, incoming, normalize);
+		Map<V, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
@@ -133,11 +133,11 @@ public class ScoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "scoring_exec_harmonic_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeHarmonicCentrality(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+	public static <V,E> int executeHarmonicCentrality(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		VertexScoringAlgorithm<Integer, Double> alg = new HarmonicCentrality<>(g);
-		Map<Integer, Double> result = alg.getScores();
+		VertexScoringAlgorithm<V, Double> alg = new HarmonicCentrality<>(g);
+		Map<V, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
@@ -147,12 +147,12 @@ public class ScoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "scoring_exec_custom_harmonic_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeCustomHarmonicCentrality(IsolateThread thread, ObjectHandle graphHandle, boolean incoming,
+	public static <V,E> int executeCustomHarmonicCentrality(IsolateThread thread, ObjectHandle graphHandle, boolean incoming,
 			boolean normalize, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		VertexScoringAlgorithm<Integer, Double> alg = new HarmonicCentrality<>(g, incoming, normalize);
-		Map<Integer, Double> result = alg.getScores();
+		VertexScoringAlgorithm<V, Double> alg = new HarmonicCentrality<>(g, incoming, normalize);
+		Map<V, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
@@ -162,11 +162,11 @@ public class ScoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "scoring_exec_pagerank", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executePagerank(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+	public static <V,E> int executePagerank(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		VertexScoringAlgorithm<Integer, Double> alg = new PageRank<>(g);
-		Map<Integer, Double> result = alg.getScores();
+		VertexScoringAlgorithm<V, Double> alg = new PageRank<>(g);
+		Map<V, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
@@ -176,12 +176,12 @@ public class ScoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "scoring_exec_custom_pagerank", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeCustomPagerank(IsolateThread thread, ObjectHandle graphHandle, double dampingFactor,
+	public static <V,E> int executeCustomPagerank(IsolateThread thread, ObjectHandle graphHandle, double dampingFactor,
 			int maxIterations, double tolerance, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		VertexScoringAlgorithm<Integer, Double> alg = new PageRank<>(g, dampingFactor, maxIterations, tolerance);
-		Map<Integer, Double> result = alg.getScores();
+		VertexScoringAlgorithm<V, Double> alg = new PageRank<>(g, dampingFactor, maxIterations, tolerance);
+		Map<V, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
@@ -191,14 +191,14 @@ public class ScoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "scoring_exec_coreness", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeCoreness(IsolateThread thread, ObjectHandle graphHandle, CIntPointer degeneracyRes,
+	public static <V,E> int executeCoreness(IsolateThread thread, ObjectHandle graphHandle, CIntPointer degeneracyRes,
 			WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		Coreness<Integer, Integer> alg = new Coreness<>(g);
+		Coreness<V, E> alg = new Coreness<>(g);
 
 		int degeneracy = alg.getDegeneracy();
-		Map<Integer, Integer> result = alg.getScores();
+		Map<V, Integer> result = alg.getScores();
 
 		if (degeneracyRes.isNonNull()) {
 			degeneracyRes.write(degeneracy);
@@ -211,13 +211,13 @@ public class ScoringApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "scoring_exec_clustering_coefficient", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeClusteringCoefficient(IsolateThread thread, ObjectHandle graphHandle,
+	public static <V,E> int executeClusteringCoefficient(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer globalRes, CDoublePointer avgRes, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		ClusteringCoefficient<Integer, Integer> alg = new ClusteringCoefficient<>(g);
+		ClusteringCoefficient<V, E> alg = new ClusteringCoefficient<>(g);
 
-		Map<Integer, Double> result = alg.getScores();
+		Map<V, Double> result = alg.getScores();
 		double avg = alg.getAverageClusteringCoefficient();
 		double global = alg.getGlobalClusteringCoefficient();
 

@@ -34,13 +34,13 @@ public class CycleApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "cycles_eulerian_exec_hierholzer", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeHierholzer(IsolateThread thread, ObjectHandle graphHandle, CIntPointer isEulerianRes,
+	public static <V,E> int executeHierholzer(IsolateThread thread, ObjectHandle graphHandle, CIntPointer isEulerianRes,
 			WordPointer eulerianCycleRes) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		HierholzerEulerianCycle<Integer, Integer> alg = new HierholzerEulerianCycle<>();
+		HierholzerEulerianCycle<V, E> alg = new HierholzerEulerianCycle<>();
 
-		GraphPath<Integer, Integer> eulerianCycle = null;
+		GraphPath<V, E> eulerianCycle = null;
 		try {
 			eulerianCycle = alg.getEulerianCycle(g);
 		} catch (IllegalArgumentException e) {
@@ -64,11 +64,11 @@ public class CycleApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "cycles_chinese_postman_exec_edmonds_johnson", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeChinesePostman(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+	public static <V,E> int executeChinesePostman(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		ChinesePostman<Integer, Integer> alg = new ChinesePostman<>();
-		GraphPath<Integer, Integer> path = alg.getCPPSolution(g);
+		ChinesePostman<V, E> alg = new ChinesePostman<>();
+		GraphPath<V, E> path = alg.getCPPSolution(g);
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(path));
@@ -78,9 +78,9 @@ public class CycleApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "cycles_simple_enumeration_exec_tarjan", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeTarjan(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		DirectedSimpleCycles<Integer, Integer> alg = new TarjanSimpleCycles<>(g);
+	public static <V,E> int executeTarjan(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
+		DirectedSimpleCycles<V, E> alg = new TarjanSimpleCycles<>(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(alg.findSimpleCycles().iterator()));
 		}
@@ -89,9 +89,9 @@ public class CycleApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "cycles_simple_enumeration_exec_tiernan", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeTierman(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		DirectedSimpleCycles<Integer, Integer> alg = new TiernanSimpleCycles<>(g);
+	public static <V,E> int executeTierman(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
+		DirectedSimpleCycles<V, E> alg = new TiernanSimpleCycles<>(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(alg.findSimpleCycles().iterator()));
 		}
@@ -100,9 +100,9 @@ public class CycleApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "cycles_simple_enumeration_exec_szwarcfiter_lauer", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeSzwarcfiterLauer(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		DirectedSimpleCycles<Integer, Integer> alg = new SzwarcfiterLauerSimpleCycles<>(g);
+	public static <V,E> int executeSzwarcfiterLauer(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
+		DirectedSimpleCycles<V, E> alg = new SzwarcfiterLauerSimpleCycles<>(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(alg.findSimpleCycles().iterator()));
 		}
@@ -111,9 +111,9 @@ public class CycleApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "cycles_simple_enumeration_exec_johnson", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeJohnson(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		DirectedSimpleCycles<Integer, Integer> alg = new JohnsonSimpleCycles<>(g);
+	public static <V,E> int executeJohnson(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
+		DirectedSimpleCycles<V, E> alg = new JohnsonSimpleCycles<>(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(alg.findSimpleCycles().iterator()));
 		}
@@ -122,9 +122,9 @@ public class CycleApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "cycles_simple_enumeration_exec_hawick_james", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeHawickJames(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		DirectedSimpleCycles<Integer, Integer> alg = new HawickJamesSimpleCycles<>(g);
+	public static <V,E> int executeHawickJames(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
+		DirectedSimpleCycles<V, E> alg = new HawickJamesSimpleCycles<>(g);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(alg.findSimpleCycles().iterator()));
 		}
@@ -133,14 +133,14 @@ public class CycleApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "cycles_fundamental_basis_exec_queue_bfs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeQueueBFSFundamental(IsolateThread thread, ObjectHandle graphHandle,
+	public static <V,E> int executeQueueBFSFundamental(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		CycleBasisAlgorithm<Integer, Integer> alg = new QueueBFSFundamentalCycleBasis<>(g);
-		CycleBasis<Integer, Integer> cycleBasis = alg.getCycleBasis();
+		CycleBasisAlgorithm<V, E> alg = new QueueBFSFundamentalCycleBasis<>(g);
+		CycleBasis<V, E> cycleBasis = alg.getCycleBasis();
 		double weight = cycleBasis.getWeight();
-		Set<GraphPath<Integer, Integer>> cycles = cycleBasis.getCyclesAsGraphPaths();
+		Set<GraphPath<V, E>> cycles = cycleBasis.getCyclesAsGraphPaths();
 
 		if (weightRes.isNonNull()) {
 			weightRes.write(weight);
@@ -153,14 +153,14 @@ public class CycleApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "cycles_fundamental_basis_exec_stack_bfs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeStackBFSFundamental(IsolateThread thread, ObjectHandle graphHandle,
+	public static <V,E> int executeStackBFSFundamental(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		CycleBasisAlgorithm<Integer, Integer> alg = new StackBFSFundamentalCycleBasis<>(g);
-		CycleBasis<Integer, Integer> cycleBasis = alg.getCycleBasis();
+		CycleBasisAlgorithm<V, E> alg = new StackBFSFundamentalCycleBasis<>(g);
+		CycleBasis<V, E> cycleBasis = alg.getCycleBasis();
 		double weight = cycleBasis.getWeight();
-		Set<GraphPath<Integer, Integer>> cycles = cycleBasis.getCyclesAsGraphPaths();
+		Set<GraphPath<V, E>> cycles = cycleBasis.getCyclesAsGraphPaths();
 
 		if (weightRes.isNonNull()) {
 			weightRes.write(weight);
@@ -173,14 +173,14 @@ public class CycleApi {
 	
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "cycles_fundamental_basis_exec_paton", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executePatonFundamental(IsolateThread thread, ObjectHandle graphHandle,
+	public static <V,E> int executePatonFundamental(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		CycleBasisAlgorithm<Integer, Integer> alg = new PatonCycleBase<>(g);
-		CycleBasis<Integer, Integer> cycleBasis = alg.getCycleBasis();
+		CycleBasisAlgorithm<V, E> alg = new PatonCycleBase<>(g);
+		CycleBasis<V, E> cycleBasis = alg.getCycleBasis();
 		double weight = cycleBasis.getWeight();
-		Set<GraphPath<Integer, Integer>> cycles = cycleBasis.getCyclesAsGraphPaths();
+		Set<GraphPath<V, E>> cycles = cycleBasis.getCyclesAsGraphPaths();
 
 		if (weightRes.isNonNull()) {
 			weightRes.write(weight);

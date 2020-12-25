@@ -21,23 +21,23 @@ public class PlanarityApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "planarity_exec_boyer_myrvold", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeBoryerMyrvold(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res,
+	public static <V,E> int executeBoryerMyrvold(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res,
 			WordPointer embeddingRes, WordPointer kuratowskiSubdivisionRes) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		BoyerMyrvoldPlanarityInspector<Integer, Integer> alg = new BoyerMyrvoldPlanarityInspector<>(g);
+		BoyerMyrvoldPlanarityInspector<V, E> alg = new BoyerMyrvoldPlanarityInspector<>(g);
 
 		boolean result = alg.isPlanar();
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
 		if (result) {
-			Embedding<Integer, Integer> embedding = alg.getEmbedding();
+			Embedding<V, E> embedding = alg.getEmbedding();
 			if (embeddingRes.isNonNull()) {
 				embeddingRes.write(globalHandles.create(embedding));
 			}
 		} else {
-			Graph<Integer, Integer> kuratowskiSubdivision = alg.getKuratowskiSubdivision();
+			Graph<V, E> kuratowskiSubdivision = alg.getKuratowskiSubdivision();
 			if (kuratowskiSubdivisionRes.isNonNull()) {
 				kuratowskiSubdivisionRes.write(globalHandles.create(kuratowskiSubdivision));
 			}
@@ -50,6 +50,17 @@ public class PlanarityApi {
 	public static int edgesAround(IsolateThread thread, ObjectHandle embeddingHandle, int vertex, WordPointer res) {
 		Embedding<Integer, Integer> embedding = globalHandles.get(embeddingHandle);
 		List<Integer> list = embedding.getEdgesAround(vertex);
+		if (list != null && res.isNonNull()) {
+			res.write(globalHandles.create(list.iterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_planarity_embedding_edges_around_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longEdgesAround(IsolateThread thread, ObjectHandle embeddingHandle, long vertex, WordPointer res) {
+		Embedding<Long, Long> embedding = globalHandles.get(embeddingHandle);
+		List<Long> list = embedding.getEdgesAround(vertex);
 		if (list != null && res.isNonNull()) {
 			res.write(globalHandles.create(list.iterator()));
 		}

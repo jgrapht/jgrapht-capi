@@ -24,8 +24,9 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointerPointer;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
-import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
+import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
@@ -83,12 +84,47 @@ public class HandlesApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "handles_get_long_edge_pair", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getHandleAsLongEdgePair(IsolateThread thread, ObjectHandle handle, CLongPointer source,
+			CLongPointer target) {
+		Pair<Long, Long> pair = globalHandles.get(handle);
+		if (pair != null) {
+			if (source.isNonNull()) {
+				source.write(pair.getFirst());
+			}
+			if (target.isNonNull()) {
+				target.write(pair.getSecond());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "handles_get_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsEdgeTriple(IsolateThread thread, ObjectHandle handle, CIntPointer source,
 			CIntPointer target, CDoublePointer weight) {
 		Triple<Integer, Integer, Double> triple = globalHandles.get(handle);
+		if (triple != null) {
+			if (source.isNonNull()) {
+				source.write(triple.getFirst());
+			}
+			if (target.isNonNull()) {
+				target.write(triple.getSecond());
+			}
+			if (weight.isNonNull()) {
+				weight.write(triple.getThird());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "handles_get_long_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getHandleAsLongEdgeTriple(IsolateThread thread, ObjectHandle handle, CLongPointer source,
+			CLongPointer target, CDoublePointer weight) {
+		Triple<Long, Long, Double> triple = globalHandles.get(handle);
 		if (triple != null) {
 			if (source.isNonNull()) {
 				source.write(triple.getFirst());
@@ -127,6 +163,26 @@ public class HandlesApi {
 	public static int getHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
 			CIntPointer startVertexRes, CIntPointer endVertexRes, WordPointer edgeItRes) {
 		GraphPath<Integer, Integer> gp = globalHandles.get(handle);
+		if (weightRes.isNonNull()) {
+			weightRes.write(gp.getWeight());
+		}
+		if (startVertexRes.isNonNull()) {
+			startVertexRes.write(gp.getStartVertex());
+		}
+		if (endVertexRes.isNonNull()) {
+			endVertexRes.write(gp.getEndVertex());
+		}
+		if (edgeItRes.isNonNull()) {
+			edgeItRes.write(globalHandles.create(gp.getEdgeList().iterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longGetHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
+			CLongPointer startVertexRes, CLongPointer endVertexRes, WordPointer edgeItRes) {
+		GraphPath<Long, Long> gp = globalHandles.get(handle);
 		if (weightRes.isNonNull()) {
 			weightRes.write(gp.getWeight());
 		}

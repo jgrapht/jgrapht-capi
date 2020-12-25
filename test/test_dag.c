@@ -18,7 +18,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
-    jgrapht_capi_graph_dag_create(thread, 1, 1, &g);
+    jgrapht_capi_ii_graph_dag_create(thread, 1, 1, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int flag;
@@ -69,12 +69,12 @@ int main() {
     jgrapht_capi_error_clear_errno(thread);
 
     void *set;
-    jgrapht_capi_graph_dag_vertex_ancestors(thread, g, 3, &set);
+    jgrapht_capi_ii_graph_dag_vertex_ancestors(thread, g, 3, &set);
     jgrapht_capi_set_size(thread, set, &count);
     assert(count == 2);
     jgrapht_capi_handles_destroy(thread, set);
 
-    jgrapht_capi_graph_dag_vertex_descendants(thread, g, 2, &set);
+    jgrapht_capi_ii_graph_dag_vertex_descendants(thread, g, 2, &set);
     jgrapht_capi_set_size(thread, set, &count);
     assert(count == 2);
     jgrapht_capi_handles_destroy(thread, set);
@@ -82,7 +82,7 @@ int main() {
     // topological it
     void *it;
     int v;
-    jgrapht_capi_graph_dag_topological_it(thread, g, &it);
+    jgrapht_capi_xx_graph_dag_topological_it(thread, g, &it);
     jgrapht_capi_it_next_int(thread, it, &v);
     assert(v == 0);
     jgrapht_capi_it_next_int(thread, it, &v);

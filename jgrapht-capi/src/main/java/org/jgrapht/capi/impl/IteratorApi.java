@@ -26,6 +26,7 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointerPointer;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
+import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
@@ -41,6 +42,15 @@ public class IteratorApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_int", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorNextInt(IsolateThread thread, ObjectHandle itHandle, CIntPointer res) {
 		Iterator<Integer> it = globalHandles.get(itHandle);
+		if (res.isNonNull()) {
+			res.write(it.next());
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_long", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int iteratorNextLong(IsolateThread thread, ObjectHandle itHandle, CLongPointer res) {
+		Iterator<Long> it = globalHandles.get(itHandle);
 		if (res.isNonNull()) {
 			res.write(it.next());
 		}
@@ -62,6 +72,28 @@ public class IteratorApi {
 			CIntPointer target, CDoublePointer weight) {
 		Iterator<Triple<Integer, Integer, Double>> it = globalHandles.get(itHandle);
 		Triple<Integer, Integer, Double> triple = it.next();
+		if (source.isNonNull()) {
+			source.write(triple.getFirst());
+		}
+		if (target.isNonNull()) {
+			target.write(triple.getSecond());
+		}
+		if (weight.isNonNull()) {
+			Double edgeWeight = triple.getThird();
+			if (edgeWeight == null) { 
+				edgeWeight = Graph.DEFAULT_EDGE_WEIGHT;
+			}
+			weight.write(edgeWeight);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "it_next_long_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int iteratorNextLongEdgeTriple(IsolateThread thread, ObjectHandle itHandle, CLongPointer source,
+			CLongPointer target, CDoublePointer weight) {
+		Iterator<Triple<Long, Long, Double>> it = globalHandles.get(itHandle);
+		Triple<Long, Long, Double> triple = it.next();
 		if (source.isNonNull()) {
 			source.write(triple.getFirst());
 		}

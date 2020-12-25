@@ -38,6 +38,7 @@ import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
 import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.IIToIFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.LLToIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
@@ -47,9 +48,9 @@ public class DrawingApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "drawing_layout_model_2d_create", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int layoutModel2DCreate(IsolateThread thread, double minX, double minY, double width, double height,
+	public static <V> int layoutModel2DCreate(IsolateThread thread, double minX, double minY, double width, double height,
 			WordPointer res) {
-		MapLayoutModel2D<Integer> model = new MapLayoutModel2D<Integer>(Box2D.of(minX, minY, width, height));
+		MapLayoutModel2D<V> model = new MapLayoutModel2D<>(Box2D.of(minX, minY, width, height));
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(model));
 		}
@@ -58,9 +59,9 @@ public class DrawingApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "drawing_layout_model_2d_get_drawable_area", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int layoutModel2dGetDrawableArea(IsolateThread thread, ObjectHandle model, CDoublePointer minX,
+	public static <V> int layoutModel2dGetDrawableArea(IsolateThread thread, ObjectHandle model, CDoublePointer minX,
 			CDoublePointer minY, CDoublePointer width, CDoublePointer height) {
-		LayoutModel2D<Integer> m = globalHandles.get(model);
+		LayoutModel2D<V> m = globalHandles.get(model);
 		Box2D area = m.getDrawableArea();
 		if (area != null) {
 			if (minX.isNonNull()) {
@@ -95,11 +96,36 @@ public class DrawingApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_drawing_layout_model_2d_get_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longLayoutModel2dGetVertex(IsolateThread thread, ObjectHandle model, long vertex, CDoublePointer x,
+			CDoublePointer y) {
+		LayoutModel2D<Long> m = globalHandles.get(model);
+		Point2D p = m.get(vertex);
+		if (p != null) {
+			if (x.isNonNull()) {
+				x.write(p.getX());
+			}
+			if (y.isNonNull()) {
+				y.write(p.getY());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "drawing_layout_model_2d_put_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dPutVertex(IsolateThread thread, ObjectHandle model, int vertex, double x, double y) {
 		LayoutModel2D<Integer> m = globalHandles.get(model);
+		m.put(vertex, Point2D.of(x, y));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_drawing_layout_model_2d_put_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longLayoutModel2dPutVertex(IsolateThread thread, ObjectHandle model, long vertex, double x, double y) {
+		LayoutModel2D<Long> m = globalHandles.get(model);
 		m.put(vertex, Point2D.of(x, y));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -113,6 +139,16 @@ public class DrawingApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_drawing_layout_model_2d_get_fixed", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longLayoutModel2dGetFixed(IsolateThread thread, ObjectHandle model, long vertex, CIntPointer res) {
+		LayoutModel2D<Long> m = globalHandles.get(model);
+		if (res.isNonNull()) {
+			res.write(m.isFixed(vertex) ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "drawing_layout_model_2d_set_fixed", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -121,15 +157,23 @@ public class DrawingApi {
 		m.setFixed(vertex, fixed);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_drawing_layout_model_2d_set_fixed", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longLayoutModel2dSetFixed(IsolateThread thread, ObjectHandle model, long vertex, boolean fixed) {
+		LayoutModel2D<Long> m = globalHandles.get(model);
+		m.setFixed(vertex, fixed);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "drawing_exec_random_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeRandomLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
+	public static <V,E> int executeRandomLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
 			long seed) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		LayoutModel2D<Integer> m = globalHandles.get(model);
+		Graph<V, E> g = globalHandles.get(graphHandle);
+		LayoutModel2D<V> m = globalHandles.get(model);
 
-		new RandomLayoutAlgorithm2D<Integer, Integer>(seed).layout(g, m);
+		new RandomLayoutAlgorithm2D<V, E>(seed).layout(g, m);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -148,24 +192,40 @@ public class DrawingApi {
 		new CircularLayoutAlgorithm2D<Integer, Integer>(radius, comparator).layout(g, m);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "ll_drawing_exec_circular_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int longExecuteCircularLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
+			double radius, LLToIFunctionPointer vertexComparator) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		LayoutModel2D<Long> m = globalHandles.get(model);
+
+		Comparator<Long> comparator = null;
+		if (vertexComparator.isNonNull()) {
+			comparator = (a, b) -> vertexComparator.invoke(a, b);
+		}
+
+		new CircularLayoutAlgorithm2D<Long, Long>(radius, comparator).layout(g, m);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "drawing_exec_fr_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeFRLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
+	public static <V,E> int executeFRLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
 			int iterations, double normalizationFactor, long seed) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		LayoutModel2D<Integer> m = globalHandles.get(model);
-		new FRLayoutAlgorithm2D<Integer, Integer>(iterations, normalizationFactor, new Random(seed)).layout(g, m);
+		Graph<V, E> g = globalHandles.get(graphHandle);
+		LayoutModel2D<V> m = globalHandles.get(model);
+		new FRLayoutAlgorithm2D<V, E>(iterations, normalizationFactor, new Random(seed)).layout(g, m);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "drawing_exec_indexed_fr_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeIndexedFRLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
+	public static <V,E> int executeIndexedFRLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
 			int iterations, double normalizationFactor, long seed, double theta, double tolerance) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
-		LayoutModel2D<Integer> m = globalHandles.get(model);
-		new IndexedFRLayoutAlgorithm2D<Integer, Integer>(iterations, theta, normalizationFactor, new Random(seed),
+		Graph<V, E> g = globalHandles.get(graphHandle);
+		LayoutModel2D<V> m = globalHandles.get(model);
+		new IndexedFRLayoutAlgorithm2D<V, E>(iterations, theta, normalizationFactor, new Random(seed),
 				tolerance).layout(g, m);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
