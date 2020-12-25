@@ -39,7 +39,7 @@ int main() {
 
     int is_connected;
     void *setsit;
-    jgrapht_capi_connectivity_weak_exec_bfs(thread, g, &is_connected, &setsit);
+    jgrapht_capi_xx_connectivity_weak_exec_bfs(thread, g, &is_connected, &setsit);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     assert(is_connected == 1);
@@ -55,22 +55,22 @@ int main() {
 
 
     // gabow
-    jgrapht_capi_connectivity_strong_exec_gabow(thread, g, &is_connected, NULL);
+    jgrapht_capi_xx_connectivity_strong_exec_gabow(thread, g, &is_connected, NULL);
     assert(!is_connected);
 
     // kosaraju
-    jgrapht_capi_connectivity_strong_exec_kosaraju(thread, g, &is_connected, NULL);
+    jgrapht_capi_xx_connectivity_strong_exec_kosaraju(thread, g, &is_connected, NULL);
     assert(!is_connected);
 
     // make strongly connected
     jgrapht_capi_graph_add_edge(thread, g, 0, 3, NULL);
 
     // gabow
-    jgrapht_capi_connectivity_strong_exec_gabow(thread, g, &is_connected, NULL);
+    jgrapht_capi_xx_connectivity_strong_exec_gabow(thread, g, &is_connected, NULL);
     assert(is_connected);
 
     // kosaraju
-    jgrapht_capi_connectivity_strong_exec_kosaraju(thread, g, &is_connected, NULL);
+    jgrapht_capi_xx_connectivity_strong_exec_kosaraju(thread, g, &is_connected, NULL);
     assert(is_connected);
 
     jgrapht_capi_handles_destroy(thread, g);

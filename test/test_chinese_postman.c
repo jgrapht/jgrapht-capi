@@ -35,7 +35,7 @@ int main() {
     jgrapht_capi_graph_add_edge(thread, g, 3, 4, NULL);
 
     void *walk;
-    jgrapht_capi_cycles_chinese_postman_exec_edmonds_johnson(thread, g, &walk);
+    jgrapht_capi_xx_cycles_chinese_postman_exec_edmonds_johnson(thread, g, &walk);
 
     double weight;
     int start_vertex;

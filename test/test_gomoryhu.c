@@ -41,13 +41,13 @@ int main() {
 
     // gomory-hu
     void *hu;
-    jgrapht_capi_cut_gomoryhu_exec_gusfield(thread, g, &hu);
+    jgrapht_capi_xx_cut_gomoryhu_exec_gusfield(thread, g, &hu);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // min s-t cut
     void *source_partition; 
     double value;
-    jgrapht_capi_cut_gomoryhu_min_st_cut(thread, hu, 0, 3, &value, &source_partition);
+    jgrapht_capi_ii_cut_gomoryhu_min_st_cut(thread, hu, 0, 3, &value, &source_partition);
     assert(value == 30.0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
@@ -64,7 +64,7 @@ int main() {
 
 
     // min cut
-    jgrapht_capi_cut_gomoryhu_min_cut(thread, hu, &value, &source_partition);
+    jgrapht_capi_xx_cut_gomoryhu_min_cut(thread, hu, &value, &source_partition);
     assert(value == 30.0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
@@ -82,7 +82,7 @@ int main() {
 
     // tree
     void *tree;
-    jgrapht_capi_cut_gomoryhu_tree(thread, hu, &tree);
+    jgrapht_capi_ii_cut_gomoryhu_tree(thread, hu, &tree);
     int count;
     jgrapht_capi_graph_vertices_count(thread, tree, &count);
     assert (count == 4);

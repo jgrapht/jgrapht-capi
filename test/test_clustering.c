@@ -54,15 +54,15 @@ int main() {
 
     int k = 2;
     void *c;
-    assert(jgrapht_capi_clustering_exec_k_spanning_tree(thread, g, k, &c) == 0);
+    assert(jgrapht_capi_xx_clustering_exec_k_spanning_tree(thread, g, k, &c) == 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int num_clusters;
-    jgrapht_capi_clustering_get_number_clusters(thread, c, &num_clusters);
+    jgrapht_capi_xx_clustering_get_number_clusters(thread, c, &num_clusters);
     assert(num_clusters == 2);
 
     void *vit;
-    jgrapht_capi_clustering_ith_cluster_vit(thread, c, 0, &vit);
+    jgrapht_capi_xx_clustering_ith_cluster_vit(thread, c, 0, &vit);
     assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
     assert(v == 0);
     assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
@@ -76,7 +76,7 @@ int main() {
     assert(hasnext == 0);
     jgrapht_capi_handles_destroy(thread, vit);
 
-    jgrapht_capi_clustering_ith_cluster_vit(thread, c, 1, &vit);
+    jgrapht_capi_xx_clustering_ith_cluster_vit(thread, c, 1, &vit);
     assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
     assert(v == 4);
     assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
@@ -92,7 +92,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, c);
 
     // test API on label propagation
-    assert(jgrapht_capi_clustering_exec_label_propagation(thread, g, 0, 17, &c) == 0);
+    assert(jgrapht_capi_xx_clustering_exec_label_propagation(thread, g, 0, 17, &c) == 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     jgrapht_capi_handles_destroy(thread, c);
 

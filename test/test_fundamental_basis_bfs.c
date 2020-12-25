@@ -38,7 +38,7 @@ int main() {
 
     double weight;
     void *gpit;
-    jgrapht_capi_cycles_fundamental_basis_exec_queue_bfs(thread, g, &weight, &gpit);
+    jgrapht_capi_xx_cycles_fundamental_basis_exec_queue_bfs(thread, g, &weight, &gpit);
 
     assert(weight == 8.0);
 

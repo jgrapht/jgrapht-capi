@@ -97,39 +97,39 @@ int main() {
 
     void *c;
     int colors;
-    jgrapht_capi_coloring_exec_greedy(thread, g, &colors, &c);
+    jgrapht_capi_xx_coloring_exec_greedy(thread, g, &colors, &c);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     assert(colors == 3);
     assert_coloring(thread, g, c);
     jgrapht_capi_handles_destroy(thread, c);
 
-    jgrapht_capi_coloring_exec_greedy_smallestdegreelast(thread, g, &colors, &c);
+    jgrapht_capi_xx_coloring_exec_greedy_smallestdegreelast(thread, g, &colors, &c);
     assert(colors == 3);
     assert_coloring(thread, g, c);
     jgrapht_capi_handles_destroy(thread, c);
 
-    jgrapht_capi_coloring_exec_backtracking_brown(thread, g, &colors, &c);
+    jgrapht_capi_xx_coloring_exec_backtracking_brown(thread, g, &colors, &c);
     assert(colors == 3);
     assert_coloring(thread, g, c);
     jgrapht_capi_handles_destroy(thread, c);
 
-    jgrapht_capi_coloring_exec_greedy_largestdegreefirst(thread, g, &colors, &c);
+    jgrapht_capi_xx_coloring_exec_greedy_largestdegreefirst(thread, g, &colors, &c);
     assert(colors == 3);
     assert_coloring(thread, g, c);
     jgrapht_capi_handles_destroy(thread, c);
 
-    jgrapht_capi_coloring_exec_greedy_random_with_seed(thread, g, 13, &colors, &c);
+    jgrapht_capi_xx_coloring_exec_greedy_random_with_seed(thread, g, 13, &colors, &c);
     assert(colors == 3);
     assert_coloring(thread, g, c);
     jgrapht_capi_handles_destroy(thread, c);
 
-    jgrapht_capi_coloring_exec_greedy_dsatur(thread, g, &colors, &c);
+    jgrapht_capi_xx_coloring_exec_greedy_dsatur(thread, g, &colors, &c);
     assert(colors == 3);
     assert_coloring(thread, g, c);
     jgrapht_capi_handles_destroy(thread, c);
 
     // just test API, since this is not a coloring
-    jgrapht_capi_coloring_exec_color_refinement(thread, g, &colors, &c);
+    jgrapht_capi_xx_coloring_exec_color_refinement(thread, g, &colors, &c);
     assert(colors == 8);
     jgrapht_capi_handles_destroy(thread, c);
 
@@ -154,7 +154,7 @@ int main() {
     jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
 
 
-    jgrapht_capi_coloring_exec_chordal_minimum_coloring(thread, g, &colors, &c);
+    jgrapht_capi_xx_coloring_exec_chordal_minimum_coloring(thread, g, &colors, &c);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     assert(colors == 3);
     jgrapht_capi_handles_destroy(thread, c);

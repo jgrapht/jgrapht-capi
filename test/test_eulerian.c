@@ -33,7 +33,7 @@ int main() {
 
     void *cycle;
     int exists;
-    jgrapht_capi_cycles_eulerian_exec_hierholzer(thread, g, &exists, &cycle);
+    jgrapht_capi_xx_cycles_eulerian_exec_hierholzer(thread, g, &exists, &cycle);
 
     assert(exists);
 

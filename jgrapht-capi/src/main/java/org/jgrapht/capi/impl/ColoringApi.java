@@ -47,42 +47,42 @@ public class ColoringApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "coloring_exec_greedy", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeGreedyColoring(IsolateThread thread, ObjectHandle graphHandle, CIntPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new GreedyColoring<>(g), resColors, resColorsMap);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "coloring_exec_greedy_smallestdegreelast", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeSmallestDegreeLastColoring(IsolateThread thread, ObjectHandle graphHandle,
 			CIntPointer resColors, WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new SmallestDegreeLastColoring<>(g), resColors, resColorsMap);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "coloring_exec_backtracking_brown", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBacktrackingBrown(IsolateThread thread, ObjectHandle graphHandle, CIntPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new BrownBacktrackColoring<>(g), resColors, resColorsMap);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "coloring_exec_greedy_largestdegreefirst", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeLargestDegreeFirstColoring(IsolateThread thread, ObjectHandle graphHandle,
 			CIntPointer resColors, WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new LargestDegreeFirstColoring<>(g), resColors, resColorsMap);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "coloring_exec_greedy_random", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeRandomGreedyWithSeed(IsolateThread thread, ObjectHandle graphHandle, CIntPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new RandomGreedyColoring<>(g), resColors, resColorsMap);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "coloring_exec_greedy_random_with_seed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeRandomGreedy(IsolateThread thread, ObjectHandle graphHandle, long seed,
 			CIntPointer resColors, WordPointer resColorsMap) {
@@ -90,21 +90,21 @@ public class ColoringApi {
 				resColorsMap);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "coloring_exec_greedy_dsatur", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeGreedyDSatur(IsolateThread thread, ObjectHandle graphHandle, CIntPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new SaturationDegreeColoring<>(g), resColors, resColorsMap);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "coloring_exec_color_refinement", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeColorRefinement(IsolateThread thread, ObjectHandle graphHandle, CIntPointer resColors,
 			WordPointer resColorsMap) {
 		return executeColoring(thread, graphHandle, g -> new ColorRefinementAlgorithm<>(g), resColors, resColorsMap);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "coloring_exec_chordal_minimum_coloring", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeChordalMinimumColoring(IsolateThread thread, ObjectHandle graphHandle,
 			CIntPointer resColors, WordPointer resColorsMap) {

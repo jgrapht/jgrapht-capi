@@ -22,7 +22,7 @@ public class CutApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "cut_mincut_exec_stoer_wagner", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executeStoerWagner(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer valueRes,
 			WordPointer cutSourcePartitionRes) {
@@ -41,7 +41,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "cut_gomoryhu_exec_gusfield", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executeGomoryHuGusfield(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -52,7 +52,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "cut_gomoryhu_min_st_cut", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int gomoryHuSTCut(IsolateThread thread, ObjectHandle gomoryHu, int source, int sink,
 			CDoublePointer valueRes, WordPointer cutSourcePartitionRes) {
@@ -68,9 +68,9 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_cut_gomoryhu_min_st_cut", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longGomoryHuSTCut(IsolateThread thread, ObjectHandle gomoryHu, long source, long sink,
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "cut_gomoryhu_min_st_cut", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int gomoryHuSTCut(IsolateThread thread, ObjectHandle gomoryHu, long source, long sink,
 			CDoublePointer valueRes, WordPointer cutSourcePartitionRes) {
 		GusfieldGomoryHuCutTree<Long, ?> alg = globalHandles.get(gomoryHu);
 		double cutValue = alg.calculateMinCut(source, sink);
@@ -84,7 +84,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "cut_gomoryhu_min_cut", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int gomoryHuMinCut(IsolateThread thread, ObjectHandle gomoryHu, CDoublePointer valueRes,
 			WordPointer cutSourcePartitionRes) {
@@ -100,7 +100,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "cut_gomoryhu_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int gomoryHuTree(IsolateThread thread, ObjectHandle gomoryHu, WordPointer treeRes) {
 		GusfieldGomoryHuCutTree<Integer, ?> alg = globalHandles.get(gomoryHu);
@@ -125,9 +125,9 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_cut_gomoryhu_tree", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int longGomoryHuTree(IsolateThread thread, ObjectHandle gomoryHu, WordPointer treeRes) {
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "cut_gomoryhu_tree", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int llGomoryHuTree(IsolateThread thread, ObjectHandle gomoryHu, WordPointer treeRes) {
 		GusfieldGomoryHuCutTree<Long, ?> alg = globalHandles.get(gomoryHu);
 		SimpleWeightedGraph<Long, DefaultWeightedEdge> origTree = alg.getGomoryHuTree();
 
@@ -150,7 +150,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "cut_oddmincutset_exec_padberg_rao", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executePadbergRao(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle oddVerticesHandle,
 			boolean useTreeCompression, CDoublePointer valueRes, WordPointer sourcePartitionRes) {

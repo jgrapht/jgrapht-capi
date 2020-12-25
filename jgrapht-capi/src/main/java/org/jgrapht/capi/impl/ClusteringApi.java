@@ -39,7 +39,7 @@ public class ClusteringApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "clustering_exec_k_spanning_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeKSpanningTree(IsolateThread thread, ObjectHandle graphHandle, int k, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -51,7 +51,7 @@ public class ClusteringApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "clustering_exec_label_propagation", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeLabelPropagationTree(IsolateThread thread, ObjectHandle graphHandle, int maxIterations,
 			long seed, WordPointer res) {
@@ -64,7 +64,7 @@ public class ClusteringApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "clustering_get_number_clusters", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getNumberOfClusters(IsolateThread thread, ObjectHandle cHandle, CIntPointer res) {
 		Clustering<?> c = globalHandles.get(cHandle);
@@ -74,7 +74,7 @@ public class ClusteringApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "clustering_ith_cluster_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getClusterWithIndexVertexIterator(IsolateThread thread, ObjectHandle cHandle, int i,
 			WordPointer res) {

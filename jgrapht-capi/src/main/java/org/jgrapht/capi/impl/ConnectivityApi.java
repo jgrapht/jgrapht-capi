@@ -21,7 +21,7 @@ public class ConnectivityApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "connectivity_strong_exec_kosaraju", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executeKosaraju(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
@@ -41,7 +41,7 @@ public class ConnectivityApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "connectivity_strong_exec_gabow", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executeGabow(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
@@ -61,7 +61,7 @@ public class ConnectivityApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "connectivity_weak_exec_bfs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executeWeakBfs(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
