@@ -34,20 +34,20 @@ int main() {
 
     // create model
     void *model;
-    jgrapht_capi_drawing_layout_model_2d_create(thread, 0, 0, 10.0, 10.0, &model);
+    jgrapht_capi_xx_drawing_layout_model_2d_create(thread, 0, 0, 10.0, 10.0, &model);
 
     double x, y, w, h;
-    jgrapht_capi_drawing_layout_model_2d_get_drawable_area(thread, model, &x, &y, &w, &h);
+    jgrapht_capi_xx_drawing_layout_model_2d_get_drawable_area(thread, model, &x, &y, &w, &h);
     assert(x == 0);
     assert(y == 0);
     assert(w == 10.0);
     assert(h == 10.0);
 
-    jgrapht_capi_drawing_exec_random_layout_2d(thread, g, model, 17);
+    jgrapht_capi_xx_drawing_exec_random_layout_2d(thread, g, model, 17);
 
     double vx, vy;
     for(int i = 0; i < 7; i++) { 
-        jgrapht_capi_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
+        jgrapht_capi_ii_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
         assert(vx >= 0.0);
         assert(vx <= 10.0);
         assert(vy >= 0.0);
@@ -55,19 +55,19 @@ int main() {
         // printf("(%lf,%lf)\n", vx, vy);
     }
 
-    jgrapht_capi_drawing_layout_model_2d_put_vertex(thread, model, 3, 2.5, 3.5);
-    jgrapht_capi_drawing_layout_model_2d_get_vertex(thread, model, 3, &vx, &vy);
+    jgrapht_capi_ii_drawing_layout_model_2d_put_vertex(thread, model, 3, 2.5, 3.5);
+    jgrapht_capi_ii_drawing_layout_model_2d_get_vertex(thread, model, 3, &vx, &vy);
     assert(vx == 2.5);
     assert(vy == 3.5);
 
     int fixed;
-    jgrapht_capi_drawing_layout_model_2d_get_fixed(thread, model, 2, &fixed);
+    jgrapht_capi_ii_drawing_layout_model_2d_get_fixed(thread, model, 2, &fixed);
     assert(fixed==0);
-    jgrapht_capi_drawing_layout_model_2d_set_fixed(thread, model, 2, 1);
-    jgrapht_capi_drawing_layout_model_2d_get_fixed(thread, model, 2, &fixed);
+    jgrapht_capi_ii_drawing_layout_model_2d_set_fixed(thread, model, 2, 1);
+    jgrapht_capi_ii_drawing_layout_model_2d_get_fixed(thread, model, 2, &fixed);
     assert(fixed==1);
-    jgrapht_capi_drawing_layout_model_2d_set_fixed(thread, model, 2, 0);
-    jgrapht_capi_drawing_layout_model_2d_get_fixed(thread, model, 2, &fixed);
+    jgrapht_capi_ii_drawing_layout_model_2d_set_fixed(thread, model, 2, 0);
+    jgrapht_capi_ii_drawing_layout_model_2d_get_fixed(thread, model, 2, &fixed);
     assert(fixed==0);
 
     jgrapht_capi_handles_destroy(thread, model);

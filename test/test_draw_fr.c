@@ -35,13 +35,13 @@ int main() {
 
     // create model
     void *model;
-    jgrapht_capi_drawing_layout_model_2d_create(thread, 0, 0, 10.0, 10.0, &model);
+    jgrapht_capi_xx_drawing_layout_model_2d_create(thread, 0, 0, 10.0, 10.0, &model);
 
-    jgrapht_capi_drawing_exec_fr_layout_2d(thread, g, model, 50, 1.0, 17);
+    jgrapht_capi_xx_drawing_exec_fr_layout_2d(thread, g, model, 50, 1.0, 17);
 
     double vx, vy;
     for(int i = 0; i < 7; i++) { 
-        jgrapht_capi_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
+        jgrapht_capi_ii_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
         assert(vx >= 0.0);
         assert(vx <= 10.0);
         assert(vy >= 0.0);
@@ -53,11 +53,11 @@ int main() {
 
 
     // now with index
-    jgrapht_capi_drawing_layout_model_2d_create(thread, 0, 0, 10.0, 10.0, &model);
-    jgrapht_capi_drawing_exec_indexed_fr_layout_2d(thread, g, model, 50, 1.0, 17, 0.5, 0.000000001);
+    jgrapht_capi_xx_drawing_layout_model_2d_create(thread, 0, 0, 10.0, 10.0, &model);
+    jgrapht_capi_xx_drawing_exec_indexed_fr_layout_2d(thread, g, model, 50, 1.0, 17, 0.5, 0.000000001);
 
     for(int i = 0; i < 7; i++) { 
-        jgrapht_capi_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
+        jgrapht_capi_ii_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
         assert(vx >= 0.0);
         assert(vx <= 10.0);
         assert(vy >= 0.0);
