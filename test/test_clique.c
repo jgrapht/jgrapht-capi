@@ -34,7 +34,7 @@ int main() {
     jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
 
     void *cliqueit;
-    jgrapht_capi_clique_exec_bron_kerbosch(thread, g, 0, &cliqueit);
+    jgrapht_capi_xx_clique_exec_bron_kerbosch(thread, g, 0, &cliqueit);
 
     int hasnext = 0;
     jgrapht_capi_it_hasnext(thread, cliqueit, &hasnext);
@@ -99,7 +99,7 @@ int main() {
     jgrapht_capi_graph_add_edge(thread, g, 2, 3, NULL);
 
 
-    jgrapht_capi_clique_exec_chordal_max_clique(thread, g, &clique);
+    jgrapht_capi_xx_clique_exec_chordal_max_clique(thread, g, &clique);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     jgrapht_capi_set_it_create(thread, clique, &vit);
     int elem = 0;

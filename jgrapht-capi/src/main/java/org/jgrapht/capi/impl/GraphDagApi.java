@@ -43,8 +43,8 @@ public class GraphDagApi {
 	 * @param thread the thread isolate
 	 * @return the graph handle
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ii_graph_dag_create", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "graph_dag_create", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Create a (int-int) dag and return its handle." })
 	public static int createDag(IsolateThread thread, boolean allowMultipleEdges, boolean weighted, WordPointer res) {
 		SafeVertexSupplier vSupplier = new SafeVertexSupplier();
@@ -67,8 +67,8 @@ public class GraphDagApi {
 	 * @param thread the thread isolate
 	 * @return the graph handle
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_dag_create", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_dag_create", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Create a (long-long) dag and return its handle." })
 	public static int createLongDag(IsolateThread thread, boolean allowMultipleEdges, boolean weighted,
 			WordPointer res) {
@@ -86,8 +86,8 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "xx_graph_dag_topological_it", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+			+ "graph_dag_topological_it", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Given a dag create a topological iterator and return its handle." })
 	public static <V, E> int createTopoIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		DirectedAcyclicGraph<V, E> graph = getSafeWrappedDag(graphHandle);
@@ -97,8 +97,8 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ii_graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (int-int) dag and a vertex returns its descendants.")
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (int-int) dag and a vertex returns its descendants.")
 	public static int createVertexDescendants(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
 		DirectedAcyclicGraph<Integer, Integer> graph = getSafeWrappedDag(graphHandle);
@@ -108,8 +108,8 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (long-long) dag and a vertex returns its descendants.")
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (long-long) dag and a vertex returns its descendants.")
 	public static int createVertexDescendants(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
 		DirectedAcyclicGraph<Long, Long> graph = getSafeWrappedDag(graphHandle);
@@ -119,8 +119,8 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ii_graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (int-int) dag and a vertex returns its ancestors.")
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (int-int) dag and a vertex returns its ancestors.")
 	public static int createVertexAncestors(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
 		DirectedAcyclicGraph<Integer, Integer> graph = getSafeWrappedDag(graphHandle);
@@ -130,8 +130,8 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "ll_graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (long-long) dag and a vertex returns its ancestors.")
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (long-long) dag and a vertex returns its ancestors.")
 	public static int createVertexAncestors(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
 		DirectedAcyclicGraph<Long, Long> graph = getSafeWrappedDag(graphHandle);

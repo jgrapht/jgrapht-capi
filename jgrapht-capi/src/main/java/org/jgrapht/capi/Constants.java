@@ -22,7 +22,30 @@ package org.jgrapht.capi;
  */
 public class Constants {
 
+	/**
+	 * Library name
+	 */
 	public static final String LIB_NAME = "jgrapht_capi";
+
+	/**
+	 * Library prefix
+	 */
 	public static final String LIB_PREFIX = LIB_NAME + "_";
+
+	/**
+	 * Indicates a method working on a graph with integer vertices and integer
+	 * edges.
+	 */
+	public static final String INTINT = "ii_";
+
+	/**
+	 * Indicates a method working on a graph with long vertices and long edges.
+	 */
+	public static final String LONGLONG = "ll_";
+
+	/**
+	 * Indicates a method working on a graph with any type of vertices and edges.
+	 */
+	public static final String ANYANY = "xx_";
 
 }
