@@ -80,10 +80,10 @@ int main() {
     jgrapht_capi_attributes_registry_register_attribute(thread, attrs_registry, "cost", "edge", "double", NULL);
 
     void *attr_store;
-    jgrapht_capi_attributes_store_create(thread, &attr_store);
-    jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 0, "cost", 5.4);
-    jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 1, "cost", 6.5);
-    jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 2, "cost", 9.2);
+    jgrapht_capi_xx_attributes_store_create(thread, &attr_store);
+    jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 0, "cost", 5.4);
+    jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 1, "cost", 6.5);
+    jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 2, "cost", 9.2);
 
     jgrapht_capi_export_file_graphml(thread, g, "dummy.graphml.simple.out", attrs_registry, NULL, attr_store, NULL, 0, 0, 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);

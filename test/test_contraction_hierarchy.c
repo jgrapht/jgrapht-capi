@@ -56,13 +56,13 @@ int main() {
     
     // create CH
     void *ch;
-    jgrapht_capi_sp_exec_contraction_hierarchy(thread, g, 1, 17, &ch);
+    jgrapht_capi_xx_sp_exec_contraction_hierarchy(thread, g, 1, 17, &ch);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test bidirectional dijkstra
     void *gp;
-    jgrapht_capi_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(thread, ch, 0, 6, 500000, &gp); 
+    jgrapht_capi_ii_sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices(thread, ch, 0, 6, 500000, &gp); 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     double weight; 
@@ -84,14 +84,14 @@ int main() {
     jgrapht_capi_set_int_add(thread, targets, 6, NULL);
     jgrapht_capi_set_int_add(thread, targets, 7, NULL);
     jgrapht_capi_set_int_add(thread, targets, 5, NULL);
-    jgrapht_capi_sp_exec_contraction_hierarchy_get_manytomany(thread, ch, sources, targets, &mm);
+    jgrapht_capi_xx_sp_exec_contraction_hierarchy_get_manytomany(thread, ch, sources, targets, &mm);
     jgrapht_capi_handles_destroy(thread, sources);
     jgrapht_capi_handles_destroy(thread, targets);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // query with many to many
-    jgrapht_capi_sp_manytomany_get_path_between_vertices(thread, mm, 0, 6, &gp);
+    jgrapht_capi_ii_sp_manytomany_get_path_between_vertices(thread, mm, 0, 6, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     jgrapht_capi_ii_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     assert(weight == 80.0);
@@ -99,7 +99,7 @@ int main() {
     assert(end_vertex == 6);
     jgrapht_capi_handles_destroy(thread, gp);
 
-    jgrapht_capi_sp_manytomany_get_path_between_vertices(thread, mm, 1, 7, &gp);
+    jgrapht_capi_ii_sp_manytomany_get_path_between_vertices(thread, mm, 1, 7, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     jgrapht_capi_ii_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
     printf("%lf\n", weight);
@@ -109,7 +109,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, gp);
 
     // test many to many not computed pair (ERROR)
-    jgrapht_capi_sp_manytomany_get_path_between_vertices(thread, mm, 5, 2, &gp);
+    jgrapht_capi_ii_sp_manytomany_get_path_between_vertices(thread, mm, 5, 2, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == STATUS_ILLEGAL_ARGUMENT);
     jgrapht_capi_error_clear_errno(thread);
 

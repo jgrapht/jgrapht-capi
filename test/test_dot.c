@@ -59,10 +59,10 @@ int main() {
     // write it to file
 
     void *attr_store;
-    jgrapht_capi_attributes_store_create(thread, &attr_store);
-    jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 0, "cost", 5.4);
-    jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 1, "cost", 6.5);
-    jgrapht_capi_attributes_store_put_double_attribute(thread, attr_store, 2, "cost", 9.2);
+    jgrapht_capi_xx_attributes_store_create(thread, &attr_store);
+    jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 0, "cost", 5.4);
+    jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 1, "cost", 6.5);
+    jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 2, "cost", 9.2);
 
     jgrapht_capi_export_file_dot(thread, g, "dummy.dot.out", NULL, attr_store, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
