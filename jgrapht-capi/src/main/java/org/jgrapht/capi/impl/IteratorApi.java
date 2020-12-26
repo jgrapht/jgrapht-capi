@@ -67,7 +67,7 @@ public class IteratorApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "it_next_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "it_next_int_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorNextEdgeTriple(IsolateThread thread, ObjectHandle itHandle, CIntPointer source,
 			CIntPointer target, CDoublePointer weight) {
 		Iterator<Triple<Integer, Integer, Double>> it = globalHandles.get(itHandle);
