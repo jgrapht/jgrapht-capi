@@ -22,7 +22,7 @@ int main() {
 
     // test read from string with extra attributes
     void *edgelist;
-    jgrapht_capi_import_edgelist_attrs_string_csv(thread, expected, NULL, NULL, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0, &edgelist);
+    jgrapht_capi_ii_import_edgelist_attrs_string_csv(thread, expected, NULL, NULL, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int count = 0;
@@ -33,7 +33,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     // no attrs
-    jgrapht_capi_import_edgelist_noattrs_string_csv(thread, expected, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0, &edgelist);
+    jgrapht_capi_xx_import_edgelist_noattrs_string_csv(thread, expected, CSV_FORMAT_ADJACENCY_LIST, 0, 0, 0, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     count = 0;

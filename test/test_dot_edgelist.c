@@ -48,7 +48,7 @@ int main() {
 
     // test read from string with extra attributes
     void *edgelist;
-    jgrapht_capi_import_edgelist_attrs_string_dot(thread, expected, NULL, NULL, &edgelist);
+    jgrapht_capi_ii_import_edgelist_attrs_string_dot(thread, expected, NULL, NULL, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int count = 0;
@@ -59,7 +59,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     // no attrs
-    jgrapht_capi_import_edgelist_noattrs_string_dot(thread, expected, &edgelist);
+    jgrapht_capi_xx_import_edgelist_noattrs_string_dot(thread, expected, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     count = 0;
@@ -72,7 +72,7 @@ int main() {
     // write to tmp file and read back
     write_to_file("test_dot_edgelist.dot", expected);
 
-    jgrapht_capi_import_edgelist_attrs_file_dot(thread, "test_dot_edgelist.dot", NULL, edge_attribute, &edgelist);
+    jgrapht_capi_ii_import_edgelist_attrs_file_dot(thread, "test_dot_edgelist.dot", NULL, edge_attribute, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     count = 0;
     jgrapht_capi_list_size(thread, edgelist, &count);
@@ -80,7 +80,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_import_edgelist_noattrs_file_dot(thread, "test_dot_edgelist.dot", &edgelist);
+    jgrapht_capi_xx_import_edgelist_noattrs_file_dot(thread, "test_dot_edgelist.dot", &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     count = 0;
     jgrapht_capi_list_size(thread, edgelist, &count);

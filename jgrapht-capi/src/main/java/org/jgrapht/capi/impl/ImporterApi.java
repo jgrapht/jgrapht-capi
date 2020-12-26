@@ -33,8 +33,10 @@ import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.IFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.ImportIdFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.ImporterExporterCSVFormat;
-import org.jgrapht.capi.JGraphTContext.IntegerToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.IntegerIdNotifyAttributeFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.IntegerToIntegerFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.LFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.LongIdNotifyAttributeFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.StringUtils;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
@@ -66,7 +68,7 @@ public class ImporterApi {
 			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
 		}
 		setupNotifyVertexEdge(importer, notifyVertexFunctionPointer, notifyEdgeFunctionPointer);
-		
+
 		importer.importGraph(g, new File(StringUtils.toJavaStringFromUtf8(filename)));
 
 		return Status.STATUS_SUCCESS.getCValue();
@@ -84,7 +86,7 @@ public class ImporterApi {
 			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
 		}
 		setupNotifyVertexEdge(importer, notifyVertexFunctionPointer, notifyEdgeFunctionPointer);
-		
+
 		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
 		try (StringReader reader = new StringReader(inputAsJava)) {
 			importer.importGraph(g, reader);
@@ -142,7 +144,8 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importJsonFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			ImportIdFunctionPointer importIdFunctionPointer, IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			ImportIdFunctionPointer importIdFunctionPointer,
+			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, IFunctionPointer notifyVertexFunctionPointer,
 			IFunctionPointer notifyEdgeFunctionPointer) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -168,7 +171,8 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_string_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importJsonFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
-			ImportIdFunctionPointer importIdFunctionPointer, IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			ImportIdFunctionPointer importIdFunctionPointer,
+			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, IFunctionPointer notifyVertexFunctionPointer,
 			IFunctionPointer notifyEdgeFunctionPointer) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -196,8 +200,8 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "import_file_csv", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importCSVFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ImportIdFunctionPointer importIdFunctionPointer, IFunctionPointer notifyVertexFunctionPointer,
-			IFunctionPointer notifyEdgeFunctionPointer, ImporterExporterCSVFormat format,
-			boolean import_edge_weights, boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge) {
+			IFunctionPointer notifyEdgeFunctionPointer, ImporterExporterCSVFormat format, boolean import_edge_weights,
+			boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		CSVFormat actualFormat = null;
@@ -235,8 +239,8 @@ public class ImporterApi {
 			+ "import_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importCSVFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			ImportIdFunctionPointer importIdFunctionPointer, IFunctionPointer notifyVertexFunctionPointer,
-			IFunctionPointer notifyEdgeFunctionPointer, ImporterExporterCSVFormat format,
-			boolean import_edge_weights, boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge) {
+			IFunctionPointer notifyEdgeFunctionPointer, ImporterExporterCSVFormat format, boolean import_edge_weights,
+			boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		CSVFormat actualFormat = null;
@@ -260,7 +264,7 @@ public class ImporterApi {
 				return importIdFunctionPointer.invoke(holder.get());
 			});
 		}
-		
+
 		setupNotifyVertexEdge(importer, notifyVertexFunctionPointer, notifyEdgeFunctionPointer);
 
 		importer.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, import_edge_weights);
@@ -454,7 +458,8 @@ public class ImporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "import_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDOTFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			ImportIdFunctionPointer importIdFunctionPointer, IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			ImportIdFunctionPointer importIdFunctionPointer,
+			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, IFunctionPointer notifyVertexFunctionPointer,
 			IFunctionPointer notifyEdgeFunctionPointer) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -479,7 +484,8 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDOTFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
-			ImportIdFunctionPointer importIdFunctionPointer, IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			ImportIdFunctionPointer importIdFunctionPointer,
+			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, IFunctionPointer notifyVertexFunctionPointer,
 			IFunctionPointer notifyEdgeFunctionPointer) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -507,7 +513,8 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_file_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraph6FromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			ImportIdFunctionPointer importIdFunctionPointer, IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			ImportIdFunctionPointer importIdFunctionPointer,
+			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, IFunctionPointer notifyVertexFunctionPointer,
 			IFunctionPointer notifyEdgeFunctionPointer) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -533,7 +540,8 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "import_string_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraph6FromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
-			ImportIdFunctionPointer importIdFunctionPointer, IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			ImportIdFunctionPointer importIdFunctionPointer,
+			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, IFunctionPointer notifyVertexFunctionPointer,
 			IFunctionPointer notifyEdgeFunctionPointer) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -590,9 +598,56 @@ public class ImporterApi {
 			});
 		}
 	}
+	
+	private static void setupImportAttributes(BaseEventDrivenImporter<Long, Long> importer,
+			LongIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, CharSequenceTranslator unescapeTranslator) {
+		if (vertexAttributeFunction.isNonNull()) {
+			importer.addVertexAttributeConsumer((p, attr) -> {
+				long vertex = p.getFirst();
+				String key = p.getSecond();
+				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(key);
+				String value = attr.getValue();
+				if (unescapeTranslator != null) {
+					value = unescapeTranslator.translate(value);
+				}
+				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
+				vertexAttributeFunction.invoke(vertex, keyHolder.get(), valueHolder.get());
+			});
+		}
+
+		if (edgeAttributeFunction.isNonNull()) {
+			importer.addEdgeAttributeConsumer((p, attr) -> {
+				long edge = p.getFirst();
+				String key = p.getSecond();
+				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(key);
+				String value = attr.getValue();
+				if (unescapeTranslator != null) {
+					value = unescapeTranslator.translate(value);
+				}
+				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
+				edgeAttributeFunction.invoke(edge, keyHolder.get(), valueHolder.get());
+			});
+		}
+	}
 
 	private static void setupNotifyVertexEdge(BaseEventDrivenImporter<Integer, Integer> importer,
 			IFunctionPointer notifyVertexFunctionPointer, IFunctionPointer notifyEdgeFunctionPointer) {
+		if (notifyVertexFunctionPointer.isNonNull()) {
+			importer.addVertexConsumer(v -> {
+				notifyVertexFunctionPointer.invoke(v);
+			});
+		}
+
+		if (notifyEdgeFunctionPointer.isNonNull()) {
+			importer.addEdgeConsumer(e -> {
+				notifyEdgeFunctionPointer.invoke(e);
+			});
+		}
+	}
+
+	private static void setupNotifyVertexEdge(BaseEventDrivenImporter<Long, Long> importer,
+			LFunctionPointer notifyVertexFunctionPointer, LFunctionPointer notifyEdgeFunctionPointer) {
 		if (notifyVertexFunctionPointer.isNonNull()) {
 			importer.addVertexConsumer(v -> {
 				notifyVertexFunctionPointer.invoke(v);

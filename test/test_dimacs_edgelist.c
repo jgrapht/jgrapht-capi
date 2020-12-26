@@ -33,7 +33,7 @@ int main() {
 
     // test read from string with extra attributes
     void *edgelist;
-    jgrapht_capi_import_edgelist_attrs_string_dimacs(thread, input, NULL, NULL, 
+    jgrapht_capi_ii_import_edgelist_attrs_string_dimacs(thread, input, NULL, NULL, 
         &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
@@ -46,7 +46,7 @@ int main() {
 
 
     // no attrs
-    jgrapht_capi_import_edgelist_noattrs_string_dimacs(thread, input, &edgelist);
+    jgrapht_capi_xx_import_edgelist_noattrs_string_dimacs(thread, input, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     count = 0;
@@ -59,7 +59,7 @@ int main() {
     // write to tmp file and read back
     write_to_file("test_dimacs_edgelist.dimacs", input);
 
-    jgrapht_capi_import_edgelist_attrs_file_dimacs(thread, "test_dimacs_edgelist.dimacs", any_attribute, NULL, &edgelist);
+    jgrapht_capi_ii_import_edgelist_attrs_file_dimacs(thread, "test_dimacs_edgelist.dimacs", any_attribute, NULL, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     count = 0;
     jgrapht_capi_list_size(thread, edgelist, &count);
@@ -68,7 +68,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
 
-    jgrapht_capi_import_edgelist_noattrs_file_dimacs(thread, "test_dimacs_edgelist.dimacs", &edgelist);
+    jgrapht_capi_xx_import_edgelist_noattrs_file_dimacs(thread, "test_dimacs_edgelist.dimacs", &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     count = 0;
     jgrapht_capi_list_size(thread, edgelist, &count);

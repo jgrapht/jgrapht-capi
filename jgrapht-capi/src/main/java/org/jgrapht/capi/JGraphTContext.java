@@ -86,6 +86,16 @@ public class JGraphTContext {
 		@InvokeCFunctionPointer
 		void invoke(int element, CCharPointer key, CCharPointer value);
 	}
+	
+	public interface LongIdNotifyAttributeFunctionPointer extends CFunctionPointer {
+
+		/*
+		 * Invocation of the function pointer. A call to the function is replaced with
+		 * an indirect call of the function pointer.
+		 */
+		@InvokeCFunctionPointer
+		void invoke(long element, CCharPointer key, CCharPointer value);
+	}
 
 	public interface StringIdNotifyAttributeFunctionPointer extends CFunctionPointer {
 
@@ -195,6 +205,13 @@ public class JGraphTContext {
 
 		@InvokeCFunctionPointer
 		void invoke(int key);
+
+	}
+	
+	public interface LFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		void invoke(long key);
 
 	}
 

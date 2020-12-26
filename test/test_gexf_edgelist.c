@@ -86,7 +86,7 @@ int main() {
 
     // test read from string with extra attributes
     void *edgelist;
-    jgrapht_capi_import_edgelist_attrs_string_gexf(thread, input, 1, NULL, NULL, &edgelist);
+    jgrapht_capi_ii_import_edgelist_attrs_string_gexf(thread, input, 1, NULL, NULL, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int count = 0;
@@ -97,7 +97,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test read from string with no attrs
-    jgrapht_capi_import_edgelist_noattrs_string_gexf(thread, input2, 1, &edgelist);
+    jgrapht_capi_xx_import_edgelist_noattrs_string_gexf(thread, input2, 1, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     count = 0;

@@ -38,6 +38,7 @@ import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.ImporterExporterCSVFormat;
 import org.jgrapht.capi.JGraphTContext.IntegerIdNotifyAttributeFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.LongIdNotifyAttributeFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.JGraphTContext.StringIdNotifyAttributeFunctionPointer;
 import org.jgrapht.capi.StringUtils;
@@ -73,7 +74,7 @@ public class ImporterEdgeListApi {
 
 	// ------------------------- DIMACS ------------------------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromDimacsFile(IsolateThread thread, CCharPointer filename,
 			WordPointer res) {
@@ -92,7 +93,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromDimacsString(IsolateThread thread, CCharPointer input,
 			WordPointer res) {
@@ -114,7 +115,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromDimacsFile(IsolateThread thread, CCharPointer filename,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -133,7 +134,26 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromDimacsFile(IsolateThread thread, CCharPointer filename,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter().renumberVertices(false)
+				.zeroBasedNumbering(true);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromDimacsString(IsolateThread thread, CCharPointer input,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -155,9 +175,31 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromDimacsString(IsolateThread thread, CCharPointer input,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		DIMACSEventDrivenImporter importer = new DIMACSEventDrivenImporter().renumberVertices(false)
+				.zeroBasedNumbering(true);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	// ------------------------- GML ---------------------------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGmlFile(IsolateThread thread, CCharPointer filename,
 			WordPointer res) {
@@ -175,7 +217,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGmlString(IsolateThread thread, CCharPointer input,
 			WordPointer res) {
@@ -196,7 +238,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGmlFile(IsolateThread thread, CCharPointer filename,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -214,7 +256,25 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromGmlFile(IsolateThread thread, CCharPointer filename,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		GmlEventDrivenImporter importer = new GmlEventDrivenImporter();
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGmlString(IsolateThread thread, CCharPointer input,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -235,9 +295,30 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromGmlString(IsolateThread thread, CCharPointer input,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		GmlEventDrivenImporter importer = new GmlEventDrivenImporter();
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	// ------------------------- JSON ---------------------------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromJsonFile(IsolateThread thread, CCharPointer filename,
 			WordPointer res) {
@@ -254,7 +335,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_string_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromJsonString(IsolateThread thread, CCharPointer input,
 			WordPointer res) {
@@ -273,7 +354,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromJsonFile(IsolateThread thread, CCharPointer filename,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -291,7 +372,25 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromJsonFile(IsolateThread thread, CCharPointer filename,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+		JSONEventDrivenImporter importer = new JSONEventDrivenImporter();
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction,
+				StringEscapeUtils.UNESCAPE_JSON);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_string_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromJsonString(IsolateThread thread, CCharPointer input,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -311,9 +410,29 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_string_json", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromJsonString(IsolateThread thread, CCharPointer input,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+		JSONEventDrivenImporter importer = new JSONEventDrivenImporter();
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction,
+				StringEscapeUtils.UNESCAPE_JSON);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	// ------------------------- CSV ---------------------------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_file_csv", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromCsvFile(IsolateThread thread, CCharPointer filename,
 			ImporterExporterCSVFormat format, boolean import_edge_weights, boolean matrix_format_nodeid,
@@ -349,7 +468,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromCsvString(IsolateThread thread, CCharPointer input,
 			ImporterExporterCSVFormat format, boolean import_edge_weights, boolean matrix_format_nodeid,
@@ -388,7 +507,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_file_csv", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromCsvFile(IsolateThread thread, CCharPointer filename,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -425,7 +544,44 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_file_csv", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromCsvFile(IsolateThread thread, CCharPointer filename,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, ImporterExporterCSVFormat format,
+			boolean import_edge_weights, boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge,
+			WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		CSVFormat actualFormat = null;
+		switch (format) {
+		case CSV_FORMAT_ADJACENCY_LIST:
+			actualFormat = CSVFormat.ADJACENCY_LIST;
+			break;
+		case CSV_FORMAT_EDGE_LIST:
+			actualFormat = CSVFormat.EDGE_LIST;
+			break;
+		default:
+			actualFormat = CSVFormat.MATRIX;
+			break;
+		}
+
+		CSVEventDrivenImporter importer = new CSVEventDrivenImporter(actualFormat);
+
+		importer.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, import_edge_weights);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromCsvString(IsolateThread thread, CCharPointer input,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -465,9 +621,49 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromCsvString(IsolateThread thread, CCharPointer input,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, ImporterExporterCSVFormat format,
+			boolean import_edge_weights, boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge,
+			WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		CSVFormat actualFormat = null;
+		switch (format) {
+		case CSV_FORMAT_ADJACENCY_LIST:
+			actualFormat = CSVFormat.ADJACENCY_LIST;
+			break;
+		case CSV_FORMAT_EDGE_LIST:
+			actualFormat = CSVFormat.EDGE_LIST;
+			break;
+		default:
+			actualFormat = CSVFormat.MATRIX;
+			break;
+		}
+
+		CSVEventDrivenImporter importer = new CSVEventDrivenImporter(actualFormat);
+
+		importer.setParameter(CSVFormat.Parameter.EDGE_WEIGHTS, import_edge_weights);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_NODEID, matrix_format_nodeid);
+		importer.setParameter(CSVFormat.Parameter.MATRIX_FORMAT_ZERO_WHEN_NO_EDGE, matrix_format_zero_when_no_edge);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	// ------------------------- GEFX ---------------------------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_file_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGexfFile(IsolateThread thread, CCharPointer filename,
 			boolean validate_schema, WordPointer res) {
@@ -486,7 +682,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGexfString(IsolateThread thread, CCharPointer input,
 			boolean validate_schema, WordPointer res) {
@@ -508,7 +704,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_file_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGexfFile(IsolateThread thread, CCharPointer filename,
 			boolean validate_schema, StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -527,7 +723,26 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_file_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromGexfFile(IsolateThread thread, CCharPointer filename,
+			boolean validate_schema, StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		SimpleGEXFEventDrivenImporter importer = new SimpleGEXFEventDrivenImporter();
+		importer.setSchemaValidation(validate_schema);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGexfString(IsolateThread thread, CCharPointer input,
 			boolean validate_schema, StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -549,9 +764,31 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromGexfString(IsolateThread thread, CCharPointer input,
+			boolean validate_schema, StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		SimpleGEXFEventDrivenImporter importer = new SimpleGEXFEventDrivenImporter();
+		importer.setSchemaValidation(validate_schema);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	// ------------------------ GraphML simple -----------------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_file_graphml_simple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGraphmlSimpleFile(IsolateThread thread, CCharPointer filename,
 			boolean validate_schema, WordPointer res) {
@@ -570,7 +807,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_string_graphml_simple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGraphmlSimpleString(IsolateThread thread, CCharPointer input,
 			boolean validate_schema, WordPointer res) {
@@ -592,7 +829,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_file_graphml_simple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGraphmlSimpleFile(IsolateThread thread, CCharPointer filename,
 			boolean validate_schema, StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -611,7 +848,26 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_file_graphml_simple", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromGraphmlSimpleFile(IsolateThread thread, CCharPointer filename,
+			boolean validate_schema, StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		SimpleGraphMLEventDrivenImporter importer = new SimpleGraphMLEventDrivenImporter();
+		importer.setSchemaValidation(validate_schema);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_string_graphml_simple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGraphmlSimpleString(IsolateThread thread, CCharPointer input,
 			boolean validate_schema, StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -633,9 +889,31 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_string_graphml_simple", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromGraphmlSimpleString(IsolateThread thread, CCharPointer input,
+			boolean validate_schema, StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		SimpleGraphMLEventDrivenImporter importer = new SimpleGraphMLEventDrivenImporter();
+		importer.setSchemaValidation(validate_schema);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	// ------------------------ GraphML -----------------------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_file_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGraphmlFile(IsolateThread thread, CCharPointer filename,
 			boolean validate_schema, WordPointer res) {
@@ -654,7 +932,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_string_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGraphmlString(IsolateThread thread, CCharPointer input,
 			boolean validate_schema, WordPointer res) {
@@ -676,7 +954,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_file_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGraphmlFile(IsolateThread thread, CCharPointer filename,
 			boolean validate_schema, StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -695,7 +973,26 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_file_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromGraphmlFile(IsolateThread thread, CCharPointer filename,
+			boolean validate_schema, StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		GraphMLEventDrivenImporter importer = new GraphMLEventDrivenImporter();
+		importer.setSchemaValidation(validate_schema);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_string_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGraphmlString(IsolateThread thread, CCharPointer input,
 			boolean validate_schema, StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -717,9 +1014,31 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_string_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromGraphmlString(IsolateThread thread, CCharPointer input,
+			boolean validate_schema, StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		GraphMLEventDrivenImporter importer = new GraphMLEventDrivenImporter();
+		importer.setSchemaValidation(validate_schema);
+
+		setupImporterWithEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	// ------------------------- Dot ---------------------------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromDotFile(IsolateThread thread, CCharPointer filename,
 			WordPointer res) {
@@ -737,7 +1056,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromDotString(IsolateThread thread, CCharPointer input,
 			WordPointer res) {
@@ -758,7 +1077,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromDotFile(IsolateThread thread, CCharPointer filename,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -776,7 +1095,25 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromDotFile(IsolateThread thread, CCharPointer filename,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		DOTEventDrivenImporter importer = new DOTEventDrivenImporter();
+
+		setupImporterWithPairEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromDotString(IsolateThread thread, CCharPointer input,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -797,9 +1134,30 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromDotString(IsolateThread thread, CCharPointer input,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		DOTEventDrivenImporter importer = new DOTEventDrivenImporter();
+
+		setupImporterWithPairEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	// ------------------------- graph6sparse6 ---------------------------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_file_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGraph6Sparse6File(IsolateThread thread, CCharPointer filename,
 			WordPointer res) {
@@ -817,7 +1175,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "import_edgelist_noattrs_string_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithNoAttrsFromGraph6Sparse6String(IsolateThread thread, CCharPointer input,
 			WordPointer res) {
@@ -838,7 +1196,7 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_file_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGraph6Sparse6File(IsolateThread thread, CCharPointer filename,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -856,11 +1214,50 @@ public class ImporterEdgeListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_file_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromGraph6Sparse6File(IsolateThread thread, CCharPointer filename,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		Graph6Sparse6EventDrivenImporter importer = new Graph6Sparse6EventDrivenImporter();
+
+		setupImporterWithPairEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		importer.importInput(new File(StringUtils.toJavaStringFromUtf8(filename)));
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "import_edgelist_attrs_string_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importEdgelistWithAttrsFromGraph6Sparse6String(IsolateThread thread, CCharPointer input,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
+		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
+
+		Graph6Sparse6EventDrivenImporter importer = new Graph6Sparse6EventDrivenImporter();
+
+		setupImporterWithPairEdgeListWithIds(importer, edgelist, vertexAttributeFunction, edgeAttributeFunction, null);
+
+		String inputAsJava = StringUtils.toJavaStringFromUtf8(input);
+		try (StringReader reader = new StringReader(inputAsJava)) {
+			importer.importInput(reader);
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(edgelist));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "import_edgelist_attrs_string_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int importEdgelistWithAttrsFromGraph6Sparse6String(IsolateThread thread, CCharPointer input,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, WordPointer res) {
 		List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist = new ArrayList<>();
 
 		Graph6Sparse6EventDrivenImporter importer = new Graph6Sparse6EventDrivenImporter();
@@ -952,6 +1349,57 @@ public class ImporterEdgeListApi {
 		}
 	}
 
+	private static <V> void setupImporterWithEdgeListWithIds(BaseEventDrivenImporter<V, Triple<V, V, Double>> importer,
+			List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, CharSequenceTranslator unescapeTranslator) {
+		long[] count = new long[1];
+
+		Map<Triple<V, V, Double>, Long> edgelistWithIds = new IdentityHashMap<>();
+
+		importer.addEdgeConsumer(e -> {
+			CCharPointerHolder sourceId = StringUtils.toCStringInUtf8(String.valueOf(e.getFirst()));
+			CCharPointerHolder targetId = StringUtils.toCStringInUtf8(String.valueOf(e.getSecond()));
+			Double weight = e.getThird();
+			if (weight == null) {
+				weight = Graph.DEFAULT_EDGE_WEIGHT;
+			}
+			long id = count[0]++;
+			edgelist.add(Triple.of(sourceId, targetId, weight));
+			edgelistWithIds.put(e, id);
+		});
+
+		if (vertexAttributeFunction.isNonNull()) {
+			importer.addVertexAttributeConsumer((p, attr) -> {
+				CCharPointerHolder vertexHolder = StringUtils.toCStringInUtf8(String.valueOf(p.getFirst()));
+				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(p.getSecond());
+				String value = attr.getValue();
+				if (unescapeTranslator != null) {
+					value = unescapeTranslator.translate(value);
+				}
+				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
+				vertexAttributeFunction.invoke(vertexHolder.get(), keyHolder.get(), valueHolder.get());
+			});
+		}
+
+		if (edgeAttributeFunction.isNonNull()) {
+			importer.addEdgeAttributeConsumer((p, attr) -> {
+				Triple<V, V, Double> edgeTriple = p.getFirst();
+
+				// lookup edge id (just the order that it was added in the list)
+				long edgeIndex = edgelistWithIds.get(edgeTriple);
+
+				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(p.getSecond());
+				String value = attr.getValue();
+				if (unescapeTranslator != null) {
+					value = unescapeTranslator.translate(value);
+				}
+				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
+				edgeAttributeFunction.invoke(edgeIndex, keyHolder.get(), valueHolder.get());
+			});
+		}
+	}
+
 	private static <V> void setupImporterWithPairEdgeListWithIds(BaseEventDrivenImporter<V, Pair<V, V>> importer,
 			List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist,
 			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
@@ -999,4 +1447,50 @@ public class ImporterEdgeListApi {
 		}
 	}
 
+	private static <V> void setupImporterWithPairEdgeListWithIds(BaseEventDrivenImporter<V, Pair<V, V>> importer,
+			List<Triple<CCharPointerHolder, CCharPointerHolder, Double>> edgelist,
+			StringIdNotifyAttributeFunctionPointer vertexAttributeFunction,
+			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, CharSequenceTranslator unescapeTranslator) {
+		long[] count = new long[1];
+
+		Map<Pair<V, V>, Long> edgelistWithIds = new IdentityHashMap<>();
+
+		importer.addEdgeConsumer(e -> {
+			CCharPointerHolder sourceId = StringUtils.toCStringInUtf8(String.valueOf(e.getFirst()));
+			CCharPointerHolder targetId = StringUtils.toCStringInUtf8(String.valueOf(e.getSecond()));
+			long id = count[0]++;
+			edgelist.add(Triple.of(sourceId, targetId, Graph.DEFAULT_EDGE_WEIGHT));
+			edgelistWithIds.put(e, id);
+		});
+
+		if (vertexAttributeFunction.isNonNull()) {
+			importer.addVertexAttributeConsumer((p, attr) -> {
+				CCharPointerHolder vertexHolder = StringUtils.toCStringInUtf8(String.valueOf(p.getFirst()));
+				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(p.getSecond());
+				String value = attr.getValue();
+				if (unescapeTranslator != null) {
+					value = unescapeTranslator.translate(value);
+				}
+				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
+				vertexAttributeFunction.invoke(vertexHolder.get(), keyHolder.get(), valueHolder.get());
+			});
+		}
+
+		if (edgeAttributeFunction.isNonNull()) {
+			importer.addEdgeAttributeConsumer((p, attr) -> {
+				Pair<V, V> edgeTriple = p.getFirst();
+
+				// lookup edge id (just the order that it was added in the list)
+				long edgeIndex = edgelistWithIds.get(edgeTriple);
+
+				CCharPointerHolder keyHolder = StringUtils.toCStringInUtf8(p.getSecond());
+				String value = attr.getValue();
+				if (unescapeTranslator != null) {
+					value = unescapeTranslator.translate(value);
+				}
+				CCharPointerHolder valueHolder = StringUtils.toCStringInUtf8(value);
+				edgeAttributeFunction.invoke(edgeIndex, keyHolder.get(), valueHolder.get());
+			});
+		}
+	}
 }
