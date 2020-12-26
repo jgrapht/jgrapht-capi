@@ -21,13 +21,13 @@ int main() {
     jgrapht_capi_list_create(thread, &edgelist);
 
     int added;
-    jgrapht_capi_list_edge_triple_add(thread, edgelist, 0, 1, 13.0, &added);
-    jgrapht_capi_list_edge_triple_add(thread, edgelist, 1, 2, 4, &added);
-    jgrapht_capi_list_edge_triple_add(thread, edgelist, 2, 3, 2, &added);
-    jgrapht_capi_list_edge_triple_add(thread, edgelist, 3, 4, 5, &added);
-    jgrapht_capi_list_edge_triple_add(thread, edgelist, 4, 5, 8, &added);
-    jgrapht_capi_list_edge_triple_add(thread, edgelist, 0, 2, 2, &added);
-    jgrapht_capi_list_edge_triple_add(thread, edgelist, 0, 3, 3, &added);
+    jgrapht_capi_ii_list_edge_triple_add(thread, edgelist, 0, 1, 13.0, &added);
+    jgrapht_capi_ii_list_edge_triple_add(thread, edgelist, 1, 2, 4, &added);
+    jgrapht_capi_ii_list_edge_triple_add(thread, edgelist, 2, 3, 2, &added);
+    jgrapht_capi_ii_list_edge_triple_add(thread, edgelist, 3, 4, 5, &added);
+    jgrapht_capi_ii_list_edge_triple_add(thread, edgelist, 4, 5, 8, &added);
+    jgrapht_capi_ii_list_edge_triple_add(thread, edgelist, 0, 2, 2, &added);
+    jgrapht_capi_ii_list_edge_triple_add(thread, edgelist, 0, 3, 3, &added);
 
     void *g;
     jgrapht_capi_ii_graph_sparse_create(thread, 0, 1, 6, edgelist, &g);
