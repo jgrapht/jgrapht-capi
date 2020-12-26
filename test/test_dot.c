@@ -64,7 +64,7 @@ int main() {
     jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 1, "cost", 6.5);
     jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 2, "cost", 9.2);
 
-    jgrapht_capi_export_file_dot(thread, g, "dummy.dot.out", NULL, attr_store, NULL);
+    jgrapht_capi_xx_export_file_dot(thread, g, "dummy.dot.out", NULL, attr_store, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
 
@@ -72,12 +72,12 @@ int main() {
     jgrapht_capi_handles_destroy(thread, g);
     jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, &g);
 
-    jgrapht_capi_import_file_dot(thread, g, "dummy.dot.out", import_id, NULL, edge_attribute, NULL, NULL);
+    jgrapht_capi_ii_import_file_dot(thread, g, "dummy.dot.out", import_id, NULL, edge_attribute, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test output to string
     void *out;
-    jgrapht_capi_export_string_dot(thread, g, NULL, attr_store, NULL, &out);
+    jgrapht_capi_xx_export_string_dot(thread, g, NULL, attr_store, NULL, &out);
     char *str;
     jgrapht_capi_handles_get_ccharpointer(thread, out, &str);
     assert(strcmp(str, expected) == 0);

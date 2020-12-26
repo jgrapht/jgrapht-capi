@@ -85,19 +85,19 @@ int main() {
     jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 1, "cost", 6.5);
     jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 2, "cost", 9.2);
 
-    jgrapht_capi_export_file_graphml(thread, g, "dummy.graphml.simple.out", attrs_registry, NULL, attr_store, NULL, 0, 0, 0);
+    jgrapht_capi_xx_export_file_graphml(thread, g, "dummy.graphml.simple.out", attrs_registry, NULL, attr_store, NULL, 0, 0, 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // now read back 
     jgrapht_capi_handles_destroy(thread, g);
     jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, &g);
 
-    jgrapht_capi_import_file_graphml_simple(thread, g, "dummy.graphml.simple.out", import_id, 1, NULL, edge_attribute, NULL, NULL);
+    jgrapht_capi_ii_import_file_graphml_simple(thread, g, "dummy.graphml.simple.out", import_id, 1, NULL, edge_attribute, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test output to string
     void *out;
-    jgrapht_capi_export_string_graphml(thread, g, attrs_registry, NULL, attr_store, NULL, 0, 0, 0, &out);
+    jgrapht_capi_xx_export_string_graphml(thread, g, attrs_registry, NULL, attr_store, NULL, 0, 0, 0, &out);
     char *str;
     jgrapht_capi_handles_get_ccharpointer(thread, out, &str);
     //printf("%s", str);

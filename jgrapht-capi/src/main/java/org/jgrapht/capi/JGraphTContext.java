@@ -86,7 +86,7 @@ public class JGraphTContext {
 		@InvokeCFunctionPointer
 		void invoke(int element, CCharPointer key, CCharPointer value);
 	}
-	
+
 	public interface LongIdNotifyAttributeFunctionPointer extends CFunctionPointer {
 
 		/*
@@ -109,12 +109,23 @@ public class JGraphTContext {
 
 	/*
 	 * Function pointer for importers which give the user control on how to convert
-	 * the input identifier of a vertex or edge into a long integer.
+	 * the input identifier of a vertex or edge into an integer.
 	 */
-	public interface ImportIdFunctionPointer extends CFunctionPointer {
+	public interface CCharPointerToIntegerFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
 		int invoke(CCharPointer id);
+
+	}
+
+	/*
+	 * Function pointer for importers which give the user control on how to convert
+	 * the input identifier of a vertex or edge into a long integer.
+	 */
+	public interface CCharPointerToLongFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		long invoke(CCharPointer id);
 
 	}
 
@@ -134,7 +145,7 @@ public class JGraphTContext {
 		double invoke(int source, int target);
 
 	}
-	
+
 	/*
 	 * Function pointer for A* heuristic functions.
 	 */
@@ -172,7 +183,7 @@ public class JGraphTContext {
 		CDoublePointer invoke(int key);
 
 	}
-	
+
 	public interface LongToCDoublePointerFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
@@ -186,14 +197,21 @@ public class JGraphTContext {
 		int invoke(long key);
 
 	}
-	
+
+	public interface LongToLongFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		long invoke(long key);
+
+	}
+
 	public interface LongToDoubleFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
 		double invoke(long key);
 
 	}
-	
+
 	public interface LongToBooleanFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
@@ -207,7 +225,7 @@ public class JGraphTContext {
 		void invoke(int key);
 
 	}
-	
+
 	public interface LFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
@@ -221,7 +239,7 @@ public class JGraphTContext {
 		void invoke(int key, int value);
 
 	}
-	
+
 	public interface LIFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
@@ -235,7 +253,7 @@ public class JGraphTContext {
 		int invoke(int d1, int d2);
 
 	}
-	
+
 	public interface LLToIFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer

@@ -102,7 +102,7 @@ int main() {
     jgrapht_capi_ii_attributes_store_put_string_attribute(thread, attr_store, 2, "label", "κόμβος 2");
     jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 0, "cost", 100.5);
 
-    jgrapht_capi_export_file_json(thread, g, "dummy2.json.out", attr_store, NULL, NULL);
+    jgrapht_capi_xx_export_file_json(thread, g, "dummy2.json.out", attr_store, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     jgrapht_capi_handles_destroy(thread, attr_store);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
@@ -115,7 +115,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test json with extra attributes
-    jgrapht_capi_import_file_json(thread, g, "dummy2.json.out", import_id_from_file, vertex_attribute, edge_attribute, NULL, NULL);
+    jgrapht_capi_ii_import_file_json(thread, g, "dummy2.json.out", import_id_from_file, vertex_attribute, edge_attribute, NULL, NULL);
 
     int ecount;
     jgrapht_capi_ii_graph_edges_count(thread, g, &ecount);

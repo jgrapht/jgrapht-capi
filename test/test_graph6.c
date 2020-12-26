@@ -36,7 +36,7 @@ int main() {
     jgrapht_capi_ii_graph_add_edge(thread, g, 1, 2, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_export_file_graph6(thread, g, "dummy.graph6.out");
+    jgrapht_capi_xx_export_file_graph6(thread, g, "dummy.graph6.out");
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_handles_destroy(thread, g);
@@ -46,7 +46,7 @@ int main() {
     jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_import_file_graph6sparse6(thread, g, "dummy.graph6.out", import_id, NULL, NULL, NULL, NULL);
+    jgrapht_capi_ii_import_file_graph6sparse6(thread, g, "dummy.graph6.out", import_id, NULL, NULL, NULL, NULL);
 
     int ecount;
     jgrapht_capi_ii_graph_edges_count(thread, g, &ecount);
@@ -54,7 +54,7 @@ int main() {
 
     // test output to string
     void *out;
-    jgrapht_capi_export_string_graph6(thread, g, &out);
+    jgrapht_capi_xx_export_string_graph6(thread, g, &out);
     char *str;
     jgrapht_capi_handles_get_ccharpointer(thread, out, &str);
     //printf("%s", str);

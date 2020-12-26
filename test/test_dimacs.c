@@ -38,7 +38,7 @@ int main() {
     jgrapht_capi_ii_graph_add_edge(thread, g, 3, 0, NULL);
 
     // write file
-    jgrapht_capi_export_file_dimacs(thread, g, "dummy.dimacs.out", DIMACS_FORMAT_COLORING, 0, NULL);
+    jgrapht_capi_ii_export_file_dimacs(thread, g, "dummy.dimacs.out", DIMACS_FORMAT_COLORING, 0, NULL);
     jgrapht_capi_handles_destroy(thread, g);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
@@ -47,7 +47,7 @@ int main() {
     jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_import_file_dimacs(thread, g, "dummy.dimacs.out", preserveid, NULL, NULL);
+    jgrapht_capi_ii_import_file_dimacs(thread, g, "dummy.dimacs.out", preserveid, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     assert(jgrapht_capi_error_get_errno(thread) == 0);
@@ -61,7 +61,7 @@ int main() {
     // test output to string
 
     void *out;
-    jgrapht_capi_export_string_dimacs(thread, g, DIMACS_FORMAT_MAX_CLIQUE, 0, NULL, &out);
+    jgrapht_capi_ii_export_string_dimacs(thread, g, DIMACS_FORMAT_MAX_CLIQUE, 0, NULL, &out);
     char *str;
     jgrapht_capi_handles_get_ccharpointer(thread, out, &str);
     assert(strcmp(str, expected) == 0);

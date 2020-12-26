@@ -46,11 +46,11 @@ int main() {
     jgrapht_capi_ii_graph_add_edge(thread, g, 3, 0, NULL);
 
     // just test the API with a dummy file
-    jgrapht_capi_export_file_lemon(thread, g, "dummy.lemon.out", 1, 0, NULL);
+    jgrapht_capi_xx_export_file_lemon(thread, g, "dummy.lemon.out", 1, 0, NULL);
 
     // test output to string
     void *out;
-    jgrapht_capi_export_string_lemon(thread, g, 1, 0, NULL, &out);
+    jgrapht_capi_xx_export_string_lemon(thread, g, 1, 0, NULL, &out);
     char *str;
     jgrapht_capi_handles_get_ccharpointer(thread, out, &str);
     //printf("%s", str);
