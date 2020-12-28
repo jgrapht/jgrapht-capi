@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
@@ -42,6 +43,7 @@ import org.jgrapht.capi.JGraphTContext.IntegerToDoubleFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LongToBooleanFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LongToDoubleFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.JGraphTContext.VoidToLongFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.CapiAsMaskSubgraph;
 import org.jgrapht.capi.graph.CapiAsSubgraph;
@@ -113,6 +115,35 @@ public class GraphApi {
 		return graph;
 	}
 
+	public static Graph<Long, Long> createLongGraph(boolean directed, boolean allowingSelfLoops,
+			boolean allowingMultipleEdges, boolean weighted, VoidToLongFunctionPointer vertexSupplier,
+			VoidToLongFunctionPointer edgeSupplier) {
+
+		if (vertexSupplier.isNull()) {
+			throw new IllegalArgumentException("Vertex supplier cannot be null.");
+		}
+
+		if (edgeSupplier.isNull()) {
+			throw new IllegalArgumentException("Edge supplier cannot be null.");
+		}
+
+		Supplier<Long> vSupplier = () -> vertexSupplier.invoke();
+		Supplier<Long> eSupplier = () -> edgeSupplier.invoke();
+
+		Graph<Long, Long> graph;
+		if (directed) {
+			graph = GraphTypeBuilder.directed().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
+					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(vSupplier).edgeSupplier(eSupplier)
+					.buildGraph();
+		} else {
+			graph = GraphTypeBuilder.undirected().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
+					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(vSupplier).edgeSupplier(eSupplier)
+					.buildGraph();
+		}
+
+		return graph;
+	}
+
 	/**
 	 * Create a graph and return its handle.
 	 *
@@ -141,6 +172,25 @@ public class GraphApi {
 	public static int createLongGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
 			boolean allowingMultipleEdges, boolean weighted, WordPointer res) {
 		Graph<Long, Long> graph = createLongGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * Create a long long graph and return its handle.
+	 *
+	 * @param thread the thread isolate
+	 * @return the graph handle
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_create_with_suppliers", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createLongGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
+			boolean allowingMultipleEdges, boolean weighted, VoidToLongFunctionPointer vertexSupplier,
+			VoidToLongFunctionPointer edgeSupplier, WordPointer res) {
+		Graph<Long, Long> graph = createLongGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted,
+				vertexSupplier, edgeSupplier);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
 		}

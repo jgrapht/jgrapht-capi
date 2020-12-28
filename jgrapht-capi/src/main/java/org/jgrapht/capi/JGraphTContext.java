@@ -76,6 +76,13 @@ public class JGraphTContext {
 
 	}
 
+	public interface VoidToLongFunctionPointer extends CFunctionPointer {
+		
+		@InvokeCFunctionPointer
+		long invoke();
+		
+	}
+
 	/* Import of a C function pointer type. */
 	public interface IntegerIdNotifyAttributeFunctionPointer extends CFunctionPointer {
 
