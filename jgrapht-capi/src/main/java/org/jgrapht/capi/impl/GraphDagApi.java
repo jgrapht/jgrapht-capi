@@ -17,6 +17,8 @@
  */
 package org.jgrapht.capi.impl;
 
+import java.util.function.Supplier;
+
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
@@ -25,6 +27,7 @@ import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.JGraphTContext.VoidToLongFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.CapiGraphWrapper;
 import org.jgrapht.capi.graph.SafeEdgeSupplier;
@@ -79,6 +82,31 @@ public class GraphDagApi {
 
 		vSupplier.setGraph(graph);
 		eSupplier.setGraph(graph);
+
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_dag_create_with_suppliers", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
+					"Create a (long-long) dag with suppliers and return its handle." })
+	public static int createLongDag(IsolateThread thread, boolean allowMultipleEdges, boolean weighted,
+			VoidToLongFunctionPointer vertexSupplier, VoidToLongFunctionPointer edgeSupplier, WordPointer res) {
+
+		if (vertexSupplier.isNull()) {
+			throw new IllegalArgumentException("Vertex supplier cannot be null.");
+		}
+
+		if (edgeSupplier.isNull()) {
+			throw new IllegalArgumentException("Edge supplier cannot be null.");
+		}
+
+		Supplier<Long> vSupplier = () -> vertexSupplier.invoke();
+		Supplier<Long> eSupplier = () -> edgeSupplier.invoke();
+
+		Graph<Long, Long> graph = new DirectedAcyclicGraph<>(vSupplier, eSupplier, weighted, allowMultipleEdges);
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
