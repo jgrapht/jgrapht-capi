@@ -4,6 +4,9 @@ import org.jgrapht.Graph;
 import org.jgrapht.capi.attributes.GraphAttributesStore;
 import org.jgrapht.nio.Attribute;
 
+/**
+ * A graph which also has attributes.
+ */
 public interface GraphWithAttributes<V, E> extends Graph<V, E> {
 
 	abstract GraphAttributesStore<V, E> getStore();

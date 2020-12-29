@@ -49,11 +49,16 @@ import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.CapiAsMaskSubgraph;
 import org.jgrapht.capi.graph.CapiAsSubgraph;
 import org.jgrapht.capi.graph.CapiAsUndirectedGraph;
+import org.jgrapht.capi.graph.CapiAsUndirectedGraphWithAttributes;
 import org.jgrapht.capi.graph.CapiAsUnmodifiableGraph;
+import org.jgrapht.capi.graph.CapiAsUnmodifiableGraphWithAttributes;
 import org.jgrapht.capi.graph.CapiAsUnweightedGraph;
+import org.jgrapht.capi.graph.CapiAsUnweightedGraphWithAttributes;
 import org.jgrapht.capi.graph.CapiAsWeightedGraph;
 import org.jgrapht.capi.graph.CapiEdgeReversedGraph;
+import org.jgrapht.capi.graph.CapiEdgeReversedGraphWithAttributes;
 import org.jgrapht.capi.graph.CapiGraphWithAttributes;
+import org.jgrapht.capi.graph.GraphWithAttributes;
 import org.jgrapht.capi.graph.SafeEdgeSupplier;
 import org.jgrapht.capi.graph.SafeLongEdgeSupplier;
 import org.jgrapht.capi.graph.SafeLongVertexSupplier;
@@ -848,9 +853,14 @@ public class GraphApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_as_undirected", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int asUndirected(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<?, ?> gIn = globalHandles.get(graphHandle);
-		Graph<?, ?> gOut = new CapiAsUndirectedGraph<>(gIn);
+	public static <V, E> int asUndirected(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> gIn = globalHandles.get(graphHandle);
+		Graph<V, E> gOut;
+		if (gIn instanceof GraphWithAttributes) {
+			gOut = new CapiAsUndirectedGraphWithAttributes<V, E>((GraphWithAttributes<V, E>) gIn);
+		} else {
+			gOut = new CapiAsUndirectedGraph<>(gIn);
+		}
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -859,9 +869,14 @@ public class GraphApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_as_unmodifiable", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int asUnmodifiable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<?, ?> gIn = globalHandles.get(graphHandle);
-		Graph<?, ?> gOut = new CapiAsUnmodifiableGraph<>(gIn);
+	public static <V, E> int asUnmodifiable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> gIn = globalHandles.get(graphHandle);
+		Graph<V, E> gOut;
+		if (gIn instanceof GraphWithAttributes) {
+			gOut = new CapiAsUnmodifiableGraphWithAttributes<V, E>((GraphWithAttributes<V, E>) gIn);
+		} else {
+			gOut = new CapiAsUnmodifiableGraph<>(gIn);
+		}
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -870,9 +885,14 @@ public class GraphApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_as_unweighted", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int asUnweighted(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<?, ?> gIn = globalHandles.get(graphHandle);
-		Graph<?, ?> gOut = new CapiAsUnweightedGraph<>(gIn);
+	public static <V, E> int asUnweighted(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> gIn = globalHandles.get(graphHandle);
+		Graph<V, E> gOut;
+		if (gIn instanceof GraphWithAttributes) {
+			gOut = new CapiAsUnweightedGraphWithAttributes<V, E>((GraphWithAttributes<V, E>) gIn);
+		} else {
+			gOut = new CapiAsUnweightedGraph<>(gIn);
+		}
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -881,9 +901,14 @@ public class GraphApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_as_edgereversed", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int asEdgeReversed(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<?, ?> gIn = globalHandles.get(graphHandle);
-		Graph<?, ?> gOut = new CapiEdgeReversedGraph<>(gIn);
+	public static <V, E> int asEdgeReversed(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> gIn = globalHandles.get(graphHandle);
+		Graph<V, E> gOut;
+		if (gIn instanceof GraphWithAttributes) {
+			gOut = new CapiEdgeReversedGraphWithAttributes<V, E>((GraphWithAttributes<V, E>) gIn);
+		} else {
+			gOut = new CapiEdgeReversedGraph<>(gIn);
+		}
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
