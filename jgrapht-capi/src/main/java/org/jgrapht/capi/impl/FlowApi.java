@@ -10,6 +10,7 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.word.WordFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.flow.DinicMFImpl;
 import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
@@ -203,7 +204,8 @@ public class FlowApi {
 		SimpleWeightedGraph<Integer, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
 
 		// convert to integer vertices/edges
-		Graph<Integer, Integer> tree = GraphApi.createGraph(false, false, false, true);
+		Graph<Integer, Integer> tree = GraphApi.createGraph(false, false, false, true, false, WordFactory.nullPointer(),
+				WordFactory.nullPointer());
 		for (Integer v : origTree.vertexSet()) {
 			tree.addVertex(v);
 		}
@@ -228,7 +230,8 @@ public class FlowApi {
 		SimpleWeightedGraph<Long, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
 
 		// convert to integer vertices/edges
-		Graph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true);
+		Graph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true, false, WordFactory.nullPointer(),
+				WordFactory.nullPointer());
 		for (Long v : origTree.vertexSet()) {
 			tree.addVertex(v);
 		}
@@ -257,7 +260,8 @@ public class FlowApi {
 		SimpleWeightedGraph<Long, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
 
 		// convert to integer vertices/edges
-		Graph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true, vertexSupplier, edgeSupplier);
+		Graph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true, false, vertexSupplier,
+				edgeSupplier);
 		for (Long v : origTree.vertexSet()) {
 			tree.addVertex(v);
 		}

@@ -99,6 +99,8 @@ public class Errors {
 			return Status.STATUS_IMPORT_ERROR;
 		} else if (e instanceof NegativeCycleDetectedException) {
 			return Status.STATUS_NEGATIVE_CYCLE_DETECTED;
+		} else if (e instanceof NumberFormatException) {
+			return Status.STATUS_NUMBER_FORMAT_EXCEPTION;
 		} else {
 			return Status.STATUS_ERROR;
 		}

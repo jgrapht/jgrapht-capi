@@ -43,6 +43,7 @@ import org.jgrapht.capi.JGraphTContext.IntegerToDoubleFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LongToBooleanFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LongToDoubleFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.JGraphTContext.VoidToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.VoidToLongFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.CapiAsMaskSubgraph;
@@ -52,6 +53,7 @@ import org.jgrapht.capi.graph.CapiAsUnmodifiableGraph;
 import org.jgrapht.capi.graph.CapiAsUnweightedGraph;
 import org.jgrapht.capi.graph.CapiAsWeightedGraph;
 import org.jgrapht.capi.graph.CapiEdgeReversedGraph;
+import org.jgrapht.capi.graph.CapiGraphWithAttributes;
 import org.jgrapht.capi.graph.SafeEdgeSupplier;
 import org.jgrapht.capi.graph.SafeLongEdgeSupplier;
 import org.jgrapht.capi.graph.SafeLongVertexSupplier;
@@ -72,9 +74,28 @@ public class GraphApi {
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
 	public static Graph<Integer, Integer> createGraph(boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges, boolean weighted) {
-		SafeVertexSupplier vSupplier = new SafeVertexSupplier();
-		SafeEdgeSupplier eSupplier = new SafeEdgeSupplier();
+			boolean allowingMultipleEdges, boolean weighted, boolean withAttributes,
+			VoidToIntegerFunctionPointer vertexSupplier, VoidToIntegerFunctionPointer edgeSupplier) {
+
+		Supplier<Integer> vSupplier;
+		boolean isSafeVSupplier;
+		if (vertexSupplier.isNull()) {
+			vSupplier = new SafeVertexSupplier();
+			isSafeVSupplier = true;
+		} else {
+			vSupplier = () -> vertexSupplier.invoke();
+			isSafeVSupplier = false;
+		}
+
+		Supplier<Integer> eSupplier;
+		boolean isSafeESupplier;
+		if (edgeSupplier.isNull()) {
+			eSupplier = new SafeEdgeSupplier();
+			isSafeESupplier = true;
+		} else {
+			eSupplier = () -> edgeSupplier.invoke();
+			isSafeESupplier = false;
+		}
 
 		Graph<Integer, Integer> graph;
 		if (directed) {
@@ -87,48 +108,43 @@ public class GraphApi {
 					.buildGraph();
 		}
 
-		vSupplier.setGraph(graph);
-		eSupplier.setGraph(graph);
-
-		return graph;
-	}
-
-	public static Graph<Long, Long> createLongGraph(boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges, boolean weighted) {
-		SafeLongVertexSupplier vSupplier = new SafeLongVertexSupplier();
-		SafeLongEdgeSupplier eSupplier = new SafeLongEdgeSupplier();
-
-		Graph<Long, Long> graph;
-		if (directed) {
-			graph = GraphTypeBuilder.directed().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
-					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(vSupplier).edgeSupplier(eSupplier)
-					.buildGraph();
-		} else {
-			graph = GraphTypeBuilder.undirected().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
-					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(vSupplier).edgeSupplier(eSupplier)
-					.buildGraph();
+		if (isSafeVSupplier) {
+			((SafeVertexSupplier) vSupplier).setGraph(graph);
+		}
+		if (isSafeESupplier) {
+			((SafeEdgeSupplier) eSupplier).setGraph(graph);
 		}
 
-		vSupplier.setGraph(graph);
-		eSupplier.setGraph(graph);
+		if (withAttributes) {
+			// return a wrapper which also supports attributes
+			graph = new CapiGraphWithAttributes<>(graph);
+		}
 
 		return graph;
 	}
 
 	public static Graph<Long, Long> createLongGraph(boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges, boolean weighted, VoidToLongFunctionPointer vertexSupplier,
-			VoidToLongFunctionPointer edgeSupplier) {
-
+			boolean allowingMultipleEdges, boolean weighted, boolean withAttributes,
+			VoidToLongFunctionPointer vertexSupplier, VoidToLongFunctionPointer edgeSupplier) {
+		Supplier<Long> vSupplier;
+		boolean isSafeVSupplier;
 		if (vertexSupplier.isNull()) {
-			throw new IllegalArgumentException("Vertex supplier cannot be null.");
+			vSupplier = new SafeLongVertexSupplier();
+			isSafeVSupplier = true;
+		} else {
+			vSupplier = () -> vertexSupplier.invoke();
+			isSafeVSupplier = false;
 		}
 
+		Supplier<Long> eSupplier;
+		boolean isSafeESupplier;
 		if (edgeSupplier.isNull()) {
-			throw new IllegalArgumentException("Edge supplier cannot be null.");
+			eSupplier = new SafeLongEdgeSupplier();
+			isSafeESupplier = true;
+		} else {
+			eSupplier = () -> edgeSupplier.invoke();
+			isSafeESupplier = false;
 		}
-
-		Supplier<Long> vSupplier = () -> vertexSupplier.invoke();
-		Supplier<Long> eSupplier = () -> edgeSupplier.invoke();
 
 		Graph<Long, Long> graph;
 		if (directed) {
@@ -139,6 +155,18 @@ public class GraphApi {
 			graph = GraphTypeBuilder.undirected().weighted(weighted).allowingMultipleEdges(allowingMultipleEdges)
 					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(vSupplier).edgeSupplier(eSupplier)
 					.buildGraph();
+		}
+
+		if (isSafeVSupplier) {
+			((SafeLongVertexSupplier) vSupplier).setGraph(graph);
+		}
+		if (isSafeESupplier) {
+			((SafeLongEdgeSupplier) eSupplier).setGraph(graph);
+		}
+
+		if (withAttributes) {
+			// return a wrapper which also supports attributes
+			graph = new CapiGraphWithAttributes<>(graph);
 		}
 
 		return graph;
@@ -153,8 +181,10 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges, boolean weighted, WordPointer res) {
-		Graph<Integer, Integer> graph = createGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted);
+			boolean allowingMultipleEdges, boolean weighted, boolean withAttributes,
+			VoidToIntegerFunctionPointer vertexSupplier, VoidToIntegerFunctionPointer edgeSupplier, WordPointer res) {
+		Graph<Integer, Integer> graph = createGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted,
+				withAttributes, vertexSupplier, edgeSupplier);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
 		}
@@ -170,27 +200,10 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
 			+ "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createLongGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges, boolean weighted, WordPointer res) {
-		Graph<Long, Long> graph = createLongGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted);
-		if (res.isNonNull()) {
-			res.write(globalHandles.create(graph));
-		}
-		return Status.STATUS_SUCCESS.getCValue();
-	}
-
-	/**
-	 * Create a long long graph and return its handle.
-	 *
-	 * @param thread the thread isolate
-	 * @return the graph handle
-	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
-			+ "graph_create_with_suppliers", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int createLongGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges, boolean weighted, VoidToLongFunctionPointer vertexSupplier,
-			VoidToLongFunctionPointer edgeSupplier, WordPointer res) {
+			boolean allowingMultipleEdges, boolean weighted, boolean withAttributes,
+			VoidToLongFunctionPointer vertexSupplier, VoidToLongFunctionPointer edgeSupplier, WordPointer res) {
 		Graph<Long, Long> graph = createLongGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted,
-				vertexSupplier, edgeSupplier);
+				withAttributes, vertexSupplier, edgeSupplier);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
 		}

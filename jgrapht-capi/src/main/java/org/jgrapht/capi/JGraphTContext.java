@@ -16,9 +16,19 @@ public class JGraphTContext {
 	public enum Status {
 
 		// @formatter:off
-		STATUS_SUCCESS, STATUS_ERROR, STATUS_ILLEGAL_ARGUMENT, STATUS_UNSUPPORTED_OPERATION, STATUS_INDEX_OUT_OF_BOUNDS,
-		STATUS_NO_SUCH_ELEMENT, STATUS_NULL_POINTER, STATUS_CLASS_CAST, STATUS_IO_ERROR, STATUS_EXPORT_ERROR,
-		STATUS_IMPORT_ERROR, STATUS_NEGATIVE_CYCLE_DETECTED,;
+		STATUS_SUCCESS, 
+		STATUS_ERROR, 
+		STATUS_ILLEGAL_ARGUMENT, 
+		STATUS_UNSUPPORTED_OPERATION, 
+		STATUS_INDEX_OUT_OF_BOUNDS,
+		STATUS_NO_SUCH_ELEMENT, 
+		STATUS_NULL_POINTER, 
+		STATUS_CLASS_CAST, 
+		STATUS_IO_ERROR, 
+		STATUS_EXPORT_ERROR,
+		STATUS_IMPORT_ERROR, 
+		STATUS_NEGATIVE_CYCLE_DETECTED,
+		STATUS_NUMBER_FORMAT_EXCEPTION;
 		// @formatter:on
 
 		@CEnumValue
@@ -76,11 +86,35 @@ public class JGraphTContext {
 
 	}
 
+	@CEnum("attribute_type_t")
+	public enum AttributeType {
+
+		// @formatter:off
+		ATTRIBUTE_TYPE_NULL, ATTRIBUTE_TYPE_BOOLEAN, ATTRIBUTE_TYPE_INT, ATTRIBUTE_TYPE_LONG, ATTRIBUTE_TYPE_FLOAT,
+		ATTRIBUTE_TYPE_DOUBLE, ATTRIBUTE_TYPE_STRING, ATTRIBUTE_TYPE_HTML, ATTRIBUTE_TYPE_UNKNOWN,
+		ATTRIBUTE_TYPE_IDENTIFIER;
+		// @formatter:on
+
+		@CEnumValue
+		public native int toCEnum();
+
+		@CEnumLookup
+		public static native AttributeType toJavaEnum(int value);
+
+	}
+
+	public interface VoidToIntegerFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		int invoke();
+
+	}
+
 	public interface VoidToLongFunctionPointer extends CFunctionPointer {
-		
+
 		@InvokeCFunctionPointer
 		long invoke();
-		
+
 	}
 
 	/* Import of a C function pointer type. */

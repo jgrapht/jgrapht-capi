@@ -35,6 +35,10 @@ public class AttributesStore<T> {
 		return Collections.unmodifiableMap(getSafeMap(element));
 	}
 
+	public void clearAttributes(T element) { 
+		attributes.remove(element);
+	}
+	
 	private Map<String, Attribute> getSafeMap(T element) {
 		Map<String, Attribute> attrs = attributes.get(element);
 		if (attrs == null) {
