@@ -1,5 +1,8 @@
 package org.jgrapht.capi.graph;
 
+import java.util.Iterator;
+
+import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.jgrapht.Graph;
 import org.jgrapht.capi.attributes.GraphAttributesStore;
 import org.jgrapht.nio.Attribute;
@@ -11,6 +14,42 @@ public interface GraphWithAttributes<V, E> extends Graph<V, E> {
 
 	abstract GraphAttributesStore<V, E> getStore();
 
+	default int getGraphAttributesSize() { 
+		return getStore().getGraphAttributesSize();
+	}
+	
+	default int getVertexAttributesSize(V element) { 
+		if (!containsVertex(element)) {
+			throw new IllegalArgumentException("no such vertex in graph: " + element.toString());
+		}
+		return getStore().getVertexAttributesSize(element);
+	}
+	
+	default int getEdgeAttributesSize(E element) { 
+		if (!containsEdge(element)) {
+			throw new IllegalArgumentException("no such edge in graph: " + element.toString());
+		}
+		return getStore().getEdgeAttributesSize(element);
+	}
+	
+	default Iterator<CCharPointerHolder> graphAttributesKeysIterator() { 
+		return getStore().graphAttributesKeysIterator();
+	}
+	
+	default Iterator<CCharPointerHolder> vertexAttributesKeysIterator(V element) {
+		if (!containsVertex(element)) {
+			throw new IllegalArgumentException("no such vertex in graph: " + element.toString());
+		}		
+		return getStore().vertexAttributesKeysIterator(element);
+	}
+	
+	default Iterator<CCharPointerHolder> edgeAttributesKeysIterator(E element) {
+		if (!containsEdge(element)) {
+			throw new IllegalArgumentException("no such edge in graph: " + element.toString());
+		}		
+		return getStore().edgeAttributesKeysIterator(element);
+	}
+	
 	default Attribute getVertexAttribute(V element, String name) {
 		if (!containsVertex(element)) {
 			throw new IllegalArgumentException("no such vertex in graph: " + element.toString());

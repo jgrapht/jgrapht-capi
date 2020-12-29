@@ -24,6 +24,7 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.CLongPointer;
+import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.StringUtils;
@@ -294,5 +295,119 @@ public class GraphWithAttributesApi {
 			res.write(contains ? 1 : 0);
 		}
 		return Status.STATUS_SUCCESS.getCValue();
+
 	}
+
+	// ---------------- ITERATOR ----------------
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+			+ "graph_attrs_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int graphAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		GraphWithAttributes<?, ?> graph = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph.graphAttributesKeysIterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "graph_attrs_vertex_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int vertexAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, int element,
+			WordPointer res) {
+		GraphWithAttributes<Integer, Integer> graph = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph.vertexAttributesKeysIterator(element)));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_attrs_vertex_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int vertexAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, long element,
+			WordPointer res) {
+		GraphWithAttributes<Long, Long> graph = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph.vertexAttributesKeysIterator(element)));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "graph_attrs_edge_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgeAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, int element,
+			WordPointer res) {
+		GraphWithAttributes<Integer, Integer> graph = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph.edgeAttributesKeysIterator(element)));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_attrs_edge_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgeAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, long element,
+			WordPointer res) {
+		GraphWithAttributes<Long, Long> graph = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph.edgeAttributesKeysIterator(element)));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	// ---------------- LENGTH ----------------
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+			+ "graph_attrs_size", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int graphAttributesSize(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
+		GraphWithAttributes<?, ?> graph = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(graph.getGraphAttributesSize());
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "graph_attrs_vertex_size", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int graphVertexAttributesSize(IsolateThread thread, ObjectHandle graphHandle, int element,
+			CIntPointer res) {
+		GraphWithAttributes<Integer, Integer> graph = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(graph.getVertexAttributesSize(element));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_attrs_vertex_size", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int graphVertexAttributesSize(IsolateThread thread, ObjectHandle graphHandle, long element,
+			CIntPointer res) {
+		GraphWithAttributes<Long, Long> graph = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(graph.getVertexAttributesSize(element));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "graph_attrs_edge_size", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int graphEdgeAttributesSize(IsolateThread thread, ObjectHandle graphHandle, int element,
+			CIntPointer res) {
+		GraphWithAttributes<Integer, Integer> graph = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(graph.getEdgeAttributesSize(element));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "graph_attrs_edge_size", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int graphEdgeAttributesSize(IsolateThread thread, ObjectHandle graphHandle, long element,
+			CIntPointer res) {
+		GraphWithAttributes<Long, Long> graph = globalHandles.get(graphHandle);
+		if (res.isNonNull()) {
+			res.write(graph.getEdgeAttributesSize(element));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 }

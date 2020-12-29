@@ -1,9 +1,12 @@
 package org.jgrapht.capi.attributes;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
+import org.jgrapht.capi.StringUtils;
 import org.jgrapht.nio.Attribute;
 
 /**
@@ -19,6 +22,30 @@ public class GraphAttributesStore<V, E> {
 		this.vertexAttributes = new HashMap<>();
 		this.edgeAttributes = new HashMap<>();
 		this.graphAttributes = new HashMap<>();
+	}
+
+	public int getGraphAttributesSize() {
+		return graphAttributes.size();
+	}
+
+	public int getVertexAttributesSize(V element) {
+		return getSafeVertexMap(element).size();
+	}
+
+	public int getEdgeAttributesSize(E element) {
+		return getSafeEdgeMap(element).size();
+	}
+
+	public Iterator<CCharPointerHolder> graphAttributesKeysIterator() {
+		return graphAttributes.keySet().stream().map(StringUtils::toCStringInUtf8).iterator();
+	}
+
+	public Iterator<CCharPointerHolder> vertexAttributesKeysIterator(V element) {
+		return getSafeVertexMap(element).keySet().stream().map(StringUtils::toCStringInUtf8).iterator();
+	}
+
+	public Iterator<CCharPointerHolder> edgeAttributesKeysIterator(E element) {
+		return getSafeEdgeMap(element).keySet().stream().map(StringUtils::toCStringInUtf8).iterator();
 	}
 
 	public Attribute getVertexAttribute(V element, String name) {
