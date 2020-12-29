@@ -23,7 +23,7 @@ int main() {
 
     // first write a gml
     void *g;
-    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, 0, NULL, NULL, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
@@ -43,7 +43,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // then read back
-    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, 0, NULL, NULL, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_ii_import_file_graph6sparse6(thread, g, "dummy.sparse6.out", import_id, NULL, NULL, NULL, NULL);

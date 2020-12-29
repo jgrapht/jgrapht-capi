@@ -15,7 +15,7 @@ int main() {
     }
 
     void *g;
-    assert(jgrapht_capi_ii_graph_create(thread, 0, 1, 1, 1, &g) == 0);
+    assert(jgrapht_capi_ii_graph_create(thread, 0, 1, 1, 1, 0, NULL, NULL, &g) == 0);
 
     int v;
     jgrapht_capi_ii_graph_add_vertex(thread, g, &v);

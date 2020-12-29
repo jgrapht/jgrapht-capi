@@ -41,7 +41,7 @@ int main() {
 
     // import a gexf from string
     void *g;
-    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, 0, NULL, NULL, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
@@ -74,7 +74,7 @@ int main() {
 
     // now read back 
     jgrapht_capi_handles_destroy(thread, g);
-    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, 0, NULL, NULL, &g);
 
     jgrapht_capi_ii_import_file_graphml(thread, g, "dummy.graphml.out", import_id, 1, NULL, edge_attribute, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);

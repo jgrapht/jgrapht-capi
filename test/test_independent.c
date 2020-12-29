@@ -17,7 +17,7 @@ int main() {
     
     // check chordal graph
     void *g;
-    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, 0, NULL, NULL, &g);
 
     jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
     jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
