@@ -57,11 +57,11 @@ public class GraphWithAttributesApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_attrs_vertex_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int getLongVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr, int element,
-			CLongPointer res) {
+	public static int getLongVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
+			CCharPointer namePtr, CLongPointer res) {
 		GraphWithAttributes<Integer, Integer> graph = globalHandles.get(graphHandle);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		Attribute attr = graph.getVertexAttribute(element, name);
@@ -74,11 +74,11 @@ public class GraphWithAttributesApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
 			+ "graph_attrs_vertex_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int getLongVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr, long element,
-			CLongPointer res) {
+	public static int getLongVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
+			CCharPointer namePtr, CLongPointer res) {
 		GraphWithAttributes<Long, Long> graph = globalHandles.get(graphHandle);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		Attribute attr = graph.getVertexAttribute(element, name);
@@ -91,11 +91,11 @@ public class GraphWithAttributesApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_attrs_edge_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int getLongEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr, int element,
-			CLongPointer res) {
+	public static int getLongEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
+			CCharPointer namePtr, CLongPointer res) {
 		GraphWithAttributes<Integer, Integer> graph = globalHandles.get(graphHandle);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		Attribute attr = graph.getEdgeAttribute(element, name);
@@ -108,11 +108,11 @@ public class GraphWithAttributesApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
 			+ "graph_attrs_edge_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int getLongEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr, long element,
-			CLongPointer res) {
+	public static int getLongEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
+			CCharPointer namePtr, CLongPointer res) {
 		GraphWithAttributes<Long, Long> graph = globalHandles.get(graphHandle);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		Attribute attr = graph.getEdgeAttribute(element, name);
