@@ -24,6 +24,7 @@ import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.IntegerToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LongToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.JGraphTContext.VoidToLongFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
@@ -228,6 +229,35 @@ public class FlowApi {
 
 		// convert to integer vertices/edges
 		Graph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true);
+		for (Long v : origTree.vertexSet()) {
+			tree.addVertex(v);
+		}
+		for (DefaultWeightedEdge e : origTree.edgeSet()) {
+			long s = origTree.getEdgeSource(e);
+			long t = origTree.getEdgeTarget(e);
+			double w = origTree.getEdgeWeight(e);
+			tree.setEdgeWeight(tree.addEdge(s, t), w);
+		}
+
+		// write result
+		if (treeRes.isNonNull()) {
+			treeRes.write(globalHandles.create(tree));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "equivalentflowtree_tree_with_suppliers", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
+					"Given an instance of the equivalent flow tree from Gusfield's algorithm, compute",
+					"the actual tree as a graph. The new graph will reuse the vertex set from the original graph",
+					"but will have new edges which will be constructed by the provided edge supplier." })
+	public static int llEftGetTree(IsolateThread thread, ObjectHandle eft, VoidToLongFunctionPointer vertexSupplier,
+			VoidToLongFunctionPointer edgeSupplier, WordPointer treeRes) {
+		GusfieldEquivalentFlowTree<Long, Long> alg = globalHandles.get(eft);
+		SimpleWeightedGraph<Long, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
+
+		// convert to integer vertices/edges
+		Graph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true, vertexSupplier, edgeSupplier);
 		for (Long v : origTree.vertexSet()) {
 			tree.addVertex(v);
 		}
