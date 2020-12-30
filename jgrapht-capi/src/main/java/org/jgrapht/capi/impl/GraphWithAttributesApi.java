@@ -17,6 +17,8 @@
  */
 package org.jgrapht.capi.impl;
 
+import java.util.Iterator;
+
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
@@ -24,6 +26,7 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.CLongPointer;
+import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
@@ -44,7 +47,7 @@ public class GraphWithAttributesApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_attrs_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int getLongAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr,
+	public static <V, E> int getLongAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr,
 			CLongPointer res) {
 		GraphWithAttributes<V, E> graph = globalHandles.get(graphHandle);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
@@ -302,10 +305,11 @@ public class GraphWithAttributesApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_attrs_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int graphAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		GraphWithAttributes<?, ?> graph = globalHandles.get(graphHandle);
-		if (res.isNonNull()) {	
-			res.write(globalHandles.create(graph.graphAttributesKeysIterator()));
+	public static <V, E> int graphAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		GraphWithAttributes<V, E> graph = globalHandles.get(graphHandle);
+		Iterator<CCharPointerHolder> it = graph.graphAttributesKeysIterator();
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(it));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
