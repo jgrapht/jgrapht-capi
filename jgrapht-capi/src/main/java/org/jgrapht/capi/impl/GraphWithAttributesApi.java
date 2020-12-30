@@ -46,7 +46,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getLongAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr,
 			CLongPointer res) {
-		GraphWithAttributes<Integer, Integer> graph = globalHandles.get(graphHandle);
+		GraphWithAttributes<?, ?> graph = globalHandles.get(graphHandle);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		Attribute attr = graph.getGraphAttribute(name);
 		if (attr == null) {
