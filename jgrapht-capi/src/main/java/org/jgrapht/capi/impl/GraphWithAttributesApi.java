@@ -181,10 +181,10 @@ public class GraphWithAttributesApi {
 
 	// ---------------- REMOVE ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_attrs_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr) {
-		GraphWithAttributes<Integer, Integer> graph = globalHandles.get(graphHandle);
+		GraphWithAttributes<?, ?> graph = globalHandles.get(graphHandle);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		graph.removeGraphAttribute(name);
 		return Status.STATUS_SUCCESS.getCValue();
