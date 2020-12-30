@@ -19,7 +19,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g;
-    jgrapht_capi_ii_graph_create(thread, 1, 1, 1, 1, 0, NULL, NULL, &g);
+    jgrapht_capi_ii_graph_create(thread, 1, 1, 1, 1, NULL, NULL, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     int vcount;
     assert(jgrapht_capi_ii_graph_vertices_count(thread,  g, &vcount) == 0);

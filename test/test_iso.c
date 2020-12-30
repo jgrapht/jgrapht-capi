@@ -18,7 +18,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *g1;
-    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, 0, NULL, NULL, &g1);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, NULL, NULL, &g1);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_ii_graph_add_vertex(thread, g1, NULL);
@@ -34,7 +34,7 @@ int main() {
     jgrapht_capi_ii_graph_add_edge(thread, g1, 1, 3, NULL);
 
     void *g2;
-    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, 0, NULL, NULL, &g2);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, NULL, NULL, &g2);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_ii_graph_add_vertex(thread, g2, NULL);

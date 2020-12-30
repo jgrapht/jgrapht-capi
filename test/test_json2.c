@@ -63,7 +63,7 @@ int main() {
 
     // first write a gml
     void *g;
-    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, 0, NULL, NULL, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, NULL, NULL, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int i;
@@ -111,7 +111,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // then read back
-    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, 0, NULL, NULL, &g);
+    jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, NULL, NULL, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // test json with extra attributes
