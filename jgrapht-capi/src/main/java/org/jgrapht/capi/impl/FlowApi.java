@@ -27,6 +27,7 @@ import org.jgrapht.capi.JGraphTContext.LongToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.JGraphTContext.VoidToLongFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.DefaultCapiGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
@@ -204,8 +205,10 @@ public class FlowApi {
 		SimpleWeightedGraph<Integer, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
 
 		// convert to integer vertices/edges
-		Graph<Integer, Integer> tree = GraphApi.createGraph(false, false, false, true, false, WordFactory.nullPointer(),
+		Graph<Integer, Integer> tree = GraphApi.createGraph(false, false, false, true, WordFactory.nullPointer(),
 				WordFactory.nullPointer());
+		tree = new DefaultCapiGraph<Integer, Integer>(tree);
+
 		for (Integer v : origTree.vertexSet()) {
 			tree.addVertex(v);
 		}
@@ -230,8 +233,10 @@ public class FlowApi {
 		SimpleWeightedGraph<Long, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
 
 		// convert to integer vertices/edges
-		Graph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true, false, WordFactory.nullPointer(),
+		Graph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true, WordFactory.nullPointer(),
 				WordFactory.nullPointer());
+		tree = new DefaultCapiGraph<Long, Long>(tree);
+
 		for (Long v : origTree.vertexSet()) {
 			tree.addVertex(v);
 		}
@@ -260,8 +265,9 @@ public class FlowApi {
 		SimpleWeightedGraph<Long, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
 
 		// convert to integer vertices/edges
-		Graph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true, false, vertexSupplier,
-				edgeSupplier);
+		Graph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true, vertexSupplier, edgeSupplier);
+		tree = new DefaultCapiGraph<Long, Long>(tree);
+
 		for (Long v : origTree.vertexSet()) {
 			tree.addVertex(v);
 		}

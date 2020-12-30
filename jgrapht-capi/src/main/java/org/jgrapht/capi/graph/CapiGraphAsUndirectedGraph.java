@@ -2,35 +2,18 @@ package org.jgrapht.capi.graph;
 
 import java.util.Set;
 
-import org.jgrapht.Graph;
 import org.jgrapht.GraphTests;
 import org.jgrapht.GraphType;
-import org.jgrapht.capi.attributes.GraphAttributesStore;
-import org.jgrapht.graph.GraphDelegator;
 import org.jgrapht.util.ArrayUnenforcedSet;
 
-public class CapiAsUndirectedGraphWithAttributes<V, E> extends GraphDelegator<V, E>
-		implements GraphWithAttributes<V, E>, CapiGraphWrapper<V, E> {
+public class CapiGraphAsUndirectedGraph<V, E> extends CapiGraphDelegator<V, E> implements CapiGraph<V, E> {
 
 	private static final long serialVersionUID = 1L;
 	private static final String NO_EDGE_ADD = "this graph does not support edge addition";
 
-	private GraphWithAttributes<V, E> wrappedGraph;
-
-	public CapiAsUndirectedGraphWithAttributes(GraphWithAttributes<V, E> g) {
+	public CapiGraphAsUndirectedGraph(CapiGraph<V, E> g) {
 		super(g);
 		GraphTests.requireDirected(g);
-		this.wrappedGraph = g;
-	}
-
-	@Override
-	public Graph<V, E> getWrappedGraph() {
-		return wrappedGraph;
-	}
-
-	@Override
-	public GraphAttributesStore<V, E> getStore() {
-		return wrappedGraph.getStore();
 	}
 
 	@Override

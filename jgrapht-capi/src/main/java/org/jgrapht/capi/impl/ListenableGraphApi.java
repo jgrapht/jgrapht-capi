@@ -22,14 +22,14 @@ import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.WordPointer;
-import org.jgrapht.Graph;
 import org.jgrapht.ListenableGraph;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.IIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
-import org.jgrapht.capi.graph.CapiListenableGraph;
+import org.jgrapht.capi.graph.CapiGraph;
+import org.jgrapht.capi.graph.CapiGraphAsListenableGraph;
 import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
@@ -43,9 +43,9 @@ public class ListenableGraphApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "listenable_as_listenable", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int asListenable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<?, ?> gIn = globalHandles.get(graphHandle);
-		CapiListenableGraph<?, ?> gOut = new CapiListenableGraph<>(gIn);
+	public static <V,E> int asListenable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		CapiGraph<V, E> gIn = globalHandles.get(graphHandle);
+		CapiGraph<V, E> gOut = new CapiGraphAsListenableGraph<>(gIn);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}

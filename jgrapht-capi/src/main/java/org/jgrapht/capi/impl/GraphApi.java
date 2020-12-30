@@ -46,19 +46,15 @@ import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.JGraphTContext.VoidToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.VoidToLongFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
-import org.jgrapht.capi.graph.CapiAsMaskSubgraph;
-import org.jgrapht.capi.graph.CapiAsSubgraph;
-import org.jgrapht.capi.graph.CapiAsUndirectedGraph;
-import org.jgrapht.capi.graph.CapiAsUndirectedGraphWithAttributes;
-import org.jgrapht.capi.graph.CapiAsUnmodifiableGraph;
-import org.jgrapht.capi.graph.CapiAsUnmodifiableGraphWithAttributes;
-import org.jgrapht.capi.graph.CapiAsUnweightedGraph;
-import org.jgrapht.capi.graph.CapiAsUnweightedGraphWithAttributes;
-import org.jgrapht.capi.graph.CapiAsWeightedGraph;
-import org.jgrapht.capi.graph.CapiEdgeReversedGraph;
-import org.jgrapht.capi.graph.CapiEdgeReversedGraphWithAttributes;
-import org.jgrapht.capi.graph.CapiGraphWithAttributes;
-import org.jgrapht.capi.graph.GraphWithAttributes;
+import org.jgrapht.capi.graph.CapiGraph;
+import org.jgrapht.capi.graph.CapiGraphAsMaskSubgraph;
+import org.jgrapht.capi.graph.CapiGraphAsSubgraph;
+import org.jgrapht.capi.graph.CapiGraphAsUndirectedGraph;
+import org.jgrapht.capi.graph.CapiGraphAsUnmodifiableGraph;
+import org.jgrapht.capi.graph.CapiGraphAsUnweightedGraph;
+import org.jgrapht.capi.graph.CapiGraphAsWeightedGraph;
+import org.jgrapht.capi.graph.CapiGraphEdgeReversedGraph;
+import org.jgrapht.capi.graph.DefaultCapiGraph;
 import org.jgrapht.capi.graph.SafeEdgeSupplier;
 import org.jgrapht.capi.graph.SafeLongEdgeSupplier;
 import org.jgrapht.capi.graph.SafeLongVertexSupplier;
@@ -79,8 +75,8 @@ public class GraphApi {
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
 	public static Graph<Integer, Integer> createGraph(boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges, boolean weighted, boolean withAttributes,
-			VoidToIntegerFunctionPointer vertexSupplier, VoidToIntegerFunctionPointer edgeSupplier) {
+			boolean allowingMultipleEdges, boolean weighted, VoidToIntegerFunctionPointer vertexSupplier,
+			VoidToIntegerFunctionPointer edgeSupplier) {
 
 		Supplier<Integer> vSupplier;
 		boolean isSafeVSupplier;
@@ -112,7 +108,6 @@ public class GraphApi {
 					.allowingSelfLoops(allowingSelfLoops).vertexSupplier(vSupplier).edgeSupplier(eSupplier)
 					.buildGraph();
 		}
-
 		if (isSafeVSupplier) {
 			((SafeVertexSupplier) vSupplier).setGraph(graph);
 		}
@@ -120,17 +115,15 @@ public class GraphApi {
 			((SafeEdgeSupplier) eSupplier).setGraph(graph);
 		}
 
-		if (withAttributes) {
-			// return a wrapper which also supports attributes
-			graph = new CapiGraphWithAttributes<>(graph);
-		}
+		// wrap in order to support all methods
+		graph = new DefaultCapiGraph<Integer, Integer>(graph);
 
 		return graph;
 	}
 
 	public static Graph<Long, Long> createLongGraph(boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges, boolean weighted, boolean withAttributes,
-			VoidToLongFunctionPointer vertexSupplier, VoidToLongFunctionPointer edgeSupplier) {
+			boolean allowingMultipleEdges, boolean weighted, VoidToLongFunctionPointer vertexSupplier,
+			VoidToLongFunctionPointer edgeSupplier) {
 		Supplier<Long> vSupplier;
 		boolean isSafeVSupplier;
 		if (vertexSupplier.isNull()) {
@@ -169,10 +162,8 @@ public class GraphApi {
 			((SafeLongEdgeSupplier) eSupplier).setGraph(graph);
 		}
 
-		if (withAttributes) {
-			// return a wrapper which also supports attributes
-			graph = new CapiGraphWithAttributes<>(graph);
-		}
+		// wrap in order to support all methods
+		graph = new DefaultCapiGraph<>(graph);
 
 		return graph;
 	}
@@ -186,10 +177,10 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges, boolean weighted, boolean withAttributes,
-			VoidToIntegerFunctionPointer vertexSupplier, VoidToIntegerFunctionPointer edgeSupplier, WordPointer res) {
+			boolean allowingMultipleEdges, boolean weighted, VoidToIntegerFunctionPointer vertexSupplier,
+			VoidToIntegerFunctionPointer edgeSupplier, WordPointer res) {
 		Graph<Integer, Integer> graph = createGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted,
-				withAttributes, vertexSupplier, edgeSupplier);
+				vertexSupplier, edgeSupplier);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
 		}
@@ -205,10 +196,10 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
 			+ "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createLongGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
-			boolean allowingMultipleEdges, boolean weighted, boolean withAttributes,
-			VoidToLongFunctionPointer vertexSupplier, VoidToLongFunctionPointer edgeSupplier, WordPointer res) {
+			boolean allowingMultipleEdges, boolean weighted, VoidToLongFunctionPointer vertexSupplier,
+			VoidToLongFunctionPointer edgeSupplier, WordPointer res) {
 		Graph<Long, Long> graph = createLongGraph(directed, allowingSelfLoops, allowingMultipleEdges, weighted,
-				withAttributes, vertexSupplier, edgeSupplier);
+				vertexSupplier, edgeSupplier);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
 		}
@@ -241,6 +232,10 @@ public class GraphApi {
 				graph = new SparseIntUndirectedGraph(numVertices, edges);
 			}
 		}
+
+		// wrap in order to support all methods
+		graph = new DefaultCapiGraph<Integer, Integer>(graph);
+
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
 		}
@@ -854,13 +849,8 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_as_undirected", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int asUndirected(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<V, E> gIn = globalHandles.get(graphHandle);
-		Graph<V, E> gOut;
-		if (gIn instanceof GraphWithAttributes) {
-			gOut = new CapiAsUndirectedGraphWithAttributes<V, E>((GraphWithAttributes<V, E>) gIn);
-		} else {
-			gOut = new CapiAsUndirectedGraph<>(gIn);
-		}
+		CapiGraph<V, E> gIn = globalHandles.get(graphHandle);
+		CapiGraph<V, E> gOut = new CapiGraphAsUndirectedGraph<V, E>(gIn);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -870,13 +860,8 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_as_unmodifiable", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int asUnmodifiable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<V, E> gIn = globalHandles.get(graphHandle);
-		Graph<V, E> gOut;
-		if (gIn instanceof GraphWithAttributes) {
-			gOut = new CapiAsUnmodifiableGraphWithAttributes<V, E>((GraphWithAttributes<V, E>) gIn);
-		} else {
-			gOut = new CapiAsUnmodifiableGraph<>(gIn);
-		}
+		CapiGraph<V, E> gIn = globalHandles.get(graphHandle);
+		CapiGraph<V, E> gOut = new CapiGraphAsUnmodifiableGraph<V, E>(gIn);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -886,13 +871,8 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_as_unweighted", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int asUnweighted(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<V, E> gIn = globalHandles.get(graphHandle);
-		Graph<V, E> gOut;
-		if (gIn instanceof GraphWithAttributes) {
-			gOut = new CapiAsUnweightedGraphWithAttributes<V, E>((GraphWithAttributes<V, E>) gIn);
-		} else {
-			gOut = new CapiAsUnweightedGraph<>(gIn);
-		}
+		CapiGraph<V, E> gIn = globalHandles.get(graphHandle);
+		CapiGraph<V, E> gOut = new CapiGraphAsUnweightedGraph<V, E>(gIn);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -902,13 +882,8 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_as_edgereversed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int asEdgeReversed(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
-		Graph<V, E> gIn = globalHandles.get(graphHandle);
-		Graph<V, E> gOut;
-		if (gIn instanceof GraphWithAttributes) {
-			gOut = new CapiEdgeReversedGraphWithAttributes<V, E>((GraphWithAttributes<V, E>) gIn);
-		} else {
-			gOut = new CapiEdgeReversedGraph<>(gIn);
-		}
+		CapiGraph<V, E> gIn = globalHandles.get(graphHandle);
+		CapiGraph<V, E> gOut = new CapiGraphEdgeReversedGraph<V, E>(gIn);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -920,7 +895,7 @@ public class GraphApi {
 	public static int asWeighted(IsolateThread thread, ObjectHandle graphHandle,
 			IntegerToDoubleFunctionPointer weightFunctionPointer, boolean cacheWeights, boolean writeWeightsThrough,
 			WordPointer res) {
-		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
+		CapiGraph<Integer, Integer> gIn = globalHandles.get(graphHandle);
 
 		Function<Integer, Double> weightFunction = e -> {
 			if (weightFunctionPointer.isNonNull()) {
@@ -930,7 +905,7 @@ public class GraphApi {
 			return 1d;
 		};
 
-		Graph<Integer, Integer> gOut = new CapiAsWeightedGraph<>(gIn, weightFunction, cacheWeights,
+		CapiGraph<Integer, Integer> gOut = new CapiGraphAsWeightedGraph<>(gIn, weightFunction, cacheWeights,
 				writeWeightsThrough);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
@@ -943,7 +918,7 @@ public class GraphApi {
 	public static int asWeighted(IsolateThread thread, ObjectHandle graphHandle,
 			LongToDoubleFunctionPointer weightFunctionPointer, boolean cacheWeights, boolean writeWeightsThrough,
 			WordPointer res) {
-		Graph<Long, Long> gIn = globalHandles.get(graphHandle);
+		CapiGraph<Long, Long> gIn = globalHandles.get(graphHandle);
 
 		Function<Long, Double> weightFunction = e -> {
 			if (weightFunctionPointer.isNonNull()) {
@@ -953,7 +928,7 @@ public class GraphApi {
 			return 1d;
 		};
 
-		Graph<Long, Long> gOut = new CapiAsWeightedGraph<>(gIn, weightFunction, cacheWeights, writeWeightsThrough);
+		CapiGraph<Long, Long> gOut = new CapiGraphAsWeightedGraph<>(gIn, weightFunction, cacheWeights, writeWeightsThrough);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -965,7 +940,7 @@ public class GraphApi {
 	public static int asMaskedSubgraph(IsolateThread thread, ObjectHandle graphHandle,
 			IntegerToBooleanFunctionPointer vertexMaskFunctionPointer,
 			IntegerToBooleanFunctionPointer edgeMaskFunctionPointer, WordPointer res) {
-		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
+		CapiGraph<Integer, Integer> gIn = globalHandles.get(graphHandle);
 
 		Predicate<Integer> vertexMask = x -> {
 			if (vertexMaskFunctionPointer.isNonNull()) {
@@ -980,7 +955,7 @@ public class GraphApi {
 			return false;
 		};
 
-		Graph<Integer, Integer> gOut = new CapiAsMaskSubgraph<>(gIn, vertexMask, edgeMask);
+		CapiGraph<Integer, Integer> gOut = new CapiGraphAsMaskSubgraph<>(gIn, vertexMask, edgeMask);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -992,7 +967,7 @@ public class GraphApi {
 	public static int asMaskedSubgraph(IsolateThread thread, ObjectHandle graphHandle,
 			LongToBooleanFunctionPointer vertexMaskFunctionPointer,
 			LongToBooleanFunctionPointer edgeMaskFunctionPointer, WordPointer res) {
-		Graph<Long, Long> gIn = globalHandles.get(graphHandle);
+		CapiGraph<Long, Long> gIn = globalHandles.get(graphHandle);
 
 		Predicate<Long> vertexMask = x -> {
 			if (vertexMaskFunctionPointer.isNonNull()) {
@@ -1007,7 +982,7 @@ public class GraphApi {
 			return false;
 		};
 
-		Graph<Long, Long> gOut = new CapiAsMaskSubgraph<>(gIn, vertexMask, edgeMask);
+		CapiGraph<Long, Long> gOut = new CapiGraphAsMaskSubgraph<>(gIn, vertexMask, edgeMask);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -1018,11 +993,11 @@ public class GraphApi {
 			+ "graph_as_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asSubgraph(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle vertexSubsetHandle,
 			ObjectHandle edgeSubsetHandle, WordPointer res) {
-		Graph<Integer, Integer> gIn = globalHandles.get(graphHandle);
+		CapiGraph<Integer, Integer> gIn = globalHandles.get(graphHandle);
 		Set<Integer> vertexSubset = globalHandles.get(vertexSubsetHandle);
 		Set<Integer> edgeSubset = globalHandles.get(edgeSubsetHandle);
 
-		Graph<Integer, Integer> gOut = new CapiAsSubgraph<>(gIn, vertexSubset, edgeSubset);
+		CapiGraph<Integer, Integer> gOut = new CapiGraphAsSubgraph<>(gIn, vertexSubset, edgeSubset);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}
@@ -1033,11 +1008,11 @@ public class GraphApi {
 			+ "graph_as_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int llAsSubgraph(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle vertexSubsetHandle,
 			ObjectHandle edgeSubsetHandle, WordPointer res) {
-		Graph<Long, Long> gIn = globalHandles.get(graphHandle);
+		CapiGraph<Long, Long> gIn = globalHandles.get(graphHandle);
 		Set<Long> vertexSubset = globalHandles.get(vertexSubsetHandle);
 		Set<Long> edgeSubset = globalHandles.get(edgeSubsetHandle);
 
-		Graph<Long, Long> gOut = new CapiAsSubgraph<>(gIn, vertexSubset, edgeSubset);
+		CapiGraph<Long, Long> gOut = new CapiGraphAsSubgraph<>(gIn, vertexSubset, edgeSubset);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}

@@ -1,34 +1,34 @@
+/*
+ * (C) Copyright 2003-2020, by Barak Naveh and Contributors.
+ *
+ * JGraphT : a free Java graph-theory library
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.capi.graph;
 
 import java.util.Collection;
 import java.util.Set;
 
-import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
-import org.jgrapht.capi.attributes.GraphAttributesStore;
-import org.jgrapht.graph.GraphDelegator;
 
-public class CapiAsUnmodifiableGraphWithAttributes<V, E> extends GraphDelegator<V, E>
-		implements GraphWithAttributes<V, E>, CapiGraphWrapper<V, E> {
+public class CapiGraphAsUnmodifiableGraph<V, E> extends CapiGraphDelegator<V, E> implements CapiGraph<V, E> {
 
 	private static final long serialVersionUID = 1L;
 	private static final String UNMODIFIABLE = "this graph is unmodifiable";
 
-	private GraphWithAttributes<V, E> wrappedGraph;
-
-	public CapiAsUnmodifiableGraphWithAttributes(GraphWithAttributes<V, E> g) {
+	public CapiGraphAsUnmodifiableGraph(CapiGraph<V, E> g) {
 		super(g);
-		this.wrappedGraph = g;
-	}
-
-	@Override
-	public Graph<V, E> getWrappedGraph() {
-		return wrappedGraph;
-	}
-
-	@Override
-	public GraphAttributesStore<V, E> getStore() {
-		return wrappedGraph.getStore();
 	}
 
 	@Override

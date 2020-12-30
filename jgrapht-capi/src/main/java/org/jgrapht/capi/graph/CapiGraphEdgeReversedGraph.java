@@ -2,30 +2,12 @@ package org.jgrapht.capi.graph;
 
 import java.util.Set;
 
-import org.jgrapht.Graph;
-import org.jgrapht.capi.attributes.GraphAttributesStore;
-import org.jgrapht.graph.GraphDelegator;
-
-public class CapiEdgeReversedGraphWithAttributes<V, E> extends GraphDelegator<V, E>
-		implements GraphWithAttributes<V, E>, CapiGraphWrapper<V, E> {
+public class CapiGraphEdgeReversedGraph<V, E> extends CapiGraphDelegator<V, E> implements CapiGraph<V, E> {
 
 	private static final long serialVersionUID = 1L;
 
-	private GraphWithAttributes<V, E> wrappedGraph;
-
-	public CapiEdgeReversedGraphWithAttributes(GraphWithAttributes<V, E> g) {
+	public CapiGraphEdgeReversedGraph(CapiGraph<V, E> g) {
 		super(g);
-		this.wrappedGraph = g;
-	}
-
-	@Override
-	public Graph<V, E> getWrappedGraph() {
-		return wrappedGraph;
-	}
-
-	@Override
-	public GraphAttributesStore<V, E> getStore() {
-		return wrappedGraph.getStore();
 	}
 
 	@Override
