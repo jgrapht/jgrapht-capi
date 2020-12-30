@@ -44,9 +44,9 @@ public class GraphWithAttributesApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_attrs_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int getLongAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr,
+	public static <V,E> int getLongAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr,
 			CLongPointer res) {
-		GraphWithAttributes<?, ?> graph = globalHandles.get(graphHandle);
+		GraphWithAttributes<V, E> graph = globalHandles.get(graphHandle);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		Attribute attr = graph.getGraphAttribute(name);
 		if (attr == null) {
@@ -304,7 +304,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		GraphWithAttributes<?, ?> graph = globalHandles.get(graphHandle);
-		if (res.isNonNull()) {
+		if (res.isNonNull()) {	
 			res.write(globalHandles.create(graph.graphAttributesKeysIterator()));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
