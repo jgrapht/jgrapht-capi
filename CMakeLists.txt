@@ -89,6 +89,7 @@ set(
     "test_addvertex.c"
     "test_edges.c"
     "test_directed_graph.c" 
+    "test_ll_directed_graph.c" 
     "test_undirected_graph.c"
     "test_error.c"
     "test_map.c"

@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jgrapht.Graph;
-import org.jgrapht.ListenableGraph;
 import org.jgrapht.event.GraphEdgeChangeEvent;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.GraphVertexChangeEvent;
@@ -44,11 +43,6 @@ public class CapiGraphAsListenableGraph<V, E> extends CapiGraphDelegator<V, E> i
 		this.reuseEvents = false;
 		reuseableEdgeEvent = new FlyweightEdgeEvent<>(this, -1, null);
 		reuseableVertexEvent = new FlyweightVertexEvent<>(this, -1, null);
-
-		// the following restriction could be probably relaxed in the future.
-		if (graph instanceof ListenableGraph<?, ?>) {
-			throw new IllegalArgumentException("base graph cannot be listenable");
-		}
 	}
 
 	/**

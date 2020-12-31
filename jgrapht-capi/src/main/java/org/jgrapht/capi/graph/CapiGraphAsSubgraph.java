@@ -69,8 +69,12 @@ public class CapiGraphAsSubgraph<V, E> extends CapiGraphDelegator<V, E> implemen
 		this.baseType = base.getType();
 		this.isInduced = edgeSubset == null;
 
-		if (base instanceof ListenableGraph<?, ?>) {
-			((ListenableGraph<V, E>) base).addGraphListener(new BaseGraphListener());
+		try {
+			if (base instanceof ListenableGraph<?, ?>) {
+				((ListenableGraph<V, E>) base).addGraphListener(new BaseGraphListener());
+			}
+		} catch (UnsupportedOperationException e) {
+			// do nothing
 		}
 
 		initialize(vertexSubset, edgeSubset);

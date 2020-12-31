@@ -23,6 +23,7 @@ import java.util.Optional;
 
 import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.jgrapht.alg.shortestpath.NegativeCycleDetectedException;
+import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.nio.ExportException;
 import org.jgrapht.nio.ImportException;
@@ -75,7 +76,17 @@ public class Errors {
 			}
 			message = sb.toString();
 		}
-		errorThreadLocal.set(new Error(status, message, e));
+		Error error = new Error(status, message, e);
+		
+		if (Constants.DEBUG) {
+			// debugging support 
+			System.err.println("Error Trace -- Status: " + error.getStatus() + " -- Message: " + error.getMessage());
+			if (e != null) {
+				e.printStackTrace();
+			}
+		}
+		
+		errorThreadLocal.set(error);
 	}
 
 	public static Status throwableToStatus(Throwable e) {

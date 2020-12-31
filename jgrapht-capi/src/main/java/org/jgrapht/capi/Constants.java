@@ -22,6 +22,8 @@ package org.jgrapht.capi;
  */
 public class Constants {
 
+	public static final boolean DEBUG = false;
+
 	/**
 	 * Library name
 	 */
