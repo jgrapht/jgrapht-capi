@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Function;
 
 import org.graalvm.nativeimage.IsolateThread;
@@ -57,6 +58,7 @@ import org.jgrapht.capi.JGraphTContext.IntegerToCDoublePointerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LongToCDoublePointerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.util.ConcurrencyUtil;
 
 /**
  * Shortest paths API
@@ -563,7 +565,8 @@ public class ShortestPathApi {
 			int target, double delta, int parallelism, WordPointer pathRes) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		ShortestPathAlgorithm<Integer, Integer> alg = new DeltaSteppingShortestPath<>(g, delta, parallelism);
+		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ShortestPathAlgorithm<Integer, Integer> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
 		GraphPath<Integer, Integer> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
@@ -581,7 +584,8 @@ public class ShortestPathApi {
 			long target, double delta, int parallelism, WordPointer pathRes) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
-		ShortestPathAlgorithm<Long, Long> alg = new DeltaSteppingShortestPath<>(g, delta, parallelism);
+		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ShortestPathAlgorithm<Long, Long> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
 		GraphPath<Long, Long> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
@@ -599,7 +603,8 @@ public class ShortestPathApi {
 			int parallelism, WordPointer pathsRes) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
-		ShortestPathAlgorithm<Integer, Integer> alg = new DeltaSteppingShortestPath<>(g, delta, parallelism);
+		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ShortestPathAlgorithm<Integer, Integer> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
 		SingleSourcePaths<Integer, Integer> paths = alg.getPaths(source);
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
@@ -613,7 +618,8 @@ public class ShortestPathApi {
 			int parallelism, WordPointer pathsRes) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
-		ShortestPathAlgorithm<Long, Long> alg = new DeltaSteppingShortestPath<>(g, delta, parallelism);
+		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ShortestPathAlgorithm<Long, Long> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
 		SingleSourcePaths<Long, Long> paths = alg.getPaths(source);
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));

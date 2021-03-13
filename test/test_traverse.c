@@ -146,11 +146,11 @@ int main() {
     jgrapht_capi_handles_destroy(thread, it);
 
     // random walk from vertex
-    jgrapht_capi_ii_traverse_create_custom_random_walk_from_vertex_vit(thread, g, 2, 0, 4, 17, &it);
+    jgrapht_capi_ii_traverse_create_custom_random_walk_from_vertex_vit(thread, g, 2, 4, 0, 17, &it);
+    jgrapht_capi_it_next_int(thread, it, &v);
+    assert(v==2);
     jgrapht_capi_it_next_int(thread, it, &v);
     jgrapht_capi_it_next_int(thread, it, &v);
-    jgrapht_capi_it_next_int(thread, it, &v);
-    assert(jgrapht_capi_it_next_int(thread, it, &v) == 0);    
     jgrapht_capi_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);
     jgrapht_capi_handles_destroy(thread, it);
@@ -166,9 +166,9 @@ int main() {
     jgrapht_capi_it_next_int(thread, it, &v);
     assert(v == 3);
     assert(jgrapht_capi_it_next_int(thread, it, &v) == 0);
-    assert(v == 4);
-    jgrapht_capi_it_next_int(thread, it, &v);
     assert(v == 5);
+    jgrapht_capi_it_next_int(thread, it, &v);
+    assert(v == 4);
     jgrapht_capi_it_next_int(thread, it, &v);
     jgrapht_capi_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);

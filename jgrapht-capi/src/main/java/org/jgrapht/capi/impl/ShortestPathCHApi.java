@@ -19,6 +19,7 @@ package org.jgrapht.capi.impl;
 
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Supplier;
 
 import org.graalvm.nativeimage.IsolateThread;
@@ -30,13 +31,16 @@ import org.graalvm.word.WordFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.interfaces.ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths;
+import org.jgrapht.alg.interfaces.ShortestPathAlgorithm.SingleSourcePaths;
 import org.jgrapht.alg.shortestpath.CHManyToManyShortestPaths;
 import org.jgrapht.alg.shortestpath.ContractionHierarchyBidirectionalDijkstra;
 import org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation;
 import org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
+import org.jgrapht.alg.shortestpath.TransitNodeRoutingShortestPath;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.util.ConcurrencyUtil;
 import org.jheaps.tree.PairingHeap;
 
 /**
@@ -118,8 +122,9 @@ public class ShortestPathCHApi {
 			throw new IllegalArgumentException("Parallelism must be positive");
 		}
 
-		ContractionHierarchyPrecomputation<V, E> chp = new ContractionHierarchyPrecomputation<>(g, parallelism,
-				new SingleRandomToManySupplier(seed));
+		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ContractionHierarchyPrecomputation<V, E> chp = new ContractionHierarchyPrecomputation<>(g,
+				new SingleRandomToManySupplier(seed), executor);
 		ContractionHierarchy<V, E> ch = chp.computeContractionHierarchy();
 
 		if (res.isNonNull()) {
@@ -213,6 +218,91 @@ public class ShortestPathCHApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	/**
+	 * Compute a {@link TransitNodeRoutingShortestPath}
+	 * 
+	 * @param thread      thread
+	 * @param graphHandle the graph handle
+	 * @param parallelism how many thread to use
+	 * @param res         the {@link TransitNodeRoutingShortestPath} handle
+	 * @return status
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+			+ "sp_exec_transit_node_routing", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <V, E> int executeTransitNodeRouting(IsolateThread thread, ObjectHandle graphHandle, int parallelism, 
+			WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
+
+		if (parallelism < 1) {
+			throw new IllegalArgumentException("Parallelism must be positive");
+		}
+
+		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		TransitNodeRoutingShortestPath<V, E> tnr = new TransitNodeRoutingShortestPath<V, E>(g, executor);
+		tnr.performPrecomputation();
+		
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(tnr));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "sp_exec_transit_node_routing_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeTransitNodeRoutingBetween(IsolateThread thread, ObjectHandle tnrHandle, int source, int target,
+			WordPointer pathRes) {
+		TransitNodeRoutingShortestPath<Integer, Integer> tnr = globalHandles.get(tnrHandle);
+		GraphPath<Integer, Integer> path = tnr.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "sp_exec_transit_node_routing_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeTransitNodeRoutingBetween(IsolateThread thread, ObjectHandle tnrHandle, long source, long target,
+			WordPointer pathRes) {
+		TransitNodeRoutingShortestPath<Long, Long> tnr = globalHandles.get(tnrHandle);
+		GraphPath<Long, Long> path = tnr.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "sp_exec_transit_node_routing_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeTransitNodeRoutingFrom(IsolateThread thread, ObjectHandle tnrHandle, int source,
+			WordPointer pathsRes) {
+		TransitNodeRoutingShortestPath<Integer, Integer> tnr = globalHandles.get(tnrHandle);
+		SingleSourcePaths<Integer, Integer> paths = tnr.getPaths(source);
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "sp_exec_transit_node_routing_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeTransitNodeRoutingFrom(IsolateThread thread, ObjectHandle tnrHandle, long source,
+			WordPointer pathsRes) {
+		TransitNodeRoutingShortestPath<Long, Long> tnr = globalHandles.get(tnrHandle);
+		SingleSourcePaths<Long, Long> paths = tnr.getPaths(source);
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
 	/**
 	 * Helper to return different random instances from a single random seed.
 	 */

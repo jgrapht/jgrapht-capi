@@ -18,6 +18,7 @@
 package org.jgrapht.capi.impl;
 
 import java.util.Map;
+import java.util.function.ToDoubleFunction;
 
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
@@ -27,15 +28,20 @@ import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
+import org.jgrapht.alg.interfaces.EdgeScoringAlgorithm;
 import org.jgrapht.alg.interfaces.VertexScoringAlgorithm;
-import org.jgrapht.alg.scoring.AlphaCentrality;
 import org.jgrapht.alg.scoring.BetweennessCentrality;
 import org.jgrapht.alg.scoring.ClosenessCentrality;
 import org.jgrapht.alg.scoring.ClusteringCoefficient;
 import org.jgrapht.alg.scoring.Coreness;
+import org.jgrapht.alg.scoring.EdgeBetweennessCentrality;
+import org.jgrapht.alg.scoring.EigenvectorCentrality;
 import org.jgrapht.alg.scoring.HarmonicCentrality;
+import org.jgrapht.alg.scoring.KatzCentrality;
 import org.jgrapht.alg.scoring.PageRank;
 import org.jgrapht.capi.Constants;
+import org.jgrapht.capi.JGraphTContext.IntegerToDoubleFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.LongToDoubleFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
@@ -44,11 +50,12 @@ public class ScoringApi {
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
-			+ "scoring_exec_alpha_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V, E> int executeAlphaCentrality(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+			+ "scoring_exec_eigenvector_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <V, E> int executeEigenVectorCentrality(IsolateThread thread, ObjectHandle graphHandle,
+			WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		VertexScoringAlgorithm<V, Double> alg = new AlphaCentrality<>(g);
+		VertexScoringAlgorithm<V, Double> alg = new EigenvectorCentrality<V, E>(g);
 		Map<V, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
@@ -58,14 +65,75 @@ public class ScoringApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
-			+ "scoring_exec_custom_alpha_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V, E> int executeCustomAlphaCentrality(IsolateThread thread, ObjectHandle graphHandle,
-			double dampingFactor, double exogenousFactor, int maxIterations, double tolerance, WordPointer res) {
+			+ "scoring_exec_custom_eigenvector_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <V, E> int executeEigenVectorCentrality(IsolateThread thread, ObjectHandle graphHandle,
+			int maxIterations, double tolerance, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		VertexScoringAlgorithm<V, Double> alg = new AlphaCentrality<>(g, dampingFactor, exogenousFactor, maxIterations,
-				tolerance);
+		VertexScoringAlgorithm<V, Double> alg = new EigenvectorCentrality<V, E>(g, maxIterations, tolerance);
 		Map<V, Double> result = alg.getScores();
+
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(result));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+			+ "scoring_exec_katz_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <V, E> int executeKatzCentrality(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
+
+		VertexScoringAlgorithm<V, Double> alg = new KatzCentrality<>(g);
+		Map<V, Double> result = alg.getScores();
+
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(result));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "scoring_exec_custom_katz_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeKatzCentrality(IsolateThread thread, ObjectHandle graphHandle, double dampingFactor,
+			IntegerToDoubleFunctionPointer exogenousFactorFunctionPointer, int maxIterations, double tolerance,
+			WordPointer res) {
+		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+
+		ToDoubleFunction<Integer> exogenousFactorFunction;
+		if (exogenousFactorFunctionPointer.isNull()) {
+			exogenousFactorFunction = x -> 1d;
+		} else {
+			exogenousFactorFunction = x -> exogenousFactorFunctionPointer.invoke(x);
+		}
+
+		VertexScoringAlgorithm<Integer, Double> alg = new KatzCentrality<>(g, dampingFactor, exogenousFactorFunction,
+				maxIterations, tolerance);
+		Map<Integer, Double> result = alg.getScores();
+
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(result));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "scoring_exec_custom_katz_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeKatzCentrality(IsolateThread thread, ObjectHandle graphHandle, double dampingFactor,
+			LongToDoubleFunctionPointer exogenousFactorFunctionPointer, int maxIterations, double tolerance,
+			WordPointer res) {
+		Graph<Long, Long> g = globalHandles.get(graphHandle);
+
+		ToDoubleFunction<Long> exogenousFactorFunction;
+		if (exogenousFactorFunctionPointer.isNull()) {
+			exogenousFactorFunction = x -> 1d;
+		} else {
+			exogenousFactorFunction = x -> exogenousFactorFunctionPointer.invoke(x);
+		}
+
+		VertexScoringAlgorithm<Long, Double> alg = new KatzCentrality<>(g, dampingFactor, exogenousFactorFunction,
+				maxIterations, tolerance);
+		Map<Long, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));
@@ -96,6 +164,21 @@ public class ScoringApi {
 
 		VertexScoringAlgorithm<V, Double> alg = new BetweennessCentrality<>(g, normalize);
 		Map<V, Double> result = alg.getScores();
+
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(result));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+			+ "scoring_exec_edge_betweenness_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <V, E> int executeEdgeBetweennessCentrality(IsolateThread thread, ObjectHandle graphHandle,
+			WordPointer res) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
+
+		EdgeScoringAlgorithm<E, Double> alg = new EdgeBetweennessCentrality<>(g);
+		Map<E, Double> result = alg.getScores();
 
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(result));

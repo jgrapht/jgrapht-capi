@@ -30,12 +30,12 @@ int main() {
 
     void *map;
     int value;
-    jgrapht_capi_xx_scoring_exec_alpha_centrality(thread, g, &map);
+    jgrapht_capi_xx_scoring_exec_katz_centrality(thread, g, &map);
     jgrapht_capi_map_int_contains_key(thread, map, 0, &value);
     assert(value == 1);
     jgrapht_capi_handles_destroy(thread, map);
 
-    jgrapht_capi_xx_scoring_exec_custom_alpha_centrality(thread, g, 0.5, 0.3, 3, 0.0000001, &map);
+    jgrapht_capi_ii_scoring_exec_custom_katz_centrality(thread, g, 0.5, NULL, 3, 0.0000001, &map);
     jgrapht_capi_map_int_contains_key(thread, map, 0, &value);
     assert(value == 1);
     jgrapht_capi_handles_destroy(thread, map);

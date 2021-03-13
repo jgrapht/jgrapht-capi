@@ -12,6 +12,7 @@ import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.graalvm.word.WordFactory;
 import org.jgrapht.Graph;
+import org.jgrapht.alg.flow.BoykovKolmogorovMFImpl;
 import org.jgrapht.alg.flow.DinicMFImpl;
 import org.jgrapht.alg.flow.EdmondsKarpMFImpl;
 import org.jgrapht.alg.flow.GusfieldEquivalentFlowTree;
@@ -80,6 +81,22 @@ public class FlowApi {
 	public static int executeEdmondsKarp(IsolateThread thread, ObjectHandle graphHandle, long source, long sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
 		return doRunLongMaxFlow(thread, graphHandle, EdmondsKarpMFImpl::new, source, sink, valueRes, flowRes,
+				cutSourcePartitionRes);
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "maxflow_exec_boykov_kolmogorov", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBoykovKolmogorov(IsolateThread thread, ObjectHandle graphHandle, int source, int sink,
+			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
+		return doRunLongMaxFlow(thread, graphHandle, BoykovKolmogorovMFImpl::new, source, sink, valueRes, flowRes,
+				cutSourcePartitionRes);
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "maxflow_exec_boykov_kolmogorov", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBoykovKolmogorov(IsolateThread thread, ObjectHandle graphHandle, long source, long sink,
+			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
+		return doRunLongMaxFlow(thread, graphHandle, BoykovKolmogorovMFImpl::new, source, sink, valueRes, flowRes,
 				cutSourcePartitionRes);
 	}
 

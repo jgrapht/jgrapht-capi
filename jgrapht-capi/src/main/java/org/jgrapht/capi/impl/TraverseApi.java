@@ -35,7 +35,7 @@ import org.jgrapht.traverse.DegeneracyOrderingIterator;
 import org.jgrapht.traverse.DepthFirstIterator;
 import org.jgrapht.traverse.LexBreadthFirstIterator;
 import org.jgrapht.traverse.MaximumCardinalityIterator;
-import org.jgrapht.traverse.RandomWalkIterator;
+import org.jgrapht.traverse.RandomWalkVertexIterator;
 import org.jgrapht.traverse.TopologicalOrderIterator;
 
 public class TraverseApi {
@@ -135,7 +135,7 @@ public class TraverseApi {
 	public static int randomWalkFromVertex(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
 		Graph<Integer, ?> g = globalHandles.get(graphHandle);
-		Iterator<Integer> it = new RandomWalkIterator<>(g, vertex, false);
+		Iterator<Integer> it = new RandomWalkVertexIterator<>(g, vertex);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
@@ -147,7 +147,7 @@ public class TraverseApi {
 	public static int randomWalkFromVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
-		Iterator<Long> it = new RandomWalkIterator<>(g, vertex, false);
+		Iterator<Long> it = new RandomWalkVertexIterator<>(g, vertex);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
@@ -159,7 +159,7 @@ public class TraverseApi {
 	public static int customRandomWalkFromVertex(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			boolean weighted, long maxSteps, long seed, WordPointer res) {
 		Graph<Integer, ?> g = globalHandles.get(graphHandle);
-		Iterator<Integer> it = new RandomWalkIterator<>(g, vertex, weighted, maxSteps, new Random(seed));
+		Iterator<Integer> it = new RandomWalkVertexIterator<>(g, vertex, maxSteps, weighted, new Random(seed));
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
@@ -171,7 +171,7 @@ public class TraverseApi {
 	public static int customRandomWalkFromVertex(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			boolean weighted, long maxSteps, long seed, WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
-		Iterator<Long> it = new RandomWalkIterator<>(g, vertex, weighted, maxSteps, new Random(seed));
+		Iterator<Long> it = new RandomWalkVertexIterator<>(g, vertex, maxSteps, weighted, new Random(seed));
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}

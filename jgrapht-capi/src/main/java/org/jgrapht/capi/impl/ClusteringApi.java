@@ -27,6 +27,7 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
+import org.jgrapht.alg.clustering.GirvanNewmanClustering;
 import org.jgrapht.alg.clustering.KSpanningTreeClustering;
 import org.jgrapht.alg.clustering.LabelPropagationClustering;
 import org.jgrapht.alg.interfaces.ClusteringAlgorithm;
@@ -57,6 +58,27 @@ public class ClusteringApi {
 			long seed, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
 		ClusteringAlgorithm<?> alg = new LabelPropagationClustering<>(g, maxIterations, new Random(seed));
+		Clustering<?> clustering = alg.getClustering();
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(clustering));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * Execute the Girvan-Newman algorithm
+	 * 
+	 * @param thread      the isolate thread
+	 * @param graphHandle the graph
+	 * @param k           the desired number of clusters
+	 * @param res         the resulting clustering handle
+	 * @return return status
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+			+ "clustering_exec_girvan_newman", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeGirvanNewman(IsolateThread thread, ObjectHandle graphHandle, int k, WordPointer res) {
+		Graph<?, ?> g = globalHandles.get(graphHandle);
+		ClusteringAlgorithm<?> alg = new GirvanNewmanClustering<>(g, k);
 		Clustering<?> clustering = alg.getClustering();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(clustering));

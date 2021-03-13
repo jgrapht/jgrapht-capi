@@ -32,6 +32,7 @@ import org.jgrapht.alg.drawing.CircularLayoutAlgorithm2D;
 import org.jgrapht.alg.drawing.FRLayoutAlgorithm2D;
 import org.jgrapht.alg.drawing.IndexedFRLayoutAlgorithm2D;
 import org.jgrapht.alg.drawing.RandomLayoutAlgorithm2D;
+import org.jgrapht.alg.drawing.RescaleLayoutAlgorithm2D;
 import org.jgrapht.alg.drawing.model.Box2D;
 import org.jgrapht.alg.drawing.model.LayoutModel2D;
 import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
@@ -228,6 +229,26 @@ public class DrawingApi {
 		LayoutModel2D<V> m = globalHandles.get(model);
 		new IndexedFRLayoutAlgorithm2D<V, E>(iterations, theta, normalizationFactor, new Random(seed), tolerance)
 				.layout(g, m);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * A layout algorithm which re-scales vertex positions to
+	 * (center-scale,center+scale) in all dimensions.
+	 * 
+	 * @param thread      the isolate thread
+	 * @param graphHandle the graph
+	 * @param model       the {@link LayoutModel2D} model
+	 * @param scale       the scale factor
+	 * @return the return status
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+			+ "drawing_exec_rescale_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <V, E> int executeRescaleLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
+			double scale) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
+		LayoutModel2D<V> m = globalHandles.get(model);
+		new RescaleLayoutAlgorithm2D<V, E>(scale).layout(g, m);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
