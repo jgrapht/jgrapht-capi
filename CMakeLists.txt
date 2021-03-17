@@ -6,7 +6,7 @@ list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/etc/cmake")
 
 find_package(Java 11)
 find_package(JNI)
-find_program(NativeImage native-image REQUIRED)
+find_program(NativeImage NAMES native-image native-image.cmd REQUIRED)
 find_package(Maven REQUIRED)
 
 message(STATUS "native-image found at ${NativeImage}")
