@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.13)
 
 project(jgrapht)
 
@@ -6,7 +6,7 @@ list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/etc/cmake")
 
 find_package(Java 11)
 find_package(JNI)
-find_program(NativeImage native-image REQUIRED)
+find_program(NativeImage NAMES native-image native-image.cmd REQUIRED)
 find_package(Maven REQUIRED)
 
 message(STATUS "native-image found at ${NativeImage}")
@@ -175,6 +175,9 @@ foreach(testsourcefile ${TEST_SOURCES})
     if(UNIX)
       target_link_libraries(${testname} m)
     endif(UNIX)
+    if(APPLE)
+      target_link_options(${testname} PUBLIC "LINKER:-rpath,@loader_path")
+    endif(APPLE)
     add_test(NAME ${testname} COMMAND ${testname})
 endforeach(testsourcefile ${TEST_SOURCES})
 

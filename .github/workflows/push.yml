@@ -1,0 +1,88 @@
+name: Build project
+
+on:
+  push:
+    branches:
+      - master      
+  pull_request:
+    branches:
+      - master 
+
+jobs:
+  build:
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - {
+            name: "Windows 2019 - MSVC",
+            os: windows-2019,
+            cc: "cl",
+            cxx: "cl",
+            gu: "gu.cmd",
+            cmake-generator: "Visual Studio 16 2019"
+          }
+        - {
+            name: "Ubuntu 20.04 - GCC",
+            os: ubuntu-20.04, 
+            cc: "gcc-9",
+            cxx: "g++-9",
+            gu: "gu"
+          }
+        - {
+            name: "MacOS 10.15",
+            os: macos-10.15,
+            cc: "gcc-9",
+            cxx: "g++-9",
+            gu: "gu",
+          }
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'recursive'
+    - name: Setup GraalVM
+      id: setup-graalvm
+      uses: DeLaGuardo/setup-graalvm@4.0
+      with:
+        graalvm: '21.0.0.2'
+        java: 'java11'
+        arch: 'amd64'        
+    - name: Install native-image component
+      run: |
+        ${{ matrix.config.gu }} install native-image
+    - name: Set Windows ENV
+      if: runner.os == 'Windows'
+      uses: ilammy/msvc-dev-cmd@v1
+      with: 
+        arch: "x64"
+    - name: Windows Run
+      if: runner.os == 'Windows'
+      shell: cmd
+      env: 
+        CMAKE_GENERATOR: ${{ matrix.config.cmake-generator }}
+        CMAKE_GENERATOR_TOOLSET: host=x64
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        cmake --build .
+        ctest -C Debug .
+    - name: Linux Run
+      if: runner.os == 'Linux'
+      shell: bash
+      run: | 
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }}
+        make
+        make test
+    - name: MacOS Run
+      if: runner.os == 'MacOS'
+      shell: bash
+      run: | 
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }}
+        make
+        make test
