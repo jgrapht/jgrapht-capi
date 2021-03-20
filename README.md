@@ -1,4 +1,4 @@
-![Build Status](https://github.com/jgrapht/jgrapht-capi/actions/workflows/push.yml/badge.svg)
+[![Build project](https://github.com/jgrapht/jgrapht-capi/actions/workflows/push.yml/badge.svg)](https://github.com/jgrapht/jgrapht-capi/actions/workflows/push.yml)
 [![License](https://img.shields.io/badge/license-LGPL%202.1-blue.svg)](http://www.gnu.org/licenses/lgpl-2.1.html)
 [![License](https://img.shields.io/badge/license-EPL%202.0-blue.svg)](http://www.eclipse.org/legal/epl-2.0)
 [![Language](http://img.shields.io/badge/language-java-brightgreen.svg)](https://www.java.com/)
