@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.13)
 
 project(jgrapht)
 
@@ -174,6 +174,9 @@ foreach(testsourcefile ${TEST_SOURCES})
     if(UNIX)
       target_link_libraries(${testname} m)
     endif(UNIX)
+    if(APPLE)
+      target_link_options(${testname} PUBLIC "LINKER:-rpath,@loader_path")
+    endif(APPLE)
     add_test(NAME ${testname} COMMAND ${testname})
 endforeach(testsourcefile ${TEST_SOURCES})
 

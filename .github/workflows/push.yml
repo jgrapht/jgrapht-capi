@@ -30,6 +30,13 @@ jobs:
             cxx: "g++-9",
             gu: "gu"
           }
+        - {
+            name: "MacOS 10.15",
+            os: macos-10.15,
+            cc: "gcc-9",
+            cxx: "g++-9",
+            gu: "gu",
+          }
     steps:
     - uses: actions/checkout@v2
       with:
@@ -63,6 +70,15 @@ jobs:
         ctest -C Debug .
     - name: Linux Run
       if: runner.os == 'Linux'
+      shell: bash
+      run: | 
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }}
+        make
+        make test
+    - name: MacOS Run
+      if: runner.os == 'MacOS'
       shell: bash
       run: | 
         mkdir build
