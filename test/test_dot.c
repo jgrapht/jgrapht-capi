@@ -11,7 +11,11 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
+#ifdef _WIN32
+char *expected = "strict graph G {\r\n  0;\r\n  1;\r\n  2;\r\n  0 -- 1 [ cost=\"5.4\" ];\r\n  1 -- 2 [ cost=\"6.5\" ];\r\n  2 -- 0 [ cost=\"9.2\" ];\r\n}\r\n";
+#else
 char *expected = "strict graph G {\n  0;\n  1;\n  2;\n  0 -- 1 [ cost=\"5.4\" ];\n  1 -- 2 [ cost=\"6.5\" ];\n  2 -- 0 [ cost=\"9.2\" ];\n}\n";
+#endif
 
 void edge_attribute(int e, char *key, char *value) { 
     if (e == 0) { 

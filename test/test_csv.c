@@ -11,7 +11,13 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
-char *expected="0,1,3\n1,0,2\n3,0,2\n2,1,3\n";
+#ifdef _WIN32
+#define CRLF "\r\n"
+#else
+#define CRLF "\n"
+#endif
+
+char *expected="0,1,3"CRLF"1,0,2"CRLF"3,0,2"CRLF"2,1,3"CRLF"";
 
 int import_id(const char *id) { 
     return atol(id);

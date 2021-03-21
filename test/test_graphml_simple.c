@@ -11,24 +11,30 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
+#ifdef _WIN32
+#define CRLF "\r\n"
+#else 
+#define CRLF "\n"
+#endif
+
 char *expected="\
-<?xml version=\"1.0\" encoding=\"UTF-8\"?><graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n\
-    <key id=\"key0\" for=\"edge\" attr.name=\"cost\" attr.type=\"double\"/>\n\
-    <graph edgedefault=\"undirected\">\n\
-        <node id=\"0\"/>\n\
-        <node id=\"1\"/>\n\
-        <node id=\"2\"/>\n\
-        <edge source=\"0\" target=\"1\">\n\
-            <data key=\"key0\">5.4</data>\n\
-        </edge>\n\
-        <edge source=\"1\" target=\"2\">\n\
-            <data key=\"key0\">6.5</data>\n\
-        </edge>\n\
-        <edge source=\"2\" target=\"0\">\n\
-            <data key=\"key0\">9.2</data>\n\
-        </edge>\n\
-    </graph>\n\
-</graphml>\n";
+<?xml version=\"1.0\" encoding=\"UTF-8\"?><graphml xmlns=\"http://graphml.graphdrawing.org/xmlns\" xsi:schemaLocation=\"http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"CRLF"\
+    <key id=\"key0\" for=\"edge\" attr.name=\"cost\" attr.type=\"double\"/>"CRLF"\
+    <graph edgedefault=\"undirected\">"CRLF"\
+        <node id=\"0\"/>"CRLF"\
+        <node id=\"1\"/>"CRLF"\
+        <node id=\"2\"/>"CRLF"\
+        <edge source=\"0\" target=\"1\">"CRLF"\
+            <data key=\"key0\">5.4</data>"CRLF"\
+        </edge>"CRLF"\
+        <edge source=\"1\" target=\"2\">"CRLF"\
+            <data key=\"key0\">6.5</data>"CRLF"\
+        </edge>"CRLF"\
+        <edge source=\"2\" target=\"0\">"CRLF"\
+            <data key=\"key0\">9.2</data>"CRLF"\
+        </edge>"CRLF"\
+    </graph>"CRLF"\
+</graphml>"CRLF"";
 
 void edge_attribute(int e, char *key, char *value) { 
     if (e == 0) { 

@@ -10,7 +10,11 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
+#ifdef _WIN32
+char *expected="c\r\nc SOURCE: Generated using the JGraphT library\r\nc\r\np edge 4 4\r\ne 1 2\r\ne 2 3\r\ne 3 4\r\ne 4 1\r\n";
+#else 
 char *expected="c\nc SOURCE: Generated using the JGraphT library\nc\np edge 4 4\ne 1 2\ne 2 3\ne 3 4\ne 4 1\n";
+#endif
 
 int preserveid(int x) { 
     return x;

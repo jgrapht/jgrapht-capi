@@ -11,20 +11,26 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
+#ifdef _WIN32
+#define CRLF "\r\n"
+#else
+#define CRLF "\n"
+#endif
+
 char *expected="\
-#Creator: JGraphT Lemon (LGF) Exporter\n\
-#Version: 1\n\
-\n\
-@nodes\n\
-label\n\
-0\n\
-1\n\
-2\n\
-\n\
-@arcs\n\
-		weight\n\
-0	1	1.0\n\
-1	2	1.0\n\n";
+#Creator: JGraphT Lemon (LGF) Exporter"CRLF"\
+#Version: 1"CRLF"\
+"CRLF"\
+@nodes"CRLF"\
+label"CRLF"\
+0"CRLF"\
+1"CRLF"\
+2"CRLF"\
+"CRLF"\
+@arcs"CRLF"\
+		weight"CRLF"\
+0	1	1.0"CRLF"\
+1	2	1.0"CRLF""CRLF"";
 
 int main() {
     

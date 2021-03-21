@@ -11,39 +11,45 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
+#ifdef _WIN32
+#define CRLF "\r\n"
+#else 
+#define CRLF "\n"
+#endif
+
 char *expected="\
-Creator \"JGraphT GML Exporter\"\n\
-Version 1\n\
-graph\n\
-[\n\
-	label \"\"\n\
-	directed 0\n\
-	node\n\
-	[\n\
-		id 0\n\
-		label \"label 0\"\n\
-	]\n\
-	node\n\
-	[\n\
-		id 1\n\
-		label \"label 1\"\n\
-	]\n\
-	node\n\
-	[\n\
-		id 2\n\
-		label \"label 2\"\n\
-	]\n\
-	edge\n\
-	[\n\
-		source 0\n\
-		target 1\n\
-	]\n\
-	edge\n\
-	[\n\
-		source 1\n\
-		target 2\n\
-	]\n\
-]\n";
+Creator \"JGraphT GML Exporter\""CRLF"\
+Version 1"CRLF"\
+graph"CRLF"\
+["CRLF"\
+	label \"\""CRLF"\
+	directed 0"CRLF"\
+	node"CRLF"\
+	["CRLF"\
+		id 0"CRLF"\
+		label \"label 0\""CRLF"\
+	]"CRLF"\
+	node"CRLF"\
+	["CRLF"\
+		id 1"CRLF"\
+		label \"label 1\""CRLF"\
+	]"CRLF"\
+	node"CRLF"\
+	["CRLF"\
+		id 2"CRLF"\
+		label \"label 2\""CRLF"\
+	]"CRLF"\
+	edge"CRLF"\
+	["CRLF"\
+		source 0"CRLF"\
+		target 1"CRLF"\
+	]"CRLF"\
+	edge"CRLF"\
+	["CRLF"\
+		source 1"CRLF"\
+		target 2"CRLF"\
+	]"CRLF"\
+]"CRLF"";
 
 void vertex_attribute(int v, char *key, char *value) { 
     if (v == 0) { 

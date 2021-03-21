@@ -11,6 +11,12 @@
 #include <jgrapht_capi_types.h>
 #include <jgrapht_capi.h>
 
+#ifdef _WIN32
+#define CRLF "\r\n"
+#else
+#define CRLF "\n"
+#endif
+
 char *input="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
 <gexf xmlns=\"http://www.gexf.net/1.2draft\" version=\"1.2\" \
 xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\" \
@@ -30,35 +36,35 @@ xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"> \
 </gexf>";
 
 char *expected="\
-<?xml version=\"1.0\" encoding=\"UTF-8\"?><gexf xmlns=\"http://www.gexf.net/1.2draft\" xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\" version=\"1.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n\
-    <graph defaultedgetype=\"undirected\">\n\
-        <attributes class=\"edge\">\n\
-            <attribute id=\"0\" title=\"cost\" type=\"double\"/>\n\
-        </attributes>\n\
-        <nodes>\n\
-            <node id=\"0\" label=\"0\"/>\n\
-            <node id=\"1\" label=\"1\"/>\n\
-            <node id=\"2\" label=\"2\"/>\n\
-        </nodes>\n\
-        <edges>\n\
-            <edge id=\"0\" source=\"1\" target=\"2\">\n\
-                <attvalues>\n\
-                    <attvalue for=\"0\" value=\"5.4\"/>\n\
-                </attvalues>\n\
-            </edge>\n\
-            <edge id=\"1\" source=\"0\" target=\"1\">\n\
-                <attvalues>\n\
-                    <attvalue for=\"0\" value=\"6.5\"/>\n\
-                </attvalues>\n\
-            </edge>\n\
-            <edge id=\"2\" source=\"2\" target=\"0\">\n\
-                <attvalues>\n\
-                    <attvalue for=\"0\" value=\"9.2\"/>\n\
-                </attvalues>\n\
-            </edge>\n\
-        </edges>\n\
-    </graph>\n\
-</gexf>\n";
+<?xml version=\"1.0\" encoding=\"UTF-8\"?><gexf xmlns=\"http://www.gexf.net/1.2draft\" xsi:schemaLocation=\"http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd\" version=\"1.2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">"CRLF"\
+    <graph defaultedgetype=\"undirected\">"CRLF"\
+        <attributes class=\"edge\">"CRLF"\
+            <attribute id=\"0\" title=\"cost\" type=\"double\"/>"CRLF"\
+        </attributes>"CRLF"\
+        <nodes>"CRLF"\
+            <node id=\"0\" label=\"0\"/>"CRLF"\
+            <node id=\"1\" label=\"1\"/>"CRLF"\
+            <node id=\"2\" label=\"2\"/>"CRLF"\
+        </nodes>"CRLF"\
+        <edges>"CRLF"\
+            <edge id=\"0\" source=\"1\" target=\"2\">"CRLF"\
+                <attvalues>"CRLF"\
+                    <attvalue for=\"0\" value=\"5.4\"/>"CRLF"\
+                </attvalues>"CRLF"\
+            </edge>"CRLF"\
+            <edge id=\"1\" source=\"0\" target=\"1\">"CRLF"\
+                <attvalues>"CRLF"\
+                    <attvalue for=\"0\" value=\"6.5\"/>"CRLF"\
+                </attvalues>"CRLF"\
+            </edge>"CRLF"\
+            <edge id=\"2\" source=\"2\" target=\"0\">"CRLF"\
+                <attvalues>"CRLF"\
+                    <attvalue for=\"0\" value=\"9.2\"/>"CRLF"\
+                </attvalues>"CRLF"\
+            </edge>"CRLF"\
+        </edges>"CRLF"\
+    </graph>"CRLF"\
+</gexf>"CRLF"";
 
 void edge_attribute(int e, char *key, char *value) { 
     if (e == 0) { 
