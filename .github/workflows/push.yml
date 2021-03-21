@@ -66,8 +66,8 @@ jobs:
         mkdir build
         cd build
         cmake ..
-        cmake --build .
-        ctest -C Debug .
+        cmake --build --config Debug .
+        ctest -C Debug --output-on-failure .
     - name: Linux Run
       if: runner.os == 'Linux'
       shell: bash

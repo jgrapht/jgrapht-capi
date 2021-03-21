@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
+#ifdef _WIN32
+#include <crtdbg.h>
+#endif 
 #include <assert.h>
 
 #include <jgrapht_capi_types.h>
@@ -23,6 +27,16 @@ double* cost_function(int edge) {
 
 
 int main() {
+    
+#ifdef _WIN32
+    _CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_FILE);
+    _CrtSetReportFile( _CRT_WARN, _CRTDBG_FILE_STDERR);
+    _CrtSetReportMode( _CRT_ERROR, _CRTDBG_MODE_FILE);
+    _CrtSetReportFile( _CRT_ERROR, _CRTDBG_FILE_STDERR);
+    _CrtSetReportMode( _CRT_ASSERT, _CRTDBG_MODE_FILE);
+    _CrtSetReportFile( _CRT_ASSERT, _CRTDBG_FILE_STDERR);
+#endif
+
     graal_isolate_t *isolate = NULL;
     graal_isolatethread_t *thread = NULL;
 
