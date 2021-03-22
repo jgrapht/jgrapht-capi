@@ -30,6 +30,7 @@ import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.color.BrownBacktrackColoring;
+import org.jgrapht.alg.color.ChordalGraphColoring;
 import org.jgrapht.alg.color.ColorRefinementAlgorithm;
 import org.jgrapht.alg.color.GreedyColoring;
 import org.jgrapht.alg.color.LargestDegreeFirstColoring;
@@ -40,7 +41,6 @@ import org.jgrapht.alg.interfaces.VertexColoringAlgorithm;
 import org.jgrapht.alg.interfaces.VertexColoringAlgorithm.Coloring;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
-import org.jgrapht.capi.custom.alg.color.ChordalGraphColoring;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class ColoringApi {

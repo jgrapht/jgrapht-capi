@@ -30,7 +30,6 @@ import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.drawing.CircularLayoutAlgorithm2D;
 import org.jgrapht.alg.drawing.FRLayoutAlgorithm2D;
-import org.jgrapht.alg.drawing.IndexedFRLayoutAlgorithm2D;
 import org.jgrapht.alg.drawing.RandomLayoutAlgorithm2D;
 import org.jgrapht.alg.drawing.RescaleLayoutAlgorithm2D;
 import org.jgrapht.alg.drawing.model.Box2D;
@@ -41,6 +40,7 @@ import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.IIToIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LLToIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.custom.drawing.IndexedFRLayoutAlgorithm2D;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 
 public class DrawingApi {
