@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -68,7 +68,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
-			+ "link_prediction_common_neighbors", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_common_neighbors", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCommonNeighbors(IsolateThread thread, ObjectHandle graphHandle, int u, int v,
 			CDoublePointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -81,7 +81,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
-			+ "link_prediction_common_neighbors", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_common_neighbors", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCommonNeighbors(IsolateThread thread, ObjectHandle graphHandle, long u, long v,
 			CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
@@ -94,7 +94,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
-			+ "link_prediction_hub_depressed_index", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_hub_depressed_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeHubDepressedIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u,
 			int v, CDoublePointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -107,7 +107,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
-			+ "link_prediction_hub_depressed_index", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_hub_depressed_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeexecuteHubDepressedIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			long u, long v, CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
@@ -120,7 +120,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
-			+ "link_prediction_hub_promoted_index", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_hub_promoted_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeHubPromotedIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u,
 			int v, CDoublePointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -133,7 +133,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
-			+ "link_prediction_hub_promoted_index", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_hub_promoted_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeexecuteHubPromotedIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			long u, long v, CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
@@ -146,7 +146,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
-			+ "link_prediction_jaccard_coefficient", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_jaccard_coefficient", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeJaccardCoefficientLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u,
 			int v, CDoublePointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -159,7 +159,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
-			+ "link_prediction_jaccard_coefficient", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_jaccard_coefficient", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeJaccardCoefficientLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, long u,
 			long v, CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
@@ -172,7 +172,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
-			+ "link_prediction_leicht_holme_newman_index", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_leicht_holme_newman_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeLeichtHolmeNewmanIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u,
 			int v, CDoublePointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -185,7 +185,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
-			+ "link_prediction_leicht_holme_newman_index", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_leicht_holme_newman_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeLeichtHolmeNewmanIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			long u, long v, CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
@@ -198,7 +198,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
-			+ "link_prediction_preferential_attachment", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_preferential_attachment", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executePreferentialAttachmentLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u,
 			int v, CDoublePointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -211,7 +211,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
-			+ "link_prediction_preferential_attachment", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_preferential_attachment", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executePreferentialAttachmentLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			long u, long v, CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
@@ -224,7 +224,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
-			+ "link_prediction_resource_allocation_index", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_resource_allocation_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeResourceAllocationIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			int u, int v, CDoublePointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -237,7 +237,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
-			+ "link_prediction_resource_allocation_index", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_resource_allocation_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeResourceAllocationIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			long u, long v, CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
@@ -250,7 +250,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
-			+ "link_prediction_salton_index", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_salton_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeSaltonIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u, int v,
 			CDoublePointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -263,7 +263,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
-			+ "link_prediction_salton_index", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_salton_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeSaltonIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, long u, long v,
 			CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
@@ -276,7 +276,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
-			+ "link_prediction_sorensen_index", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_sorensen_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeSørensenIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u, int v,
 			CDoublePointer res) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -289,7 +289,7 @@ public class LinkPredictionApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
-			+ "link_prediction_sorensen_index", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "link_prediction_exec_sorensen_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeSørensenIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, long u, long v,
 			CDoublePointer res) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
