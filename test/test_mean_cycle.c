@@ -62,7 +62,7 @@ int main() {
     void *cycle;
     double mean; 
 
-    jgrapht_capi_xx_cycles_mean_execute_howard(thread, g, 100, 1e-6, &mean, &cycle);
+    jgrapht_capi_xx_cycles_mean_exec_howard(thread, g, 100, 1e-6, &mean, &cycle);
     assert(mean == 9.0);
 
     int start_vertex, end_vertex;

@@ -195,7 +195,7 @@ public class CycleApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
-			+ "cycles_mean_execute_howard", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "cycles_mean_exec_howard", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeMeanHoward(IsolateThread thread, ObjectHandle graphHandle, int iterations,
 			double tolerance, CDoublePointer meanRes, WordPointer cycleRes) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
