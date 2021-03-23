@@ -1,13 +1,11 @@
 
-# Algorithms in jgrapht which are not mapped in the capi
+# Algorithms in JGraphT which are not mapped in the jgrapht-capi
 
- - Zhang-Shasha tree edit distance 
- - Bipartite layout drawing algorithms
- - NETGEN-style problems generator
- - Algorithm for minimum cycle mean
- - WebGraph adapter
  - Sparse graphs with no incoming edges, or lazily constructed
  - Succinct graphs 
+ - WebGraph adapter
+ - Zhang-Shasha tree edit distance 
+ - NETGEN-style problems generator
 
 And possible others. 
 

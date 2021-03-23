@@ -9,12 +9,15 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.word.WordFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.alg.connectivity.GabowStrongConnectivityInspector;
 import org.jgrapht.alg.cycle.ChinesePostman;
 import org.jgrapht.alg.cycle.DirectedSimpleCycles;
 import org.jgrapht.alg.cycle.HawickJamesSimpleCycles;
 import org.jgrapht.alg.cycle.HierholzerEulerianCycle;
+import org.jgrapht.alg.cycle.HowardMinimumMeanCycle;
 import org.jgrapht.alg.cycle.JohnsonSimpleCycles;
 import org.jgrapht.alg.cycle.PatonCycleBase;
 import org.jgrapht.alg.cycle.QueueBFSFundamentalCycleBasis;
@@ -188,6 +191,33 @@ public class CycleApi {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(cycles.iterator()));
 		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+			+ "cycles_mean_execute_howard", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <V, E> int executeMeanHoward(IsolateThread thread, ObjectHandle graphHandle, int iterations,
+			double tolerance, CDoublePointer meanRes, WordPointer cycleRes) {
+		Graph<V, E> g = globalHandles.get(graphHandle);
+
+		HowardMinimumMeanCycle<V, E> alg = new HowardMinimumMeanCycle<V, E>(g, iterations,
+				new GabowStrongConnectivityInspector<>(g), tolerance);
+
+		double mean = alg.getCycleMean();
+		GraphPath<V, E> cycle = alg.getCycle();
+
+		if (meanRes.isNonNull()) {
+			meanRes.write(mean);
+		}
+		
+		if (cycleRes.isNonNull()) {
+			if (cycle != null) {
+				cycleRes.write(globalHandles.create(cycle));
+			} else {
+				cycleRes.write(WordFactory.nullPointer());
+			}
+		}
+		
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
