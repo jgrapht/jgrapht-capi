@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -19,6 +19,7 @@ package org.jgrapht.capi.impl;
 
 import java.util.Comparator;
 import java.util.Random;
+import java.util.Set;
 
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
@@ -28,10 +29,13 @@ import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.Graph;
+import org.jgrapht.alg.drawing.BarycenterGreedyTwoLayeredBipartiteLayout2D;
 import org.jgrapht.alg.drawing.CircularLayoutAlgorithm2D;
 import org.jgrapht.alg.drawing.FRLayoutAlgorithm2D;
+import org.jgrapht.alg.drawing.MedianGreedyTwoLayeredBipartiteLayout2D;
 import org.jgrapht.alg.drawing.RandomLayoutAlgorithm2D;
 import org.jgrapht.alg.drawing.RescaleLayoutAlgorithm2D;
+import org.jgrapht.alg.drawing.TwoLayeredBipartiteLayout2D;
 import org.jgrapht.alg.drawing.model.Box2D;
 import org.jgrapht.alg.drawing.model.LayoutModel2D;
 import org.jgrapht.alg.drawing.model.MapLayoutModel2D;
@@ -249,6 +253,178 @@ public class DrawingApi {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 		LayoutModel2D<V> m = globalHandles.get(model);
 		new RescaleLayoutAlgorithm2D<V, E>(scale).layout(g, m);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * A bipartite layout algorithm.
+	 * 
+	 * @param thread                      the isolate thread
+	 * @param graphHandle                 the graph
+	 * @param modelHandle                 the {@link LayoutModel2D} model
+	 * @param partitionHandle             a possible null left partition of the
+	 *                                    bipartite graph
+	 * @param vertexComparatorFunctionPtr a possible null vertex comparator
+	 * @param vertical                    whether to draw vertically or not
+	 * @return the return status
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "drawing_exec_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle modelHandle, ObjectHandle partitionHandle, IIToIFunctionPointer vertexComparatorFunctionPtr,
+			boolean vertical) {
+		Graph<Integer, Integer> graph = globalHandles.get(graphHandle);
+		LayoutModel2D<Integer> model = globalHandles.get(modelHandle);
+		Set<Integer> partition = globalHandles.get(partitionHandle);
+		Comparator<Integer> vertexComparator = null;
+		if (vertexComparatorFunctionPtr.isNonNull()) {
+			vertexComparator = (a, b) -> vertexComparatorFunctionPtr.invoke(a, b);
+		}
+		new TwoLayeredBipartiteLayout2D<Integer, Integer>(partition, vertexComparator, vertical).layout(graph, model);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * A bipartite layout algorithm.
+	 * 
+	 * @param thread                      the isolate thread
+	 * @param graphHandle                 the graph
+	 * @param modelHandle                 the {@link LayoutModel2D} model
+	 * @param partitionHandle             a possible null left partition of the
+	 *                                    bipartite graph
+	 * @param vertexComparatorFunctionPtr a possible null vertex comparator
+	 * @param vertical                    whether to draw vertically or not
+	 * @return the return status
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "drawing_exec_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle modelHandle, ObjectHandle partitionHandle, LLToIFunctionPointer vertexComparatorFunctionPtr,
+			boolean vertical) {
+		Graph<Long, Long> graph = globalHandles.get(graphHandle);
+		LayoutModel2D<Long> model = globalHandles.get(modelHandle);
+		Set<Long> partition = globalHandles.get(partitionHandle);
+		Comparator<Long> vertexComparator = null;
+		if (vertexComparatorFunctionPtr.isNonNull()) {
+			vertexComparator = (a, b) -> vertexComparatorFunctionPtr.invoke(a, b);
+		}
+		new TwoLayeredBipartiteLayout2D<Long, Long>(partition, vertexComparator, vertical).layout(graph, model);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * A bipartite layout algorithm.
+	 * 
+	 * @param thread                      the isolate thread
+	 * @param graphHandle                 the graph
+	 * @param modelHandle                 the {@link LayoutModel2D} model
+	 * @param partitionHandle             a possible null left partition of the
+	 *                                    bipartite graph
+	 * @param vertexComparatorFunctionPtr a possible null vertex comparator
+	 * @param vertical                    whether to draw vertically or not
+	 * @return the return status
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBarycenterGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle modelHandle, ObjectHandle partitionHandle, IIToIFunctionPointer vertexComparatorFunctionPtr,
+			boolean vertical) {
+		Graph<Integer, Integer> graph = globalHandles.get(graphHandle);
+		LayoutModel2D<Integer> model = globalHandles.get(modelHandle);
+		Set<Integer> partition = globalHandles.get(partitionHandle);
+		Comparator<Integer> vertexComparator = null;
+		if (vertexComparatorFunctionPtr.isNonNull()) {
+			vertexComparator = (a, b) -> vertexComparatorFunctionPtr.invoke(a, b);
+		}
+		new BarycenterGreedyTwoLayeredBipartiteLayout2D<Integer, Integer>(partition, vertexComparator, vertical)
+				.layout(graph, model);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * A bipartite layout algorithm.
+	 * 
+	 * @param thread                      the isolate thread
+	 * @param graphHandle                 the graph
+	 * @param modelHandle                 the {@link LayoutModel2D} model
+	 * @param partitionHandle             a possible null left partition of the
+	 *                                    bipartite graph
+	 * @param vertexComparatorFunctionPtr a possible null vertex comparator
+	 * @param vertical                    whether to draw vertically or not
+	 * @return the return status
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBarycenterGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle modelHandle, ObjectHandle partitionHandle, LLToIFunctionPointer vertexComparatorFunctionPtr,
+			boolean vertical) {
+		Graph<Long, Long> graph = globalHandles.get(graphHandle);
+		LayoutModel2D<Long> model = globalHandles.get(modelHandle);
+		Set<Long> partition = globalHandles.get(partitionHandle);
+		Comparator<Long> vertexComparator = null;
+		if (vertexComparatorFunctionPtr.isNonNull()) {
+			vertexComparator = (a, b) -> vertexComparatorFunctionPtr.invoke(a, b);
+		}
+		new BarycenterGreedyTwoLayeredBipartiteLayout2D<Long, Long>(partition, vertexComparator, vertical).layout(graph,
+				model);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * A bipartite layout algorithm.
+	 * 
+	 * @param thread                      the isolate thread
+	 * @param graphHandle                 the graph
+	 * @param modelHandle                 the {@link LayoutModel2D} model
+	 * @param partitionHandle             a possible null left partition of the
+	 *                                    bipartite graph
+	 * @param vertexComparatorFunctionPtr a possible null vertex comparator
+	 * @param vertical                    whether to draw vertically or not
+	 * @return the return status
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "drawing_exec_median_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeMedianGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle modelHandle, ObjectHandle partitionHandle, IIToIFunctionPointer vertexComparatorFunctionPtr,
+			boolean vertical) {
+		Graph<Integer, Integer> graph = globalHandles.get(graphHandle);
+		LayoutModel2D<Integer> model = globalHandles.get(modelHandle);
+		Set<Integer> partition = globalHandles.get(partitionHandle);
+		Comparator<Integer> vertexComparator = null;
+		if (vertexComparatorFunctionPtr.isNonNull()) {
+			vertexComparator = (a, b) -> vertexComparatorFunctionPtr.invoke(a, b);
+		}
+		new MedianGreedyTwoLayeredBipartiteLayout2D<Integer, Integer>(partition, vertexComparator, vertical)
+				.layout(graph, model);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * A bipartite layout algorithm.
+	 * 
+	 * @param thread                      the isolate thread
+	 * @param graphHandle                 the graph
+	 * @param modelHandle                 the {@link LayoutModel2D} model
+	 * @param partitionHandle             a possible null left partition of the
+	 *                                    bipartite graph
+	 * @param vertexComparatorFunctionPtr a possible null vertex comparator
+	 * @param vertical                    whether to draw vertically or not
+	 * @return the return status
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+			+ "drawing_exec_median_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeMedianGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle modelHandle, ObjectHandle partitionHandle, LLToIFunctionPointer vertexComparatorFunctionPtr,
+			boolean vertical) {
+		Graph<Long, Long> graph = globalHandles.get(graphHandle);
+		LayoutModel2D<Long> model = globalHandles.get(modelHandle);
+		Set<Long> partition = globalHandles.get(partitionHandle);
+		Comparator<Long> vertexComparator = null;
+		if (vertexComparatorFunctionPtr.isNonNull()) {
+			vertexComparator = (a, b) -> vertexComparatorFunctionPtr.invoke(a, b);
+		}
+		new MedianGreedyTwoLayeredBipartiteLayout2D<Long, Long>(partition, vertexComparator, vertical).layout(graph,
+				model);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
