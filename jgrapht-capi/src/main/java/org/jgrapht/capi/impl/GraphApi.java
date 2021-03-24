@@ -38,6 +38,7 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.DDToDFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.IncomingEdgesSupport;
 import org.jgrapht.capi.JGraphTContext.IntegerToBooleanFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.IntegerToDoubleFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LongToBooleanFunctionPointer;
@@ -213,21 +214,42 @@ public class GraphApi {
 	 * @return the graph handle
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
-			+ "graph_sparse_create", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "graph_sparse_create", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
+					"Create a sparse graph", "@param thread the isolate thread", "@param directed directed or not",
+					"@param weighted weighted graph or not", "@param num_vertices number of vertices",
+					"@param edge_list edge list handle",
+					"@param incoming_edges_support  enum with incoming edges support type",
+					"@param result the resulting graph handle" })
 	public static int createSparseGraph(IsolateThread thread, boolean directed, boolean weighted, int numVertices,
-			ObjectHandle edgesListHandle, WordPointer res) {
+			ObjectHandle edgesListHandle, IncomingEdgesSupport incomingEdgesSupport, WordPointer res) {
+
+		// map to internal enum
+		org.jgrapht.opt.graph.sparse.IncomingEdgesSupport iSupport;
+		switch (incomingEdgesSupport) {
+		case INCOMING_EDGES_SUPPORT_NO_INCOMING_EDGES:
+			iSupport = org.jgrapht.opt.graph.sparse.IncomingEdgesSupport.NO_INCOMING_EDGES;
+			break;
+		case INCOMING_EDGES_SUPPORT_FULL_INCOMING_EDGES:
+			iSupport = org.jgrapht.opt.graph.sparse.IncomingEdgesSupport.FULL_INCOMING_EDGES;
+			break;
+		case INCOMING_EDGES_SUPPORT_LAZY_INCOMING_EDGES:
+		default:
+			iSupport = org.jgrapht.opt.graph.sparse.IncomingEdgesSupport.LAZY_INCOMING_EDGES;
+			break;
+		}
+
 		Graph<Integer, Integer> graph;
 		if (weighted) {
 			List<Triple<Integer, Integer, Double>> edges = globalHandles.get(edgesListHandle);
 			if (directed) {
-				graph = new SparseIntDirectedWeightedGraph(numVertices, edges);
+				graph = new SparseIntDirectedWeightedGraph(numVertices, edges, iSupport);
 			} else {
 				graph = new SparseIntUndirectedWeightedGraph(numVertices, edges);
 			}
 		} else {
 			List<Pair<Integer, Integer>> edges = globalHandles.get(edgesListHandle);
 			if (directed) {
-				graph = new SparseIntDirectedGraph(numVertices, edges);
+				graph = new SparseIntDirectedGraph(numVertices, edges, iSupport);
 			} else {
 				graph = new SparseIntUndirectedGraph(numVertices, edges);
 			}
@@ -928,7 +950,8 @@ public class GraphApi {
 			return 1d;
 		};
 
-		CapiGraph<Long, Long> gOut = new CapiGraphAsWeightedGraph<>(gIn, weightFunction, cacheWeights, writeWeightsThrough);
+		CapiGraph<Long, Long> gOut = new CapiGraphAsWeightedGraph<>(gIn, weightFunction, cacheWeights,
+				writeWeightsThrough);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(gOut));
 		}

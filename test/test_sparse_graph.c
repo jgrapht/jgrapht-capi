@@ -44,7 +44,7 @@ int main() {
     jgrapht_capi_ii_list_edge_pair_add(thread, edgelist, 0, 3, &added);
 
     void *g;
-    jgrapht_capi_ii_graph_sparse_create(thread, 1, 0, 6, edgelist, &g);
+    jgrapht_capi_ii_graph_sparse_create(thread, 1, 0, 6, edgelist, INCOMING_EDGES_SUPPORT_FULL_INCOMING_EDGES, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     jgrapht_capi_handles_destroy(thread, edgelist);
 

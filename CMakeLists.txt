@@ -145,6 +145,8 @@ set(
     "test_connectivity.c"
     "test_sparse_graph.c"
     "test_sparse_graph2.c"
+    "test_sparse_graph3.c"
+    "test_sparse_graph4.c"
     "test_listenable.c"
     "test_dag.c"
     "test_graph_union.c"

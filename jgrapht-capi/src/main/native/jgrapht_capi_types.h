@@ -54,4 +54,10 @@ typedef enum {
     ATTRIBUTE_TYPE_IDENTIFIER,
 } attribute_type_t;
 
+typedef enum { 
+    INCOMING_EDGES_SUPPORT_NO_INCOMING_EDGES,
+    INCOMING_EDGES_SUPPORT_LAZY_INCOMING_EDGES,
+    INCOMING_EDGES_SUPPORT_FULL_INCOMING_EDGES,
+} incoming_edges_support_t;
+
 #endif

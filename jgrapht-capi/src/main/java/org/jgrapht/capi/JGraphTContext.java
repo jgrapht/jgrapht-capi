@@ -120,6 +120,23 @@ public class JGraphTContext {
 
 	}
 
+	@CEnum("incoming_edges_support_t")
+	public enum IncomingEdgesSupport {
+
+		// @formatter:off
+		INCOMING_EDGES_SUPPORT_NO_INCOMING_EDGES,
+		INCOMING_EDGES_SUPPORT_LAZY_INCOMING_EDGES,
+		INCOMING_EDGES_SUPPORT_FULL_INCOMING_EDGES;
+		// @formatter:on
+
+		@CEnumValue
+		public native int toCEnum();
+
+		@CEnumLookup
+		public static native IncomingEdgesSupport toJavaEnum(int value);
+
+	}
+	
 	public interface VoidToIntegerFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
