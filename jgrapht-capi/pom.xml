@@ -33,6 +33,11 @@
 			<artifactId>jgrapht-opt</artifactId>
 			<version>1.5.1</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.jgrapht</groupId>
+		    <artifactId>jgrapht-unimi-dsi</artifactId>
+		    <version>1.5.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

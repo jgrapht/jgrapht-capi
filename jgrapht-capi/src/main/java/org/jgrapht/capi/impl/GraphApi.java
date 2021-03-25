@@ -66,6 +66,8 @@ import org.jgrapht.opt.graph.sparse.SparseIntDirectedGraph;
 import org.jgrapht.opt.graph.sparse.SparseIntDirectedWeightedGraph;
 import org.jgrapht.opt.graph.sparse.SparseIntUndirectedGraph;
 import org.jgrapht.opt.graph.sparse.SparseIntUndirectedWeightedGraph;
+import org.jgrapht.sux4j.SuccinctIntDirectedGraph;
+import org.jgrapht.sux4j.SuccinctIntUndirectedGraph;
 import org.jgrapht.util.WeightCombiner;
 
 /**
@@ -264,6 +266,52 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	/**
+	 * Create a graph and return its handle.
+	 *
+	 * @param thread the thread isolate
+	 * @return the graph handle
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+			+ "graph_succinct_create", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
+					"Create a succinct graph", "@param thread the isolate thread", "@param directed directed or not",
+					"@param num_vertices number of vertices",
+					"@param edge_list edge list handle",
+					"@param incoming_edges_support  enum with incoming edges support type",
+					"@param result the resulting graph handle" })
+	public static int createSuccinctGraph(IsolateThread thread, boolean directed, int numVertices,
+			ObjectHandle edgesListHandle, IncomingEdgesSupport incomingEdgesSupport, WordPointer res) {
+
+		boolean incomingEdges = false;
+		switch (incomingEdgesSupport) {
+		case INCOMING_EDGES_SUPPORT_NO_INCOMING_EDGES:
+			incomingEdges = false;
+			break;
+		case INCOMING_EDGES_SUPPORT_LAZY_INCOMING_EDGES:
+			throw new IllegalArgumentException("Lazy construction of incoming edges not supported.");
+		case INCOMING_EDGES_SUPPORT_FULL_INCOMING_EDGES:
+		default:
+			incomingEdges = true;
+			break;
+		}
+
+		List<Pair<Integer, Integer>> edges = globalHandles.get(edgesListHandle);
+		Graph<Integer, Integer> graph;
+		if (directed) {
+			graph = new SuccinctIntDirectedGraph(numVertices, edges, incomingEdges);
+		} else {
+			graph = new SuccinctIntUndirectedGraph(numVertices, edges);
+		}
+
+		// wrap in order to support all methods
+		graph = new DefaultCapiGraph<Integer, Integer>(graph);
+
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_vertices_count", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int verticesCount(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {

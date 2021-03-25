@@ -170,6 +170,7 @@ set(
     "test_link_prediction.c"
     "test_draw_bipartite.c"
     "test_mean_cycle.c"
+    "test_succinct_graph.c"
 )
 foreach(testsourcefile ${TEST_SOURCES})
     string(REPLACE ".c" "" testname ${testsourcefile})
