@@ -275,8 +275,7 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_succinct_create", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Create a succinct graph", "@param thread the isolate thread", "@param directed directed or not",
-					"@param num_vertices number of vertices",
-					"@param edge_list edge list handle",
+					"@param num_vertices number of vertices", "@param edge_list edge list handle",
 					"@param incoming_edges_support  enum with incoming edges support type",
 					"@param result the resulting graph handle" })
 	public static int createSuccinctGraph(IsolateThread thread, boolean directed, int numVertices,
@@ -295,12 +294,22 @@ public class GraphApi {
 			break;
 		}
 
+		// create a sparse graph
 		List<Pair<Integer, Integer>> edges = globalHandles.get(edgesListHandle);
+		Graph<Integer, Integer> sparseGraph;
+		if (directed) {
+			sparseGraph = new SparseIntDirectedGraph(numVertices, edges,
+					org.jgrapht.opt.graph.sparse.IncomingEdgesSupport.LAZY_INCOMING_EDGES);
+		} else {
+			sparseGraph = new SparseIntUndirectedGraph(numVertices, edges);
+		}
+
+		// convert to succinct
 		Graph<Integer, Integer> graph;
 		if (directed) {
-			graph = new SuccinctIntDirectedGraph(numVertices, edges, incomingEdges);
+			graph = new SuccinctIntDirectedGraph(sparseGraph, incomingEdges);
 		} else {
-			graph = new SuccinctIntUndirectedGraph(numVertices, edges);
+			graph = new SuccinctIntUndirectedGraph(sparseGraph);
 		}
 
 		// wrap in order to support all methods
@@ -311,7 +320,7 @@ public class GraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "graph_vertices_count", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int verticesCount(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
