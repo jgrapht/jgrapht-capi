@@ -49,11 +49,11 @@ int main() {
     assert(flag == 1);
 
     int v;
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 0);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 1);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 2);
 
     int e;
@@ -91,22 +91,22 @@ int main() {
     assert(s == 1 && t == 2);
 
     double w;
-    assert(jgrapht_capi_ii_graph_get_edge_weight(thread, g, 0, &w) == 0);
+    assert(jgrapht_capi_xi_graph_get_edge_weight(thread, g, 0, &w) == 0);
     assert(w == 1.0);
-    assert(jgrapht_capi_ii_graph_get_edge_weight(thread, g, 1, &w) == 0);
+    assert(jgrapht_capi_xi_graph_get_edge_weight(thread, g, 1, &w) == 0);
     assert(w == 1.0);
-    assert(jgrapht_capi_ii_graph_get_edge_weight(thread, g, 2, &w) == 0);
+    assert(jgrapht_capi_xi_graph_get_edge_weight(thread, g, 2, &w) == 0);
     assert(w == 1.0);
-    assert(jgrapht_capi_ii_graph_get_edge_weight(thread, g, 3, &w) == 0);
+    assert(jgrapht_capi_xi_graph_get_edge_weight(thread, g, 3, &w) == 0);
     assert(w == 1.0);
-    assert(jgrapht_capi_ii_graph_get_edge_weight(thread, g, 4, &w) == 0);
+    assert(jgrapht_capi_xi_graph_get_edge_weight(thread, g, 4, &w) == 0);
     assert(w == 1.0);
-    assert(jgrapht_capi_ii_graph_get_edge_weight(thread, g, 5, &w) == 0);
+    assert(jgrapht_capi_xi_graph_get_edge_weight(thread, g, 5, &w) == 0);
     assert(w == 1.0);
 
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 0, 5.0);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 0, 5.0);
     assert(jgrapht_capi_error_get_errno(thread) == 0); 
-    jgrapht_capi_ii_graph_get_edge_weight(thread, g, 0, &w);
+    jgrapht_capi_xi_graph_get_edge_weight(thread, g, 0, &w);
     assert(w == 5.0);
 
     void *eit;
@@ -129,26 +129,26 @@ int main() {
 
     jgrapht_capi_handles_destroy(thread, eit);
 
-    assert(jgrapht_capi_ii_graph_contains_edge_between(thread, g, 0, 0, &flag) == 0);
+    assert(jgrapht_capi_ix_graph_contains_edge_between(thread, g, 0, 0, &flag) == 0);
     assert(flag);
-    assert(jgrapht_capi_ii_graph_contains_edge_between(thread, g, 0, 1, &flag) == 0);
+    assert(jgrapht_capi_ix_graph_contains_edge_between(thread, g, 0, 1, &flag) == 0);
     assert(flag);
-    assert(jgrapht_capi_ii_graph_contains_edge_between(thread, g, 0, 2, &flag) == 0);
+    assert(jgrapht_capi_ix_graph_contains_edge_between(thread, g, 0, 2, &flag) == 0);
     assert(flag);
-    assert(jgrapht_capi_ii_graph_contains_edge_between(thread, g, 1, 0, &flag) == 0);
+    assert(jgrapht_capi_ix_graph_contains_edge_between(thread, g, 1, 0, &flag) == 0);
     assert(!flag);
-    assert(jgrapht_capi_ii_graph_contains_edge_between(thread, g, 1, 1, &flag) == 0);
+    assert(jgrapht_capi_ix_graph_contains_edge_between(thread, g, 1, 1, &flag) == 0);
     assert(!flag);
-    assert(jgrapht_capi_ii_graph_contains_edge_between(thread, g, 1, 2, &flag) == 0);
+    assert(jgrapht_capi_ix_graph_contains_edge_between(thread, g, 1, 2, &flag) == 0);
     assert(flag);
-    assert(jgrapht_capi_ii_graph_contains_edge_between(thread, g, 2, 0, &flag) == 0);
+    assert(jgrapht_capi_ix_graph_contains_edge_between(thread, g, 2, 0, &flag) == 0);
     assert(!flag);
-    assert(jgrapht_capi_ii_graph_contains_edge_between(thread, g, 2, 1, &flag) == 0);
+    assert(jgrapht_capi_ix_graph_contains_edge_between(thread, g, 2, 1, &flag) == 0);
     assert(!flag);
-    assert(jgrapht_capi_ii_graph_contains_edge_between(thread, g, 2, 2, &flag) == 0);
+    assert(jgrapht_capi_ix_graph_contains_edge_between(thread, g, 2, 2, &flag) == 0);
     assert(!flag);
 
-    jgrapht_capi_ii_graph_create_between_eit(thread, g, 1 , 2, &eit);
+    jgrapht_capi_ix_graph_create_between_eit(thread, g, 1 , 2, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == 3);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);

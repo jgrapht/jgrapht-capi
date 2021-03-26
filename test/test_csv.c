@@ -48,10 +48,10 @@ int main() {
     jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, NULL, NULL, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
     jgrapht_capi_ii_graph_add_edge(thread, g, 1, 2, NULL);
@@ -72,9 +72,9 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     int count;
-    jgrapht_capi_ii_graph_vertices_count(thread, g, &count);
+    jgrapht_capi_ix_graph_vertices_count(thread, g, &count);
     assert(count == 4);
-    jgrapht_capi_ii_graph_edges_count(thread, g, &count);
+    jgrapht_capi_ix_graph_edges_count(thread, g, &count);
     assert(count == 4);
 
     // test output to string

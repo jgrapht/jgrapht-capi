@@ -48,7 +48,7 @@ int main() {
 
     int i;
     for(i = 0; i < 7; i++) { 
-        jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+        jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
     }
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);

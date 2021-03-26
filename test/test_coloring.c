@@ -70,21 +70,21 @@ int main() {
     assert(flag == 0);
 
     int v;
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 0);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 1);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 2);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 3);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 4);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 5);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 6);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 7);
 
     int e;
@@ -152,12 +152,12 @@ int main() {
     // check chordal graph
     jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, NULL, NULL, &g);
 
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 2, NULL);

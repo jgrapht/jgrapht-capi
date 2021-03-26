@@ -65,20 +65,20 @@ int main() {
     assert(flag == 0);
 
     int count;
-    jgrapht_capi_ii_graph_vertices_count(thread, g, &count);
+    jgrapht_capi_ix_graph_vertices_count(thread, g, &count);
     assert(count == 6);
-    jgrapht_capi_ii_graph_edges_count(thread, g, &count);
+    jgrapht_capi_ix_graph_edges_count(thread, g, &count);
     assert(count == 7);
 
     // inout
     int d;
-    assert(jgrapht_capi_ii_graph_outdegree_of(thread, g, 0, &d) == 0);
+    assert(jgrapht_capi_ix_graph_outdegree_of(thread, g, 0, &d) == 0);
     assert(d == 3);
-    assert(jgrapht_capi_ii_graph_indegree_of(thread, g, 0, &d) == 0);
+    assert(jgrapht_capi_ix_graph_indegree_of(thread, g, 0, &d) == 0);
     assert(d == 0);
-    assert(jgrapht_capi_ii_graph_outdegree_of(thread, g, 1, &d) == 0);
+    assert(jgrapht_capi_ix_graph_outdegree_of(thread, g, 1, &d) == 0);
     assert(d == 1);
-    assert(jgrapht_capi_ii_graph_indegree_of(thread, g, 1, &d) == 0);
+    assert(jgrapht_capi_ix_graph_indegree_of(thread, g, 1, &d) == 0);
     assert(d == 1);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);

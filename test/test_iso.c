@@ -35,10 +35,10 @@ int main() {
     jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, NULL, NULL, &g1);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_ii_graph_add_vertex(thread, g1, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g1, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g1, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g1, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g1, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g1, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g1, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g1, NULL);
 
     jgrapht_capi_ii_graph_add_edge(thread, g1, 0, 1, NULL);
     jgrapht_capi_ii_graph_add_edge(thread, g1, 1, 2, NULL);
@@ -51,10 +51,10 @@ int main() {
     jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, NULL, NULL, &g2);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_ii_graph_add_vertex(thread, g2, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g2, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g2, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g2, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g2, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g2, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g2, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g2, NULL);
 
     jgrapht_capi_ii_graph_add_edge(thread, g2, 0, 1, NULL);
     jgrapht_capi_ii_graph_add_edge(thread, g2, 1, 2, NULL);
@@ -75,13 +75,13 @@ int main() {
 
     int has_other_vertex;
     int other_vertex;
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 0, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 0, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 0);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 1, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 1, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 1);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 2, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 2, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 2);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 3, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 3, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 3);
     //printf("%lld -> %lld\n", 0, other_vertex);
     jgrapht_capi_handles_destroy(thread, map);
@@ -89,13 +89,13 @@ int main() {
 
     // next mapping
     jgrapht_capi_it_next_object(thread, map_it, &map);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 0, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 0, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 0);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 1, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 1, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 1);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 2, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 2, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 3);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 3, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 3, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 2);
     //printf("%lld -> %lld\n", 0, other_vertex);
     jgrapht_capi_handles_destroy(thread, map);
@@ -103,13 +103,13 @@ int main() {
 
     // next mapping
     jgrapht_capi_it_next_object(thread, map_it, &map);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 0, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 0, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 0);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 1, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 1, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 2);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 2, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 2, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 1);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 3, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 3, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 3);
     //printf("%lld -> %lld\n", 0, other_vertex);
     jgrapht_capi_handles_destroy(thread, map);
@@ -117,13 +117,13 @@ int main() {
 
     // next mapping
     jgrapht_capi_it_next_object(thread, map_it, &map);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 0, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 0, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 0);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 1, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 1, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 3);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 2, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 2, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 1);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 3, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 3, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 2);
     //printf("%lld -> %lld\n", 0, other_vertex);
     jgrapht_capi_handles_destroy(thread, map);
@@ -131,13 +131,13 @@ int main() {
 
     // next mapping
     jgrapht_capi_it_next_object(thread, map_it, &map);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 0, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 0, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 0);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 1, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 1, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 2);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 2, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 2, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 3);
-    jgrapht_capi_ii_isomorphism_graph_mapping_vertex_correspondence(thread, map, 3, 1, &has_other_vertex, &other_vertex);
+    jgrapht_capi_ix_isomorphism_graph_mapping_vertex_correspondence(thread, map, 3, 1, &has_other_vertex, &other_vertex);
     assert(other_vertex == 1);
     //printf("%lld -> %lld\n", 0, other_vertex);
     jgrapht_capi_handles_destroy(thread, map);

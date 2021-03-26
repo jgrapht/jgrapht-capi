@@ -36,10 +36,10 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int v0;
-    jgrapht_capi_ii_graph_add_vertex(thread, g, &v0);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, &v0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     int v1;
-    jgrapht_capi_ii_graph_add_vertex(thread, g, &v1);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, &v1);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     int v2 = 2;
 
@@ -53,7 +53,7 @@ int main() {
     jgrapht_capi_ii_graph_add_edge(thread, g, v0, v1, &e01);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, e01, 15.0);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, e01, 15.0);
     assert(jgrapht_capi_error_get_errno(thread) == STATUS_UNSUPPORTED_OPERATION);
     assert(strcmp("Error (UnsupportedOperationException)", jgrapht_capi_error_get_errno_msg(thread)) == 0);    
     jgrapht_capi_error_clear_errno(thread);

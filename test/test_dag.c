@@ -51,15 +51,15 @@ int main() {
     assert(jgrapht_capi_xx_graph_is_modifiable(thread, g, &flag) == 0);
     assert(flag == 1);
 
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
 
     int count;
-    jgrapht_capi_ii_graph_vertices_count(thread, g, &count);
+    jgrapht_capi_ix_graph_vertices_count(thread, g, &count);
     assert(count == 6);
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
@@ -72,7 +72,7 @@ int main() {
     jgrapht_capi_error_print_stack_trace(thread);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_ii_graph_edges_count(thread, g, &count);
+    jgrapht_capi_ix_graph_edges_count(thread, g, &count);
     assert(count == 6);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
@@ -83,12 +83,12 @@ int main() {
     jgrapht_capi_error_clear_errno(thread);
 
     void *set;
-    jgrapht_capi_ii_graph_dag_vertex_ancestors(thread, g, 3, &set);
+    jgrapht_capi_ix_graph_dag_vertex_ancestors(thread, g, 3, &set);
     jgrapht_capi_set_size(thread, set, &count);
     assert(count == 2);
     jgrapht_capi_handles_destroy(thread, set);
 
-    jgrapht_capi_ii_graph_dag_vertex_descendants(thread, g, 2, &set);
+    jgrapht_capi_ix_graph_dag_vertex_descendants(thread, g, 2, &set);
     jgrapht_capi_set_size(thread, set, &count);
     assert(count == 2);
     jgrapht_capi_handles_destroy(thread, set);

@@ -49,7 +49,7 @@ int main() {
     int v;
     int i;
     for(i = 0; i < 8; i++) { 
-        jgrapht_capi_ii_graph_add_vertex(thread, g, &v);
+        jgrapht_capi_ix_graph_add_vertex(thread, g, &v);
     }
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
@@ -63,7 +63,7 @@ int main() {
     jgrapht_capi_ii_graph_add_edge(thread, g, 3, 4, NULL);
 
     // set larger weight on bridge
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 8, 100.0);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 8, 100.0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int k = 2;

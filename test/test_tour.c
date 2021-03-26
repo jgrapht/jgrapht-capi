@@ -16,7 +16,7 @@ int check_tour(graal_isolatethread_t *thread, void *tour, double expected_weight
     int start_vertex;
     int end_vertex;
 
-    jgrapht_capi_ii_handles_get_graphpath(thread, tour, &weight, &start_vertex, &end_vertex, NULL);
+    jgrapht_capi_ix_handles_get_graphpath(thread, tour, &weight, &start_vertex, &end_vertex, NULL);
     //printf("%lf\n", weight);
     assert(weight == expected_weight);
     assert(start_vertex == end_vertex);

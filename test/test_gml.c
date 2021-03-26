@@ -121,9 +121,9 @@ int main() {
     jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, NULL, NULL, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
@@ -152,7 +152,7 @@ int main() {
     jgrapht_capi_ii_import_file_gml(thread, g, "dummy.gml.out", preserveid, vertex_attribute, edge_attribute, NULL, NULL);
 
     int ecount;
-    jgrapht_capi_ii_graph_edges_count(thread, g, &ecount);
+    jgrapht_capi_ix_graph_edges_count(thread, g, &ecount);
     assert(ecount == 2);
 
     // test output to string

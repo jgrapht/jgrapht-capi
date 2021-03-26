@@ -37,11 +37,11 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int v;
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 0);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 1);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 2);
 
     int e;

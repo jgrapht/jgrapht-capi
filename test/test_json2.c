@@ -83,7 +83,7 @@ int main() {
 
     int i;
     for(i = 0; i < 10; i++) {
-        jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+        jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
     }
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
@@ -133,7 +133,7 @@ int main() {
     jgrapht_capi_ii_import_file_json(thread, g, "dummy2.json.out", import_id_from_file, vertex_attribute, edge_attribute, NULL, NULL);
 
     int ecount;
-    jgrapht_capi_ii_graph_edges_count(thread, g, &ecount);
+    jgrapht_capi_ix_graph_edges_count(thread, g, &ecount);
     assert(ecount == 18);
 
     jgrapht_capi_handles_destroy(thread, g);

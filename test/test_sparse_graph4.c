@@ -65,14 +65,14 @@ int main() {
     assert(flag == 0);
 
     int count;
-    jgrapht_capi_ii_graph_vertices_count(thread, g, &count);
+    jgrapht_capi_ix_graph_vertices_count(thread, g, &count);
     assert(count == 6);
-    jgrapht_capi_ii_graph_edges_count(thread, g, &count);
+    jgrapht_capi_ix_graph_edges_count(thread, g, &count);
     assert(count == 7);
 
     // incoming - no support
     int d;
-    assert(jgrapht_capi_ii_graph_indegree_of(thread, g, 2, &d) != 0);
+    assert(jgrapht_capi_ix_graph_indegree_of(thread, g, 2, &d) != 0);
     assert(jgrapht_capi_error_get_errno(thread) == STATUS_UNSUPPORTED_OPERATION);
     jgrapht_capi_error_clear_errno(thread);
 

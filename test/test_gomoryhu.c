@@ -34,21 +34,21 @@ int main() {
     jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, NULL, NULL, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 0, 20);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 0, 20);
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 2, NULL);
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 1, 10);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 1, 10);
     jgrapht_capi_ii_graph_add_edge(thread, g, 1, 2, NULL);
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 2, 30);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 2, 30);
     jgrapht_capi_ii_graph_add_edge(thread, g, 1, 3, NULL);
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 3, 10);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 3, 10);
     jgrapht_capi_ii_graph_add_edge(thread, g, 2, 3, NULL);
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 4, 20);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 4, 20);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
@@ -61,7 +61,7 @@ int main() {
     // min s-t cut
     void *source_partition; 
     double value;
-    jgrapht_capi_ii_cut_gomoryhu_min_st_cut(thread, hu, 0, 3, &value, &source_partition);
+    jgrapht_capi_ix_cut_gomoryhu_min_st_cut(thread, hu, 0, 3, &value, &source_partition);
     assert(value == 30.0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
@@ -96,11 +96,11 @@ int main() {
 
     // tree
     void *tree;
-    jgrapht_capi_ii_cut_gomoryhu_tree(thread, hu, &tree);
+    jgrapht_capi_ix_cut_gomoryhu_tree(thread, hu, &tree);
     int count;
-    jgrapht_capi_ii_graph_vertices_count(thread, tree, &count);
+    jgrapht_capi_ix_graph_vertices_count(thread, tree, &count);
     assert (count == 4);
-    jgrapht_capi_ii_graph_edges_count(thread, tree, &count);
+    jgrapht_capi_ix_graph_edges_count(thread, tree, &count);
     assert (count == 3);
     jgrapht_capi_handles_destroy(thread, tree);
 

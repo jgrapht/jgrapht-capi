@@ -36,18 +36,18 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int v1;
-    jgrapht_capi_ii_graph_add_vertex(thread, g, &v1);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, &v1);
     int v2;
-    jgrapht_capi_ii_graph_add_vertex(thread, g, &v2);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, &v2);
     int v3;
-    jgrapht_capi_ii_graph_add_vertex(thread, g, &v3);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, &v3);
     int v4;
-    jgrapht_capi_ii_graph_add_vertex(thread, g, &v4);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, &v4);
     int v5;
-    jgrapht_capi_ii_graph_add_vertex(thread, g, &v5);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, &v5);
 
     int vcount;
-    jgrapht_capi_ii_graph_vertices_count(thread, g, &vcount);
+    jgrapht_capi_ix_graph_vertices_count(thread, g, &vcount);
     assert(vcount == 5);
 
     int e12;
@@ -69,19 +69,19 @@ int main() {
 
     // inout
     int d;
-    assert(jgrapht_capi_ii_graph_degree_of(thread, g, v1, &d) == 0);
+    assert(jgrapht_capi_ix_graph_degree_of(thread, g, v1, &d) == 0);
     assert(d == 1);
-    assert(jgrapht_capi_ii_graph_degree_of(thread, g, v2, &d) == 0);
+    assert(jgrapht_capi_ix_graph_degree_of(thread, g, v2, &d) == 0);
     assert(d == 5);
-    assert(jgrapht_capi_ii_graph_degree_of(thread, g, v3, &d) == 0);
+    assert(jgrapht_capi_ix_graph_degree_of(thread, g, v3, &d) == 0);
     assert(d == 2);
-    assert(jgrapht_capi_ii_graph_degree_of(thread, g, v4, &d) == 0);
+    assert(jgrapht_capi_ix_graph_degree_of(thread, g, v4, &d) == 0);
     assert(d == 3);
-    assert(jgrapht_capi_ii_graph_degree_of(thread, g, v5, &d) == 0);
+    assert(jgrapht_capi_ix_graph_degree_of(thread, g, v5, &d) == 0);
     assert(d == 5);
 
     void *eit;
-    jgrapht_capi_ii_graph_vertex_create_eit(thread, g, v1, &eit);
+    jgrapht_capi_ix_graph_vertex_create_eit(thread, g, v1, &eit);
     int hasnext;
     int v;
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
@@ -90,7 +90,7 @@ int main() {
     assert(hasnext == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_ii_graph_vertex_create_eit(thread, g, v2, &eit);
+    jgrapht_capi_ix_graph_vertex_create_eit(thread, g, v2, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e12);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
@@ -104,7 +104,7 @@ int main() {
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_ii_graph_vertex_create_eit(thread, g, v3, &eit);
+    jgrapht_capi_ix_graph_vertex_create_eit(thread, g, v3, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e23_1);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
@@ -112,7 +112,7 @@ int main() {
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_ii_graph_vertex_create_eit(thread, g, v4, &eit);
+    jgrapht_capi_ix_graph_vertex_create_eit(thread, g, v4, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e24);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
@@ -120,7 +120,7 @@ int main() {
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_ii_graph_vertex_create_eit(thread, g, v5, &eit);
+    jgrapht_capi_ix_graph_vertex_create_eit(thread, g, v5, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e55_1);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
@@ -131,24 +131,24 @@ int main() {
     jgrapht_capi_handles_destroy(thread, eit);
 
     // incoming
-    assert(jgrapht_capi_ii_graph_indegree_of(thread, g, v1, &d) == 0);
+    assert(jgrapht_capi_ix_graph_indegree_of(thread, g, v1, &d) == 0);
     assert(d == 1);
-    assert(jgrapht_capi_ii_graph_indegree_of(thread, g, v2, &d) == 0);
+    assert(jgrapht_capi_ix_graph_indegree_of(thread, g, v2, &d) == 0);
     assert(d == 5);
-    assert(jgrapht_capi_ii_graph_indegree_of(thread, g, v3, &d) == 0);
+    assert(jgrapht_capi_ix_graph_indegree_of(thread, g, v3, &d) == 0);
     assert(d == 2);
-    assert(jgrapht_capi_ii_graph_indegree_of(thread, g, v4, &d) == 0);
+    assert(jgrapht_capi_ix_graph_indegree_of(thread, g, v4, &d) == 0);
     assert(d == 3);
-    assert(jgrapht_capi_ii_graph_indegree_of(thread, g, v5, &d) == 0);
+    assert(jgrapht_capi_ix_graph_indegree_of(thread, g, v5, &d) == 0);
     assert(d == 5);
 
-    jgrapht_capi_ii_graph_vertex_create_in_eit(thread, g, v1, &eit);
+    jgrapht_capi_ix_graph_vertex_create_in_eit(thread, g, v1, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e12);
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_ii_graph_vertex_create_in_eit(thread, g, v2, &eit);
+    jgrapht_capi_ix_graph_vertex_create_in_eit(thread, g, v2, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e12);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
@@ -162,7 +162,7 @@ int main() {
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_ii_graph_vertex_create_in_eit(thread, g, v3, &eit);
+    jgrapht_capi_ix_graph_vertex_create_in_eit(thread, g, v3, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e23_1);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
@@ -170,7 +170,7 @@ int main() {
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_ii_graph_vertex_create_in_eit(thread, g, v4, &eit);
+    jgrapht_capi_ix_graph_vertex_create_in_eit(thread, g, v4, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e24);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
@@ -178,7 +178,7 @@ int main() {
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_ii_graph_vertex_create_in_eit(thread, g, v5, &eit);
+    jgrapht_capi_ix_graph_vertex_create_in_eit(thread, g, v5, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e55_1);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
@@ -189,24 +189,24 @@ int main() {
     jgrapht_capi_handles_destroy(thread, eit);
 
     // outgoing
-    assert(jgrapht_capi_ii_graph_outdegree_of(thread, g, v1, &d) == 0);
+    assert(jgrapht_capi_ix_graph_outdegree_of(thread, g, v1, &d) == 0);
     assert(d == 1);
-    assert(jgrapht_capi_ii_graph_outdegree_of(thread, g, v2, &d) == 0);
+    assert(jgrapht_capi_ix_graph_outdegree_of(thread, g, v2, &d) == 0);
     assert(d == 5);
-    assert(jgrapht_capi_ii_graph_outdegree_of(thread, g, v3, &d) == 0);
+    assert(jgrapht_capi_ix_graph_outdegree_of(thread, g, v3, &d) == 0);
     assert(d == 2);
-    assert(jgrapht_capi_ii_graph_outdegree_of(thread, g, v4, &d) == 0);
+    assert(jgrapht_capi_ix_graph_outdegree_of(thread, g, v4, &d) == 0);
     assert(d == 3);
-    assert(jgrapht_capi_ii_graph_outdegree_of(thread, g, v5, &d) == 0);
+    assert(jgrapht_capi_ix_graph_outdegree_of(thread, g, v5, &d) == 0);
     assert(d == 5);
     
-    jgrapht_capi_ii_graph_vertex_create_out_eit(thread, g, v1, &eit);
+    jgrapht_capi_ix_graph_vertex_create_out_eit(thread, g, v1, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e12);
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_ii_graph_vertex_create_out_eit(thread, g, v2, &eit);
+    jgrapht_capi_ix_graph_vertex_create_out_eit(thread, g, v2, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e12);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
@@ -220,7 +220,7 @@ int main() {
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_ii_graph_vertex_create_out_eit(thread, g, v3, &eit);
+    jgrapht_capi_ix_graph_vertex_create_out_eit(thread, g, v3, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e23_1);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
@@ -228,7 +228,7 @@ int main() {
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_ii_graph_vertex_create_out_eit(thread, g, v4, &eit);
+    jgrapht_capi_ix_graph_vertex_create_out_eit(thread, g, v4, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e24);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
@@ -236,7 +236,7 @@ int main() {
     assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 
-    jgrapht_capi_ii_graph_vertex_create_out_eit(thread, g, v5, &eit);
+    jgrapht_capi_ix_graph_vertex_create_out_eit(thread, g, v5, &eit);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
     assert(v == e55_1);
     assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);

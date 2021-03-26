@@ -47,11 +47,11 @@ int main() {
     assert(jgrapht_capi_xx_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
     assert(flag == 0);
 
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
     jgrapht_capi_ii_graph_add_edge(thread, g, 1, 2, NULL);
@@ -60,7 +60,7 @@ int main() {
     jgrapht_capi_ii_graph_add_edge(thread, g, 4, 0, NULL);
 
     double score;
-    jgrapht_capi_ii_link_prediction_exec_adamic_adar_index(thread, g, 0, 3, &score);
+    jgrapht_capi_ix_link_prediction_exec_adamic_adar_index(thread, g, 0, 3, &score);
     assert(abs(score-1.442695) < 1e-9);
 
     jgrapht_capi_handles_destroy(thread, g);

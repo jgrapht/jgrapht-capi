@@ -36,7 +36,7 @@ int main() {
 
     int i;
     for(i = 0; i < 7; i++) { 
-        jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+        jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
     }
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
@@ -61,7 +61,7 @@ int main() {
 
     double vx, vy;
     for(int i = 0; i < 7; i++) { 
-        jgrapht_capi_ii_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
+        jgrapht_capi_ix_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
         assert(vx >= 0.0);
         assert(vx <= 10.0);
         assert(vy >= 0.0);
@@ -69,19 +69,19 @@ int main() {
         // printf("(%lf,%lf)\n", vx, vy);
     }
 
-    jgrapht_capi_ii_drawing_layout_model_2d_put_vertex(thread, model, 3, 2.5, 3.5);
-    jgrapht_capi_ii_drawing_layout_model_2d_get_vertex(thread, model, 3, &vx, &vy);
+    jgrapht_capi_ix_drawing_layout_model_2d_put_vertex(thread, model, 3, 2.5, 3.5);
+    jgrapht_capi_ix_drawing_layout_model_2d_get_vertex(thread, model, 3, &vx, &vy);
     assert(vx == 2.5);
     assert(vy == 3.5);
 
     int fixed;
-    jgrapht_capi_ii_drawing_layout_model_2d_get_fixed(thread, model, 2, &fixed);
+    jgrapht_capi_ix_drawing_layout_model_2d_get_fixed(thread, model, 2, &fixed);
     assert(fixed==0);
-    jgrapht_capi_ii_drawing_layout_model_2d_set_fixed(thread, model, 2, 1);
-    jgrapht_capi_ii_drawing_layout_model_2d_get_fixed(thread, model, 2, &fixed);
+    jgrapht_capi_ix_drawing_layout_model_2d_set_fixed(thread, model, 2, 1);
+    jgrapht_capi_ix_drawing_layout_model_2d_get_fixed(thread, model, 2, &fixed);
     assert(fixed==1);
-    jgrapht_capi_ii_drawing_layout_model_2d_set_fixed(thread, model, 2, 0);
-    jgrapht_capi_ii_drawing_layout_model_2d_get_fixed(thread, model, 2, &fixed);
+    jgrapht_capi_ix_drawing_layout_model_2d_set_fixed(thread, model, 2, 0);
+    jgrapht_capi_ix_drawing_layout_model_2d_get_fixed(thread, model, 2, &fixed);
     assert(fixed==0);
 
     jgrapht_capi_handles_destroy(thread, model);

@@ -32,10 +32,10 @@ int main() {
     void *g;
     jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 1, NULL, NULL, &g);
 
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
     jgrapht_capi_ii_graph_add_edge(thread, g, 2, 3, NULL);
@@ -49,7 +49,7 @@ int main() {
     assert(value == 1);
     jgrapht_capi_handles_destroy(thread, map);
 
-    jgrapht_capi_ii_scoring_exec_custom_katz_centrality(thread, g, 0.5, NULL, 3, 0.0000001, &map);
+    jgrapht_capi_ix_scoring_exec_custom_katz_centrality(thread, g, 0.5, NULL, 3, 0.0000001, &map);
     jgrapht_capi_map_int_contains_key(thread, map, 0, &value);
     assert(value == 1);
     jgrapht_capi_handles_destroy(thread, map);

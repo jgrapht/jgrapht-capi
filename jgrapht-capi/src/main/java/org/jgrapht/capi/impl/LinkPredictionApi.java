@@ -41,7 +41,7 @@ public class LinkPredictionApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "link_prediction_exec_adamic_adar_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeAdamicAdarIndex(IsolateThread thread, ObjectHandle graphHandle, int u, int v,
 			CDoublePointer res) {

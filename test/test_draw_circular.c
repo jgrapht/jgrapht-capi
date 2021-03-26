@@ -46,7 +46,7 @@ int main() {
 
     int i;
     for(i = 0; i < 7; i++) { 
-        jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+        jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
     }
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
@@ -67,11 +67,11 @@ int main() {
     assert(w == 10.0);
     assert(h == 10.0);
 
-    jgrapht_capi_ii_drawing_exec_circular_layout_2d(thread, g, model, 5.0, NULL);
+    jgrapht_capi_ix_drawing_exec_circular_layout_2d(thread, g, model, 5.0, NULL);
 
     double vx, vy;
     for(int i = 0; i < 7; i++) { 
-        jgrapht_capi_ii_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
+        jgrapht_capi_ix_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
         if (i == 0) { 
             assert (vx == 10.0 && vy == 5.0);
         }
@@ -87,10 +87,10 @@ int main() {
 
     // now with ordering
     jgrapht_capi_xx_drawing_layout_model_2d_create(thread, 0, 0, 10.0, 10.0, &model);
-    jgrapht_capi_ii_drawing_exec_circular_layout_2d(thread, g, model, 5.0, order);
+    jgrapht_capi_ix_drawing_exec_circular_layout_2d(thread, g, model, 5.0, order);
 
     for(int i = 0; i < 7; i++) { 
-        jgrapht_capi_ii_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
+        jgrapht_capi_ix_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
         if (i == 6) { 
             assert (vx == 10.0 && vy == 5.0);
         }

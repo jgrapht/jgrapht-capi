@@ -37,7 +37,7 @@ int main() {
 
     int i;
     for(i = 0; i < 7; i++) { 
-        jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+        jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
     }
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
@@ -55,7 +55,7 @@ int main() {
 
     double vx, vy;
     for(int i = 0; i < 7; i++) { 
-        jgrapht_capi_ii_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
+        jgrapht_capi_ix_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
         assert(vx >= 0.0);
         assert(vx <= 10.0);
         assert(vy >= 0.0);
@@ -71,7 +71,7 @@ int main() {
     jgrapht_capi_xx_drawing_exec_indexed_fr_layout_2d(thread, g, model, 50, 1.0, 17, 0.5, 0.000000001);
 
     for(int i = 0; i < 7; i++) { 
-        jgrapht_capi_ii_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
+        jgrapht_capi_ix_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
         assert(vx >= 0.0);
         assert(vx <= 10.0);
         assert(vy >= 0.0);

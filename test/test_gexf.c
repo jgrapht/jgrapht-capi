@@ -123,11 +123,11 @@ int main() {
 
 
     int vcount;
-    jgrapht_capi_ii_graph_vertices_count(thread, g, &vcount);
+    jgrapht_capi_ix_graph_vertices_count(thread, g, &vcount);
     assert(vcount == 3);
 
     int ecount;
-    jgrapht_capi_ii_graph_edges_count(thread, g, &ecount);
+    jgrapht_capi_ix_graph_edges_count(thread, g, &ecount);
     assert(ecount == 3);
 
     // write it to file

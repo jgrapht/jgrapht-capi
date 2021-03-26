@@ -35,17 +35,17 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int v;
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 0);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 1);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 2);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 3);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 4);
-    assert(jgrapht_capi_ii_graph_add_vertex(thread, g, &v) == 0);
+    assert(jgrapht_capi_ix_graph_add_vertex(thread, g, &v) == 0);
     assert(v == 5);
 
     int e;
@@ -59,7 +59,7 @@ int main() {
     jgrapht_capi_ii_graph_add_edge(thread, g, 3, 4, &e);
     jgrapht_capi_ii_graph_add_edge(thread, g, 4, 5, &e);
     jgrapht_capi_ii_graph_add_edge(thread, g, 2, 5, &e);
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, e, 100.0);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, e, 100.0);
 
     // bfs from all
     void *it;
@@ -83,7 +83,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, it);
 
     // bfs from single
-    jgrapht_capi_ii_traverse_create_bfs_from_vertex_vit(thread, g, 2, &it);
+    jgrapht_capi_ix_traverse_create_bfs_from_vertex_vit(thread, g, 2, &it);
     jgrapht_capi_it_next_int(thread, it, &v);
     assert(v == 2);
     jgrapht_capi_it_next_int(thread, it, &v);
@@ -141,7 +141,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, it);
 
     // dfs single vertex
-    jgrapht_capi_ii_traverse_create_dfs_from_vertex_vit(thread, g, 2, &it);
+    jgrapht_capi_ix_traverse_create_dfs_from_vertex_vit(thread, g, 2, &it);
     jgrapht_capi_it_next_int(thread, it, &v);
     assert(v == 2);
     jgrapht_capi_it_next_int(thread, it, &v);
@@ -160,7 +160,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, it);
 
     // random walk from vertex
-    jgrapht_capi_ii_traverse_create_custom_random_walk_from_vertex_vit(thread, g, 2, 4, 0, 17, &it);
+    jgrapht_capi_ix_traverse_create_custom_random_walk_from_vertex_vit(thread, g, 2, 4, 0, 17, &it);
     jgrapht_capi_it_next_int(thread, it, &v);
     assert(v==2);
     jgrapht_capi_it_next_int(thread, it, &v);
@@ -208,7 +208,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, it);
 
     // closest first
-    jgrapht_capi_ii_traverse_create_closest_first_from_vertex_vit(thread, g, 0, &it);
+    jgrapht_capi_ix_traverse_create_closest_first_from_vertex_vit(thread, g, 0, &it);
     jgrapht_capi_it_next_int(thread, it, &v);
     assert(v == 0);
     jgrapht_capi_it_next_int(thread, it, &v);

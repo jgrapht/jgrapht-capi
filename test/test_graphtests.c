@@ -32,11 +32,11 @@ int main() {
     assert(jgrapht_capi_ii_graph_create(thread, 0, 1, 1, 1, NULL, NULL, &g) == 0);
 
     int v;
-    jgrapht_capi_ii_graph_add_vertex(thread, g, &v);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, &v);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, &v);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, &v);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, &v);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, &v);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, &v);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, &v);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, &v);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, &v);
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
     jgrapht_capi_ii_graph_add_edge(thread, g, 1, 2, NULL);

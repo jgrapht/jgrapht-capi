@@ -51,7 +51,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int v; 
-    jgrapht_capi_ii_graph_add_vertex(thread, gl, &v);
+    jgrapht_capi_ix_graph_add_vertex(thread, gl, &v);
     assert( v == 0);
 
     jgrapht_capi_ii_listenable_remove_graph_listener(thread, gl, listener);

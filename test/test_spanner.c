@@ -47,11 +47,11 @@ int main() {
     assert(jgrapht_capi_xx_graph_is_allowing_multipleedges(thread, g, &flag) == 0);
     assert(flag == 0);
 
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
-    jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
+    jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 1, NULL);
     jgrapht_capi_ii_graph_add_edge(thread, g, 1, 2, NULL);
@@ -59,11 +59,11 @@ int main() {
     jgrapht_capi_ii_graph_add_edge(thread, g, 3, 4, NULL);
     jgrapht_capi_ii_graph_add_edge(thread, g, 4, 0, NULL);
 
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 0, 5.0);
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 1, 4.0);
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 2, 3.0);
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 3, 2.0);
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 4, 1.0);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 0, 5.0);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 1, 4.0);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 2, 3.0);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 3, 2.0);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 4, 1.0);
 
     // run 
     void *spanner;

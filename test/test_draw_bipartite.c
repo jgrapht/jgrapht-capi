@@ -36,7 +36,7 @@ int main() {
 
     int i;
     for(i = 0; i < 7; i++) { 
-        jgrapht_capi_ii_graph_add_vertex(thread, g, NULL);
+        jgrapht_capi_ix_graph_add_vertex(thread, g, NULL);
     }
 
     jgrapht_capi_ii_graph_add_edge(thread, g, 0, 3, NULL);
@@ -51,11 +51,11 @@ int main() {
     void *model;
     jgrapht_capi_xx_drawing_layout_model_2d_create(thread, 0, 0, 10.0, 10.0, &model);
 
-    jgrapht_capi_ii_drawing_exec_two_layered_bipartite_layout_2d(thread, g, model, 0, 0, 1);
+    jgrapht_capi_ix_drawing_exec_two_layered_bipartite_layout_2d(thread, g, model, 0, 0, 1);
  
     double vx, vy;
     for(int i = 0; i < 7; i++) { 
-        jgrapht_capi_ii_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
+        jgrapht_capi_ix_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
         assert(vx >= 0.0);
         assert(vx <= 10.0);
         assert(vy >= 0.0);
@@ -73,10 +73,10 @@ int main() {
     jgrapht_capi_set_int_add(thread, set, 2, NULL);
     jgrapht_capi_xx_drawing_layout_model_2d_create(thread, 0, 0, 10.0, 10.0, &model);
 
-    jgrapht_capi_ii_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(thread, g, model, set, 0, 1);
+    jgrapht_capi_ix_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(thread, g, model, set, 0, 1);
  
     for(int i = 0; i < 7; i++) { 
-        jgrapht_capi_ii_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
+        jgrapht_capi_ix_drawing_layout_model_2d_get_vertex(thread, model, i, &vx, &vy);
         assert(vx >= 0.0);
         assert(vx <= 10.0);
         assert(vy >= 0.0);

@@ -61,17 +61,17 @@ int main() {
     assert(flag == 1);
 
     int count;
-    jgrapht_capi_ii_graph_vertices_count(thread, g, &count);
+    jgrapht_capi_ix_graph_vertices_count(thread, g, &count);
     assert(count == 6);
-    jgrapht_capi_ii_graph_edges_count(thread, g, &count);
+    jgrapht_capi_ix_graph_edges_count(thread, g, &count);
     assert(count == 7);
 
     double w;
-    jgrapht_capi_ii_graph_get_edge_weight(thread, g, 0, &w);
+    jgrapht_capi_xi_graph_get_edge_weight(thread, g, 0, &w);
     assert(w == 13.0);
 
-    jgrapht_capi_ii_graph_set_edge_weight(thread, g, 2, 33.0);
-    jgrapht_capi_ii_graph_get_edge_weight(thread, g, 2, &w);
+    jgrapht_capi_xi_graph_set_edge_weight(thread, g, 2, 33.0);
+    jgrapht_capi_xi_graph_get_edge_weight(thread, g, 2, &w);
     assert(w == 33.0);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
