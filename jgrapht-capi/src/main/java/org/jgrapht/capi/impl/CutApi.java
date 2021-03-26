@@ -103,7 +103,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
 			+ "cut_gomoryhu_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int gomoryHuTree(IsolateThread thread, ObjectHandle gomoryHu, WordPointer treeRes) {
 		GusfieldGomoryHuCutTree<Integer, ?> alg = globalHandles.get(gomoryHu);
