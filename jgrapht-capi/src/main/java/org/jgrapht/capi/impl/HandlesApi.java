@@ -158,11 +158,11 @@ public class HandlesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
 			CIntPointer startVertexRes, CIntPointer endVertexRes, WordPointer edgeItRes) {
-		GraphPath<Integer, Integer> gp = globalHandles.get(handle);
+		GraphPath<Integer, ?> gp = globalHandles.get(handle);
 		if (weightRes.isNonNull()) {
 			weightRes.write(gp.getWeight());
 		}
@@ -178,11 +178,11 @@ public class HandlesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
 			CLongPointer startVertexRes, CLongPointer endVertexRes, WordPointer edgeItRes) {
-		GraphPath<Long, Long> gp = globalHandles.get(handle);
+		GraphPath<Long, ?> gp = globalHandles.get(handle);
 		if (weightRes.isNonNull()) {
 			weightRes.write(gp.getWeight());
 		}

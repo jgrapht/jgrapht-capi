@@ -66,11 +66,11 @@ public class ExporterApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "export_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int exportDIMACSToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+	public static <E> int exportDIMACSToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ExporterDIMACSFormat format, boolean exportEdgeWeights, ObjectHandle vertexIdStore) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<Integer, E> g = globalHandles.get(graphHandle);
 
 		DIMACSFormat actualFormat = null;
 		switch (format) {
@@ -84,18 +84,18 @@ public class ExporterApi {
 			actualFormat = DIMACSFormat.SHORTEST_PATH;
 			break;
 		}
-		DIMACSExporter<Integer, Integer> exporter = new DIMACSExporter<>(createIntegerIdProviderDimacs(vertexIdStore),
+		DIMACSExporter<Integer, E> exporter = new DIMACSExporter<>(createIntegerIdProviderDimacs(vertexIdStore),
 				actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "export_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int llExportDIMACSToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+	public static <E> int llExportDIMACSToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ExporterDIMACSFormat format, boolean exportEdgeWeights, ObjectHandle vertexIdStore) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Long, E> g = globalHandles.get(graphHandle);
 
 		DIMACSFormat actualFormat = null;
 		switch (format) {
@@ -109,18 +109,18 @@ public class ExporterApi {
 			actualFormat = DIMACSFormat.SHORTEST_PATH;
 			break;
 		}
-		DIMACSExporter<Long, Long> exporter = new DIMACSExporter<>(createLongIdProviderDimacs(vertexIdStore),
+		DIMACSExporter<Long, E> exporter = new DIMACSExporter<>(createLongIdProviderDimacs(vertexIdStore),
 				actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "export_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int exportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle, ExporterDIMACSFormat format,
+	public static <E> int exportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle, ExporterDIMACSFormat format,
 			boolean exportEdgeWeights, ObjectHandle vertexIdStore, WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<Integer, E> g = globalHandles.get(graphHandle);
 
 		DIMACSFormat actualFormat = null;
 		switch (format) {
@@ -135,7 +135,7 @@ public class ExporterApi {
 			break;
 		}
 
-		DIMACSExporter<Integer, Integer> exporter = new DIMACSExporter<>(createIntegerIdProviderDimacs(vertexIdStore),
+		DIMACSExporter<Integer, E> exporter = new DIMACSExporter<>(createIntegerIdProviderDimacs(vertexIdStore),
 				actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 
@@ -146,11 +146,11 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "export_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int llExportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle, ExporterDIMACSFormat format,
+	public static <E> int llExportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle, ExporterDIMACSFormat format,
 			boolean exportEdgeWeights, ObjectHandle vertexIdStore, WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Long, E> g = globalHandles.get(graphHandle);
 
 		DIMACSFormat actualFormat = null;
 		switch (format) {
@@ -165,7 +165,7 @@ public class ExporterApi {
 			break;
 		}
 
-		DIMACSExporter<Long, Long> exporter = new DIMACSExporter<>(createLongIdProviderDimacs(vertexIdStore),
+		DIMACSExporter<Long, E> exporter = new DIMACSExporter<>(createLongIdProviderDimacs(vertexIdStore),
 				actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 

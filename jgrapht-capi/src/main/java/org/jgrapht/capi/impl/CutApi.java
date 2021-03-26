@@ -55,7 +55,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "cut_gomoryhu_min_st_cut", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int gomoryHuSTCut(IsolateThread thread, ObjectHandle gomoryHu, int source, int sink,
 			CDoublePointer valueRes, WordPointer cutSourcePartitionRes) {
@@ -71,7 +71,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "cut_gomoryhu_min_st_cut", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int gomoryHuSTCut(IsolateThread thread, ObjectHandle gomoryHu, long source, long sink,
 			CDoublePointer valueRes, WordPointer cutSourcePartitionRes) {
@@ -103,7 +103,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "cut_gomoryhu_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int gomoryHuTree(IsolateThread thread, ObjectHandle gomoryHu, WordPointer treeRes) {
 		GusfieldGomoryHuCutTree<Integer, ?> alg = globalHandles.get(gomoryHu);

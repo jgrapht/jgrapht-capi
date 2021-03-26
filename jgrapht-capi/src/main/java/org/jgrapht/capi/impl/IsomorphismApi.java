@@ -62,11 +62,11 @@ public class IsomorphismApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYINT
 			+ "isomorphism_graph_mapping_edge_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphMappingEdge(IsolateThread thread, ObjectHandle mappingHandle, int edge, boolean forward,
 			CIntPointer existsEdgeRes, CIntPointer edgeRes) {
-		GraphMapping<Integer, Integer> graphMapping = globalHandles.get(mappingHandle);
+		GraphMapping<?, Integer> graphMapping = globalHandles.get(mappingHandle);
 
 		Integer otherEdge = graphMapping.getEdgeCorrespondence(edge, forward);
 		if (existsEdgeRes.isNonNull()) {
@@ -82,11 +82,11 @@ public class IsomorphismApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYLONG
 			+ "isomorphism_graph_mapping_edge_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphMappingEdge(IsolateThread thread, ObjectHandle mappingHandle, long edge, boolean forward,
 			CIntPointer existsEdgeRes, CLongPointer edgeRes) {
-		GraphMapping<Long, Long> graphMapping = globalHandles.get(mappingHandle);
+		GraphMapping<?, Long> graphMapping = globalHandles.get(mappingHandle);
 
 		Long otherEdge = graphMapping.getEdgeCorrespondence(edge, forward);
 		if (existsEdgeRes.isNonNull()) {
@@ -102,11 +102,11 @@ public class IsomorphismApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "isomorphism_graph_mapping_vertex_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphMappingVertex(IsolateThread thread, ObjectHandle mappingHandle, int vertex, boolean forward,
 			CIntPointer existsVertexRes, CIntPointer vertexRes) {
-		GraphMapping<Integer, Integer> graphMapping = globalHandles.get(mappingHandle);
+		GraphMapping<Integer, ?> graphMapping = globalHandles.get(mappingHandle);
 
 		Integer otherVertex = graphMapping.getVertexCorrespondence(vertex, forward);
 		if (existsVertexRes.isNonNull()) {
@@ -122,11 +122,11 @@ public class IsomorphismApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "isomorphism_graph_mapping_vertex_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphMappingVertex(IsolateThread thread, ObjectHandle mappingHandle, long vertex, boolean forward,
 			CIntPointer existsVertexRes, CLongPointer vertexRes) {
-		GraphMapping<Long, Long> graphMapping = globalHandles.get(mappingHandle);
+		GraphMapping<Long, ?> graphMapping = globalHandles.get(mappingHandle);
 
 		Long otherVertex = graphMapping.getVertexCorrespondence(vertex, forward);
 		if (existsVertexRes.isNonNull()) {

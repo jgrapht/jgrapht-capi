@@ -93,12 +93,12 @@ public class ScoringApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "scoring_exec_custom_katz_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeKatzCentrality(IsolateThread thread, ObjectHandle graphHandle, double dampingFactor,
 			IntegerToDoubleFunctionPointer exogenousFactorFunctionPointer, int maxIterations, double tolerance,
 			WordPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 
 		ToDoubleFunction<Integer> exogenousFactorFunction;
 		if (exogenousFactorFunctionPointer.isNull()) {
@@ -117,12 +117,12 @@ public class ScoringApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "scoring_exec_custom_katz_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeKatzCentrality(IsolateThread thread, ObjectHandle graphHandle, double dampingFactor,
 			LongToDoubleFunctionPointer exogenousFactorFunctionPointer, int maxIterations, double tolerance,
 			WordPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<Long, ?> g = globalHandles.get(graphHandle);
 
 		ToDoubleFunction<Long> exogenousFactorFunction;
 		if (exogenousFactorFunctionPointer.isNull()) {

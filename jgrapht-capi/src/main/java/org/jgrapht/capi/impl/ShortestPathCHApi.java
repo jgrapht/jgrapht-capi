@@ -60,7 +60,7 @@ public class ShortestPathCHApi {
 	 * @param res    a {@link GraphPath} handle
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "sp_manytomany_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int manyToManyGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, int source,
 			int target, WordPointer res) {
@@ -86,7 +86,7 @@ public class ShortestPathCHApi {
 	 * @param res    a {@link GraphPath} handle
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "sp_manytomany_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int manyToManyGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, long source,
 			long target, WordPointer res) {
@@ -169,15 +169,15 @@ public class ShortestPathCHApi {
 	 * @param res      handle to a {@link GraphPath}.
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCHBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle chHandle, int source,
 			int target, double radius, WordPointer pathRes) {
-		ContractionHierarchy<Integer, Integer> ch = globalHandles.get(chHandle);
+		ContractionHierarchy<Integer, ?> ch = globalHandles.get(chHandle);
 
-		ContractionHierarchyBidirectionalDijkstra<Integer, Integer> alg = new ContractionHierarchyBidirectionalDijkstra<>(
+		ContractionHierarchyBidirectionalDijkstra<Integer, ?> alg = new ContractionHierarchyBidirectionalDijkstra<>(
 				ch, radius, PairingHeap::new);
-		GraphPath<Integer, Integer> path = alg.getPath(source, target);
+		GraphPath<Integer, ?> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
 				pathRes.write(globalHandles.create(path));
@@ -199,15 +199,15 @@ public class ShortestPathCHApi {
 	 * @param res      handle to a {@link GraphPath}.
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCHBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle chHandle, long source,
 			long target, double radius, WordPointer pathRes) {
-		ContractionHierarchy<Long, Long> ch = globalHandles.get(chHandle);
+		ContractionHierarchy<Long, ?> ch = globalHandles.get(chHandle);
 
-		ContractionHierarchyBidirectionalDijkstra<Long, Long> alg = new ContractionHierarchyBidirectionalDijkstra<>(ch,
+		ContractionHierarchyBidirectionalDijkstra<Long, ?> alg = new ContractionHierarchyBidirectionalDijkstra<>(ch,
 				radius, PairingHeap::new);
-		GraphPath<Long, Long> path = alg.getPath(source, target);
+		GraphPath<Long, ?> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
 				pathRes.write(globalHandles.create(path));
@@ -247,12 +247,12 @@ public class ShortestPathCHApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "sp_exec_transit_node_routing_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeTransitNodeRoutingBetween(IsolateThread thread, ObjectHandle tnrHandle, int source, int target,
 			WordPointer pathRes) {
-		TransitNodeRoutingShortestPath<Integer, Integer> tnr = globalHandles.get(tnrHandle);
-		GraphPath<Integer, Integer> path = tnr.getPath(source, target);
+		TransitNodeRoutingShortestPath<Integer, ?> tnr = globalHandles.get(tnrHandle);
+		GraphPath<Integer, ?> path = tnr.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
 				pathRes.write(globalHandles.create(path));
@@ -263,12 +263,12 @@ public class ShortestPathCHApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "sp_exec_transit_node_routing_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeTransitNodeRoutingBetween(IsolateThread thread, ObjectHandle tnrHandle, long source, long target,
 			WordPointer pathRes) {
-		TransitNodeRoutingShortestPath<Long, Long> tnr = globalHandles.get(tnrHandle);
-		GraphPath<Long, Long> path = tnr.getPath(source, target);
+		TransitNodeRoutingShortestPath<Long, ?> tnr = globalHandles.get(tnrHandle);
+		GraphPath<Long, ?> path = tnr.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
 				pathRes.write(globalHandles.create(path));
@@ -279,24 +279,24 @@ public class ShortestPathCHApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "sp_exec_transit_node_routing_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeTransitNodeRoutingFrom(IsolateThread thread, ObjectHandle tnrHandle, int source,
 			WordPointer pathsRes) {
-		TransitNodeRoutingShortestPath<Integer, Integer> tnr = globalHandles.get(tnrHandle);
-		SingleSourcePaths<Integer, Integer> paths = tnr.getPaths(source);
+		TransitNodeRoutingShortestPath<Integer, ?> tnr = globalHandles.get(tnrHandle);
+		SingleSourcePaths<Integer, ?> paths = tnr.getPaths(source);
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "sp_exec_transit_node_routing_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeTransitNodeRoutingFrom(IsolateThread thread, ObjectHandle tnrHandle, long source,
 			WordPointer pathsRes) {
-		TransitNodeRoutingShortestPath<Long, Long> tnr = globalHandles.get(tnrHandle);
-		SingleSourcePaths<Long, Long> paths = tnr.getPaths(source);
+		TransitNodeRoutingShortestPath<Long, ?> tnr = globalHandles.get(tnrHandle);
+		SingleSourcePaths<Long, ?> paths = tnr.getPaths(source);
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
 		}

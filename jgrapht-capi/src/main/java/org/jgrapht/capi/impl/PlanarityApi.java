@@ -45,22 +45,22 @@ public class PlanarityApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "planarity_embedding_edges_around_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgesAround(IsolateThread thread, ObjectHandle embeddingHandle, int vertex, WordPointer res) {
-		Embedding<Integer, Integer> embedding = globalHandles.get(embeddingHandle);
-		List<Integer> list = embedding.getEdgesAround(vertex);
+		Embedding<Integer, ?> embedding = globalHandles.get(embeddingHandle);
+		List<?> list = embedding.getEdgesAround(vertex);
 		if (list != null && res.isNonNull()) {
 			res.write(globalHandles.create(list.iterator()));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "planarity_embedding_edges_around_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgesAround(IsolateThread thread, ObjectHandle embeddingHandle, long vertex, WordPointer res) {
-		Embedding<Long, Long> embedding = globalHandles.get(embeddingHandle);
-		List<Long> list = embedding.getEdgesAround(vertex);
+		Embedding<Long, ?> embedding = globalHandles.get(embeddingHandle);
+		List<?> list = embedding.getEdgesAround(vertex);
 		if (list != null && res.isNonNull()) {
 			res.write(globalHandles.create(list.iterator()));
 		}

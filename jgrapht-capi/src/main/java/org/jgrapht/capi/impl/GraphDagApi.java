@@ -135,44 +135,44 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (int-int) dag and a vertex returns its descendants.")
 	public static int createVertexDescendants(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
-		CapiGraph<Integer, Integer> graph = globalHandles.get(graphHandle);
+		CapiGraph<Integer, ?> graph = globalHandles.get(graphHandle);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph.getDescendants(vertex)));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (long-long) dag and a vertex returns its descendants.")
 	public static int createVertexDescendants(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
-		CapiGraph<Long, Long> graph = globalHandles.get(graphHandle);
+		CapiGraph<Long, ?> graph = globalHandles.get(graphHandle);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph.getDescendants(vertex)));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (int-int) dag and a vertex returns its ancestors.")
 	public static int createVertexAncestors(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
-		CapiGraph<Integer, Integer> graph = globalHandles.get(graphHandle);
+		CapiGraph<Integer, ?> graph = globalHandles.get(graphHandle);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph.getAncestors(vertex)));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (long-long) dag and a vertex returns its ancestors.")
 	public static int createVertexAncestors(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
-		CapiGraph<Long, Long> graph = globalHandles.get(graphHandle);
+		CapiGraph<Long, ?> graph = globalHandles.get(graphHandle);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph.getAncestors(vertex)));
 		}
