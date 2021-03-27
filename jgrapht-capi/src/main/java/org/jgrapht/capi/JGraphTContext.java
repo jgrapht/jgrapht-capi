@@ -8,6 +8,7 @@ import org.graalvm.nativeimage.c.function.CFunctionPointer;
 import org.graalvm.nativeimage.c.function.InvokeCFunctionPointer;
 import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
+import org.graalvm.word.PointerBase;
 
 @CContext(JGraphTDirectives.class)
 public class JGraphTContext {
@@ -16,19 +17,9 @@ public class JGraphTContext {
 	public enum Status {
 
 		// @formatter:off
-		STATUS_SUCCESS, 
-		STATUS_ERROR, 
-		STATUS_ILLEGAL_ARGUMENT, 
-		STATUS_UNSUPPORTED_OPERATION, 
-		STATUS_INDEX_OUT_OF_BOUNDS,
-		STATUS_NO_SUCH_ELEMENT, 
-		STATUS_NULL_POINTER, 
-		STATUS_CLASS_CAST, 
-		STATUS_IO_ERROR, 
-		STATUS_EXPORT_ERROR,
-		STATUS_IMPORT_ERROR, 
-		STATUS_NEGATIVE_CYCLE_DETECTED,
-		STATUS_NUMBER_FORMAT_EXCEPTION;
+		STATUS_SUCCESS, STATUS_ERROR, STATUS_ILLEGAL_ARGUMENT, STATUS_UNSUPPORTED_OPERATION, STATUS_INDEX_OUT_OF_BOUNDS,
+		STATUS_NO_SUCH_ELEMENT, STATUS_NULL_POINTER, STATUS_CLASS_CAST, STATUS_IO_ERROR, STATUS_EXPORT_ERROR,
+		STATUS_IMPORT_ERROR, STATUS_NEGATIVE_CYCLE_DETECTED, STATUS_NUMBER_FORMAT_EXCEPTION;
 		// @formatter:on
 
 		@CEnumValue
@@ -43,9 +34,7 @@ public class JGraphTContext {
 	public enum ExporterDIMACSFormat {
 
 		// @formatter:off
-		DIMACS_FORMAT_SHORTEST_PATH,
-		DIMACS_FORMAT_MAX_CLIQUE,
-		DIMACS_FORMAT_COLORING,;
+		DIMACS_FORMAT_SHORTEST_PATH, DIMACS_FORMAT_MAX_CLIQUE, DIMACS_FORMAT_COLORING,;
 		// @formatter:on
 
 		@CEnumValue
@@ -60,9 +49,7 @@ public class JGraphTContext {
 	public enum ImporterExporterCSVFormat {
 
 		// @formatter:off
-		CSV_FORMAT_EDGE_LIST, 
-		CSV_FORMAT_ADJACENCY_LIST, 
-		CSV_FORMAT_MATRIX,;
+		CSV_FORMAT_EDGE_LIST, CSV_FORMAT_ADJACENCY_LIST, CSV_FORMAT_MATRIX,;
 		// @formatter:on
 
 		@CEnumValue
@@ -77,15 +64,9 @@ public class JGraphTContext {
 	public enum GraphEvent {
 
 		// @formatter:off
-		GRAPH_EVENT_BEFORE_VERTEX_ADDED, 
-		GRAPH_EVENT_BEFORE_VERTEX_REMOVED, 
-		GRAPH_EVENT_VERTEX_ADDED,
-		GRAPH_EVENT_VERTEX_REMOVED, 
-		GRAPH_EVENT_BEFORE_EDGE_ADDED, 
-		GRAPH_EVENT_BEFORE_EDGE_REMOVED,
-		GRAPH_EVENT_EDGE_ADDED, 
-		GRAPH_EVENT_EDGE_REMOVED, 
-		GRAPH_EVENT_EDGE_WEIGHT_UPDATED,;
+		GRAPH_EVENT_BEFORE_VERTEX_ADDED, GRAPH_EVENT_BEFORE_VERTEX_REMOVED, GRAPH_EVENT_VERTEX_ADDED,
+		GRAPH_EVENT_VERTEX_REMOVED, GRAPH_EVENT_BEFORE_EDGE_ADDED, GRAPH_EVENT_BEFORE_EDGE_REMOVED,
+		GRAPH_EVENT_EDGE_ADDED, GRAPH_EVENT_EDGE_REMOVED, GRAPH_EVENT_EDGE_WEIGHT_UPDATED,;
 		// @formatter:on
 
 		@CEnumValue
@@ -100,15 +81,8 @@ public class JGraphTContext {
 	public enum AttributeType {
 
 		// @formatter:off
-		ATTRIBUTE_TYPE_NULL, 
-		ATTRIBUTE_TYPE_BOOLEAN, 
-		ATTRIBUTE_TYPE_INT, 
-		ATTRIBUTE_TYPE_LONG, 
-		ATTRIBUTE_TYPE_FLOAT,
-		ATTRIBUTE_TYPE_DOUBLE, 
-		ATTRIBUTE_TYPE_STRING, 
-		ATTRIBUTE_TYPE_HTML, 
-		ATTRIBUTE_TYPE_UNKNOWN,
+		ATTRIBUTE_TYPE_NULL, ATTRIBUTE_TYPE_BOOLEAN, ATTRIBUTE_TYPE_INT, ATTRIBUTE_TYPE_LONG, ATTRIBUTE_TYPE_FLOAT,
+		ATTRIBUTE_TYPE_DOUBLE, ATTRIBUTE_TYPE_STRING, ATTRIBUTE_TYPE_HTML, ATTRIBUTE_TYPE_UNKNOWN,
 		ATTRIBUTE_TYPE_IDENTIFIER;
 		// @formatter:on
 
@@ -124,8 +98,7 @@ public class JGraphTContext {
 	public enum IncomingEdgesSupport {
 
 		// @formatter:off
-		INCOMING_EDGES_SUPPORT_NO_INCOMING_EDGES,
-		INCOMING_EDGES_SUPPORT_LAZY_INCOMING_EDGES,
+		INCOMING_EDGES_SUPPORT_NO_INCOMING_EDGES, INCOMING_EDGES_SUPPORT_LAZY_INCOMING_EDGES,
 		INCOMING_EDGES_SUPPORT_FULL_INCOMING_EDGES;
 		// @formatter:on
 
@@ -136,7 +109,7 @@ public class JGraphTContext {
 		public static native IncomingEdgesSupport toJavaEnum(int value);
 
 	}
-	
+
 	public interface VoidToIntegerFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
@@ -340,6 +313,20 @@ public class JGraphTContext {
 
 		@InvokeCFunctionPointer
 		double invoke(double d1, double d2);
+
+	}
+
+	public interface PToIFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		int invoke(PointerBase p1);
+
+	}
+	
+	public interface PPToIFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		int invoke(PointerBase p1, PointerBase p2);
 
 	}
 

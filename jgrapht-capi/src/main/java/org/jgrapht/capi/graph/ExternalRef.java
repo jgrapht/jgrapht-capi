@@ -1,32 +1,30 @@
 package org.jgrapht.capi.graph;
 
-import org.jgrapht.capi.JGraphTContext.LLToIFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.LongToIntegerFunctionPointer;
+import org.graalvm.word.PointerBase;
+import org.jgrapht.capi.JGraphTContext.PPToIFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PToIFunctionPointer;
 
 /**
  * A reference to an external object.
  */
 public class ExternalRef {
 
-	private final long id;
-	private final LLToIFunctionPointer equalsPtr;
-	private final LongToIntegerFunctionPointer hashPtr;
+	private final PointerBase ptr;
+	private final PPToIFunctionPointer equalsPtr;
+	private final PToIFunctionPointer hashPtr;
 
-	public ExternalRef(long id, LLToIFunctionPointer equalsPtr, LongToIntegerFunctionPointer hashPtr) {
-		this.id = id;
+	public ExternalRef(PointerBase ptr, PPToIFunctionPointer equalsPtr, PToIFunctionPointer hashPtr) {
+		this.ptr = ptr;
 		this.equalsPtr = equalsPtr;
 		this.hashPtr = hashPtr;
-	}
-
-	public long getId() {
-		return id;
 	}
 
 	@Override
 	public int hashCode() {
 		if (hashPtr.isNonNull()) {
-			return hashPtr.invoke(this.id);
+			return hashPtr.invoke(ptr);
 		}
+		long id = ptr.rawValue();
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (int) (id ^ (id >>> 32));
@@ -43,9 +41,9 @@ public class ExternalRef {
 			return false;
 		ExternalRef other = (ExternalRef) obj;
 		if (equalsPtr.isNonNull()) {
-			return equalsPtr.invoke(id, other.id) != 0;
+			return equalsPtr.invoke(ptr, other.ptr) != 0;
 		}
-		if (id != other.id)
+		if (ptr.rawValue() != other.ptr.rawValue())
 			return false;
 		return true;
 	}
