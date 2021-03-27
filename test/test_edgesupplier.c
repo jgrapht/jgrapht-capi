@@ -60,7 +60,7 @@ int main() {
     assert(added == 0);
 
     int contains = 0;
-    jgrapht_capi_ii_graph_contains_edge(thread, g, 3, &contains);
+    jgrapht_capi_xi_graph_contains_edge(thread, g, 3, &contains);
     assert(contains == 1);
 
     assert(jgrapht_capi_ii_graph_add_edge(thread, g, 1, 2, &e) == 0);

@@ -41,36 +41,43 @@ public class Constants {
 	public static final String INTINT = "ii_";
 
 	/**
-	 * Indicates a method working on a graph with integer vertices and any type of edges.
-	 * edges.
+	 * Indicates a method working on a graph with integer vertices and any type of
+	 * edges. edges.
 	 */
 	public static final String INTANY = "ix_";
-	
+
 	/**
-	 * Indicates a method working on a graph with any type vertices and integer edges.
-	 * edges.
+	 * Indicates a method working on a graph with any type vertices and integer
+	 * edges. edges.
 	 */
 	public static final String ANYINT = "xi_";
-	
+
 	/**
 	 * Indicates a method working on a graph with long vertices and long edges.
 	 */
 	public static final String LONGLONG = "ll_";
 
 	/**
-	 * Indicates a method working on a graph with long vertices and any type of edges.
+	 * Indicates a method working on a graph with long vertices and any type of
+	 * edges.
 	 */
 	public static final String LONGANY = "lx_";
-	
+
 	/**
 	 * Indicates a method working on a graph with any type vertices and long edges.
 	 * edges.
 	 */
-	public static final String ANYLONG = "xl_";	
-	
+	public static final String ANYLONG = "xl_";
+
 	/**
 	 * Indicates a method working on a graph with any type of vertices and edges.
 	 */
 	public static final String ANYANY = "xx_";
+
+	/**
+	 * Indicates a method working on a graph with external references for vertices
+	 * and external references for edges.
+	 */
+	public static final String REFREF = "rr_";
 
 }

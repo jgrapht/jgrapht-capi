@@ -335,8 +335,8 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "graph_vertices_count", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int verticesCount(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
-		long result = g.vertexSet().size();
+		Graph<?, ?> g = globalHandles.get(graphHandle);
+		long result = g.iterables().vertexCount();
 		if (res.isNonNull()) {
 			res.write(result);
 		}
@@ -358,7 +358,7 @@ public class GraphApi {
 			+ "graph_edges_count", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgesCount(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
-		long result = g.edgeSet().size();
+		long result = g.iterables().edgeCount();
 		if (res.isNonNull()) {
 			res.write(result);
 		}
@@ -506,10 +506,10 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYINT
 			+ "graph_remove_edge", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeEdge(IsolateThread thread, ObjectHandle graphHandle, int edge, CIntPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<?, Integer> g = globalHandles.get(graphHandle);
 		boolean result = g.removeEdge(edge);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
@@ -517,10 +517,10 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYLONG
 			+ "graph_remove_edge", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeEdge(IsolateThread thread, ObjectHandle graphHandle, long edge, CIntPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<?, Long> g = globalHandles.get(graphHandle);
 		boolean result = g.removeEdge(edge);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
@@ -528,10 +528,10 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYINT
 			+ "graph_contains_edge", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsEdge(IsolateThread thread, ObjectHandle graphHandle, int edge, CIntPointer res) {
-		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
+		Graph<?, Integer> g = globalHandles.get(graphHandle);
 		boolean result = g.containsEdge(edge);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
@@ -539,10 +539,10 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYLONG
 			+ "graph_contains_edge", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsEdge(IsolateThread thread, ObjectHandle graphHandle, long edge, CIntPointer res) {
-		Graph<Long, Long> g = globalHandles.get(graphHandle);
+		Graph<?, Long> g = globalHandles.get(graphHandle);
 		boolean result = g.containsEdge(edge);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
@@ -589,7 +589,7 @@ public class GraphApi {
 			+ "graph_degree_of", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int degreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex, CLongPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
-		long result = g.degreeOf(vertex);
+		long result = g.iterables().degreeOf(vertex);
 		if (res.isNonNull()) {
 			res.write(result);
 		}
@@ -611,7 +611,7 @@ public class GraphApi {
 			+ "graph_indegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int inDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex, CLongPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
-		long result = g.inDegreeOf(vertex);
+		long result = g.iterables().inDegreeOf(vertex);
 		if (res.isNonNull()) {
 			res.write(result);
 		}
@@ -633,7 +633,7 @@ public class GraphApi {
 			+ "graph_outdegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int outDegreeOf(IsolateThread thread, ObjectHandle graphHandle, long vertex, CLongPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
-		long result = g.outDegreeOf(vertex);
+		long result = g.iterables().outDegreeOf(vertex);
 		if (res.isNonNull()) {
 			res.write(result);
 		}
@@ -803,7 +803,7 @@ public class GraphApi {
 			+ "graph_create_all_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createAllVerticesIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
-		Iterator<?> it = g.vertexSet().iterator();
+		Iterator<?> it = g.iterables().vertices().iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
@@ -814,7 +814,7 @@ public class GraphApi {
 			+ "graph_create_all_eit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createAllEdgesIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
-		Iterator<?> it = g.edgeSet().iterator();
+		Iterator<?> it = g.iterables().edges().iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
@@ -842,7 +842,7 @@ public class GraphApi {
 	public static int createEdgesBetweenIterator(IsolateThread thread, ObjectHandle graphHandle, long source,
 			long target, WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
-		Set<?> edges = g.getAllEdges(source, target);
+		Iterable<?> edges = g.iterables().allEdges(source, target);
 		if (edges == null) {
 			throw new IllegalArgumentException("Unknown vertex " + source + " or " + target);
 		}
@@ -870,7 +870,7 @@ public class GraphApi {
 	public static int createVertexEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
-		Iterator<?> it = g.edgesOf(vertex).iterator();
+		Iterator<?> it = g.iterables().edgesOf(vertex).iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
@@ -894,7 +894,7 @@ public class GraphApi {
 	public static int createVertexOutEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
-		Iterator<?> it = g.outgoingEdgesOf(vertex).iterator();
+		Iterator<?> it = g.iterables().outgoingEdgesOf(vertex).iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}
@@ -918,7 +918,7 @@ public class GraphApi {
 	public static int createVertexInEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
-		Iterator<?> it = g.incomingEdgesOf(vertex).iterator();
+		Iterator<?> it = g.iterables().incomingEdgesOf(vertex).iterator();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(it));
 		}

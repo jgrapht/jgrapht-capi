@@ -159,7 +159,7 @@ int main() {
     jgrapht_capi_ix_graph_edges_count(thread, g1, &ecount);
     assert(ecount == 2);
     int contains=1;
-    jgrapht_capi_ii_graph_contains_edge(thread, g1, e23_1, &contains);
+    jgrapht_capi_xi_graph_contains_edge(thread, g1, e23_1, &contains);
     assert(contains == 0);
     jgrapht_capi_handles_destroy(thread, g1);
 
