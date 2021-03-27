@@ -332,9 +332,9 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_vertices_count", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int verticesCount(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
+	public static int anyVerticesCount(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
 		long result = g.iterables().vertexCount();
 		if (res.isNonNull()) {
@@ -354,7 +354,7 @@ public class GraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
 			+ "graph_edges_count", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgesCount(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);

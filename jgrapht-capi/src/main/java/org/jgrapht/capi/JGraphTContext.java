@@ -322,18 +322,46 @@ public class JGraphTContext {
 		int invoke(PointerBase p1);
 
 	}
-	
+
 	public interface PToLFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
 		long invoke(PointerBase p1);
 
 	}
-	
+
+	public interface PToPFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		PointerBase invoke(PointerBase p1);
+
+	}
+
+	public interface VToPFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		PointerBase invoke();
+
+	}
+
 	public interface PPToIFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
 		int invoke(PointerBase p1, PointerBase p2);
+
+	}
+
+	public interface PtrToHashFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		PToLFunctionPointer invoke(PointerBase p1);
+
+	}
+
+	public interface PtrToEqualsFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		PPToIFunctionPointer invoke(PointerBase p1);
 
 	}
 

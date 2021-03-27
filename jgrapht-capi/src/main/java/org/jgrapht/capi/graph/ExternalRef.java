@@ -19,6 +19,10 @@ public class ExternalRef {
 		this.hashPtr = hashPtr;
 	}
 
+	public PointerBase getPtr() {
+		return ptr;
+	}
+
 	@Override
 	public int hashCode() {
 		if (hashPtr.isNonNull()) {

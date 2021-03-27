@@ -47,7 +47,7 @@ int main() {
     jgrapht_capi_lx_graph_add_vertex(thread, g, &v5);
 
     long long vcount;
-    jgrapht_capi_lx_graph_vertices_count(thread, g, &vcount);
+    jgrapht_capi_xx_graph_vertices_count(thread, g, &vcount);
     assert(vcount == 5);
 
     long long e12;

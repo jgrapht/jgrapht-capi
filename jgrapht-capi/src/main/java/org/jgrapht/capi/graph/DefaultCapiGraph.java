@@ -20,8 +20,14 @@ package org.jgrapht.capi.graph;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.graalvm.word.PointerBase;
+import org.graalvm.word.WordFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.ListenableGraph;
+import org.jgrapht.capi.JGraphTContext.PPToIFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PToLFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PtrToEqualsFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PtrToHashFunctionPointer;
 import org.jgrapht.capi.attributes.GraphAttributesStore;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.VertexSetListener;
@@ -35,6 +41,23 @@ public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements Capi
 	protected Graph<V, E> graph;
 	protected GraphAttributesStore<V, E> store;
 
+	/**
+	 * Method to lookup the hash function in case the graph contains external
+	 * references. Otherwise null.
+	 */
+	protected PtrToHashFunctionPointer hashLookup;
+
+	/**
+	 * Method to lookup the equals function in case the graph contains external
+	 * references. Otherwise null.
+	 */
+	protected PtrToEqualsFunctionPointer equalsLookup;
+
+	/**
+	 * Create a graph.
+	 * 
+	 * @param graph the actual graph.
+	 */
 	public DefaultCapiGraph(Graph<V, E> graph) {
 		super(graph);
 		this.graph = graph;
@@ -44,6 +67,43 @@ public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements Capi
 	@Override
 	public GraphAttributesStore<V, E> getStore() {
 		return store;
+	}
+
+	public PtrToHashFunctionPointer getHashLookup() {
+		return hashLookup;
+	}
+
+	public void setHashLookup(PtrToHashFunctionPointer hashLookup) {
+		this.hashLookup = hashLookup;
+	}
+
+	public PtrToEqualsFunctionPointer getEqualsLookup() {
+		return equalsLookup;
+	}
+
+	public void setEqualsLookup(PtrToEqualsFunctionPointer equalsLookup) {
+		this.equalsLookup = equalsLookup;
+	}
+
+	public PToLFunctionPointer resolveHashFunction(PointerBase ptr) {
+		if (hashLookup.isNull()) {
+			return WordFactory.nullPointer();
+		}
+		return hashLookup.invoke(ptr);
+	}
+
+	public PPToIFunctionPointer resolveEqualsFunction(PointerBase ptr) {
+		if (equalsLookup.isNull()) {
+			return WordFactory.nullPointer();
+		}
+		return equalsLookup.invoke(ptr);
+	}
+
+	public ExternalRef toExternalRef(PointerBase ptr) {
+		PToLFunctionPointer hashPtr = resolveHashFunction(ptr);
+		PPToIFunctionPointer equalsPtr = resolveEqualsFunction(ptr);
+		ExternalRef ref = new ExternalRef(ptr, equalsPtr, hashPtr);
+		return ref;
 	}
 
 	@Override
