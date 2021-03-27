@@ -2,7 +2,7 @@ package org.jgrapht.capi.graph;
 
 import org.graalvm.word.PointerBase;
 import org.jgrapht.capi.JGraphTContext.PPToIFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.PToIFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PToLFunctionPointer;
 
 /**
  * A reference to an external object.
@@ -11,9 +11,9 @@ public class ExternalRef {
 
 	private final PointerBase ptr;
 	private final PPToIFunctionPointer equalsPtr;
-	private final PToIFunctionPointer hashPtr;
+	private final PToLFunctionPointer hashPtr;
 
-	public ExternalRef(PointerBase ptr, PPToIFunctionPointer equalsPtr, PToIFunctionPointer hashPtr) {
+	public ExternalRef(PointerBase ptr, PPToIFunctionPointer equalsPtr, PToLFunctionPointer hashPtr) {
 		this.ptr = ptr;
 		this.equalsPtr = equalsPtr;
 		this.hashPtr = hashPtr;
@@ -22,13 +22,9 @@ public class ExternalRef {
 	@Override
 	public int hashCode() {
 		if (hashPtr.isNonNull()) {
-			return hashPtr.invoke(ptr);
+			return Long.hashCode(hashPtr.invoke(ptr));
 		}
-		long id = ptr.rawValue();
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (int) (id ^ (id >>> 32));
-		return result;
+		return Long.hashCode(ptr.rawValue());
 	}
 
 	@Override
@@ -41,7 +37,11 @@ public class ExternalRef {
 			return false;
 		ExternalRef other = (ExternalRef) obj;
 		if (equalsPtr.isNonNull()) {
-			return equalsPtr.invoke(ptr, other.ptr) != 0;
+			int comp = equalsPtr.invoke(ptr, other.ptr);
+			if (comp == -1) {
+				throw new IllegalArgumentException("Error occured when calling external comparison function.");
+			}
+			return comp != 0;
 		}
 		if (ptr.rawValue() != other.ptr.rawValue())
 			return false;
