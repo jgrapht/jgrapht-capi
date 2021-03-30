@@ -133,12 +133,27 @@ public class IteratorApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	/**
+	 * Get the next external reference.
+	 * 
+	 * @param thread        the isolate thread
+	 * @param itHandle      the iterator handle
+	 * @param create_handle whether to create a handle for the external reference or
+	 *                      simply return its address (deference in one step)
+	 * @param res           the handle to the reference or its address
+	 * @return
+	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_ref", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int iteratorNextRef(IsolateThread thread, ObjectHandle itHandle, WordPointer res) {
+	public static int iteratorNextRef(IsolateThread thread, ObjectHandle itHandle, boolean create_handle,
+			WordPointer res) {
 		Iterator<ExternalRef> it = globalHandles.get(itHandle);
 		ExternalRef o = it.next();
 		if (res.isNonNull()) {
-			res.write(o.getPtr());
+			if (create_handle) {
+				res.write(globalHandles.create(o));
+			} else {
+				res.write(o.getPtr());
+			}
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
