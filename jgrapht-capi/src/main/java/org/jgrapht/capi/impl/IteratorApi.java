@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -34,6 +34,7 @@ import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.ExternalRef;
 
 public class IteratorApi {
 
@@ -47,7 +48,7 @@ public class IteratorApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_long", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorNextLong(IsolateThread thread, ObjectHandle itHandle, CLongPointer res) {
 		Iterator<Long> it = globalHandles.get(itHandle);
@@ -80,14 +81,14 @@ public class IteratorApi {
 		}
 		if (weight.isNonNull()) {
 			Double edgeWeight = triple.getThird();
-			if (edgeWeight == null) { 
+			if (edgeWeight == null) {
 				edgeWeight = Graph.DEFAULT_EDGE_WEIGHT;
 			}
 			weight.write(edgeWeight);
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "it_next_long_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorNextLongEdgeTriple(IsolateThread thread, ObjectHandle itHandle, CLongPointer source,
@@ -102,14 +103,14 @@ public class IteratorApi {
 		}
 		if (weight.isNonNull()) {
 			Double edgeWeight = triple.getThird();
-			if (edgeWeight == null) { 
+			if (edgeWeight == null) {
 				edgeWeight = Graph.DEFAULT_EDGE_WEIGHT;
 			}
 			weight.write(edgeWeight);
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "it_next_str_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorNextStrEdgeTriple(IsolateThread thread, ObjectHandle itHandle, CCharPointerPointer source,
@@ -124,10 +125,20 @@ public class IteratorApi {
 		}
 		if (weight.isNonNull()) {
 			Double edgeWeight = triple.getThird();
-			if (edgeWeight == null) { 
+			if (edgeWeight == null) {
 				edgeWeight = Graph.DEFAULT_EDGE_WEIGHT;
 			}
 			weight.write(edgeWeight);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_ref", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int iteratorNextRef(IsolateThread thread, ObjectHandle itHandle, WordPointer res) {
+		Iterator<ExternalRef> it = globalHandles.get(itHandle);
+		ExternalRef o = it.next();
+		if (res.isNonNull()) {
+			res.write(o.getPtr());
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
