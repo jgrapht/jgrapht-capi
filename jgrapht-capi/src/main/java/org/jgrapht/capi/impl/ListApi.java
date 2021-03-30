@@ -31,6 +31,7 @@ import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.ExternalRef;
 
 public class ListApi {
 
@@ -86,6 +87,17 @@ public class ListApi {
 	public static int listDoubleAdd(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
 		List<Double> list = globalHandles.get(handle);
 		boolean result = list.add(value);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "list_ref_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listRefAdd(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle, CIntPointer res) {
+		List<ExternalRef> list = globalHandles.get(handle);
+		ExternalRef ref = globalHandles.get(refHandle);
+		boolean result = list.add(ref);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}
@@ -164,6 +176,15 @@ public class ListApi {
 		list.remove(value);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "list_ref_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle) {
+		List<ExternalRef> list = globalHandles.get(handle);
+		ExternalRef ref = globalHandles.get(refHandle);
+		list.remove(ref);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "list_int_contains", exceptionHandler = StatusReturnExceptionHandler.class)
@@ -192,6 +213,18 @@ public class ListApi {
 	public static int listDoubleContains(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
 		List<Double> list = globalHandles.get(handle);
 		boolean result = list.contains(value);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "list_ref_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listRefContains(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle, CIntPointer res) {
+		List<ExternalRef> list = globalHandles.get(handle);
+		ExternalRef ref = globalHandles.get(refHandle);
+		boolean result = list.contains(ref);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
 		}

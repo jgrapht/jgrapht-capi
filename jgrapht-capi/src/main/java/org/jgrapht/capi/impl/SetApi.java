@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -30,6 +30,7 @@ import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.ExternalRef;
 
 public class SetApi {
 
@@ -79,7 +80,7 @@ public class SetApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_long_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setLongAdd(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
 		Set<Long> set = globalHandles.get(handle);
@@ -100,13 +101,24 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + "set_ref_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int setRefAdd(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle, CIntPointer res) {
+		Set<ExternalRef> set = globalHandles.get(handle);
+		ExternalRef ref = globalHandles.get(refHandle);
+		boolean result = set.add(ref);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_int_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setIntRemove(IsolateThread thread, ObjectHandle handle, int value) {
 		Set<Integer> set = globalHandles.get(handle);
 		set.remove(value);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_long_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setLongRemove(IsolateThread thread, ObjectHandle handle, long value) {
 		Set<Long> set = globalHandles.get(handle);
@@ -119,6 +131,14 @@ public class SetApi {
 	public static int setDoubleRemove(IsolateThread thread, ObjectHandle handle, double value) {
 		Set<Double> set = globalHandles.get(handle);
 		set.remove(value);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "set_ref_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle) {
+		Set<ExternalRef> set = globalHandles.get(handle);
+		ExternalRef ref = globalHandles.get(refHandle);
+		set.remove(ref);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -143,7 +163,7 @@ public class SetApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "set_double_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setDoubleContains(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
@@ -155,8 +175,21 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "set_ref_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int setRefContains(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
+			CIntPointer res) {
+		Set<ExternalRef> set = globalHandles.get(handle);
+		ExternalRef ref = globalHandles.get(refHandle);
+		boolean result = set.contains(ref);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_clear", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int clearMap(IsolateThread thread, ObjectHandle handle) {
+	public static int clearSet(IsolateThread thread, ObjectHandle handle) {
 		Set<?> set = globalHandles.get(handle);
 		set.clear();
 		return Status.STATUS_SUCCESS.getCValue();

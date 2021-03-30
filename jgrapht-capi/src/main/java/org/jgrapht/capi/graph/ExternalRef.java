@@ -23,6 +23,14 @@ public class ExternalRef {
 		return ptr;
 	}
 
+	public PPToIFunctionPointer getEqualsPtr() {
+		return equalsPtr;
+	}
+
+	public PToLFunctionPointer getHashPtr() {
+		return hashPtr;
+	}
+
 	@Override
 	public int hashCode() {
 		if (hashPtr.isNonNull()) {

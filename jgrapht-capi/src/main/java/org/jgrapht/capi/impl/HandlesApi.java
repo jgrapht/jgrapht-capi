@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -27,12 +27,16 @@ import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.word.PointerBase;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
+import org.jgrapht.capi.JGraphTContext.PPToIFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PToLFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.ExternalRef;
 
 public class HandlesApi {
 
@@ -47,6 +51,52 @@ public class HandlesApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + "handles_destroy", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int destroy(IsolateThread thread, ObjectHandle handle) {
 		globalHandles.destroy(handle);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * Create a reference to an external object.
+	 * 
+	 * @param thread    the isolate thread
+	 * @param refPtr    external object pointer
+	 * @param hashPtr   external object hash function pointer
+	 * @param equalsPtr external object equals function pointer
+	 * @param res       the resulting handle
+	 * @return status code
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + "handles_put_ref", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putRefHandle(IsolateThread thread, PointerBase refPtr, PToLFunctionPointer hashPtr,
+			PPToIFunctionPointer equalsPtr, WordPointer res) {
+		ExternalRef ref = new ExternalRef(refPtr, equalsPtr, hashPtr);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(ref));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * Read attributes of an external reference to an object.
+	 * 
+	 * @param thread       the isolate thread
+	 * @param refHandle    the handle to the external reference
+	 * @param refPtrRes    the pointer
+	 * @param hashPtrRes   the hash function pointer
+	 * @param equalsPtrRes the equals function pointer
+	 * @return
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + "handles_get_ref", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getRefHandle(IsolateThread thread, ObjectHandle refHandle, WordPointer refPtrRes,
+			WordPointer hashPtrRes, WordPointer equalsPtrRes) {
+		ExternalRef ref = globalHandles.get(refHandle);
+		if (refPtrRes.isNonNull()) {
+			refPtrRes.write(ref.getPtr());
+		}
+		if (hashPtrRes.isNonNull()) {
+			hashPtrRes.write(ref.getHashPtr());
+		}
+		if (equalsPtrRes.isNonNull()) {
+			equalsPtrRes.write(ref.getEqualsPtr());
+		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -84,7 +134,7 @@ public class HandlesApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "handles_get_long_edge_pair", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsLongEdgePair(IsolateThread thread, ObjectHandle handle, CLongPointer source,
@@ -119,7 +169,7 @@ public class HandlesApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "handles_get_long_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsLongEdgeTriple(IsolateThread thread, ObjectHandle handle, CLongPointer source,
@@ -138,7 +188,7 @@ public class HandlesApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "handles_get_str_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsStringEdgeTriple(IsolateThread thread, ObjectHandle handle, CCharPointerPointer source,
@@ -177,7 +227,7 @@ public class HandlesApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
 			+ "handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
