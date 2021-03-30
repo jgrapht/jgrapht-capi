@@ -46,7 +46,6 @@ public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements Capi
 		super(graph);
 		this.graph = graph;
 		this.store = new GraphAttributesStore<>();
-		this.hashAndEqualsResolver = new DefaultHashAndEqualsResolver();
 	}
 
 	@Override

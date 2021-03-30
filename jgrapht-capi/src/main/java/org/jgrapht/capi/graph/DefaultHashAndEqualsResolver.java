@@ -20,10 +20,6 @@ public class DefaultHashAndEqualsResolver implements HashAndEqualsResolver {
 	 * references. Otherwise null.
 	 */
 	private PtrToEqualsFunctionPointer equalsLookup;
-
-	public DefaultHashAndEqualsResolver() { 
-		this(null, null);
-	}
 	
 	public DefaultHashAndEqualsResolver(PtrToHashFunctionPointer hashLookup, PtrToEqualsFunctionPointer equalsLookup) {
 		this.hashLookup = hashLookup;
