@@ -21,37 +21,21 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.graalvm.word.PointerBase;
-import org.graalvm.word.WordFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.ListenableGraph;
-import org.jgrapht.capi.JGraphTContext.PPToIFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.PToLFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.PtrToEqualsFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.PtrToHashFunctionPointer;
 import org.jgrapht.capi.attributes.GraphAttributesStore;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.VertexSetListener;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.jgrapht.graph.GraphDelegator;
 
-public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements CapiGraph<V, E> {
+public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements CapiGraph<V, E>, HashAndEqualsResolver {
 
 	private static final long serialVersionUID = 1L;
 
 	protected Graph<V, E> graph;
 	protected GraphAttributesStore<V, E> store;
-
-	/**
-	 * Method to lookup the hash function in case the graph contains external
-	 * references. Otherwise null.
-	 */
-	protected PtrToHashFunctionPointer hashLookup;
-
-	/**
-	 * Method to lookup the equals function in case the graph contains external
-	 * references. Otherwise null.
-	 */
-	protected PtrToEqualsFunctionPointer equalsLookup;
+	protected HashAndEqualsResolver hashAndEqualsResolver;
 
 	/**
 	 * Create a graph.
@@ -62,6 +46,7 @@ public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements Capi
 		super(graph);
 		this.graph = graph;
 		this.store = new GraphAttributesStore<>();
+		this.hashAndEqualsResolver = new DefaultHashAndEqualsResolver();
 	}
 
 	@Override
@@ -69,41 +54,17 @@ public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements Capi
 		return store;
 	}
 
-	public PtrToHashFunctionPointer getHashLookup() {
-		return hashLookup;
+	public HashAndEqualsResolver getHashAndEqualsResolver() {
+		return hashAndEqualsResolver;
 	}
 
-	public void setHashLookup(PtrToHashFunctionPointer hashLookup) {
-		this.hashLookup = hashLookup;
+	public void setHashAndEqualsResolver(HashAndEqualsResolver hashAndEqualsResolver) {
+		this.hashAndEqualsResolver = hashAndEqualsResolver;
 	}
 
-	public PtrToEqualsFunctionPointer getEqualsLookup() {
-		return equalsLookup;
-	}
-
-	public void setEqualsLookup(PtrToEqualsFunctionPointer equalsLookup) {
-		this.equalsLookup = equalsLookup;
-	}
-
-	public PToLFunctionPointer resolveHashFunction(PointerBase ptr) {
-		if (hashLookup.isNull()) {
-			return WordFactory.nullPointer();
-		}
-		return hashLookup.invoke(ptr);
-	}
-
-	public PPToIFunctionPointer resolveEqualsFunction(PointerBase ptr) {
-		if (equalsLookup.isNull()) {
-			return WordFactory.nullPointer();
-		}
-		return equalsLookup.invoke(ptr);
-	}
-
+	@Override
 	public ExternalRef toExternalRef(PointerBase ptr) {
-		PToLFunctionPointer hashPtr = resolveHashFunction(ptr);
-		PPToIFunctionPointer equalsPtr = resolveEqualsFunction(ptr);
-		ExternalRef ref = new ExternalRef(ptr, equalsPtr, hashPtr);
-		return ref;
+		return hashAndEqualsResolver.toExternalRef(ptr);
 	}
 
 	@Override

@@ -37,8 +37,10 @@ import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.JGraphTContext.VToPFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.DefaultCapiGraph;
+import org.jgrapht.capi.graph.DefaultHashAndEqualsResolver;
 import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.capi.graph.ExternalRefSupplier;
+import org.jgrapht.capi.graph.HashAndEqualsResolver;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 
 /**
@@ -94,14 +96,26 @@ public class RefGraphApi {
 
 		// wrap in order to support all methods
 		DefaultCapiGraph<ExternalRef, ExternalRef> wrappedGraph = new DefaultCapiGraph<>(graph);
-		wrappedGraph.setEqualsLookup(equalsLookup);
-		wrappedGraph.setHashLookup(hashLookup);
+
+		// replace default hash and equals resolver
+		wrappedGraph.setHashAndEqualsResolver(new DefaultHashAndEqualsResolver(hashLookup, equalsLookup));
 
 		// provide graph in order to perform the hash and equals lookup
 		vSupplier.setGraph(wrappedGraph);
 		eSupplier.setGraph(wrappedGraph);
 
 		return wrappedGraph;
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_hash_equals_resolver_create", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createHashEqualsResolver(IsolateThread thread, PtrToHashFunctionPointer hashLookup,
+			PtrToEqualsFunctionPointer equalsLookup, WordPointer res) {
+		HashAndEqualsResolver resolver = new DefaultHashAndEqualsResolver(hashLookup, equalsLookup);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(resolver));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	/**
