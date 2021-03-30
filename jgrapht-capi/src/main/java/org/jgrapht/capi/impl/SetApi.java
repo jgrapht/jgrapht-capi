@@ -27,10 +27,12 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.word.PointerBase;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.ExternalRef;
+import org.jgrapht.capi.graph.HashAndEqualsResolver;
 
 public class SetApi {
 
@@ -112,6 +114,20 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "set_ref_add_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int setRefAdd(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
+			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
+		Set<ExternalRef> set = globalHandles.get(handle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef ref = resolver.toExternalRef(refPtr);
+		boolean result = set.add(ref);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_int_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setIntRemove(IsolateThread thread, ObjectHandle handle, int value) {
 		Set<Integer> set = globalHandles.get(handle);
@@ -135,6 +151,17 @@ public class SetApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_ref_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
+			ObjectHandle hashEqualsResolverHandle) {
+		Set<ExternalRef> set = globalHandles.get(handle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef ref = resolver.toExternalRef(refPtr);
+		set.remove(ref);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "set_ref_remove_direct", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle) {
 		Set<ExternalRef> set = globalHandles.get(handle);
 		ExternalRef ref = globalHandles.get(refHandle);
@@ -178,6 +205,19 @@ public class SetApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "set_ref_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setRefContains(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
+			CIntPointer res) {
+		Set<ExternalRef> set = globalHandles.get(handle);
+		ExternalRef ref = globalHandles.get(refHandle);
+		boolean result = set.contains(ref);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "set_ref_contains_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int setRefContainsDirect(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
 			CIntPointer res) {
 		Set<ExternalRef> set = globalHandles.get(handle);
 		ExternalRef ref = globalHandles.get(refHandle);

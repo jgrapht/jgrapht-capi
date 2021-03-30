@@ -37,6 +37,7 @@ import org.jgrapht.capi.JGraphTContext.PToLFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.ExternalRef;
+import org.jgrapht.capi.graph.HashAndEqualsResolver;
 
 public class HandlesApi {
 
@@ -64,10 +65,32 @@ public class HandlesApi {
 	 * @param res       the resulting handle
 	 * @return status code
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "handles_put_ref", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int putRefHandle(IsolateThread thread, PointerBase refPtr, PToLFunctionPointer hashPtr,
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "handles_put2_ref", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int put2RefHandle(IsolateThread thread, PointerBase refPtr, PToLFunctionPointer hashPtr,
 			PPToIFunctionPointer equalsPtr, WordPointer res) {
 		ExternalRef ref = new ExternalRef(refPtr, equalsPtr, hashPtr);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(ref));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * Create a reference to an external object.
+	 * 
+	 * @param thread    the isolate thread
+	 * @param refPtr    external object pointer
+	 * @param hashPtr   external object hash function pointer
+	 * @param equalsPtr external object equals function pointer
+	 * @param res       the resulting handle
+	 * @return status code
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + "handles_put_ref", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putRefHandle(IsolateThread thread, PointerBase refPtr, ObjectHandle hashEqualsResolverHandle,
+			WordPointer res) {
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef ref = resolver.toExternalRef(refPtr);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(ref));
 		}

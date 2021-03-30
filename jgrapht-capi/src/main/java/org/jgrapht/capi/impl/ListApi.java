@@ -26,12 +26,14 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.word.PointerBase;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.ExternalRef;
+import org.jgrapht.capi.graph.HashAndEqualsResolver;
 
 public class ListApi {
 
@@ -97,6 +99,20 @@ public class ListApi {
 	public static int listRefAdd(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle, CIntPointer res) {
 		List<ExternalRef> list = globalHandles.get(handle);
 		ExternalRef ref = globalHandles.get(refHandle);
+		boolean result = list.add(ref);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "list_ref_add_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listRefAdd(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
+			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
+		List<ExternalRef> list = globalHandles.get(handle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef ref = resolver.toExternalRef(refPtr);
 		boolean result = list.add(ref);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
@@ -176,10 +192,18 @@ public class ListApi {
 		list.remove(value);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "list_ref_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + "list_ref_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle) {
+		List<ExternalRef> list = globalHandles.get(handle);
+		ExternalRef ref = globalHandles.get(refHandle);
+		list.remove(ref);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "list_ref_remove_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listRefRemoveDirect(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle) {
 		List<ExternalRef> list = globalHandles.get(handle);
 		ExternalRef ref = globalHandles.get(refHandle);
 		list.remove(ref);
@@ -218,10 +242,24 @@ public class ListApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "list_ref_contains", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int listRefContains(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle, CIntPointer res) {
+	public static int listRefContains(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
+			CIntPointer res) {
+		List<ExternalRef> list = globalHandles.get(handle);
+		ExternalRef ref = globalHandles.get(refHandle);
+		boolean result = list.contains(ref);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX
+			+ "list_ref_contains_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int listRefContainsDirect(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
+			CIntPointer res) {
 		List<ExternalRef> list = globalHandles.get(handle);
 		ExternalRef ref = globalHandles.get(refHandle);
 		boolean result = list.contains(ref);
