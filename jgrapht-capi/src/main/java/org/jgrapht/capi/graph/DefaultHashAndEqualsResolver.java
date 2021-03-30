@@ -20,7 +20,7 @@ public class DefaultHashAndEqualsResolver implements HashAndEqualsResolver {
 	 * references. Otherwise null.
 	 */
 	private PtrToEqualsFunctionPointer equalsLookup;
-	
+
 	public DefaultHashAndEqualsResolver(PtrToHashFunctionPointer hashLookup, PtrToEqualsFunctionPointer equalsLookup) {
 		this.hashLookup = hashLookup;
 		this.equalsLookup = equalsLookup;
@@ -43,14 +43,14 @@ public class DefaultHashAndEqualsResolver implements HashAndEqualsResolver {
 	}
 
 	protected PToLFunctionPointer resolveHashFunction(PointerBase ptr) {
-		if (hashLookup == null || hashLookup.isNull()) {
+		if (hashLookup.isNull()) {
 			return WordFactory.nullPointer();
 		}
 		return hashLookup.invoke(ptr);
 	}
 
 	protected PPToIFunctionPointer resolveEqualsFunction(PointerBase ptr) {
-		if (equalsLookup == null || equalsLookup.isNull()) {
+		if (equalsLookup.isNull()) {
 			return WordFactory.nullPointer();
 		}
 		return equalsLookup.invoke(ptr);
