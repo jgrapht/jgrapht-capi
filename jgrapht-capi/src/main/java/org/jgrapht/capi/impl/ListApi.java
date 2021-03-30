@@ -203,9 +203,11 @@ public class ListApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "list_ref_remove_direct", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int listRefRemoveDirect(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle) {
+	public static int listRefRemove(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
+			ObjectHandle hashEqualsResolverHandle) {
 		List<ExternalRef> list = globalHandles.get(handle);
-		ExternalRef ref = globalHandles.get(refHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef ref = resolver.toExternalRef(refPtr);
 		list.remove(ref);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -258,10 +260,11 @@ public class ListApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "list_ref_contains_direct", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int listRefContainsDirect(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
-			CIntPointer res) {
+	public static int listRefContainsDirect(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
+			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
 		List<ExternalRef> list = globalHandles.get(handle);
-		ExternalRef ref = globalHandles.get(refHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef ref = resolver.toExternalRef(refPtr);
 		boolean result = list.contains(ref);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);

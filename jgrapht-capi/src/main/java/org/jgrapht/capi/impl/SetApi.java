@@ -151,20 +151,20 @@ public class SetApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_ref_remove", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
-			ObjectHandle hashEqualsResolverHandle) {
+	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle) {
 		Set<ExternalRef> set = globalHandles.get(handle);
-		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
-		ExternalRef ref = resolver.toExternalRef(refPtr);
+		ExternalRef ref = globalHandles.get(refHandle);
 		set.remove(ref);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "set_ref_remove_direct", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle) {
+	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
+			ObjectHandle hashEqualsResolverHandle) {
 		Set<ExternalRef> set = globalHandles.get(handle);
-		ExternalRef ref = globalHandles.get(refHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef ref = resolver.toExternalRef(refPtr);
 		set.remove(ref);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -217,10 +217,11 @@ public class SetApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "set_ref_contains_direct", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int setRefContainsDirect(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
-			CIntPointer res) {
+	public static int setRefContainsDirect(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
+			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
 		Set<ExternalRef> set = globalHandles.get(handle);
-		ExternalRef ref = globalHandles.get(refHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef ref = resolver.toExternalRef(refPtr);
 		boolean result = set.contains(ref);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
