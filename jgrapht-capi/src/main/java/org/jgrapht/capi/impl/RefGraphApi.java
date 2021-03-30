@@ -17,11 +17,16 @@
  */
 package org.jgrapht.capi.impl;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import org.graalvm.nativeimage.IsolateThread;
 import org.graalvm.nativeimage.ObjectHandle;
 import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
+import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
+import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
 import org.graalvm.word.PointerBase;
 import org.jgrapht.Graph;
@@ -166,6 +171,216 @@ public class RefGraphApi {
 		boolean result = g.containsVertex(ref);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_add_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int addEdge(IsolateThread thread, ObjectHandle graphHandle, PointerBase source, PointerBase target,
+			WordPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef sourceRef = g.toExternalRef(source);
+		ExternalRef targetRef = g.toExternalRef(target);
+		ExternalRef result = g.addEdge(sourceRef, targetRef);
+		if (result == null) {
+			throw new IllegalArgumentException("Graph does not allow multiple edges");
+		}
+		if (res.isNonNull()) {
+			res.write(result.getPtr());
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_add_given_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int addGivenEdge(IsolateThread thread, ObjectHandle graphHandle, PointerBase source,
+			PointerBase target, PointerBase edge, CIntPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef sourceRef = g.toExternalRef(source);
+		ExternalRef targetRef = g.toExternalRef(target);
+		ExternalRef edgeRef = g.toExternalRef(edge);
+		boolean result = g.addEdge(sourceRef, targetRef, edgeRef);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_remove_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int removeEdge(IsolateThread thread, ObjectHandle graphHandle, PointerBase edge, CIntPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef ref = g.toExternalRef(edge);
+		boolean result = g.removeEdge(ref);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_contains_edge", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int containsEdge(IsolateThread thread, ObjectHandle graphHandle, PointerBase edge, CIntPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef ref = g.toExternalRef(edge);
+		boolean result = g.containsEdge(ref);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_contains_edge_between", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int containsEdgeBetween(IsolateThread thread, ObjectHandle graphHandle, PointerBase source,
+			PointerBase target, CIntPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef sourceRef = g.toExternalRef(source);
+		ExternalRef targetRef = g.toExternalRef(target);
+		boolean result = g.containsEdge(sourceRef, targetRef);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_degree_of", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int degreeOf(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex, CLongPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef ref = g.toExternalRef(vertex);
+		long result = g.iterables().degreeOf(ref);
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_indegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int indegreeOf(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex, CLongPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef ref = g.toExternalRef(vertex);
+		long result = g.iterables().inDegreeOf(ref);
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_outdegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int outdegreeOf(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex,
+			CLongPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef ref = g.toExternalRef(vertex);
+		long result = g.iterables().outDegreeOf(ref);
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_edge_source", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgeSource(IsolateThread thread, ObjectHandle graphHandle, PointerBase edge, WordPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef ref = g.toExternalRef(edge);
+		ExternalRef result = g.getEdgeSource(ref);
+		if (res.isNonNull()) {
+			res.write(result.getPtr());
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_edge_target", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgeTarget(IsolateThread thread, ObjectHandle graphHandle, PointerBase edge, WordPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef ref = g.toExternalRef(edge);
+		ExternalRef result = g.getEdgeTarget(ref);
+		if (res.isNonNull()) {
+			res.write(result.getPtr());
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_get_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getEdgeWeight(IsolateThread thread, ObjectHandle graphHandle, PointerBase edge,
+			CDoublePointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef ref = g.toExternalRef(edge);
+		double result = g.getEdgeWeight(ref);
+		if (res.isNonNull()) {
+			res.write(result);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_set_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int setEdgeWeight(IsolateThread thread, ObjectHandle graphHandle, PointerBase edge, double weight) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef ref = g.toExternalRef(edge);
+		g.setEdgeWeight(ref, weight);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_create_between_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createEdgesBetweenIterator(IsolateThread thread, ObjectHandle graphHandle, PointerBase source,
+			PointerBase target, WordPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef sourceRef = g.toExternalRef(source);
+		ExternalRef targetRef = g.toExternalRef(target);
+		Set<?> edges = g.getAllEdges(sourceRef, targetRef);
+		if (edges == null) {
+			throw new IllegalArgumentException("Unknown vertex " + source.rawValue() + " or " + target.rawValue());
+		}
+		Iterator<?> it = edges.iterator();
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(it));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_vertex_create_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createVertexEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex,
+			WordPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef ref = g.toExternalRef(vertex);
+		Iterator<?> it = g.edgesOf(ref).iterator();
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(it));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_vertex_create_out_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createVertexOutEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex,
+			WordPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef ref = g.toExternalRef(vertex);
+		Iterator<?> it = g.outgoingEdgesOf(ref).iterator();
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(it));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "graph_vertex_create_in_eit", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int createVertexInEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex,
+			WordPointer res) {
+		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		ExternalRef ref = g.toExternalRef(vertex);
+		Iterator<?> it = g.incomingEdgesOf(ref).iterator();
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(it));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
