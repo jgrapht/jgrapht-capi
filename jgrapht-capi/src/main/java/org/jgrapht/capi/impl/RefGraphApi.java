@@ -77,8 +77,7 @@ public class RefGraphApi {
 	 */
 	public static DefaultCapiGraph<ExternalRef, ExternalRef> createRefGraph(boolean directed, boolean allowingSelfLoops,
 			boolean allowingMultipleEdges, boolean weighted, VToPFunctionPointer vertexSupplier,
-			VToPFunctionPointer edgeSupplier, PtrToHashFunctionPointer hashLookup,
-			PtrToEqualsFunctionPointer equalsLookup) {
+			VToPFunctionPointer edgeSupplier, HashAndEqualsResolver hashEqualsResolver) {
 
 		ExternalRefSupplier vSupplier = new ExternalRefSupplier(vertexSupplier, null);
 		ExternalRefSupplier eSupplier = new ExternalRefSupplier(edgeSupplier, null);
@@ -98,7 +97,9 @@ public class RefGraphApi {
 		DefaultCapiGraph<ExternalRef, ExternalRef> wrappedGraph = new DefaultCapiGraph<>(graph);
 
 		// replace default hash and equals resolver
-		wrappedGraph.setHashAndEqualsResolver(new DefaultHashAndEqualsResolver(hashLookup, equalsLookup));
+		if (hashEqualsResolver != null) {
+			wrappedGraph.setHashAndEqualsResolver(hashEqualsResolver);
+		}
 
 		// provide graph in order to perform the hash and equals lookup
 		vSupplier.setGraph(wrappedGraph);
@@ -128,10 +129,10 @@ public class RefGraphApi {
 			+ "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
 			boolean allowingMultipleEdges, boolean weighted, VToPFunctionPointer vertexSupplier,
-			VToPFunctionPointer edgeSupplier, PtrToHashFunctionPointer hashLookup,
-			PtrToEqualsFunctionPointer equalsLookup, WordPointer res) {
+			VToPFunctionPointer edgeSupplier, ObjectHandle hashEqualsResolverHandle, WordPointer res) {
+		HashAndEqualsResolver hashEqualsResolver = globalHandles.get(hashEqualsResolverHandle);
 		DefaultCapiGraph<ExternalRef, ExternalRef> graph = createRefGraph(directed, allowingSelfLoops,
-				allowingMultipleEdges, weighted, vertexSupplier, edgeSupplier, hashLookup, equalsLookup);
+				allowingMultipleEdges, weighted, vertexSupplier, edgeSupplier, hashEqualsResolver);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph));
 		}
