@@ -271,4 +271,24 @@ public class HandlesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+			+ "handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
+			WordPointer startVertexRes, WordPointer endVertexRes, WordPointer edgeItRes) {
+		GraphPath<ExternalRef, ExternalRef> gp = globalHandles.get(handle);
+		if (weightRes.isNonNull()) {
+			weightRes.write(gp.getWeight());
+		}
+		if (startVertexRes.isNonNull()) {
+			startVertexRes.write(gp.getStartVertex().getPtr());
+		}
+		if (endVertexRes.isNonNull()) {
+			endVertexRes.write(gp.getEndVertex().getPtr());
+		}
+		if (edgeItRes.isNonNull()) {
+			edgeItRes.write(globalHandles.create(gp.getEdgeList().iterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 }
