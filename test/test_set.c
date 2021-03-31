@@ -56,7 +56,7 @@ int main() {
     jgrapht_capi_set_size(thread, set, &size);
     assert(size == 3);
 
-    jgrapht_capi_set_int_remove(thread, set, 500);
+    jgrapht_capi_set_int_remove(thread, set, 500, NULL);
     jgrapht_capi_set_int_contains(thread, set, 500, &exists);
     assert(exists == 0);
 
