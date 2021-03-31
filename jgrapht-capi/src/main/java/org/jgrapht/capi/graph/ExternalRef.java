@@ -62,7 +62,8 @@ public class ExternalRef {
 
 	@Override
 	public String toString() {
-		return "Ref(ptr=" + ptr + ")";
+		return "Ref(ptr=" + ptr.rawValue() + ", equalsPtr=" + equalsPtr.rawValue() + ", hashPtr=" + hashPtr.rawValue()
+				+ ")";
 	}
-	
+
 }
