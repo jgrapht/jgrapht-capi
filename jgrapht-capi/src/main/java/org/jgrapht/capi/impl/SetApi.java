@@ -129,43 +129,58 @@ public class SetApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_int_remove", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int setIntRemove(IsolateThread thread, ObjectHandle handle, int value) {
+	public static int setIntRemove(IsolateThread thread, ObjectHandle handle, int value, CIntPointer res) {
 		Set<Integer> set = globalHandles.get(handle);
-		set.remove(value);
+		boolean result = set.remove(value);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_long_remove", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int setLongRemove(IsolateThread thread, ObjectHandle handle, long value) {
+	public static int setLongRemove(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
 		Set<Long> set = globalHandles.get(handle);
-		set.remove(value);
+		boolean result = set.remove(value);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "set_double_remove", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int setDoubleRemove(IsolateThread thread, ObjectHandle handle, double value) {
+	public static int setDoubleRemove(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
 		Set<Double> set = globalHandles.get(handle);
-		set.remove(value);
+		boolean result = set.remove(value);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + "set_ref_remove", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle) {
+	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle, CIntPointer res) {
 		Set<ExternalRef> set = globalHandles.get(handle);
 		ExternalRef ref = globalHandles.get(refHandle);
-		set.remove(ref);
+		boolean result = set.remove(ref);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "set_ref_remove_direct", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
-			ObjectHandle hashEqualsResolverHandle) {
+			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
 		Set<ExternalRef> set = globalHandles.get(handle);
 		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
 		ExternalRef ref = resolver.toExternalRef(refPtr);
-		set.remove(ref);
+		boolean result = set.remove(ref);
+		if (res.isNonNull()) {
+			res.write(result ? 1 : 0);
+		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
