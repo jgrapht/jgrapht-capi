@@ -60,4 +60,9 @@ public class ExternalRef {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Ref(ptr=" + ptr + ")";
+	}
+	
 }
