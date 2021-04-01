@@ -28,6 +28,7 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.word.PointerBase;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.drawing.BarycenterGreedyTwoLayeredBipartiteLayout2D;
 import org.jgrapht.alg.drawing.CircularLayoutAlgorithm2D;
@@ -43,9 +44,12 @@ import org.jgrapht.alg.drawing.model.Point2D;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.IIToIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LLToIFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PPToIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.custom.drawing.IndexedFRLayoutAlgorithm2D;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.ExternalRef;
+import org.jgrapht.capi.graph.HashAndEqualsResolver;
 
 public class DrawingApi {
 
@@ -119,6 +123,26 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+			+ "drawing_layout_model_2d_get_vertex_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int layoutModel2dGetVertexDirect(IsolateThread thread, ObjectHandle model, PointerBase vertexPtr,
+			ObjectHandle hashEqualsResolverHandle, CDoublePointer x, CDoublePointer y) {
+		LayoutModel2D<ExternalRef> m = globalHandles.get(model);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef vertex = resolver.toExternalRef(vertexPtr);
+
+		Point2D p = m.get(vertex);
+		if (p != null) {
+			if (x.isNonNull()) {
+				x.write(p.getX());
+			}
+			if (y.isNonNull()) {
+				y.write(p.getY());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "drawing_layout_model_2d_put_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dPutVertex(IsolateThread thread, ObjectHandle model, int vertex, double x, double y) {
@@ -132,6 +156,17 @@ public class DrawingApi {
 	public static int layoutModel2dPutVertex(IsolateThread thread, ObjectHandle model, long vertex, double x,
 			double y) {
 		LayoutModel2D<Long> m = globalHandles.get(model);
+		m.put(vertex, Point2D.of(x, y));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+			+ "drawing_layout_model_2d_put_vertex_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int layoutModel2dPutVertex(IsolateThread thread, ObjectHandle model, PointerBase vertexPtr,
+			ObjectHandle hashEqualsResolverHandle, double x, double y) {
+		LayoutModel2D<ExternalRef> m = globalHandles.get(model);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef vertex = resolver.toExternalRef(vertexPtr);
 		m.put(vertex, Point2D.of(x, y));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -156,6 +191,19 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+			+ "drawing_layout_model_2d_get_fixed_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int layoutModel2dGetFixed(IsolateThread thread, ObjectHandle model, PointerBase vertexPtr,
+			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
+		LayoutModel2D<ExternalRef> m = globalHandles.get(model);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef vertex = resolver.toExternalRef(vertexPtr);
+		if (res.isNonNull()) {
+			res.write(m.isFixed(vertex) ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "drawing_layout_model_2d_set_fixed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dSetFixed(IsolateThread thread, ObjectHandle model, int vertex, boolean fixed) {
@@ -168,6 +216,17 @@ public class DrawingApi {
 			+ "drawing_layout_model_2d_set_fixed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dSetFixed(IsolateThread thread, ObjectHandle model, long vertex, boolean fixed) {
 		LayoutModel2D<Long> m = globalHandles.get(model);
+		m.setFixed(vertex, fixed);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+			+ "drawing_layout_model_2d_set_fixed_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int layoutModel2dSetFixed(IsolateThread thread, ObjectHandle model, PointerBase vertexPtr,
+			ObjectHandle hashEqualsResolverHandle, boolean fixed) {
+		LayoutModel2D<ExternalRef> m = globalHandles.get(model);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef vertex = resolver.toExternalRef(vertexPtr);
 		m.setFixed(vertex, fixed);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -212,6 +271,22 @@ public class DrawingApi {
 		}
 
 		new CircularLayoutAlgorithm2D<Long, E>(radius, comparator).layout(g, m);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+			+ "drawing_exec_circular_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <E> int executeCircularLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
+			double radius, PPToIFunctionPointer vertexComparator) {
+		Graph<ExternalRef, E> g = globalHandles.get(graphHandle);
+		LayoutModel2D<ExternalRef> m = globalHandles.get(model);
+
+		Comparator<ExternalRef> comparator = null;
+		if (vertexComparator.isNonNull()) {
+			comparator = (a, b) -> vertexComparator.invoke(a.getPtr(), b.getPtr());
+		}
+
+		new CircularLayoutAlgorithm2D<ExternalRef, E>(radius, comparator).layout(g, m);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
@@ -324,6 +399,34 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+			+ "drawing_exec_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <E> int executeTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle modelHandle, ObjectHandle partitionHandle, PPToIFunctionPointer vertexComparatorFunctionPtr,
+			boolean vertical) {
+		Graph<ExternalRef, E> graph = globalHandles.get(graphHandle);
+		LayoutModel2D<ExternalRef> model = globalHandles.get(modelHandle);
+		Set<ExternalRef> partition = globalHandles.get(partitionHandle);
+		Comparator<ExternalRef> vertexComparator = null;
+		if (vertexComparatorFunctionPtr.isNonNull()) {
+			vertexComparator = (a, b) -> vertexComparatorFunctionPtr.invoke(a.getPtr(), b.getPtr());
+		}
+		new TwoLayeredBipartiteLayout2D<ExternalRef, E>(partition, vertexComparator, vertical).layout(graph, model);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * A bipartite layout algorithm.
+	 * 
+	 * @param thread                      the isolate thread
+	 * @param graphHandle                 the graph
+	 * @param modelHandle                 the {@link LayoutModel2D} model
+	 * @param partitionHandle             a possible null left partition of the
+	 *                                    bipartite graph
+	 * @param vertexComparatorFunctionPtr a possible null vertex comparator
+	 * @param vertical                    whether to draw vertically or not
+	 * @return the return status
+	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeBarycenterGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
@@ -382,6 +485,35 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+			+ "drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <E> int executeBarycenterGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle modelHandle, ObjectHandle partitionHandle, PPToIFunctionPointer vertexComparatorFunctionPtr,
+			boolean vertical) {
+		Graph<ExternalRef, E> graph = globalHandles.get(graphHandle);
+		LayoutModel2D<ExternalRef> model = globalHandles.get(modelHandle);
+		Set<ExternalRef> partition = globalHandles.get(partitionHandle);
+		Comparator<ExternalRef> vertexComparator = null;
+		if (vertexComparatorFunctionPtr.isNonNull()) {
+			vertexComparator = (a, b) -> vertexComparatorFunctionPtr.invoke(a.getPtr(), b.getPtr());
+		}
+		new BarycenterGreedyTwoLayeredBipartiteLayout2D<ExternalRef, E>(partition, vertexComparator, vertical)
+				.layout(graph, model);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * A bipartite layout algorithm.
+	 * 
+	 * @param thread                      the isolate thread
+	 * @param graphHandle                 the graph
+	 * @param modelHandle                 the {@link LayoutModel2D} model
+	 * @param partitionHandle             a possible null left partition of the
+	 *                                    bipartite graph
+	 * @param vertexComparatorFunctionPtr a possible null vertex comparator
+	 * @param vertical                    whether to draw vertically or not
+	 * @return the return status
+	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
 			+ "drawing_exec_median_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeMedianGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
@@ -424,6 +556,35 @@ public class DrawingApi {
 			vertexComparator = (a, b) -> vertexComparatorFunctionPtr.invoke(a, b);
 		}
 		new MedianGreedyTwoLayeredBipartiteLayout2D<Long, E>(partition, vertexComparator, vertical).layout(graph,
+				model);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * A bipartite layout algorithm.
+	 * 
+	 * @param thread                      the isolate thread
+	 * @param graphHandle                 the graph
+	 * @param modelHandle                 the {@link LayoutModel2D} model
+	 * @param partitionHandle             a possible null left partition of the
+	 *                                    bipartite graph
+	 * @param vertexComparatorFunctionPtr a possible null vertex comparator
+	 * @param vertical                    whether to draw vertically or not
+	 * @return the return status
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+			+ "drawing_exec_median_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <E> int executeMedianGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle modelHandle, ObjectHandle partitionHandle, PPToIFunctionPointer vertexComparatorFunctionPtr,
+			boolean vertical) {
+		Graph<ExternalRef, E> graph = globalHandles.get(graphHandle);
+		LayoutModel2D<ExternalRef> model = globalHandles.get(modelHandle);
+		Set<ExternalRef> partition = globalHandles.get(partitionHandle);
+		Comparator<ExternalRef> vertexComparator = null;
+		if (vertexComparatorFunctionPtr.isNonNull()) {
+			vertexComparator = (a, b) -> vertexComparatorFunctionPtr.invoke(a.getPtr(), b.getPtr());
+		}
+		new MedianGreedyTwoLayeredBipartiteLayout2D<ExternalRef, E>(partition, vertexComparator, vertical).layout(graph,
 				model);
 		return Status.STATUS_SUCCESS.getCValue();
 	}

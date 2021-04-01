@@ -79,5 +79,11 @@ public class Constants {
 	 * and external references for edges.
 	 */
 	public static final String REFREF = "rr_";
+	
+	/**
+	 * Indicates a method working on a graph with external references for vertices
+	 * and any type for edges.
+	 */
+	public static final String REFANY = "rx_";	
 
 }
