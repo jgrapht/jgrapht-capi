@@ -55,7 +55,7 @@ public class DrawingApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "drawing_layout_model_2d_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V> int layoutModel2DCreate(IsolateThread thread, double minX, double minY, double width,
 			double height, WordPointer res) {
@@ -66,7 +66,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "drawing_layout_model_2d_get_drawable_area", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V> int layoutModel2dGetDrawableArea(IsolateThread thread, ObjectHandle model, CDoublePointer minX,
 			CDoublePointer minY, CDoublePointer width, CDoublePointer height) {
@@ -89,7 +89,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "drawing_layout_model_2d_get_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dGetVertex(IsolateThread thread, ObjectHandle model, int vertex, CDoublePointer x,
 			CDoublePointer y) {
@@ -106,7 +106,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "drawing_layout_model_2d_get_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dGetVertex(IsolateThread thread, ObjectHandle model, long vertex, CDoublePointer x,
 			CDoublePointer y) {
@@ -123,9 +123,9 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
-			+ "drawing_layout_model_2d_get_vertex_direct", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int layoutModel2dGetVertexDirect(IsolateThread thread, ObjectHandle model, PointerBase vertexPtr,
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "drawing_layout_model_2d_get_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int layoutModel2dGetVertex(IsolateThread thread, ObjectHandle model, PointerBase vertexPtr,
 			ObjectHandle hashEqualsResolverHandle, CDoublePointer x, CDoublePointer y) {
 		LayoutModel2D<ExternalRef> m = globalHandles.get(model);
 		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
@@ -143,7 +143,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "drawing_layout_model_2d_put_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dPutVertex(IsolateThread thread, ObjectHandle model, int vertex, double x, double y) {
 		LayoutModel2D<Integer> m = globalHandles.get(model);
@@ -151,7 +151,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "drawing_layout_model_2d_put_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dPutVertex(IsolateThread thread, ObjectHandle model, long vertex, double x,
 			double y) {
@@ -160,8 +160,8 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
-			+ "drawing_layout_model_2d_put_vertex_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "drawing_layout_model_2d_put_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dPutVertex(IsolateThread thread, ObjectHandle model, PointerBase vertexPtr,
 			ObjectHandle hashEqualsResolverHandle, double x, double y) {
 		LayoutModel2D<ExternalRef> m = globalHandles.get(model);
@@ -171,7 +171,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "drawing_layout_model_2d_get_fixed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dGetFixed(IsolateThread thread, ObjectHandle model, int vertex, CIntPointer res) {
 		LayoutModel2D<Integer> m = globalHandles.get(model);
@@ -181,7 +181,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "drawing_layout_model_2d_get_fixed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dGetFixed(IsolateThread thread, ObjectHandle model, long vertex, CIntPointer res) {
 		LayoutModel2D<Long> m = globalHandles.get(model);
@@ -191,8 +191,8 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
-			+ "drawing_layout_model_2d_get_fixed_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "drawing_layout_model_2d_get_fixed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dGetFixed(IsolateThread thread, ObjectHandle model, PointerBase vertexPtr,
 			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
 		LayoutModel2D<ExternalRef> m = globalHandles.get(model);
@@ -204,7 +204,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "drawing_layout_model_2d_set_fixed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dSetFixed(IsolateThread thread, ObjectHandle model, int vertex, boolean fixed) {
 		LayoutModel2D<Integer> m = globalHandles.get(model);
@@ -212,7 +212,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "drawing_layout_model_2d_set_fixed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dSetFixed(IsolateThread thread, ObjectHandle model, long vertex, boolean fixed) {
 		LayoutModel2D<Long> m = globalHandles.get(model);
@@ -220,8 +220,8 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
-			+ "drawing_layout_model_2d_set_fixed_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "drawing_layout_model_2d_set_fixed", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int layoutModel2dSetFixed(IsolateThread thread, ObjectHandle model, PointerBase vertexPtr,
 			ObjectHandle hashEqualsResolverHandle, boolean fixed) {
 		LayoutModel2D<ExternalRef> m = globalHandles.get(model);
@@ -231,7 +231,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "drawing_exec_random_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeRandomLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
 			long seed) {
@@ -242,7 +242,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "drawing_exec_circular_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeCircularLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
 			double radius, IIToIFunctionPointer vertexComparator) {
@@ -258,7 +258,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "drawing_exec_circular_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeCircularLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
 			double radius, LLToIFunctionPointer vertexComparator) {
@@ -274,7 +274,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_ANY
 			+ "drawing_exec_circular_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeCircularLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
 			double radius, PPToIFunctionPointer vertexComparator) {
@@ -290,7 +290,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "drawing_exec_fr_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeFRLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
 			int iterations, double normalizationFactor, long seed) {
@@ -300,7 +300,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "drawing_exec_indexed_fr_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeIndexedFRLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
 			int iterations, double normalizationFactor, long seed, double theta, double tolerance) {
@@ -321,7 +321,7 @@ public class DrawingApi {
 	 * @param scale       the scale factor
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "drawing_exec_rescale_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeRescaleLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
 			double scale) {
@@ -343,7 +343,7 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "drawing_exec_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle modelHandle, ObjectHandle partitionHandle, IIToIFunctionPointer vertexComparatorFunctionPtr,
@@ -371,7 +371,7 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "drawing_exec_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle modelHandle, ObjectHandle partitionHandle, LLToIFunctionPointer vertexComparatorFunctionPtr,
@@ -399,7 +399,7 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_ANY
 			+ "drawing_exec_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle modelHandle, ObjectHandle partitionHandle, PPToIFunctionPointer vertexComparatorFunctionPtr,
@@ -427,7 +427,7 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeBarycenterGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle modelHandle, ObjectHandle partitionHandle, IIToIFunctionPointer vertexComparatorFunctionPtr,
@@ -456,7 +456,7 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeBarycenterGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle modelHandle, ObjectHandle partitionHandle, LLToIFunctionPointer vertexComparatorFunctionPtr,
@@ -485,7 +485,7 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_ANY
 			+ "drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeBarycenterGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle modelHandle, ObjectHandle partitionHandle, PPToIFunctionPointer vertexComparatorFunctionPtr,
@@ -514,7 +514,7 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "drawing_exec_median_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeMedianGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle modelHandle, ObjectHandle partitionHandle, IIToIFunctionPointer vertexComparatorFunctionPtr,
@@ -543,7 +543,7 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "drawing_exec_median_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeMedianGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle modelHandle, ObjectHandle partitionHandle, LLToIFunctionPointer vertexComparatorFunctionPtr,
@@ -572,7 +572,7 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_ANY
 			+ "drawing_exec_median_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeMedianGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle modelHandle, ObjectHandle partitionHandle, PPToIFunctionPointer vertexComparatorFunctionPtr,

@@ -36,7 +36,7 @@ public class FlowApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "maxflow_exec_push_relabel", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executePushRelabel(IsolateThread thread, ObjectHandle graphHandle, int source, int sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
@@ -44,7 +44,7 @@ public class FlowApi {
 				cutSourcePartitionRes);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "maxflow_exec_push_relabel", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executePushRelabel(IsolateThread thread, ObjectHandle graphHandle, long source, long sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
@@ -52,7 +52,7 @@ public class FlowApi {
 				cutSourcePartitionRes);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "maxflow_exec_dinic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDinic(IsolateThread thread, ObjectHandle graphHandle, int source, int sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
@@ -60,7 +60,7 @@ public class FlowApi {
 				cutSourcePartitionRes);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "maxflow_exec_dinic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDinic(IsolateThread thread, ObjectHandle graphHandle, long source, long sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
@@ -68,7 +68,7 @@ public class FlowApi {
 				cutSourcePartitionRes);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "maxflow_exec_edmonds_karp", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeEdmondsKarp(IsolateThread thread, ObjectHandle graphHandle, int source, int sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
@@ -76,7 +76,7 @@ public class FlowApi {
 				cutSourcePartitionRes);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "maxflow_exec_edmonds_karp", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeEdmondsKarp(IsolateThread thread, ObjectHandle graphHandle, long source, long sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
@@ -84,7 +84,7 @@ public class FlowApi {
 				cutSourcePartitionRes);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "maxflow_exec_boykov_kolmogorov", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBoykovKolmogorov(IsolateThread thread, ObjectHandle graphHandle, int source, int sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
@@ -92,7 +92,7 @@ public class FlowApi {
 				cutSourcePartitionRes);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "maxflow_exec_boykov_kolmogorov", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBoykovKolmogorov(IsolateThread thread, ObjectHandle graphHandle, long source, long sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
@@ -100,7 +100,7 @@ public class FlowApi {
 				cutSourcePartitionRes);
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "mincostflow_exec_capacity_scaling", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCapacityScaling(IsolateThread thread, ObjectHandle graphHandle,
 			IntegerToIntegerFunctionPointer nodeSupplyFunction,
@@ -140,7 +140,7 @@ public class FlowApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "mincostflow_exec_capacity_scaling", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCapacityScaling(IsolateThread thread, ObjectHandle graphHandle,
 			LongToIntegerFunctionPointer nodeSupplyFunction,
@@ -180,7 +180,7 @@ public class FlowApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "equivalentflowtree_exec_gusfield", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeEFTGusfield(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -191,7 +191,7 @@ public class FlowApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "equivalentflowtree_max_st_flow", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int eftMaxSTFlow(IsolateThread thread, ObjectHandle eft, int source, int sink,
 			CDoublePointer valueRes) {
@@ -203,7 +203,7 @@ public class FlowApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "equivalentflowtree_max_st_flow", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int eftMaxSTFlow(IsolateThread thread, ObjectHandle eft, long source, long sink,
 			CDoublePointer valueRes) {
@@ -215,7 +215,7 @@ public class FlowApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "equivalentflowtree_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int eftGetTree(IsolateThread thread, ObjectHandle eft, WordPointer treeRes) {
 		GusfieldEquivalentFlowTree<Integer, Integer> alg = globalHandles.get(eft);
@@ -243,7 +243,7 @@ public class FlowApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "equivalentflowtree_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int llEftGetTree(IsolateThread thread, ObjectHandle eft, WordPointer treeRes) {
 		GusfieldEquivalentFlowTree<Long, Long> alg = globalHandles.get(eft);
@@ -271,7 +271,7 @@ public class FlowApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "equivalentflowtree_tree_with_suppliers", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Given an instance of the equivalent flow tree from Gusfield's algorithm, compute",
 					"the actual tree as a graph. The new graph will reuse the vertex set from the original graph",

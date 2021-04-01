@@ -34,7 +34,7 @@ public class PartitionApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "partition_exec_bipartite", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeBipartitePartitioner(IsolateThread thread, ObjectHandle graphHandle,
 			CIntPointer res, WordPointer part1, WordPointer part2) {

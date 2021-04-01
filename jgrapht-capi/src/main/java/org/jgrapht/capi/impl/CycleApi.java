@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
+ *
+ * JGraphT C-API
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.capi.impl;
 
 import java.util.Set;
@@ -35,7 +52,7 @@ public class CycleApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cycles_eulerian_exec_hierholzer", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeHierholzer(IsolateThread thread, ObjectHandle graphHandle,
 			CIntPointer isEulerianRes, WordPointer eulerianCycleRes) {
@@ -65,7 +82,7 @@ public class CycleApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cycles_chinese_postman_exec_edmonds_johnson", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeChinesePostman(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -79,7 +96,7 @@ public class CycleApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cycles_simple_enumeration_exec_tarjan", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeTarjan(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -90,7 +107,7 @@ public class CycleApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cycles_simple_enumeration_exec_tiernan", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeTierman(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -101,7 +118,7 @@ public class CycleApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cycles_simple_enumeration_exec_szwarcfiter_lauer", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeSzwarcfiterLauer(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -112,7 +129,7 @@ public class CycleApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cycles_simple_enumeration_exec_johnson", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeJohnson(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -123,7 +140,7 @@ public class CycleApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cycles_simple_enumeration_exec_hawick_james", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeHawickJames(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -134,7 +151,7 @@ public class CycleApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cycles_fundamental_basis_exec_queue_bfs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeQueueBFSFundamental(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
@@ -154,7 +171,7 @@ public class CycleApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cycles_fundamental_basis_exec_stack_bfs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeStackBFSFundamental(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
@@ -174,7 +191,7 @@ public class CycleApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cycles_fundamental_basis_exec_paton", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executePatonFundamental(IsolateThread thread, ObjectHandle graphHandle,
 			CDoublePointer weightRes, WordPointer res) {
@@ -194,7 +211,7 @@ public class CycleApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cycles_mean_exec_howard", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeMeanHoward(IsolateThread thread, ObjectHandle graphHandle, int iterations,
 			double tolerance, CDoublePointer meanRes, WordPointer cycleRes) {

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -39,7 +39,7 @@ public class CliqueApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "clique_exec_bron_kerbosch", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBrownKerbosch(IsolateThread thread, ObjectHandle graphHandle, long timeoutSeconds,
 			WordPointer res) {
@@ -53,7 +53,7 @@ public class CliqueApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "clique_exec_bron_kerbosch_pivot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBrownKerboschWithPivot(IsolateThread thread, ObjectHandle graphHandle, long timeoutSeconds,
 			WordPointer res) {
@@ -67,7 +67,7 @@ public class CliqueApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "clique_exec_bron_kerbosch_pivot_degeneracy_ordering", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBrownKerboschPivotAndDegeneracyOrdering(IsolateThread thread, ObjectHandle graphHandle,
 			long timeoutSeconds, WordPointer res) {
@@ -81,7 +81,7 @@ public class CliqueApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "clique_exec_chordal_max_clique", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeChordalMaxCliqueFinder(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);

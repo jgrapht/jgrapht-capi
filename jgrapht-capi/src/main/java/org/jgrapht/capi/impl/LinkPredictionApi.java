@@ -44,7 +44,7 @@ public class LinkPredictionApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "link_prediction_exec_adamic_adar_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeAdamicAdarIndex(IsolateThread thread, ObjectHandle graphHandle, int u, int v,
 			CDoublePointer res) {
@@ -57,7 +57,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "link_prediction_exec_adamic_adar_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeAdamicAdarIndex(IsolateThread thread, ObjectHandle graphHandle, long u, long v,
 			CDoublePointer res) {
@@ -70,7 +70,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "link_prediction_exec_adamic_adar_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeAdamicAdarIndex(IsolateThread thread, ObjectHandle graphHandle, PointerBase u,
 			PointerBase v, CDoublePointer res) {
@@ -85,7 +85,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "link_prediction_exec_common_neighbors", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeCommonNeighbors(IsolateThread thread, ObjectHandle graphHandle, int u, int v,
 			CDoublePointer res) {
@@ -98,7 +98,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "link_prediction_exec_common_neighbors", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeCommonNeighbors(IsolateThread thread, ObjectHandle graphHandle, long u, long v,
 			CDoublePointer res) {
@@ -111,7 +111,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "link_prediction_exec_common_neighbors", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCommonNeighbors(IsolateThread thread, ObjectHandle graphHandle, PointerBase u,
 			PointerBase v, CDoublePointer res) {
@@ -126,7 +126,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "link_prediction_exec_hub_depressed_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeHubDepressedIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u,
 			int v, CDoublePointer res) {
@@ -139,7 +139,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "link_prediction_exec_hub_depressed_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeexecuteHubDepressedIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			long u, long v, CDoublePointer res) {
@@ -152,7 +152,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "link_prediction_exec_hub_depressed_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeexecuteHubDepressedIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			PointerBase u, PointerBase v, CDoublePointer res) {
@@ -167,7 +167,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "link_prediction_exec_hub_promoted_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeHubPromotedIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u,
 			int v, CDoublePointer res) {
@@ -180,7 +180,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "link_prediction_exec_hub_promoted_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeexecuteHubPromotedIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			long u, long v, CDoublePointer res) {
@@ -193,7 +193,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "link_prediction_exec_hub_promoted_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeexecuteHubPromotedIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			PointerBase u, PointerBase v, CDoublePointer res) {
@@ -208,7 +208,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "link_prediction_exec_jaccard_coefficient", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeJaccardCoefficientLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u,
 			int v, CDoublePointer res) {
@@ -221,7 +221,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "link_prediction_exec_jaccard_coefficient", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeJaccardCoefficientLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			long u, long v, CDoublePointer res) {
@@ -234,7 +234,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "link_prediction_exec_jaccard_coefficient", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeJaccardCoefficientLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			PointerBase u, PointerBase v, CDoublePointer res) {
@@ -249,7 +249,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "link_prediction_exec_leicht_holme_newman_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeLeichtHolmeNewmanIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			int u, int v, CDoublePointer res) {
@@ -262,7 +262,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "link_prediction_exec_leicht_holme_newman_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeLeichtHolmeNewmanIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			long u, long v, CDoublePointer res) {
@@ -275,7 +275,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "link_prediction_exec_leicht_holme_newman_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeLeichtHolmeNewmanIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			PointerBase u, PointerBase v, CDoublePointer res) {
@@ -290,7 +290,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "link_prediction_exec_preferential_attachment", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executePreferentialAttachmentLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			int u, int v, CDoublePointer res) {
@@ -303,7 +303,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "link_prediction_exec_preferential_attachment", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executePreferentialAttachmentLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			long u, long v, CDoublePointer res) {
@@ -316,7 +316,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "link_prediction_exec_preferential_attachment", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executePreferentialAttachmentLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			PointerBase u, PointerBase v, CDoublePointer res) {
@@ -331,7 +331,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "link_prediction_exec_resource_allocation_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeResourceAllocationIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			int u, int v, CDoublePointer res) {
@@ -344,7 +344,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "link_prediction_exec_resource_allocation_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeResourceAllocationIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			long u, long v, CDoublePointer res) {
@@ -357,7 +357,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "link_prediction_exec_resource_allocation_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeResourceAllocationIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			PointerBase u, PointerBase v, CDoublePointer res) {
@@ -372,7 +372,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "link_prediction_exec_salton_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeSaltonIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u, int v,
 			CDoublePointer res) {
@@ -385,7 +385,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "link_prediction_exec_salton_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeSaltonIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, long u,
 			long v, CDoublePointer res) {
@@ -398,7 +398,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "link_prediction_exec_salton_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeSaltonIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, PointerBase u,
 			PointerBase v, CDoublePointer res) {
@@ -413,7 +413,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "link_prediction_exec_sorensen_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeSørensenIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u,
 			int v, CDoublePointer res) {
@@ -426,7 +426,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "link_prediction_exec_sorensen_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeSørensenIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, long u,
 			long v, CDoublePointer res) {
@@ -439,7 +439,7 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "link_prediction_exec_sorensen_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeSørensenIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, PointerBase u,
 			PointerBase v, CDoublePointer res) {

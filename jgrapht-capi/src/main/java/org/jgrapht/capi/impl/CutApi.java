@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
+ *
+ * JGraphT C-API
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.capi.impl;
 
 import java.util.Set;
@@ -29,7 +46,7 @@ public class CutApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cut_mincut_exec_stoer_wagner", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeStoerWagner(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer valueRes,
 			WordPointer cutSourcePartitionRes) {
@@ -48,7 +65,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cut_gomoryhu_exec_gusfield", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeGomoryHuGusfield(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -59,7 +76,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "cut_gomoryhu_min_st_cut", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int gomoryHuSTCut(IsolateThread thread, ObjectHandle gomoryHu, int source, int sink,
 			CDoublePointer valueRes, WordPointer cutSourcePartitionRes) {
@@ -75,7 +92,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "cut_gomoryhu_min_st_cut", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int gomoryHuSTCut(IsolateThread thread, ObjectHandle gomoryHu, long source, long sink,
 			CDoublePointer valueRes, WordPointer cutSourcePartitionRes) {
@@ -91,7 +108,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "cut_gomoryhu_min_st_cut", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int gomoryHuSTCut(IsolateThread thread, ObjectHandle gomoryHu, PointerBase sourcePtr,
 			PointerBase sinkPtr, ObjectHandle hashEqualsResolverHandle, CDoublePointer valueRes,
@@ -112,7 +129,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cut_gomoryhu_min_cut", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int gomoryHuMinCut(IsolateThread thread, ObjectHandle gomoryHu, CDoublePointer valueRes,
 			WordPointer cutSourcePartitionRes) {
@@ -128,7 +145,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "cut_gomoryhu_tree", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Given an instance of the GomoryHu cut tree from Gusfield's algorithm, compute",
 					"the actual tree as a graph. The new graph will reuse the vertex set from the original graph",
@@ -160,7 +177,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "cut_gomoryhu_tree", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Given an instance of the GomoryHu cut tree from Gusfield's algorithm, compute",
 					"the actual tree as a graph. The new graph will reuse the vertex set from the original graph",
@@ -191,7 +208,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "cut_gomoryhu_tree", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Given an instance of the GomoryHu cut tree from Gusfield's algorithm, compute",
 					"the actual tree as a graph. The new graph will reuse the vertex set from the original graph",
@@ -224,7 +241,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "cut_oddmincutset_exec_padberg_rao", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executePadbergRao(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle oddVerticesHandle, boolean useTreeCompression, CDoublePointer valueRes,

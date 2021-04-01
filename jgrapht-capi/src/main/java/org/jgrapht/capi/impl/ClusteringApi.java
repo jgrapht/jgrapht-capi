@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -40,7 +40,7 @@ public class ClusteringApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "clustering_exec_k_spanning_tree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeKSpanningTree(IsolateThread thread, ObjectHandle graphHandle, int k, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -52,7 +52,7 @@ public class ClusteringApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "clustering_exec_label_propagation", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeLabelPropagationTree(IsolateThread thread, ObjectHandle graphHandle, int maxIterations,
 			long seed, WordPointer res) {
@@ -74,7 +74,7 @@ public class ClusteringApi {
 	 * @param res         the resulting clustering handle
 	 * @return return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "clustering_exec_girvan_newman", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeGirvanNewman(IsolateThread thread, ObjectHandle graphHandle, int k, WordPointer res) {
 		Graph<?, ?> g = globalHandles.get(graphHandle);
@@ -86,7 +86,7 @@ public class ClusteringApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "clustering_get_number_clusters", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getNumberOfClusters(IsolateThread thread, ObjectHandle cHandle, CIntPointer res) {
 		Clustering<?> c = globalHandles.get(cHandle);
@@ -96,7 +96,7 @@ public class ClusteringApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "clustering_ith_cluster_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getClusterWithIndexVertexIterator(IsolateThread thread, ObjectHandle cHandle, int i,
 			WordPointer res) {

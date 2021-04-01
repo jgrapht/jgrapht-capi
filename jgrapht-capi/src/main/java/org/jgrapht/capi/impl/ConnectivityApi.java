@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
+ *
+ * JGraphT C-API
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.capi.impl;
 
 import java.util.List;
@@ -21,7 +38,7 @@ public class ConnectivityApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "connectivity_strong_exec_kosaraju", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executeKosaraju(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
@@ -41,7 +58,7 @@ public class ConnectivityApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "connectivity_strong_exec_gabow", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executeGabow(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {
@@ -61,7 +78,7 @@ public class ConnectivityApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "connectivity_weak_exec_bfs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executeWeakBfs(IsolateThread thread, ObjectHandle graphHandle, CIntPointer valueRes,
 			WordPointer res) {

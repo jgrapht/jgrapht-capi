@@ -45,7 +45,7 @@ public class GraphWithAttributesApi {
 
 	// ---------------- GET ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "graph_attrs_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int getLongAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr,
 			CLongPointer res) {
@@ -62,7 +62,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "graph_attrs_vertex_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getLongVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr, CLongPointer res) {
@@ -79,7 +79,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "graph_attrs_vertex_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getLongVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr, CLongPointer res) {
@@ -96,7 +96,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
 			+ "graph_attrs_edge_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getLongEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr, CLongPointer res) {
@@ -113,7 +113,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
 			+ "graph_attrs_edge_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getLongEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr, CLongPointer res) {
@@ -132,7 +132,7 @@ public class GraphWithAttributesApi {
 
 	// ---------------- STORE ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "graph_attrs_put_long", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putLongAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr,
 			long value) {
@@ -142,7 +142,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "graph_attrs_vertex_put_long", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putVertexLongAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr, long value) {
@@ -152,7 +152,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "graph_attrs_vertex_put_long", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putVertexLongAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr, long value) {
@@ -162,7 +162,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
 			+ "graph_attrs_edge_put_long", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putEdgeLongAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr, long value) {
@@ -172,7 +172,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
 			+ "graph_attrs_edge_put_long", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putEdgeLongAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr, long value) {
@@ -184,7 +184,7 @@ public class GraphWithAttributesApi {
 
 	// ---------------- REMOVE ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "graph_attrs_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr) {
 		GraphWithAttributes<?, ?> graph = globalHandles.get(graphHandle);
@@ -193,7 +193,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "graph_attrs_vertex_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr) {
@@ -203,7 +203,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "graph_attrs_vertex_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr) {
@@ -213,7 +213,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
 			+ "graph_attrs_edge_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr) {
@@ -223,7 +223,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
 			+ "graph_attrs_edge_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr) {
@@ -235,7 +235,7 @@ public class GraphWithAttributesApi {
 
 	// ---------------- CONTAINS ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "graph_attrs_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr,
 			CIntPointer res) {
@@ -248,7 +248,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "graph_attrs_vertex_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr, CIntPointer res) {
@@ -261,7 +261,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "graph_attrs_vertex_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr, CIntPointer res) {
@@ -274,7 +274,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
 			+ "graph_attrs_edge_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr, CIntPointer res) {
@@ -287,7 +287,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
 			+ "graph_attrs_edge_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr, CIntPointer res) {
@@ -303,7 +303,7 @@ public class GraphWithAttributesApi {
 
 	// ---------------- ITERATOR ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "graph_attrs_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int graphAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		GraphWithAttributes<V, E> graph = globalHandles.get(graphHandle);
@@ -314,7 +314,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "graph_attrs_vertex_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int vertexAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, int element,
 			WordPointer res) {
@@ -325,7 +325,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "graph_attrs_vertex_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int vertexAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, long element,
 			WordPointer res) {
@@ -336,7 +336,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
 			+ "graph_attrs_edge_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgeAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, int element,
 			WordPointer res) {
@@ -347,7 +347,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
 			+ "graph_attrs_edge_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgeAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, long element,
 			WordPointer res) {
@@ -360,7 +360,7 @@ public class GraphWithAttributesApi {
 
 	// ---------------- LENGTH ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "graph_attrs_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphAttributesSize(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		GraphWithAttributes<?, ?> graph = globalHandles.get(graphHandle);
@@ -370,7 +370,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "graph_attrs_vertex_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphVertexAttributesSize(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CIntPointer res) {
@@ -381,7 +381,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "graph_attrs_vertex_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphVertexAttributesSize(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CIntPointer res) {
@@ -392,7 +392,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
 			+ "graph_attrs_edge_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphEdgeAttributesSize(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CIntPointer res) {
@@ -403,7 +403,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
 			+ "graph_attrs_edge_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphEdgeAttributesSize(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CIntPointer res) {

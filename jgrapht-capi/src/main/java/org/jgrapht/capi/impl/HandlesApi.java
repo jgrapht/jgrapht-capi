@@ -231,7 +231,7 @@ public class HandlesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
 			CIntPointer startVertexRes, CIntPointer endVertexRes, WordPointer edgeItRes) {
@@ -251,7 +251,7 @@ public class HandlesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
 			CLongPointer startVertexRes, CLongPointer endVertexRes, WordPointer edgeItRes) {
@@ -271,7 +271,7 @@ public class HandlesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
 			WordPointer startVertexRes, WordPointer endVertexRes, WordPointer edgeItRes) {

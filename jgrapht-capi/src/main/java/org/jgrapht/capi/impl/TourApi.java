@@ -44,7 +44,7 @@ public class TourApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "tour_tsp_random", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int randomTSP(IsolateThread thread, ObjectHandle handle, long seed, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(handle);
@@ -56,7 +56,7 @@ public class TourApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "tour_tsp_greedy_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int greedyHeuristic(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(handle);
@@ -68,7 +68,7 @@ public class TourApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "tour_tsp_nearest_insertion_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int nearestInsertionHeuristic(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(handle);
@@ -80,7 +80,7 @@ public class TourApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "tour_tsp_nearest_neighbor_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int nearestNeighborHeuristic(IsolateThread thread, ObjectHandle handle, long seed,
 			WordPointer res) {
@@ -93,7 +93,7 @@ public class TourApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "tour_metric_tsp_christofides", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int christofides(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(handle);
@@ -105,7 +105,7 @@ public class TourApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "tour_metric_tsp_two_approx", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int twoApprox(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(handle);
@@ -117,7 +117,7 @@ public class TourApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "tour_tsp_held_karp", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int heldKarp(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(handle);
@@ -129,7 +129,7 @@ public class TourApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "tour_hamiltonian_palmer", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int palmer(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(handle);
@@ -141,7 +141,7 @@ public class TourApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "tour_tsp_two_opt_heuristic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int twoOptHeuristic(IsolateThread thread, ObjectHandle handle, int k,
 			double minCostImprovement, long seed, WordPointer res) {
@@ -154,7 +154,7 @@ public class TourApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "tour_tsp_two_opt_heuristic_improve", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int twoOptHeuristicImprove(IsolateThread thread, ObjectHandle handle,
 			double minCostImprovement, long seed, WordPointer res) {

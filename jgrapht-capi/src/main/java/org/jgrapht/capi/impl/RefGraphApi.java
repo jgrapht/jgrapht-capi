@@ -108,7 +108,7 @@ public class RefGraphApi {
 		return wrappedGraph;
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_hash_equals_resolver_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createHashEqualsResolver(IsolateThread thread, PtrToHashFunctionPointer hashLookup,
 			PtrToEqualsFunctionPointer equalsLookup, WordPointer res) {
@@ -125,7 +125,7 @@ public class RefGraphApi {
 	 * @param thread the thread isolate
 	 * @return the graph handle
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createGraph(IsolateThread thread, boolean directed, boolean allowingSelfLoops,
 			boolean allowingMultipleEdges, boolean weighted, VToPFunctionPointer vertexSupplier,
@@ -139,7 +139,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_add_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int addVertex(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
@@ -150,7 +150,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_add_given_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int addGivenVertex(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex,
 			CIntPointer res) {
@@ -164,7 +164,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_remove_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeVertex(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex,
 			CIntPointer res) {
@@ -177,7 +177,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_contains_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsVertex(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex,
 			CIntPointer res) {
@@ -190,7 +190,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_add_edge", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int addEdge(IsolateThread thread, ObjectHandle graphHandle, PointerBase source, PointerBase target,
 			WordPointer res) {
@@ -207,7 +207,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_add_given_edge", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int addGivenEdge(IsolateThread thread, ObjectHandle graphHandle, PointerBase source,
 			PointerBase target, PointerBase edge, CIntPointer res) {
@@ -222,7 +222,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_remove_edge", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeEdge(IsolateThread thread, ObjectHandle graphHandle, PointerBase edge, CIntPointer res) {
 		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
@@ -234,7 +234,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_contains_edge", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsEdge(IsolateThread thread, ObjectHandle graphHandle, PointerBase edge, CIntPointer res) {
 		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
@@ -246,7 +246,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_contains_edge_between", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsEdgeBetween(IsolateThread thread, ObjectHandle graphHandle, PointerBase source,
 			PointerBase target, CIntPointer res) {
@@ -260,7 +260,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_degree_of", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int degreeOf(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex, CLongPointer res) {
 		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
@@ -272,7 +272,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_indegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int indegreeOf(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex, CLongPointer res) {
 		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
@@ -284,7 +284,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_outdegree_of", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int outdegreeOf(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex,
 			CLongPointer res) {
@@ -297,7 +297,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_edge_source", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgeSource(IsolateThread thread, ObjectHandle graphHandle, PointerBase edge, WordPointer res) {
 		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
@@ -309,7 +309,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_edge_target", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgeTarget(IsolateThread thread, ObjectHandle graphHandle, PointerBase edge, WordPointer res) {
 		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
@@ -321,7 +321,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_get_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getEdgeWeight(IsolateThread thread, ObjectHandle graphHandle, PointerBase edge,
 			CDoublePointer res) {
@@ -334,7 +334,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_set_edge_weight", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setEdgeWeight(IsolateThread thread, ObjectHandle graphHandle, PointerBase edge, double weight) {
 		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
@@ -343,7 +343,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_create_between_eit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createEdgesBetweenIterator(IsolateThread thread, ObjectHandle graphHandle, PointerBase source,
 			PointerBase target, WordPointer res) {
@@ -361,7 +361,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_vertex_create_eit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createVertexEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex,
 			WordPointer res) {
@@ -374,7 +374,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_vertex_create_out_eit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createVertexOutEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex,
 			WordPointer res) {
@@ -387,7 +387,7 @@ public class RefGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REFREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
 			+ "graph_vertex_create_in_eit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createVertexInEdgesOfIterator(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertex,
 			WordPointer res) {

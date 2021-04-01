@@ -67,7 +67,7 @@ public class ShortestPathApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDijkstraBetween(IsolateThread thread, ObjectHandle graphHandle, int source, int target,
 			WordPointer pathRes) {
@@ -85,7 +85,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDijkstraBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
 			WordPointer pathRes) {
@@ -103,7 +103,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle graphHandle, int source,
 			int target, WordPointer pathRes) {
@@ -121,7 +121,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
 			long target, WordPointer pathRes) {
@@ -139,7 +139,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_dijkstra_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDijkstraFrom(IsolateThread thread, ObjectHandle graphHandle, int source,
 			WordPointer pathsRes) {
@@ -153,7 +153,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_dijkstra_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDijkstraFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
 			WordPointer pathsRes) {
@@ -167,7 +167,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_bellmanford_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBellmanFordFrom(IsolateThread thread, ObjectHandle graphHandle, int source,
 			WordPointer pathsRes) {
@@ -181,7 +181,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_bellmanford_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBellmanFordFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
 			WordPointer pathsRes) {
@@ -195,7 +195,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_bfs_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBfsFrom(IsolateThread thread, ObjectHandle graphHandle, int source, WordPointer pathsRes) {
 		Graph<Integer, ?> g = globalHandles.get(graphHandle);
@@ -208,7 +208,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_bfs_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBfsFrom(IsolateThread thread, ObjectHandle graphHandle, long source, WordPointer pathsRes) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
@@ -221,7 +221,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "sp_exec_johnson_get_allpairs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executeJohnson(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -232,7 +232,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "sp_exec_floydwarshall_get_allpairs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int executeFloydWarshall(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -243,7 +243,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_singlesource_get_path_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int singleSourceGetPathToVertex(IsolateThread thread, ObjectHandle pathsHandle, int target,
 			WordPointer pathRes) {
@@ -259,7 +259,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_singlesource_get_path_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int singleSourceGetPathToVertex(IsolateThread thread, ObjectHandle pathsHandle, long target,
 			WordPointer pathRes) {
@@ -275,7 +275,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_allpairs_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int allPairsGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, int source,
 			int target, WordPointer res) {
@@ -291,7 +291,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_allpairs_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int allPairsGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, long source,
 			long target, WordPointer res) {
@@ -307,7 +307,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_allpairs_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int allPairsGetSingleSourceFromVertex(IsolateThread thread, ObjectHandle handle, int source,
 			WordPointer res) {
@@ -319,7 +319,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_allpairs_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int allPairsGetSingleSourceFromVertex(IsolateThread thread, ObjectHandle handle, long source,
 			WordPointer res) {
@@ -331,7 +331,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeAStarBetween(IsolateThread thread, ObjectHandle graphHandle, int source, int target,
 			AStarHeuristicFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
@@ -352,7 +352,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeAStarBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
 			AStarHeuristicLLFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
@@ -373,7 +373,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_bidirectional_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBidirectionalAStarBetween(IsolateThread thread, ObjectHandle graphHandle, int source,
 			int target, AStarHeuristicFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
@@ -394,7 +394,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_bidirectional_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBidirectionalAStarBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
 			long target, AStarHeuristicLLFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
@@ -415,7 +415,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_astar_alt_heuristic_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle, int source,
 			int target, ObjectHandle landmarksSet, WordPointer pathRes) {
@@ -436,7 +436,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_astar_alt_heuristic_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
 			long target, ObjectHandle landmarksSet, WordPointer pathRes) {
@@ -457,7 +457,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBidirectionalAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle,
 			int source, int target, ObjectHandle landmarksSet, WordPointer pathRes) {
@@ -478,7 +478,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBidirectionalAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle,
 			long source, long target, ObjectHandle landmarksSet, WordPointer pathRes) {
@@ -499,7 +499,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_yen_get_k_loopless_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeYenBetween(IsolateThread thread, ObjectHandle graphHandle, int source, int target, int k,
 			WordPointer pathIteratorRes) {
@@ -514,7 +514,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_yen_get_k_loopless_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeYenBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target, int k,
 			WordPointer pathIteratorRes) {
@@ -529,7 +529,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_eppstein_get_k_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeEppsteinBetween(IsolateThread thread, ObjectHandle graphHandle, int source, int target,
 			int k, WordPointer pathIteratorRes) {
@@ -544,7 +544,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_eppstein_get_k_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeEppsteinBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
 			int k, WordPointer pathIteratorRes) {
@@ -559,7 +559,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_delta_stepping_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDeltaSteppingBetween(IsolateThread thread, ObjectHandle graphHandle, int source,
 			int target, double delta, int parallelism, WordPointer pathRes) {
@@ -578,7 +578,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_delta_stepping_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDeltaSteppingBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
 			long target, double delta, int parallelism, WordPointer pathRes) {
@@ -597,7 +597,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_delta_stepping_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDeltaSteppingFrom(IsolateThread thread, ObjectHandle graphHandle, int source, double delta,
 			int parallelism, WordPointer pathsRes) {
@@ -612,7 +612,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_delta_stepping_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDeltaSteppingFrom(IsolateThread thread, ObjectHandle graphHandle, long source, double delta,
 			int parallelism, WordPointer pathsRes) {
@@ -627,7 +627,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "multisp_exec_martin_get_multiobjectivesinglesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeMartin(IsolateThread thread, ObjectHandle graphHandle, int source,
 			IntegerToCDoublePointerFunctionPointer edgeWeightFunctionPointer, int dim, WordPointer pathsRes) {
@@ -644,7 +644,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "multisp_exec_martin_get_multiobjectivesinglesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeMartin(IsolateThread thread, ObjectHandle graphHandle, long source,
 			LongToCDoublePointerFunctionPointer edgeWeightFunctionPointer, int dim, WordPointer pathsRes) {
@@ -661,7 +661,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "multisp_exec_martin_get_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeMartin(IsolateThread thread, ObjectHandle graphHandle, int source, int target,
 			IntegerToCDoublePointerFunctionPointer edgeWeightFunctionPointer, int dim, WordPointer pathsRes) {
@@ -685,7 +685,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "multisp_exec_martin_get_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeMartin(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
 			LongToCDoublePointerFunctionPointer edgeWeightFunctionPointer, int dim, WordPointer pathsRes) {
@@ -709,7 +709,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "multisp_multiobjectivesinglesource_get_paths_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int multiObjectiveSingleSourceGetPathToVertex(IsolateThread thread, ObjectHandle sourceHandle,
 			int target, WordPointer pathsRes) {
@@ -721,7 +721,7 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "multisp_multiobjectivesinglesource_get_paths_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int multiObjectiveSingleSourceGetPathToVertex(IsolateThread thread, ObjectHandle sourceHandle,
 			long target, WordPointer pathsRes) {

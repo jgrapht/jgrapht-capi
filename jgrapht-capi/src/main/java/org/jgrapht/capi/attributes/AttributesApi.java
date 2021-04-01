@@ -29,7 +29,7 @@ public class AttributesApi {
 	 * @param res    Pointer to store the result
 	 * @return return code
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "attributes_store_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createIntStore(IsolateThread thread, WordPointer res) {
 		AttributesStore<?> store = new AttributesStore<>();
@@ -39,7 +39,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "attributes_store_put_boolean_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putBooleanAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, boolean value) {
@@ -49,7 +49,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "attributes_store_put_boolean_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putBooleanAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr, boolean value) {
@@ -59,7 +59,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "attributes_store_put_int_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putIntAttribute(IsolateThread thread, ObjectHandle storeHandle, int element, CCharPointer namePtr,
 			int value) {
@@ -69,7 +69,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "attributes_store_put_int_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putIntAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr, int value) {
@@ -79,7 +79,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "attributes_store_put_long_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putLongAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, long value) {
@@ -89,7 +89,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "attributes_store_put_long_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putLongAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr, long value) {
@@ -99,7 +99,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "attributes_store_put_double_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putDoubleAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, double value) {
@@ -109,7 +109,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "attributes_store_put_double_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putDoubleAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr, double value) {
@@ -119,7 +119,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "attributes_store_put_string_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putStringAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, CCharPointer valuePtr) {
@@ -130,7 +130,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "attributes_store_put_string_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putStringAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr, CCharPointer valuePtr) {
@@ -141,7 +141,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "attributes_store_remove_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr) {
@@ -151,7 +151,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "attributes_store_remove_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr) {

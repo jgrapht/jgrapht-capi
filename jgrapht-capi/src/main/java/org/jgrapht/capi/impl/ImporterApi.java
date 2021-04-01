@@ -58,7 +58,7 @@ public class ImporterApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			IntegerToIntegerFunctionPointer importIdFunctionPointer, IFunctionPointer notifyVertexFunctionPointer,
@@ -76,7 +76,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			LongToLongFunctionPointer importIdFunctionPointer, LFunctionPointer notifyVertexFunctionPointer,
@@ -94,7 +94,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			IntegerToIntegerFunctionPointer importIdFunctionPointer, IFunctionPointer notifyVertexFunctionPointer,
@@ -115,7 +115,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			LongToLongFunctionPointer importIdFunctionPointer, LFunctionPointer notifyVertexFunctionPointer,
@@ -136,7 +136,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			IntegerToIntegerFunctionPointer importIdFunctionPointer,
@@ -158,7 +158,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			LongToLongFunctionPointer importIdFunctionPointer,
@@ -180,7 +180,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			IntegerToIntegerFunctionPointer importIdFunctionPointer,
@@ -205,7 +205,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			LongToLongFunctionPointer importIdFunctionPointer,
@@ -230,7 +230,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importJsonFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer,
@@ -257,7 +257,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importJsonFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer,
@@ -284,7 +284,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_string_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importJsonFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer,
@@ -313,7 +313,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_string_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importJsonFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer,
@@ -342,7 +342,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_file_csv", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importCSVFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer, IFunctionPointer notifyVertexFunctionPointer,
@@ -381,7 +381,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_file_csv", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importCSVFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer, LFunctionPointer notifyVertexFunctionPointer,
@@ -420,7 +420,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importCSVFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer, IFunctionPointer notifyVertexFunctionPointer,
@@ -464,7 +464,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importCSVFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer, LFunctionPointer notifyVertexFunctionPointer,
@@ -508,7 +508,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_file_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGEXFFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer, boolean validate_schema,
@@ -536,7 +536,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_file_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGEXFFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer, boolean validate_schema,
@@ -564,7 +564,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGEXFFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer, boolean validate_schema,
@@ -595,7 +595,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGEXFFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer, boolean validate_schema,
@@ -626,7 +626,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_file_graphml_simple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraphMLSimpleFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer, boolean validate_schema,
@@ -654,7 +654,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_file_graphml_simple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraphMLSimpleFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer, boolean validate_schema,
@@ -682,7 +682,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_string_graphml_simple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraphMLSimpleFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer, boolean validate_schema,
@@ -713,7 +713,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_string_graphml_simple", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraphMLSimpleFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer, boolean validate_schema,
@@ -744,7 +744,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_file_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraphMLFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer, boolean validate_schema,
@@ -772,7 +772,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_file_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraphMLFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer, boolean validate_schema,
@@ -800,7 +800,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_string_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraphMLFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer, boolean validate_schema,
@@ -831,7 +831,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_string_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraphMLFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer, boolean validate_schema,
@@ -862,7 +862,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDOTFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer,
@@ -888,7 +888,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDOTFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer,
@@ -914,7 +914,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDOTFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer,
@@ -943,7 +943,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDOTFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer,
@@ -972,7 +972,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_file_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraph6FromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer,
@@ -999,7 +999,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_file_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraph6FromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer,
@@ -1026,7 +1026,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_string_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraph6FromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToIntegerFunctionPointer importIdFunctionPointer,
@@ -1056,7 +1056,7 @@ public class ImporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_string_graph6sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGraph6FromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			CCharPointerToLongFunctionPointer importIdFunctionPointer,

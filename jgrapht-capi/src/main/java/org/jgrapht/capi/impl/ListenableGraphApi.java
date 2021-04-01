@@ -41,7 +41,7 @@ public class ListenableGraphApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "listenable_as_listenable", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int asListenable(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		CapiGraph<V, E> gIn = globalHandles.get(graphHandle);
@@ -52,7 +52,7 @@ public class ListenableGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "listenable_create_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createGraphListener(IsolateThread thread, IIFunctionPointer eventFunctionPointer,
 			WordPointer res) {
@@ -63,7 +63,7 @@ public class ListenableGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "listenable_create_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createGraphListener(IsolateThread thread, LIFunctionPointer eventFunctionPointer,
 			WordPointer res) {
@@ -74,7 +74,7 @@ public class ListenableGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "listenable_add_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int addGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
 		ListenableGraph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -83,7 +83,7 @@ public class ListenableGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "listenable_add_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int llAddGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
 		ListenableGraph<Long, Long> g = globalHandles.get(graphHandle);
@@ -92,7 +92,7 @@ public class ListenableGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "listenable_remove_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
 		ListenableGraph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -101,7 +101,7 @@ public class ListenableGraphApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "listenable_remove_graph_listener", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int llRemoveGraphListener(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle listenerHandle) {
 		ListenableGraph<Long, Long> g = globalHandles.get(graphHandle);

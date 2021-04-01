@@ -38,52 +38,60 @@ public class Constants {
 	 * Indicates a method working on a graph with integer vertices and integer
 	 * edges.
 	 */
-	public static final String INTINT = "ii_";
+	public static final String INT_INT = "ii_";
 
 	/**
 	 * Indicates a method working on a graph with integer vertices and any type of
 	 * edges. edges.
 	 */
-	public static final String INTANY = "ix_";
+	public static final String INT_ANY = "ix_";
 
 	/**
 	 * Indicates a method working on a graph with any type vertices and integer
 	 * edges. edges.
 	 */
-	public static final String ANYINT = "xi_";
+	public static final String ANY_INT = "xi_";
 
 	/**
 	 * Indicates a method working on a graph with long vertices and long edges.
 	 */
-	public static final String LONGLONG = "ll_";
+	public static final String LONG_LONG = "ll_";
 
 	/**
 	 * Indicates a method working on a graph with long vertices and any type of
 	 * edges.
 	 */
-	public static final String LONGANY = "lx_";
+	public static final String LONG_ANY = "lx_";
 
 	/**
 	 * Indicates a method working on a graph with any type vertices and long edges.
 	 * edges.
 	 */
-	public static final String ANYLONG = "xl_";
+	public static final String ANY_LONG = "xl_";
 
 	/**
 	 * Indicates a method working on a graph with any type of vertices and edges.
 	 */
-	public static final String ANYANY = "xx_";
+	public static final String ANY_ANY = "xx_";
 
 	/**
 	 * Indicates a method working on a graph with external references for vertices
 	 * and external references for edges.
 	 */
-	public static final String REFREF = "rr_";
-	
+	public static final String REF_REF = "rr_";
+
 	/**
-	 * Indicates a method working on a graph with external references for vertices
+	 * Indicates a method working on a graph with an external reference for vertices
 	 * and any type for edges.
 	 */
-	public static final String REFANY = "rx_";	
+	public static final String REF_ANY = "rx_";
+
+	/**
+	 * Indicates a method working on a graph with an direct external reference for
+	 * vertices and any type for edges. Direct external reference means that the
+	 * calls needs to provide both a pointer and a handle for the equals-hash
+	 * resolver.
+	 */
+	public static final String DREF_ANY = "Rx_";
 
 }

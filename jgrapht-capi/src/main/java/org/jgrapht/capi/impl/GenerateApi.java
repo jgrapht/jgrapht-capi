@@ -55,7 +55,7 @@ public class GenerateApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_barabasi_albert", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int barabasiAlbertGraphGenerator(IsolateThread thread, ObjectHandle graph, int m0, int m,
 			int n, long seed) {
@@ -65,7 +65,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_barabasi_albert_forest", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int barabasiAlbertForestGenerator(IsolateThread thread, ObjectHandle graph, int t, int n,
 			long seed) {
@@ -75,7 +75,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_complete", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int completeGraphGenerator(IsolateThread thread, ObjectHandle graph, int n) {
 		Graph<V, E> g = globalHandles.get(graph);
@@ -84,7 +84,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_bipartite_complete", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int completeBipartiteGraphGenerator(IsolateThread thread, ObjectHandle graph, int a, int b) {
 		Graph<V, E> g = globalHandles.get(graph);
@@ -93,7 +93,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_empty", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int emptyGraphGenerator(IsolateThread thread, ObjectHandle graph, int n) {
 		Graph<V, E> g = globalHandles.get(graph);
@@ -102,7 +102,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_gnm_random", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int customRandomGnmGenerator(IsolateThread thread, ObjectHandle graph, int n, int m,
 			boolean loops, boolean multipleEdges, long seed) {
@@ -112,7 +112,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_gnp_random", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int customRandomGnpGenerator(IsolateThread thread, ObjectHandle graph, int n, double p,
 			boolean createLoops, long seed) {
@@ -122,7 +122,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_ring", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int ringGenerator(IsolateThread thread, ObjectHandle graph, int n) {
 		Graph<V, E> g = globalHandles.get(graph);
@@ -131,7 +131,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_scalefree", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int scaleFreeGenerator(IsolateThread thread, ObjectHandle graph, int n, long seed) {
 		Graph<V, E> g = globalHandles.get(graph);
@@ -140,7 +140,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_watts_strogatz", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int wattsStrogatzGenerator(IsolateThread thread, ObjectHandle graph, int n, int k, double p,
 			boolean addInsteadOfRewire, long seed) {
@@ -150,7 +150,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_kleinberg_smallworld", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int kleinbergSmallWorldGenerator(IsolateThread thread, ObjectHandle graph, int n, int p, int q,
 			int r, long seed) {
@@ -160,7 +160,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_complement", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int generateComplement(IsolateThread thread, ObjectHandle graphTarget,
 			ObjectHandle graphSource, boolean generateSelfLoops) {
@@ -171,7 +171,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_generalized_petersen", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int generateGeneralizedPetersen(IsolateThread thread, ObjectHandle graph, int n, int k) {
 		Graph<V, E> g = globalHandles.get(graph);
@@ -180,7 +180,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_grid", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int generateGrid(IsolateThread thread, ObjectHandle graph, int rows, int cols) {
 		Graph<V, E> g = globalHandles.get(graph);
@@ -189,7 +189,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_hypercube", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int generateHyperCube(IsolateThread thread, ObjectHandle graph, int dim) {
 		Graph<V, E> g = globalHandles.get(graph);
@@ -198,7 +198,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_linear", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int generateLinear(IsolateThread thread, ObjectHandle graph, int n) {
 		Graph<V, E> g = globalHandles.get(graph);
@@ -207,7 +207,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_random_regular", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int generateRandomRegularGraph(IsolateThread thread, ObjectHandle graph, int n, int d,
 			long seed) {
@@ -217,7 +217,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_star", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int generateStarGraph(IsolateThread thread, ObjectHandle graph, int n) {
 		Graph<V, E> g = globalHandles.get(graph);
@@ -226,7 +226,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_wheel", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int generateWheel(IsolateThread thread, ObjectHandle graph, int size, boolean inwardSpokes) {
 		Graph<V, E> g = globalHandles.get(graph);
@@ -235,7 +235,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_windmill", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int generateWindmill(IsolateThread thread, ObjectHandle graph, int m, int n, boolean dutch) {
 		Graph<V, E> g = globalHandles.get(graph);
@@ -244,7 +244,7 @@ public class GenerateApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "generate_linearized_chord_diagram", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int generateLinearizedChordDiagram(IsolateThread thread, ObjectHandle graph, int n, int m,
 			long seed) {

@@ -47,7 +47,7 @@ public class GraphDagApi {
 	 * @param thread the thread isolate
 	 * @return the graph handle
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "graph_dag_create", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Create a (int-int) dag and return its handle." })
 	public static int createDag(IsolateThread thread, boolean allowMultipleEdges, boolean weighted, WordPointer res) {
@@ -74,7 +74,7 @@ public class GraphDagApi {
 	 * @param thread the thread isolate
 	 * @return the graph handle
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "graph_dag_create", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Create a (long-long) dag and return its handle." })
 	public static int createLongDag(IsolateThread thread, boolean allowMultipleEdges, boolean weighted,
@@ -96,7 +96,7 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "graph_dag_create_with_suppliers", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Create a (long-long) dag with suppliers and return its handle." })
 	public static int createLongDag(IsolateThread thread, boolean allowMultipleEdges, boolean weighted,
@@ -124,7 +124,7 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "graph_dag_topological_it", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Given a dag create a topological iterator and return its handle." })
 	public static <V, E> int createTopoIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
@@ -135,7 +135,7 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (int-int) dag and a vertex returns its descendants.")
 	public static int createVertexDescendants(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
@@ -146,7 +146,7 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (long-long) dag and a vertex returns its descendants.")
 	public static int createVertexDescendants(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {
@@ -157,7 +157,7 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (int-int) dag and a vertex returns its ancestors.")
 	public static int createVertexAncestors(IsolateThread thread, ObjectHandle graphHandle, int vertex,
 			WordPointer res) {
@@ -168,7 +168,7 @@ public class GraphDagApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (long-long) dag and a vertex returns its ancestors.")
 	public static int createVertexAncestors(IsolateThread thread, ObjectHandle graphHandle, long vertex,
 			WordPointer res) {

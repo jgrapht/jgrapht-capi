@@ -66,7 +66,7 @@ public class ExporterApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "export_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int exportDIMACSToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ExporterDIMACSFormat format, boolean exportEdgeWeights, ObjectHandle vertexIdStore) {
@@ -91,7 +91,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "export_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int llExportDIMACSToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ExporterDIMACSFormat format, boolean exportEdgeWeights, ObjectHandle vertexIdStore) {
@@ -116,7 +116,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "export_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int exportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle, ExporterDIMACSFormat format,
 			boolean exportEdgeWeights, ObjectHandle vertexIdStore, WordPointer res) {
@@ -146,7 +146,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "export_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int llExportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle, ExporterDIMACSFormat format,
 			boolean exportEdgeWeights, ObjectHandle vertexIdStore, WordPointer res) {
@@ -176,7 +176,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportGmlFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			boolean exportEdgeWeights, boolean exportVertexLabels, boolean exportEdgeLabels,
@@ -197,7 +197,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportGmlString(IsolateThread thread, ObjectHandle graphHandle, boolean exportEdgeWeights,
 			boolean exportVertexLabels, boolean exportEdgeLabels, ObjectHandle vertexLabelsStore,
@@ -221,7 +221,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportJsonFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore, ObjectHandle vertexIdStore) {
@@ -235,7 +235,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_json", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportJsonString(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle vertexLabelsStore,
 			ObjectHandle edgeLabelsStore, ObjectHandle vertexIdStore, WordPointer res) {
@@ -252,7 +252,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_lemon", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportLemonToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			boolean exportEdgeWeights, boolean escapeStringsAsJava, ObjectHandle vertexIdStore) {
@@ -266,7 +266,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_lemon", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportLemonToString(IsolateThread thread, ObjectHandle graphHandle, boolean exportEdgeWeights,
 			boolean escapeStringsAsJava, ObjectHandle vertexIdStore, WordPointer res) {
@@ -283,7 +283,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_csv", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportCSVToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ImporterExporterCSVFormat format, boolean exportEdgeWeights, boolean matrix_format_nodeid,
@@ -309,7 +309,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportCSVToString(IsolateThread thread, ObjectHandle graphHandle,
 			ImporterExporterCSVFormat format, boolean exportEdgeWeights, boolean matrix_format_nodeid,
@@ -355,7 +355,7 @@ public class ExporterApi {
 	 * @param exportMeta            whether to export meta information
 	 * @return status code
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportGexfFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
@@ -387,7 +387,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportGexfString(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle attributesRegistry,
 			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore, ObjectHandle vertexIdStore,
@@ -422,7 +422,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportDotFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore, ObjectHandle vertexIdStore) {
@@ -436,7 +436,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportDotString(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore, ObjectHandle vertexIdStore,
@@ -454,7 +454,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_graph6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportGraph6File(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -466,7 +466,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_graph6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportGraph6String(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -481,7 +481,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportSparse6File(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -493,7 +493,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportSparse6String(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -508,7 +508,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportGraphMLFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
@@ -538,7 +538,7 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int exportGraphMLString(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,

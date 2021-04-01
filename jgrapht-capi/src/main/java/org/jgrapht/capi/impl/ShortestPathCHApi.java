@@ -60,7 +60,7 @@ public class ShortestPathCHApi {
 	 * @param res    a {@link GraphPath} handle
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_manytomany_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int manyToManyGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, int source,
 			int target, WordPointer res) {
@@ -86,7 +86,7 @@ public class ShortestPathCHApi {
 	 * @param res    a {@link GraphPath} handle
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_manytomany_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int manyToManyGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, long source,
 			long target, WordPointer res) {
@@ -112,7 +112,7 @@ public class ShortestPathCHApi {
 	 * @param res         the {@link ContractionHierarchy} handle
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "sp_exec_contraction_hierarchy", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeCH(IsolateThread thread, ObjectHandle graphHandle, int parallelism, long seed,
 			WordPointer res) {
@@ -143,7 +143,7 @@ public class ShortestPathCHApi {
 	 * @param res           handle to a {@link ManyToManyShortestPaths}.
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "sp_exec_contraction_hierarchy_get_manytomany", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeCHManyToMany(IsolateThread thread, ObjectHandle chHandle,
 			ObjectHandle sourcesHandle, ObjectHandle targetsHandle, WordPointer res) {
@@ -169,7 +169,7 @@ public class ShortestPathCHApi {
 	 * @param res      handle to a {@link GraphPath}.
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCHBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle chHandle, int source,
 			int target, double radius, WordPointer pathRes) {
@@ -199,7 +199,7 @@ public class ShortestPathCHApi {
 	 * @param res      handle to a {@link GraphPath}.
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCHBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle chHandle, long source,
 			long target, double radius, WordPointer pathRes) {
@@ -227,7 +227,7 @@ public class ShortestPathCHApi {
 	 * @param res         the {@link TransitNodeRoutingShortestPath} handle
 	 * @return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "sp_exec_transit_node_routing", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeTransitNodeRouting(IsolateThread thread, ObjectHandle graphHandle, int parallelism, 
 			WordPointer res) {
@@ -247,7 +247,7 @@ public class ShortestPathCHApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_transit_node_routing_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeTransitNodeRoutingBetween(IsolateThread thread, ObjectHandle tnrHandle, int source, int target,
 			WordPointer pathRes) {
@@ -263,7 +263,7 @@ public class ShortestPathCHApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_transit_node_routing_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeTransitNodeRoutingBetween(IsolateThread thread, ObjectHandle tnrHandle, long source, long target,
 			WordPointer pathRes) {
@@ -279,7 +279,7 @@ public class ShortestPathCHApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_transit_node_routing_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeTransitNodeRoutingFrom(IsolateThread thread, ObjectHandle tnrHandle, int source,
 			WordPointer pathsRes) {
@@ -291,7 +291,7 @@ public class ShortestPathCHApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 	
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_transit_node_routing_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeTransitNodeRoutingFrom(IsolateThread thread, ObjectHandle tnrHandle, long source,
 			WordPointer pathsRes) {

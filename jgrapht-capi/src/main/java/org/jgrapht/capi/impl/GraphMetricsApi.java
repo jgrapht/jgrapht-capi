@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -39,7 +39,7 @@ public class GraphMetricsApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "graph_metrics_diameter", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int diameter(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -50,7 +50,7 @@ public class GraphMetricsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "graph_metrics_radius", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int radius(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -61,7 +61,7 @@ public class GraphMetricsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "graph_metrics_girth", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int girth(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -72,7 +72,7 @@ public class GraphMetricsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "graph_metrics_triangles", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int triangles(IsolateThread thread, ObjectHandle graphHandle, CLongPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -83,7 +83,7 @@ public class GraphMetricsApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "graph_metrics_measure_graph", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V,E> int vertexEccentricity(IsolateThread thread, ObjectHandle graphHandle, CDoublePointer diameter,
 			CDoublePointer radius, WordPointer center, WordPointer periphery, WordPointer pseudoPeriphery,

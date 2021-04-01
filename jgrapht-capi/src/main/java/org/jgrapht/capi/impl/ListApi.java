@@ -120,7 +120,7 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "list_edge_pair_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listEdgePairAdd(IsolateThread thread, ObjectHandle handle, int source, int target,
 			CIntPointer res) {
@@ -132,7 +132,7 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "list_edge_pair_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int longListEdgePairAdd(IsolateThread thread, ObjectHandle handle, long source, long target,
 			CIntPointer res) {
@@ -144,7 +144,7 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INTINT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "list_edge_triple_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listEdgeTripleAdd(IsolateThread thread, ObjectHandle handle, int source, int target,
 			double weight, CIntPointer res) {
@@ -156,7 +156,7 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONGLONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "list_edge_triple_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listEdgeTripleAdd(IsolateThread thread, ObjectHandle handle, long source, long target,
 			double weight, CIntPointer res) {

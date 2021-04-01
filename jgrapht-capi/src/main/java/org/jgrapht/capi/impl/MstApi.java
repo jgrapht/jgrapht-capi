@@ -43,7 +43,7 @@ public class MstApi {
 	 * @param graphHandle the graph handle
 	 * @return a handle on the result
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "mst_exec_kruskal", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeMSTKruskal(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
 			WordPointer res) {
@@ -65,7 +65,7 @@ public class MstApi {
 	 * @param graphHandle the graph handle
 	 * @return a handle on the result
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "mst_exec_prim", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeMSTPrim(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
 			WordPointer res) {
@@ -87,7 +87,7 @@ public class MstApi {
 	 * @param graphHandle the graph handle
 	 * @return a handle on the result
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANYANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "mst_exec_boruvka", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeMSTBoruvka(IsolateThread thread, ObjectHandle graph, CDoublePointer weightRes,
 			WordPointer res) {
