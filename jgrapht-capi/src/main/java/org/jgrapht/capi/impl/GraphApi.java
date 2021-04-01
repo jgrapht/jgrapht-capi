@@ -77,7 +77,7 @@ public class GraphApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	public static Graph<Integer, Integer> createGraph(boolean directed, boolean allowingSelfLoops,
+	public static DefaultCapiGraph<Integer, Integer> createGraph(boolean directed, boolean allowingSelfLoops,
 			boolean allowingMultipleEdges, boolean weighted, VoidToIntegerFunctionPointer vertexSupplier,
 			VoidToIntegerFunctionPointer edgeSupplier) {
 
@@ -119,12 +119,10 @@ public class GraphApi {
 		}
 
 		// wrap in order to support all methods
-		graph = new DefaultCapiGraph<Integer, Integer>(graph);
-
-		return graph;
+		return new DefaultCapiGraph<Integer, Integer>(graph);
 	}
 
-	public static Graph<Long, Long> createLongGraph(boolean directed, boolean allowingSelfLoops,
+	public static DefaultCapiGraph<Long, Long> createLongGraph(boolean directed, boolean allowingSelfLoops,
 			boolean allowingMultipleEdges, boolean weighted, VoidToLongFunctionPointer vertexSupplier,
 			VoidToLongFunctionPointer edgeSupplier) {
 		Supplier<Long> vSupplier;
@@ -166,9 +164,7 @@ public class GraphApi {
 		}
 
 		// wrap in order to support all methods
-		graph = new DefaultCapiGraph<>(graph);
-
-		return graph;
+		return new DefaultCapiGraph<>(graph);
 	}
 
 	/**
