@@ -96,7 +96,7 @@ int main() {
 
     // tree
     void *tree;
-    jgrapht_capi_ii_cut_gomoryhu_tree(thread, hu, &tree);
+    jgrapht_capi_ii_cut_gomoryhu_tree(thread, hu, NULL, NULL, &tree);
     int count;
     jgrapht_capi_ix_graph_vertices_count(thread, tree, &count);
     assert (count == 4);
