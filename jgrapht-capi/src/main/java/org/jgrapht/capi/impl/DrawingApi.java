@@ -274,7 +274,7 @@ public class DrawingApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "drawing_exec_circular_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeCircularLayout(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle model,
 			double radius, PPToIFunctionPointer vertexComparator) {
