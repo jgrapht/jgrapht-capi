@@ -271,7 +271,7 @@ public class HandlesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
 			+ "handles_get_graphpath", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getHandleAsGraphPath(IsolateThread thread, ObjectHandle handle, CDoublePointer weightRes,
 			WordPointer startVertexRes, WordPointer endVertexRes, WordPointer edgeItRes) {

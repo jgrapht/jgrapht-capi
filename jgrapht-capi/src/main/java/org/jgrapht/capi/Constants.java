@@ -75,23 +75,37 @@ public class Constants {
 	public static final String ANY_ANY = "xx_";
 
 	/**
-	 * Indicates a method working on a graph with external references for vertices
-	 * and external references for edges.
-	 */
-	public static final String REF_REF = "rr_";
-
-	/**
 	 * Indicates a method working on a graph with an external reference for vertices
 	 * and any type for edges.
 	 */
-	public static final String REF_ANY = "rx_";
+	public static final String REF_ANY = "Rx_";
+
+	/**
+	 * Indicates a method working on a graph with external references for vertices
+	 * and external references for edges.
+	 */
+	public static final String REF_REF = "RR_";
 
 	/**
 	 * Indicates a method working on a graph with an direct external reference for
-	 * vertices and any type for edges. Direct external reference means that the
-	 * calls needs to provide both a pointer and a handle for the equals-hash
+	 * vertices and any type for edges. Direct external reference means that there
+	 * is no instance that is guaranteed to live inside the JVM. The caller needs to
+	 * provide all information to instantiate the element every time it is needs.
+	 * Several methods using this also need to provide a handle for the equals-hash
 	 * resolver.
 	 */
-	public static final String DREF_ANY = "Rx_";
+	public static final String DREF_ANY = "rx_";
+
+	/**
+	 * Indicates a method working on a graph with any type for the vertices and
+	 * direct external references for edges.
+	 */
+	public static final String ANY_DREF = "xr_";
+
+	/**
+	 * Indicates a method working on a graph with directed external references for
+	 * vertices and direct external references for edges.
+	 */
+	public static final String DREF_DREF = "rr_";
 
 }

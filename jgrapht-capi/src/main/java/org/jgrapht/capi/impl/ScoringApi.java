@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -42,8 +42,10 @@ import org.jgrapht.alg.scoring.PageRank;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.IntegerToDoubleFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LongToDoubleFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PToDFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.ExternalRef;
 
 public class ScoringApi {
 
@@ -141,6 +143,29 @@ public class ScoringApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "scoring_exec_custom_katz_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeKatzCentrality(IsolateThread thread, ObjectHandle graphHandle, double dampingFactor,
+			PToDFunctionPointer exogenousFactorFunctionPointer, int maxIterations, double tolerance, WordPointer res) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+
+		ToDoubleFunction<ExternalRef> exogenousFactorFunction;
+		if (exogenousFactorFunctionPointer.isNull()) {
+			exogenousFactorFunction = x -> 1d;
+		} else {
+			exogenousFactorFunction = x -> exogenousFactorFunctionPointer.invoke(x.getPtr());
+		}
+
+		VertexScoringAlgorithm<ExternalRef, Double> alg = new KatzCentrality<>(g, dampingFactor,
+				exogenousFactorFunction, maxIterations, tolerance);
+		Map<ExternalRef, Double> result = alg.getScores();
+
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(result));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "scoring_exec_betweenness_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeBetweennessCentrality(IsolateThread thread, ObjectHandle graphHandle,
@@ -170,7 +195,7 @@ public class ScoringApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "scoring_exec_edge_betweenness_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int executeEdgeBetweennessCentrality(IsolateThread thread, ObjectHandle graphHandle,

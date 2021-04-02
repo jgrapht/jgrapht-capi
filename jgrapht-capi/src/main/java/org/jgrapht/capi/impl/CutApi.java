@@ -208,7 +208,7 @@ public class CutApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_REF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
 			+ "cut_gomoryhu_tree", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Given an instance of the GomoryHu cut tree from Gusfield's algorithm, compute",
 					"the actual tree as a graph. The new graph will reuse the vertex set from the original graph",

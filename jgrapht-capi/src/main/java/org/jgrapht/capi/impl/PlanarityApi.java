@@ -1,3 +1,20 @@
+/*
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
+ *
+ * JGraphT C-API
+ *
+ * See the CONTRIBUTORS.md file distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0, or the
+ * GNU Lesser General Public License v2.1 or later
+ * which is available at
+ * http://www.gnu.org/licenses/old-licenses/lgpl-2.1-standalone.html.
+ *
+ * SPDX-License-Identifier: EPL-2.0 OR LGPL-2.1-or-later
+ */
 package org.jgrapht.capi.impl;
 
 import java.util.List;
@@ -8,12 +25,15 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.word.PointerBase;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.interfaces.PlanarityTestingAlgorithm.Embedding;
 import org.jgrapht.alg.planar.BoyerMyrvoldPlanarityInspector;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.ExternalRef;
+import org.jgrapht.capi.graph.HashAndEqualsResolver;
 
 public class PlanarityApi {
 
@@ -60,6 +80,20 @@ public class PlanarityApi {
 			+ "planarity_embedding_edges_around_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgesAround(IsolateThread thread, ObjectHandle embeddingHandle, long vertex, WordPointer res) {
 		Embedding<Long, ?> embedding = globalHandles.get(embeddingHandle);
+		List<?> list = embedding.getEdgesAround(vertex);
+		if (list != null && res.isNonNull()) {
+			res.write(globalHandles.create(list.iterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "planarity_embedding_edges_around_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgesAround(IsolateThread thread, ObjectHandle embeddingHandle, PointerBase vertexPtr,
+			ObjectHandle hashEqualsResolverHandle, WordPointer res) {
+		Embedding<ExternalRef, ?> embedding = globalHandles.get(embeddingHandle);
+		HashAndEqualsResolver hashEqualsResolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef vertex = hashEqualsResolver.toExternalRef(vertexPtr);
 		List<?> list = embedding.getEdgesAround(vertex);
 		if (list != null && res.isNonNull()) {
 			res.write(globalHandles.create(list.iterator()));
