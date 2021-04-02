@@ -399,7 +399,7 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "drawing_exec_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle modelHandle, ObjectHandle partitionHandle, PPToIFunctionPointer vertexComparatorFunctionPtr,
@@ -485,7 +485,7 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeBarycenterGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle modelHandle, ObjectHandle partitionHandle, PPToIFunctionPointer vertexComparatorFunctionPtr,
@@ -572,7 +572,7 @@ public class DrawingApi {
 	 * @param vertical                    whether to draw vertically or not
 	 * @return the return status
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.REF_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "drawing_exec_median_greedy_two_layered_bipartite_layout_2d", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int executeMedianGreedyTwoLayeredBipartite(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle modelHandle, ObjectHandle partitionHandle, PPToIFunctionPointer vertexComparatorFunctionPtr,
