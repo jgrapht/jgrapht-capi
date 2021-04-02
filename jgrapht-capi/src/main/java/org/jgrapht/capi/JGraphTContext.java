@@ -329,6 +329,13 @@ public class JGraphTContext {
 		long invoke(PointerBase p1);
 
 	}
+	
+	public interface PToDFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		double invoke(PointerBase p1);
+
+	}
 
 	public interface PToPFunctionPointer extends CFunctionPointer {
 
