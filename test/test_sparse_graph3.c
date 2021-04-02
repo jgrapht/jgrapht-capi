@@ -32,16 +32,16 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *edgelist;
-    jgrapht_capi_list_create(thread, &edgelist);
+    jgrapht_capi_x_list_create(thread, &edgelist);
 
     int added;
-    jgrapht_capi_ii_list_edge_pair_add(thread, edgelist, 0, 1, &added);
-    jgrapht_capi_ii_list_edge_pair_add(thread, edgelist, 1, 2, &added);
-    jgrapht_capi_ii_list_edge_pair_add(thread, edgelist, 2, 3, &added);
-    jgrapht_capi_ii_list_edge_pair_add(thread, edgelist, 3, 4, &added);
-    jgrapht_capi_ii_list_edge_pair_add(thread, edgelist, 4, 5, &added);
-    jgrapht_capi_ii_list_edge_pair_add(thread, edgelist, 0, 2, &added);
-    jgrapht_capi_ii_list_edge_pair_add(thread, edgelist, 0, 3, &added);
+    jgrapht_capi_ii_p_list_add(thread, edgelist, 0, 1, &added);
+    jgrapht_capi_ii_p_list_add(thread, edgelist, 1, 2, &added);
+    jgrapht_capi_ii_p_list_add(thread, edgelist, 2, 3, &added);
+    jgrapht_capi_ii_p_list_add(thread, edgelist, 3, 4, &added);
+    jgrapht_capi_ii_p_list_add(thread, edgelist, 4, 5, &added);
+    jgrapht_capi_ii_p_list_add(thread, edgelist, 0, 2, &added);
+    jgrapht_capi_ii_p_list_add(thread, edgelist, 0, 3, &added);
 
     void *g;
     jgrapht_capi_ii_graph_sparse_create(thread, 1, 0, 6, edgelist, INCOMING_EDGES_SUPPORT_LAZY_INCOMING_EDGES, &g);

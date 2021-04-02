@@ -142,14 +142,14 @@ int main() {
     // test as_subgraph
     void *vset;
     void *eset;
-    jgrapht_capi_set_create(thread, &vset);
-    jgrapht_capi_set_int_add(thread, vset, v1, NULL);
-    jgrapht_capi_set_int_add(thread, vset, v2, NULL);
-    jgrapht_capi_set_int_add(thread, vset, v3, NULL);
+    jgrapht_capi_x_set_create(thread, &vset);
+    jgrapht_capi_i_set_add(thread, vset, v1, NULL);
+    jgrapht_capi_i_set_add(thread, vset, v2, NULL);
+    jgrapht_capi_i_set_add(thread, vset, v3, NULL);
 
-    jgrapht_capi_set_create(thread, &eset);
-    jgrapht_capi_set_int_add(thread, eset, e12, NULL);
-    jgrapht_capi_set_int_add(thread, eset, e23_2, NULL);
+    jgrapht_capi_x_set_create(thread, &eset);
+    jgrapht_capi_i_set_add(thread, eset, e12, NULL);
+    jgrapht_capi_i_set_add(thread, eset, e23_2, NULL);
 
     jgrapht_capi_xx_graph_as_subgraph(thread, g, vset, eset, &g1);
     assert(jgrapht_capi_error_get_errno(thread) == 0);

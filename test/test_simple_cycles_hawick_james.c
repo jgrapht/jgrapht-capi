@@ -68,7 +68,7 @@ int main() {
     // cycle is a List<Long> where each long is a vertex 
 
     void *vit;
-    jgrapht_capi_list_it_create(thread, cycle, &vit);
+    jgrapht_capi_x_list_it_create(thread, cycle, &vit);
 
     char result[100];
     result[0] = '\0';
@@ -93,7 +93,7 @@ int main() {
     assert(hasnext==1);
     jgrapht_capi_it_next_object(thread, cycleit, &cycle);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-    jgrapht_capi_list_it_create(thread, cycle, &vit);
+    jgrapht_capi_x_list_it_create(thread, cycle, &vit);
 
     result[0] = '\0';
     while(1) { 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -31,6 +31,7 @@ import org.jgrapht.alg.util.Pair;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.Types;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.capi.graph.HashAndEqualsResolver;
@@ -39,7 +40,8 @@ public class ListApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "list_create", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
+			+ "list_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createList(IsolateThread thread, WordPointer res) {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(new ArrayList<>()));
@@ -47,7 +49,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "list_it_create", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
+			+ "list_it_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createListIterator(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		List<?> list = globalHandles.get(handle);
 		if (res.isNonNull()) {
@@ -56,7 +59,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "list_size", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
+			+ "list_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listSize(IsolateThread thread, ObjectHandle handle, CIntPointer res) {
 		List<?> list = globalHandles.get(handle);
 		if (res.isNonNull()) {
@@ -65,7 +69,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "list_int_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT
+			+ "list_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listIntegerAdd(IsolateThread thread, ObjectHandle handle, int value, CIntPointer res) {
 		List<Integer> list = globalHandles.get(handle);
 		boolean result = list.add(value);
@@ -75,7 +80,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "list_long_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG
+			+ "list_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listLongAdd(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
 		List<Long> list = globalHandles.get(handle);
 		boolean result = list.add(value);
@@ -85,7 +91,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "list_double_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DOUBLE
+			+ "list_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listDoubleAdd(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
 		List<Double> list = globalHandles.get(handle);
 		boolean result = list.add(value);
@@ -95,7 +102,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "list_ref_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.REF
+			+ "list_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listRefAdd(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle, CIntPointer res) {
 		List<ExternalRef> list = globalHandles.get(handle);
 		ExternalRef ref = globalHandles.get(refHandle);
@@ -106,8 +114,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "list_ref_add_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF
+			+ "list_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listRefAdd(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
 			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
 		List<ExternalRef> list = globalHandles.get(handle);
@@ -120,8 +128,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
-			+ "list_edge_pair_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_INT_PAIR
+			+ "list_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listEdgePairAdd(IsolateThread thread, ObjectHandle handle, int source, int target,
 			CIntPointer res) {
 		List<Pair<Integer, Integer>> list = globalHandles.get(handle);
@@ -132,8 +140,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
-			+ "list_edge_pair_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_LONG_PAIR
+			+ "list_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int longListEdgePairAdd(IsolateThread thread, ObjectHandle handle, long source, long target,
 			CIntPointer res) {
 		List<Pair<Long, Long>> list = globalHandles.get(handle);
@@ -144,8 +152,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
-			+ "list_edge_triple_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_INT_DOUBLE_TRIPLE
+			+ "list_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listEdgeTripleAdd(IsolateThread thread, ObjectHandle handle, int source, int target,
 			double weight, CIntPointer res) {
 		List<Triple<Integer, Integer, Double>> list = globalHandles.get(handle);
@@ -156,8 +164,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
-			+ "list_edge_triple_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_LONG_DOUBLE_TRIPLE
+			+ "list_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listEdgeTripleAdd(IsolateThread thread, ObjectHandle handle, long source, long target,
 			double weight, CIntPointer res) {
 		List<Triple<Long, Long, Double>> list = globalHandles.get(handle);
@@ -168,7 +176,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "list_int_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT
+			+ "list_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listIntegerRemove(IsolateThread thread, ObjectHandle handle, int value) {
 		List<Integer> list = globalHandles.get(handle);
 		Integer objectToRemove = value;
@@ -176,8 +185,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "list_long_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG
+			+ "list_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listLongRemove(IsolateThread thread, ObjectHandle handle, long value) {
 		List<Long> list = globalHandles.get(handle);
 		Long objectToRemove = value;
@@ -185,15 +194,16 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "list_double_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DOUBLE
+			+ "list_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listDoubleRemove(IsolateThread thread, ObjectHandle handle, double value) {
 		List<Double> list = globalHandles.get(handle);
 		list.remove(value);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "list_ref_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.REF
+			+ "list_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle) {
 		List<ExternalRef> list = globalHandles.get(handle);
 		ExternalRef ref = globalHandles.get(refHandle);
@@ -201,8 +211,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "list_ref_remove_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF
+			+ "list_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listRefRemove(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
 			ObjectHandle hashEqualsResolverHandle) {
 		List<ExternalRef> list = globalHandles.get(handle);
@@ -212,8 +222,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "list_int_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT
+			+ "list_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listIntegerContains(IsolateThread thread, ObjectHandle handle, int value, CIntPointer res) {
 		List<Integer> list = globalHandles.get(handle);
 		boolean result = list.contains(value);
@@ -223,8 +233,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "list_long_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG
+			+ "list_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listLongContains(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
 		List<Long> list = globalHandles.get(handle);
 		boolean result = list.contains(value);
@@ -234,8 +244,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "list_double_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DOUBLE
+			+ "list_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listDoubleContains(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
 		List<Double> list = globalHandles.get(handle);
 		boolean result = list.contains(value);
@@ -245,8 +255,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "list_ref_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.REF
+			+ "list_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listRefContains(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
 			CIntPointer res) {
 		List<ExternalRef> list = globalHandles.get(handle);
@@ -258,8 +268,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "list_ref_contains_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF
+			+ "list_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int listRefContainsDirect(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
 			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
 		List<ExternalRef> list = globalHandles.get(handle);
@@ -272,7 +282,8 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "list_clear", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
+			+ "list_clear", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int clearList(IsolateThread thread, ObjectHandle handle) {
 		List<?> list = globalHandles.get(handle);
 		list.clear();

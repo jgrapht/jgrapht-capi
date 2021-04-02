@@ -71,18 +71,18 @@ int main() {
     assert(jgrapht_capi_xx_spanner_exec_greedy_multiplicative(thread, g, 3, &weight, &spanner)==0);
     assert(weight == 4.0);
     int size;
-    jgrapht_capi_set_size(thread, spanner, &size);
+    jgrapht_capi_x_set_size(thread, spanner, &size);
     assert(size == 4);
     int contains;
-    jgrapht_capi_set_int_contains(thread, spanner, 0, &contains);
+    jgrapht_capi_i_set_contains(thread, spanner, 0, &contains);
     assert(contains);
-    jgrapht_capi_set_int_contains(thread, spanner, 1, &contains);
+    jgrapht_capi_i_set_contains(thread, spanner, 1, &contains);
     assert(contains);
-    jgrapht_capi_set_int_contains(thread, spanner, 2, &contains);
+    jgrapht_capi_i_set_contains(thread, spanner, 2, &contains);
     assert(contains);
-    jgrapht_capi_set_int_contains(thread, spanner, 3, &contains);
+    jgrapht_capi_i_set_contains(thread, spanner, 3, &contains);
     assert(contains);
-    jgrapht_capi_set_int_contains(thread, spanner, 4, &contains);
+    jgrapht_capi_i_set_contains(thread, spanner, 4, &contains);
     assert(!contains);
     jgrapht_capi_handles_destroy(thread,  spanner);
 

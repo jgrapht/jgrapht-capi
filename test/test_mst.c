@@ -71,31 +71,31 @@ int main() {
     assert(jgrapht_capi_xx_mst_exec_kruskal(thread, g, &weight, &mst) == 0);
     assert(weight == 10.0);
     int size;
-    jgrapht_capi_set_size(thread, mst, &size);
+    jgrapht_capi_x_set_size(thread, mst, &size);
     assert(size == 4);
     int contains;
-    jgrapht_capi_set_int_contains(thread, mst, 1, &contains);
+    jgrapht_capi_i_set_contains(thread, mst, 1, &contains);
     assert(contains);
-    jgrapht_capi_set_int_contains(thread, mst, 2, &contains);
+    jgrapht_capi_i_set_contains(thread, mst, 2, &contains);
     assert(contains);
-    jgrapht_capi_set_int_contains(thread, mst, 3, &contains);
+    jgrapht_capi_i_set_contains(thread, mst, 3, &contains);
     assert(contains);
-    jgrapht_capi_set_int_contains(thread, mst, 4, &contains);
+    jgrapht_capi_i_set_contains(thread, mst, 4, &contains);
     assert(contains);
     jgrapht_capi_handles_destroy(thread,  mst);
 
     // run prim
     assert(jgrapht_capi_xx_mst_exec_prim(thread, g, &weight, &mst) == 0);
     assert(weight == 10.0);
-    jgrapht_capi_set_size(thread, mst, &size);
+    jgrapht_capi_x_set_size(thread, mst, &size);
     assert(size == 4);
-    jgrapht_capi_set_int_contains(thread, mst, 1, &contains);
+    jgrapht_capi_i_set_contains(thread, mst, 1, &contains);
     assert(contains);
-    jgrapht_capi_set_int_contains(thread, mst, 2, &contains);
+    jgrapht_capi_i_set_contains(thread, mst, 2, &contains);
     assert(contains);
-    jgrapht_capi_set_int_contains(thread, mst, 3, &contains);
+    jgrapht_capi_i_set_contains(thread, mst, 3, &contains);
     assert(contains);
-    jgrapht_capi_set_int_contains(thread, mst, 4, &contains);
+    jgrapht_capi_i_set_contains(thread, mst, 4, &contains);
     assert(contains);
     jgrapht_capi_handles_destroy(thread,  mst);
 

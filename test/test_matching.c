@@ -53,78 +53,78 @@ int main() {
     void * part1, * part2;
     jgrapht_capi_xx_matching_exec_greedy_general_max_card(thread, g, &weight, &m);
     assert(weight == 115.0);
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 
     jgrapht_capi_xx_matching_exec_custom_greedy_general_max_card(thread, g, 1, &weight, &m);
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 
     jgrapht_capi_xx_matching_exec_edmonds_general_max_card_dense(thread, g, &weight, &m);
     assert(weight == 115.0);
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 
     jgrapht_capi_xx_matching_exec_edmonds_general_max_card_sparse(thread, g, &weight, &m);
     // assert(weight == 115.0); bug in JGraphT 1.4.0 returns 2.0
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 
     jgrapht_capi_xx_matching_exec_greedy_general_max_weight(thread, g, &weight, &m);
     assert(weight == 115.0);
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 
     jgrapht_capi_xx_matching_exec_custom_greedy_general_max_weight(thread, g, 1, 0.000000001, &weight, &m);
     assert(weight == 115.0);
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 
     jgrapht_capi_xx_matching_exec_pathgrowing_max_weight(thread, g, &weight, &m);
     assert(weight == 115.0);
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 
     jgrapht_capi_xx_matching_exec_blossom5_general_max_weight(thread, g, &weight, &m);
     assert(weight == 115.0);
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 
     jgrapht_capi_xx_matching_exec_blossom5_general_min_weight(thread, g, &weight, &m);
     assert(weight == 0.0);
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 0);
     jgrapht_capi_handles_destroy(thread, m);
 
     jgrapht_capi_xx_matching_exec_blossom5_general_perfect_max_weight(thread, g, &weight, &m);
     assert(weight == 115.0);
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 
     jgrapht_capi_xx_matching_exec_blossom5_general_perfect_min_weight(thread, g, &weight, &m);
     assert(weight == 8.0);
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 
     jgrapht_capi_xx_matching_exec_bipartite_max_card(thread, g, &weight, &m);
     // assert(weight == 115.0); bug in JGraphT 1.4.0 returns 2.0
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 
     jgrapht_capi_xx_matching_exec_bipartite_max_weight(thread, g, &weight, &m);
     assert(weight == 115.0);
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 
@@ -135,7 +135,7 @@ int main() {
 
     jgrapht_capi_xx_matching_exec_bipartite_perfect_min_weight(thread, g, part1, part2, &weight, &m);
     assert(weight == 8.0);
-    jgrapht_capi_set_size(thread, m, &card);
+    jgrapht_capi_x_set_size(thread, m, &card);
     assert(card == 2);
     jgrapht_capi_handles_destroy(thread, m);
 

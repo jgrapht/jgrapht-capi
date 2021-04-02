@@ -105,7 +105,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int count = 0;
-    jgrapht_capi_list_size(thread, edgelist, &count);
+    jgrapht_capi_x_list_size(thread, edgelist, &count);
     assert (count == 3);
 
     jgrapht_capi_handles_destroy(thread, edgelist);
@@ -116,7 +116,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     count = 0;
-    jgrapht_capi_list_size(thread, edgelist, &count);
+    jgrapht_capi_x_list_size(thread, edgelist, &count);
     assert (count == 3);
 
     jgrapht_capi_handles_destroy(thread, edgelist);

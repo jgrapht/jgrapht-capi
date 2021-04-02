@@ -30,6 +30,7 @@ import org.graalvm.nativeimage.c.type.WordPointer;
 import org.graalvm.word.PointerBase;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.Types;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.capi.graph.HashAndEqualsResolver;
@@ -38,7 +39,8 @@ public class SetApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "set_create", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
+			+ "set_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createSet(IsolateThread thread, WordPointer res) {
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(new HashSet<>()));
@@ -46,7 +48,7 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
 			+ "set_linked_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createLinkedSet(IsolateThread thread, WordPointer res) {
 		if (res.isNonNull()) {
@@ -55,7 +57,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "set_it_create", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
+			+ "set_it_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createMapKeysIterator(IsolateThread thread, ObjectHandle handle, WordPointer res) {
 		Set<?> set = globalHandles.get(handle);
 		if (res.isNonNull()) {
@@ -64,7 +67,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "set_size", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
+			+ "set_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setSize(IsolateThread thread, ObjectHandle handle, CIntPointer res) {
 		Set<?> set = globalHandles.get(handle);
 		if (res.isNonNull()) {
@@ -73,7 +77,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "set_int_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT
+			+ "set_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setIntAdd(IsolateThread thread, ObjectHandle handle, int value, CIntPointer res) {
 		Set<Integer> set = globalHandles.get(handle);
 		boolean result = set.add(value);
@@ -83,7 +88,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "set_long_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG
+			+ "set_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setLongAdd(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
 		Set<Long> set = globalHandles.get(handle);
 		boolean result = set.add(value);
@@ -93,7 +99,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "set_double_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DOUBLE
+			+ "set_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setDoubleAdd(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
 		Set<Double> set = globalHandles.get(handle);
 		boolean result = set.add(value);
@@ -103,7 +110,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "set_ref_add", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.REF
+			+ "set_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setRefAdd(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle, CIntPointer res) {
 		Set<ExternalRef> set = globalHandles.get(handle);
 		ExternalRef ref = globalHandles.get(refHandle);
@@ -114,8 +122,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "set_ref_add_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF
+			+ "set_add", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setRefAdd(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
 			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
 		Set<ExternalRef> set = globalHandles.get(handle);
@@ -128,7 +136,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "set_int_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT
+			+ "set_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setIntRemove(IsolateThread thread, ObjectHandle handle, int value, CIntPointer res) {
 		Set<Integer> set = globalHandles.get(handle);
 		boolean result = set.remove(value);
@@ -138,7 +147,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "set_long_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG
+			+ "set_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setLongRemove(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
 		Set<Long> set = globalHandles.get(handle);
 		boolean result = set.remove(value);
@@ -148,8 +158,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "set_double_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DOUBLE
+			+ "set_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setDoubleRemove(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
 		Set<Double> set = globalHandles.get(handle);
 		boolean result = set.remove(value);
@@ -159,7 +169,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "set_ref_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.REF
+			+ "set_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle, CIntPointer res) {
 		Set<ExternalRef> set = globalHandles.get(handle);
 		ExternalRef ref = globalHandles.get(refHandle);
@@ -170,8 +181,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "set_ref_remove_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF
+			+ "set_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
 			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
 		Set<ExternalRef> set = globalHandles.get(handle);
@@ -184,8 +195,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "set_int_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT
+			+ "set_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setIntContains(IsolateThread thread, ObjectHandle handle, int value, CIntPointer res) {
 		Set<Integer> set = globalHandles.get(handle);
 		boolean result = set.contains(value);
@@ -195,8 +206,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "set_long_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG
+			+ "set_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setLongContains(IsolateThread thread, ObjectHandle handle, long value, CIntPointer res) {
 		Set<Long> set = globalHandles.get(handle);
 		boolean result = set.contains(value);
@@ -206,8 +217,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "set_double_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DOUBLE
+			+ "set_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setDoubleContains(IsolateThread thread, ObjectHandle handle, double value, CIntPointer res) {
 		Set<Double> set = globalHandles.get(handle);
 		boolean result = set.contains(value);
@@ -217,8 +228,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "set_ref_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.REF
+			+ "set_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setRefContains(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
 			CIntPointer res) {
 		Set<ExternalRef> set = globalHandles.get(handle);
@@ -230,8 +241,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "set_ref_contains_direct", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF
+			+ "set_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int setRefContainsDirect(IsolateThread thread, ObjectHandle handle, PointerBase refPtr,
 			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
 		Set<ExternalRef> set = globalHandles.get(handle);
@@ -244,7 +255,8 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "set_clear", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
+			+ "set_clear", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int clearSet(IsolateThread thread, ObjectHandle handle) {
 		Set<?> set = globalHandles.get(handle);
 		set.clear();

@@ -30,42 +30,42 @@ int main() {
     }
 
     void * set;
-    jgrapht_capi_set_linked_create(thread, &set);
+    jgrapht_capi_x_set_linked_create(thread, &set);
 
     int exists;
-    jgrapht_capi_set_int_contains(thread, set, 4, &exists);
+    jgrapht_capi_i_set_contains(thread, set, 4, &exists);
     assert(exists == 0);
 
     int did_not_exist;
-    jgrapht_capi_set_int_add(thread, set, 4, &did_not_exist);
+    jgrapht_capi_i_set_add(thread, set, 4, &did_not_exist);
     assert(did_not_exist);
-    jgrapht_capi_set_int_contains(thread, set, 4, &exists);
+    jgrapht_capi_i_set_contains(thread, set, 4, &exists);
     assert(exists == 1);
 
-    jgrapht_capi_set_int_add(thread, set, 100, &did_not_exist);
+    jgrapht_capi_i_set_add(thread, set, 100, &did_not_exist);
     assert(did_not_exist);
-    jgrapht_capi_set_int_contains(thread, set, 100, &exists);
+    jgrapht_capi_i_set_contains(thread, set, 100, &exists);
     assert(exists == 1);
 
-    jgrapht_capi_set_int_add(thread, set, 500, &did_not_exist);
+    jgrapht_capi_i_set_add(thread, set, 500, &did_not_exist);
     assert(did_not_exist);
-    jgrapht_capi_set_int_contains(thread, set, 500, &exists);
+    jgrapht_capi_i_set_contains(thread, set, 500, &exists);
     assert(exists == 1);
 
     int size;
-    jgrapht_capi_set_size(thread, set, &size);
+    jgrapht_capi_x_set_size(thread, set, &size);
     assert(size == 3);
 
-    jgrapht_capi_set_int_remove(thread, set, 500, NULL);
-    jgrapht_capi_set_int_contains(thread, set, 500, &exists);
+    jgrapht_capi_i_set_remove(thread, set, 500, NULL);
+    jgrapht_capi_i_set_contains(thread, set, 500, &exists);
     assert(exists == 0);
 
-    jgrapht_capi_set_size(thread, set, &size);
+    jgrapht_capi_x_set_size(thread, set, &size);
     assert(size == 2);
 
     void * it;
     int elem;
-    jgrapht_capi_set_it_create(thread, set, &it);
+    jgrapht_capi_x_set_it_create(thread, set, &it);
     jgrapht_capi_it_next_int(thread, it, &elem);
     assert(elem == 4);
     jgrapht_capi_it_next_int(thread, it, &elem);
@@ -75,8 +75,8 @@ int main() {
     assert(hasnext == 0);
     jgrapht_capi_handles_destroy(thread, it);
 
-    jgrapht_capi_set_clear(thread, set);
-    jgrapht_capi_set_size(thread, set, &size);
+    jgrapht_capi_x_set_clear(thread, set);
+    jgrapht_capi_x_set_size(thread, set, &size);
     assert(size == 0);
 
     jgrapht_capi_handles_destroy(thread, set);

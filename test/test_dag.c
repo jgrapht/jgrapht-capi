@@ -84,12 +84,12 @@ int main() {
 
     void *set;
     jgrapht_capi_ix_graph_dag_vertex_ancestors(thread, g, 3, &set);
-    jgrapht_capi_set_size(thread, set, &count);
+    jgrapht_capi_x_set_size(thread, set, &count);
     assert(count == 2);
     jgrapht_capi_handles_destroy(thread, set);
 
     jgrapht_capi_ix_graph_dag_vertex_descendants(thread, g, 2, &set);
-    jgrapht_capi_set_size(thread, set, &count);
+    jgrapht_capi_x_set_size(thread, set, &count);
     assert(count == 2);
     jgrapht_capi_handles_destroy(thread, set);
 

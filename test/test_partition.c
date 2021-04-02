@@ -47,22 +47,22 @@ int main() {
     assert(isbipartite == 1);
 
     int contains;
-    jgrapht_capi_set_int_contains(thread, part1, 0, &contains);
+    jgrapht_capi_i_set_contains(thread, part1, 0, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_int_contains(thread, part1, 1, &contains);
+    jgrapht_capi_i_set_contains(thread, part1, 1, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_int_contains(thread, part1, 2, &contains);
+    jgrapht_capi_i_set_contains(thread, part1, 2, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_int_contains(thread, part1, 3, &contains);
+    jgrapht_capi_i_set_contains(thread, part1, 3, &contains);
     assert(contains == 0);
 
-    jgrapht_capi_set_int_contains(thread, part2, 0, &contains);
+    jgrapht_capi_i_set_contains(thread, part2, 0, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_int_contains(thread, part2, 1, &contains);
+    jgrapht_capi_i_set_contains(thread, part2, 1, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_int_contains(thread, part2, 2, &contains);
+    jgrapht_capi_i_set_contains(thread, part2, 2, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_int_contains(thread, part2, 3, &contains);
+    jgrapht_capi_i_set_contains(thread, part2, 3, &contains);
     assert(contains == 1);
 
 

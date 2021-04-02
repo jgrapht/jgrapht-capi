@@ -62,7 +62,7 @@ int main() {
     jgrapht_capi_it_next_object(thread, setsit, &set);
 
     int size = 0;
-    jgrapht_capi_set_size(thread, set, &size);
+    jgrapht_capi_x_set_size(thread, set, &size);
     assert(size == 6);
     jgrapht_capi_handles_destroy(thread, set);
     jgrapht_capi_handles_destroy(thread, setsit);

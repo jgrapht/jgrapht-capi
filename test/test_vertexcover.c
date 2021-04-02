@@ -66,10 +66,10 @@ int main() {
     assert(vc_w == 1.0);
 
     int size;
-    jgrapht_capi_set_size(thread, vc, &size);
+    jgrapht_capi_x_set_size(thread, vc, &size);
     assert(size == 1);
     int contains;
-    jgrapht_capi_set_int_contains(thread, vc, 0, &contains);
+    jgrapht_capi_i_set_contains(thread, vc, 0, &contains);
     assert(contains == 1);
 
     jgrapht_capi_handles_destroy(thread, vc);
@@ -87,7 +87,7 @@ int main() {
     jgrapht_capi_xx_vertexcover_exec_greedy_weighted(thread, g, map, &vc_w, &vc);
     assert(vc_w == 12.0);
     void *vit;
-    jgrapht_capi_set_it_create(thread, vc, &vit);
+    jgrapht_capi_x_set_it_create(thread, vc, &vit);
 
     int v;
     assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);

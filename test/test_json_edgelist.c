@@ -112,7 +112,7 @@ int main() {
     jgrapht_capi_ii_import_edgelist_attrs_file_json(thread, "dummy.edgelist.json.out", vertex_attribute, edge_attribute, &edgelist);
 
     int size;
-    jgrapht_capi_list_size(thread, edgelist, &size);
+    jgrapht_capi_x_list_size(thread, edgelist, &size);
     assert(size == 2);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     jgrapht_capi_handles_destroy(thread, edgelist);
@@ -120,7 +120,7 @@ int main() {
 
     // test json with no attributes
     jgrapht_capi_xx_import_edgelist_noattrs_file_json(thread, "dummy.edgelist.json.out", &edgelist);
-    jgrapht_capi_list_size(thread, edgelist, &size);
+    jgrapht_capi_x_list_size(thread, edgelist, &size);
     assert(size == 2);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     jgrapht_capi_handles_destroy(thread, edgelist);

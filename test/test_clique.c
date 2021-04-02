@@ -58,7 +58,7 @@ int main() {
     void *clique;
     jgrapht_capi_it_next_object(thread, cliqueit, &clique);
     void *vit;
-    jgrapht_capi_set_it_create(thread, clique, &vit);
+    jgrapht_capi_x_set_it_create(thread, clique, &vit);
     while(1) { 
         jgrapht_capi_it_hasnext(thread, vit, &hasnext);
         if (!hasnext) 
@@ -74,7 +74,7 @@ int main() {
 
     // clique is a Set<Long>
     jgrapht_capi_it_next_object(thread, cliqueit, &clique);
-    jgrapht_capi_set_it_create(thread, clique, &vit);
+    jgrapht_capi_x_set_it_create(thread, clique, &vit);
     while(1) { 
         jgrapht_capi_it_hasnext(thread, vit, &hasnext);
         if (!hasnext) 
@@ -115,7 +115,7 @@ int main() {
 
     jgrapht_capi_xx_clique_exec_chordal_max_clique(thread, g, &clique);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-    jgrapht_capi_set_it_create(thread, clique, &vit);
+    jgrapht_capi_x_set_it_create(thread, clique, &vit);
     int elem = 0;
     while(1) { 
         jgrapht_capi_it_hasnext(thread, vit, &hasnext);

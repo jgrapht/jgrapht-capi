@@ -67,10 +67,10 @@ int main() {
 
     // test with given partition 
     void *set;
-    jgrapht_capi_set_linked_create(thread, &set);
-    jgrapht_capi_set_int_add(thread, set, 0, NULL);
-    jgrapht_capi_set_int_add(thread, set, 1, NULL);
-    jgrapht_capi_set_int_add(thread, set, 2, NULL);
+    jgrapht_capi_x_set_linked_create(thread, &set);
+    jgrapht_capi_i_set_add(thread, set, 0, NULL);
+    jgrapht_capi_i_set_add(thread, set, 1, NULL);
+    jgrapht_capi_i_set_add(thread, set, 2, NULL);
     jgrapht_capi_xx_drawing_layout_model_2d_create(thread, 0, 0, 10.0, 10.0, &model);
 
     jgrapht_capi_ix_drawing_exec_barycenter_greedy_two_layered_bipartite_layout_2d(thread, g, model, set, 0, 1);

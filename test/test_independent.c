@@ -52,7 +52,7 @@ int main() {
     jgrapht_capi_xx_independent_set_exec_chordal_max_independent_set(thread, g, &ind);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     void *vit;
-    jgrapht_capi_set_it_create(thread, ind, &vit);
+    jgrapht_capi_x_set_it_create(thread, ind, &vit);
     int elem = 0;
     int hasnext;
     int v;

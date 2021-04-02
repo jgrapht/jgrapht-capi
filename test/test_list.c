@@ -30,47 +30,47 @@ int main() {
     }
 
     void *list;
-    jgrapht_capi_list_create(thread, &list);
+    jgrapht_capi_x_list_create(thread, &list);
 
     int exists;
-    jgrapht_capi_list_int_contains(thread, list, 4, &exists);
+    jgrapht_capi_i_list_contains(thread, list, 4, &exists);
     assert(exists == 0);
 
     int did_not_exist;
-    jgrapht_capi_list_int_add(thread, list, 4, &did_not_exist);
+    jgrapht_capi_i_list_add(thread, list, 4, &did_not_exist);
     assert(did_not_exist);
-    jgrapht_capi_list_int_contains(thread, list, 4, &exists);
+    jgrapht_capi_i_list_contains(thread, list, 4, &exists);
     assert(exists == 1);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_list_int_add(thread, list, 100, &did_not_exist);
+    jgrapht_capi_i_list_add(thread, list, 100, &did_not_exist);
     assert(did_not_exist);
-    jgrapht_capi_list_int_contains(thread, list, 100, &exists);
+    jgrapht_capi_i_list_contains(thread, list, 100, &exists);
     assert(exists == 1);
 
-    jgrapht_capi_list_int_add(thread, list, 500, &did_not_exist);
+    jgrapht_capi_i_list_add(thread, list, 500, &did_not_exist);
     assert(did_not_exist);
-    jgrapht_capi_list_int_contains(thread, list, 500, &exists);
+    jgrapht_capi_i_list_contains(thread, list, 500, &exists);
     assert(exists == 1);
 
     int size;
-    jgrapht_capi_list_size(thread, list, &size);
+    jgrapht_capi_x_list_size(thread, list, &size);
     assert(size == 3);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_list_int_remove(thread, list, 500);
+    jgrapht_capi_i_list_remove(thread, list, 500);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
-    jgrapht_capi_list_int_contains(thread, list, 500, &exists);
+    jgrapht_capi_i_list_contains(thread, list, 500, &exists);
     assert(exists == 0);
 
-    jgrapht_capi_list_size(thread, list, &size);
+    jgrapht_capi_x_list_size(thread, list, &size);
     assert(size == 2);
 
     void * it;
     int elem;
-    jgrapht_capi_list_it_create(thread, list, &it);
+    jgrapht_capi_x_list_it_create(thread, list, &it);
     jgrapht_capi_it_next_int(thread, it, &elem);
     assert(elem == 4);
     jgrapht_capi_it_next_int(thread, it, &elem);
@@ -80,8 +80,8 @@ int main() {
     assert(hasnext == 0);
     jgrapht_capi_handles_destroy(thread, it);
 
-    jgrapht_capi_list_clear(thread, list);
-    jgrapht_capi_list_size(thread, list, &size);
+    jgrapht_capi_x_list_clear(thread, list);
+    jgrapht_capi_x_list_size(thread, list, &size);
     assert(size == 0);
 
     jgrapht_capi_handles_destroy(thread, list);

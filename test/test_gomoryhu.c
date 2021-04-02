@@ -66,13 +66,13 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int contains = 0;
-    jgrapht_capi_set_int_contains(thread, source_partition, 0, &contains);
+    jgrapht_capi_i_set_contains(thread, source_partition, 0, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_int_contains(thread, source_partition, 1, &contains);
+    jgrapht_capi_i_set_contains(thread, source_partition, 1, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_int_contains(thread, source_partition, 2, &contains);
+    jgrapht_capi_i_set_contains(thread, source_partition, 2, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_int_contains(thread, source_partition, 3, &contains);
+    jgrapht_capi_i_set_contains(thread, source_partition, 3, &contains);
     assert(contains == 0);
     jgrapht_capi_handles_destroy(thread, source_partition);
 
@@ -83,13 +83,13 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     contains = 0;
-    jgrapht_capi_set_int_contains(thread, source_partition, 0, &contains);
+    jgrapht_capi_i_set_contains(thread, source_partition, 0, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_int_contains(thread, source_partition, 1, &contains);
+    jgrapht_capi_i_set_contains(thread, source_partition, 1, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_int_contains(thread, source_partition, 2, &contains);
+    jgrapht_capi_i_set_contains(thread, source_partition, 2, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_int_contains(thread, source_partition, 3, &contains);
+    jgrapht_capi_i_set_contains(thread, source_partition, 3, &contains);
     assert(contains == 1);
     jgrapht_capi_handles_destroy(thread, source_partition);
 

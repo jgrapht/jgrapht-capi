@@ -53,9 +53,9 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     void *odd_vertices;
-    jgrapht_capi_set_create(thread, &odd_vertices);
-    jgrapht_capi_set_int_add(thread, odd_vertices, 0, NULL);
-    jgrapht_capi_set_int_add(thread, odd_vertices, 1, NULL);
+    jgrapht_capi_x_set_create(thread, &odd_vertices);
+    jgrapht_capi_i_set_add(thread, odd_vertices, 0, NULL);
+    jgrapht_capi_i_set_add(thread, odd_vertices, 1, NULL);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
@@ -68,13 +68,13 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int contains = 0;
-    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 0, &contains);
+    jgrapht_capi_i_set_contains(thread, cutSourcePartition, 0, &contains);
     assert(contains == 1);
-    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 1, &contains);
+    jgrapht_capi_i_set_contains(thread, cutSourcePartition, 1, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 2, &contains);
+    jgrapht_capi_i_set_contains(thread, cutSourcePartition, 2, &contains);
     assert(contains == 0);
-    jgrapht_capi_set_int_contains(thread, cutSourcePartition, 3, &contains);
+    jgrapht_capi_i_set_contains(thread, cutSourcePartition, 3, &contains);
     assert(contains == 0);
 
     jgrapht_capi_handles_destroy(thread, cutSourcePartition);

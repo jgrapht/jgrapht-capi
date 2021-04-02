@@ -90,14 +90,14 @@ int main() {
 
     // test many to many
     void *sources, *targets, *mm;
-    jgrapht_capi_set_linked_create(thread, &sources);
-    jgrapht_capi_set_linked_create(thread, &targets);
-    jgrapht_capi_set_int_add(thread, sources, 0, NULL);
-    jgrapht_capi_set_int_add(thread, sources, 1, NULL);
-    jgrapht_capi_set_int_add(thread, sources, 2, NULL);
-    jgrapht_capi_set_int_add(thread, targets, 6, NULL);
-    jgrapht_capi_set_int_add(thread, targets, 7, NULL);
-    jgrapht_capi_set_int_add(thread, targets, 5, NULL);
+    jgrapht_capi_x_set_linked_create(thread, &sources);
+    jgrapht_capi_x_set_linked_create(thread, &targets);
+    jgrapht_capi_i_set_add(thread, sources, 0, NULL);
+    jgrapht_capi_i_set_add(thread, sources, 1, NULL);
+    jgrapht_capi_i_set_add(thread, sources, 2, NULL);
+    jgrapht_capi_i_set_add(thread, targets, 6, NULL);
+    jgrapht_capi_i_set_add(thread, targets, 7, NULL);
+    jgrapht_capi_i_set_add(thread, targets, 5, NULL);
     jgrapht_capi_xx_sp_exec_contraction_hierarchy_get_manytomany(thread, ch, sources, targets, &mm);
     jgrapht_capi_handles_destroy(thread, sources);
     jgrapht_capi_handles_destroy(thread, targets);

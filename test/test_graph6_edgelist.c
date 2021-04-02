@@ -46,7 +46,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     int count = 0;
-    jgrapht_capi_list_size(thread, edgelist, &count);
+    jgrapht_capi_x_list_size(thread, edgelist, &count);
     assert (count == 8);
 
     jgrapht_capi_handles_destroy(thread, edgelist);
@@ -57,7 +57,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     count = 0;
-    jgrapht_capi_list_size(thread, edgelist, &count);
+    jgrapht_capi_x_list_size(thread, edgelist, &count);
     assert (count == 8);
 
     jgrapht_capi_handles_destroy(thread, edgelist);
@@ -69,7 +69,7 @@ int main() {
     jgrapht_capi_ii_import_edgelist_attrs_file_graph6sparse6(thread, "test_edgelist.g6", NULL, NULL, &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     count = 0;
-    jgrapht_capi_list_size(thread, edgelist, &count);
+    jgrapht_capi_x_list_size(thread, edgelist, &count);
     assert (count == 8);
     jgrapht_capi_handles_destroy(thread, edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
@@ -77,7 +77,7 @@ int main() {
     jgrapht_capi_xx_import_edgelist_noattrs_file_graph6sparse6(thread, "test_edgelist.g6", &edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     count = 0;
-    jgrapht_capi_list_size(thread, edgelist, &count);
+    jgrapht_capi_x_list_size(thread, edgelist, &count);
     assert (count == 8);
     jgrapht_capi_handles_destroy(thread, edgelist);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
