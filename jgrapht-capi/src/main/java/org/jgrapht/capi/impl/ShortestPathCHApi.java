@@ -38,9 +38,11 @@ import org.jgrapht.alg.shortestpath.ContractionHierarchyBidirectionalDijkstra;
 import org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation;
 import org.jgrapht.alg.shortestpath.ContractionHierarchyPrecomputation.ContractionHierarchy;
 import org.jgrapht.alg.shortestpath.TransitNodeRoutingShortestPath;
+import org.jgrapht.capi.CapiUtils;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.DefaultCapiGraph;
 import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.capi.graph.HashAndEqualsResolver;
 import org.jgrapht.util.ConcurrencyUtil;
@@ -259,21 +261,19 @@ public class ShortestPathCHApi {
 	 * @param chHandle                 the contraction hierarchy handle
 	 * @param sourcePtr                the source vertex
 	 * @param targetPtr                the target vertex
-	 * @param hashEqualsResolverHandle hash equals resolver handle
 	 * @param res                      handle to a {@link GraphPath}.
 	 * @return status
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "sp_exec_contraction_hierarchy_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCHBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle chHandle,
-			PointerBase sourcePtr, PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle, double radius,
-			WordPointer pathRes) {
+			PointerBase sourcePtr, PointerBase targetPtr, double radius, WordPointer pathRes) {
 		ContractionHierarchy<ExternalRef, ?> ch = globalHandles.get(chHandle);
+		DefaultCapiGraph<ExternalRef, ?> g = CapiUtils.unsafeCast(ch.getGraph());
 		ContractionHierarchyBidirectionalDijkstra<ExternalRef, ?> alg = new ContractionHierarchyBidirectionalDijkstra<>(
 				ch, radius, PairingHeap::new);
-		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
-		ExternalRef source = resolver.toExternalRef(sourcePtr);
-		ExternalRef target = resolver.toExternalRef(targetPtr);
+		ExternalRef source = g.toExternalRef(sourcePtr);
+		ExternalRef target = g.toExternalRef(targetPtr);
 		GraphPath<ExternalRef, ?> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
