@@ -24,6 +24,7 @@ import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.word.PointerBase;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphMapping;
 import org.jgrapht.alg.isomorphism.VF2GraphIsomorphismInspector;
@@ -31,6 +32,8 @@ import org.jgrapht.alg.isomorphism.VF2SubgraphIsomorphismInspector;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.ExternalRef;
+import org.jgrapht.capi.graph.HashAndEqualsResolver;
 
 public class IsomorphismApi {
 
@@ -38,7 +41,7 @@ public class IsomorphismApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "isomorphism_exec_vf2", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeVF2(IsolateThread thread, ObjectHandle graph1Handle, ObjectHandle graph2Handle,
+	public static <V, E> int executeVF2(IsolateThread thread, ObjectHandle graph1Handle, ObjectHandle graph2Handle,
 			CIntPointer existsRes, WordPointer graphMappingIteratorRes) {
 		Graph<V, E> g1 = globalHandles.get(graph1Handle);
 		Graph<V, E> g2 = globalHandles.get(graph2Handle);
@@ -63,8 +66,8 @@ public class IsomorphismApi {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "isomorphism_exec_vf2_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeVF2Subgraph(IsolateThread thread, ObjectHandle graph1Handle, ObjectHandle graph2Handle,
-			CIntPointer existsRes, WordPointer graphMappingIteratorRes) {
+	public static <V, E> int executeVF2Subgraph(IsolateThread thread, ObjectHandle graph1Handle,
+			ObjectHandle graph2Handle, CIntPointer existsRes, WordPointer graphMappingIteratorRes) {
 		Graph<V, E> g1 = globalHandles.get(graph1Handle);
 		Graph<V, E> g2 = globalHandles.get(graph2Handle);
 
@@ -98,7 +101,7 @@ public class IsomorphismApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
 			+ "isomorphism_graph_mapping_edge_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphMappingEdge(IsolateThread thread, ObjectHandle mappingHandle, long edge, boolean forward,
@@ -111,6 +114,29 @@ public class IsomorphismApi {
 				existsEdgeRes.write(1);
 				if (edgeRes.isNonNull()) {
 					edgeRes.write(otherEdge);
+				}
+			} else {
+				existsEdgeRes.write(0);
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_DREF
+			+ "isomorphism_graph_mapping_edge_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int graphMappingEdge(IsolateThread thread, ObjectHandle mappingHandle, PointerBase edgePtr,
+			ObjectHandle hashEqualsResolverHandle, boolean forward, CIntPointer existsEdgeRes, WordPointer edgeRes) {
+		GraphMapping<?, ExternalRef> graphMapping = globalHandles.get(mappingHandle);
+
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef edge = resolver.toExternalRef(edgePtr);
+
+		ExternalRef otherEdge = graphMapping.getEdgeCorrespondence(edge, forward);
+		if (existsEdgeRes.isNonNull()) {
+			if (otherEdge != null) {
+				existsEdgeRes.write(1);
+				if (edgeRes.isNonNull()) {
+					edgeRes.write(otherEdge.getPtr());
 				}
 			} else {
 				existsEdgeRes.write(0);
@@ -138,7 +164,7 @@ public class IsomorphismApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "isomorphism_graph_mapping_vertex_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphMappingVertex(IsolateThread thread, ObjectHandle mappingHandle, long vertex, boolean forward,
@@ -151,6 +177,29 @@ public class IsomorphismApi {
 				existsVertexRes.write(1);
 				if (vertexRes.isNonNull()) {
 					vertexRes.write(otherVertex);
+				}
+			} else {
+				existsVertexRes.write(0);
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "isomorphism_graph_mapping_vertex_correspondence", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int graphMappingVertex(IsolateThread thread, ObjectHandle mappingHandle, PointerBase vertexPtr,
+			ObjectHandle hashEqualsResolverHandle, boolean forward, CIntPointer existsVertexRes,
+			WordPointer vertexRes) {
+		GraphMapping<ExternalRef, ?> graphMapping = globalHandles.get(mappingHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef vertex = resolver.toExternalRef(vertexPtr);
+
+		ExternalRef otherVertex = graphMapping.getVertexCorrespondence(vertex, forward);
+		if (existsVertexRes.isNonNull()) {
+			if (otherVertex != null) {
+				existsVertexRes.write(1);
+				if (vertexRes.isNonNull()) {
+					vertexRes.write(otherVertex.getPtr());
 				}
 			} else {
 				existsVertexRes.write(0);
