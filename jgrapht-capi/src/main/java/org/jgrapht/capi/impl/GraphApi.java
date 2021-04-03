@@ -40,9 +40,9 @@ import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.DDToDFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.IncomingEdgesSupport;
 import org.jgrapht.capi.JGraphTContext.IntegerToBooleanFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.IntegerToDoubleFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.IToDFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LongToBooleanFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.LongToDoubleFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.LToDFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.JGraphTContext.VoidToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.VoidToLongFunctionPointer;
@@ -968,7 +968,7 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
 			+ "graph_as_weighted", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asWeighted(IsolateThread thread, ObjectHandle graphHandle,
-			IntegerToDoubleFunctionPointer weightFunctionPointer, boolean cacheWeights, boolean writeWeightsThrough,
+			IToDFunctionPointer weightFunctionPointer, boolean cacheWeights, boolean writeWeightsThrough,
 			WordPointer res) {
 		CapiGraph<?, Integer> gIn = globalHandles.get(graphHandle);
 
@@ -991,7 +991,7 @@ public class GraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
 			+ "graph_as_weighted", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asWeighted(IsolateThread thread, ObjectHandle graphHandle,
-			LongToDoubleFunctionPointer weightFunctionPointer, boolean cacheWeights, boolean writeWeightsThrough,
+			LToDFunctionPointer weightFunctionPointer, boolean cacheWeights, boolean writeWeightsThrough,
 			WordPointer res) {
 		CapiGraph<?, Long> gIn = globalHandles.get(graphHandle);
 

@@ -30,6 +30,7 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.word.PointerBase;
 import org.graalvm.word.WordFactory;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -52,12 +53,16 @@ import org.jgrapht.alg.shortestpath.JohnsonShortestPaths;
 import org.jgrapht.alg.shortestpath.MartinShortestPath;
 import org.jgrapht.alg.shortestpath.YenKShortestPath;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.JGraphTContext.AStarHeuristicFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.AStarHeuristicLLFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.IIToDFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.IntegerToCDoublePointerFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.LLToDFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LongToCDoublePointerFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PPToDFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PToCDoublePointerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.ExternalRef;
+import org.jgrapht.capi.graph.HashAndEqualsResolver;
 import org.jgrapht.util.ConcurrencyUtil;
 
 /**
@@ -84,7 +89,7 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDijkstraBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
@@ -93,6 +98,26 @@ public class ShortestPathApi {
 
 		ShortestPathAlgorithm<Long, ?> alg = new DijkstraShortestPath<>(g);
 		GraphPath<Long, ?> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeDijkstraBetween(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
+			PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle, WordPointer pathRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
+		ShortestPathAlgorithm<ExternalRef, ?> alg = new DijkstraShortestPath<>(g);
+		GraphPath<ExternalRef, ?> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
 				pathRes.write(globalHandles.create(path));
@@ -120,7 +145,7 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
@@ -129,6 +154,26 @@ public class ShortestPathApi {
 
 		ShortestPathAlgorithm<Long, ?> alg = new BidirectionalDijkstraShortestPath<>(g);
 		GraphPath<Long, ?> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_bidirectional_dijkstra_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle graphHandle,
+			PointerBase sourcePtr, PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle, WordPointer pathRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
+		ShortestPathAlgorithm<ExternalRef, ?> alg = new BidirectionalDijkstraShortestPath<>(g);
+		GraphPath<ExternalRef, ?> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
 				pathRes.write(globalHandles.create(path));
@@ -152,7 +197,7 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_dijkstra_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDijkstraFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
@@ -161,6 +206,21 @@ public class ShortestPathApi {
 
 		ShortestPathAlgorithm<Long, ?> alg = new DijkstraShortestPath<>(g);
 		SingleSourcePaths<Long, ?> paths = alg.getPaths(source);
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_dijkstra_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeDijkstraFrom(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
+			ObjectHandle hashEqualsResolverHandle, WordPointer pathsRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ShortestPathAlgorithm<ExternalRef, ?> alg = new DijkstraShortestPath<>(g);
+		SingleSourcePaths<ExternalRef, ?> paths = alg.getPaths(source);
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
 		}
@@ -180,7 +240,7 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_bellmanford_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBellmanFordFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
@@ -189,6 +249,21 @@ public class ShortestPathApi {
 
 		ShortestPathAlgorithm<Long, ?> alg = new BellmanFordShortestPath<>(g);
 		SingleSourcePaths<Long, ?> paths = alg.getPaths(source);
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_bellmanford_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBellmanFordFrom(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
+			ObjectHandle hashEqualsResolverHandle, WordPointer pathsRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ShortestPathAlgorithm<ExternalRef, ?> alg = new BellmanFordShortestPath<>(g);
+		SingleSourcePaths<ExternalRef, ?> paths = alg.getPaths(source);
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
 		}
@@ -207,10 +282,11 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_bfs_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeBfsFrom(IsolateThread thread, ObjectHandle graphHandle, long source, WordPointer pathsRes) {
+	public static int executeBfsFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
+			WordPointer pathsRes) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 
 		ShortestPathAlgorithm<Long, ?> alg = new BFSShortestPath<>(g);
@@ -221,9 +297,24 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_bfs_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBfsFrom(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
+			ObjectHandle hashEqualsResolverHandle, WordPointer pathsRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ShortestPathAlgorithm<ExternalRef, ?> alg = new BFSShortestPath<>(g);
+		SingleSourcePaths<ExternalRef, ?> paths = alg.getPaths(source);
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "sp_exec_johnson_get_allpairs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeJohnson(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+	public static <V, E> int executeJohnson(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 		ShortestPathAlgorithm<V, E> alg = new JohnsonShortestPaths<>(g);
 		if (res.isNonNull()) {
@@ -234,7 +325,7 @@ public class ShortestPathApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "sp_exec_floydwarshall_get_allpairs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int executeFloydWarshall(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+	public static <V, E> int executeFloydWarshall(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 		ShortestPathAlgorithm<V, E> alg = new FloydWarshallShortestPaths<>(g);
 		if (res.isNonNull()) {
@@ -258,13 +349,31 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_singlesource_get_path_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int singleSourceGetPathToVertex(IsolateThread thread, ObjectHandle pathsHandle, long target,
 			WordPointer pathRes) {
 		SingleSourcePaths<Long, ?> paths = globalHandles.get(pathsHandle);
 		GraphPath<Long, ?> path = paths.getPath(target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_singlesource_get_path_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int singleSourceGetPathToVertex(IsolateThread thread, ObjectHandle pathsHandle, PointerBase targetPtr,
+			ObjectHandle hashEqualsResolverHandle, WordPointer pathRes) {
+		SingleSourcePaths<ExternalRef, ?> paths = globalHandles.get(pathsHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
+		GraphPath<ExternalRef, ?> path = paths.getPath(target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
 				pathRes.write(globalHandles.create(path));
@@ -290,13 +399,32 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_allpairs_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int allPairsGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle, long source,
 			long target, WordPointer res) {
 		ShortestPathAlgorithm<Long, ?> alg = globalHandles.get(handle);
 		GraphPath<Long, ?> path = alg.getPath(source, target);
+		if (res.isNonNull()) {
+			if (path != null) {
+				res.write(globalHandles.create(path));
+			} else {
+				res.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_allpairs_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int allPairsGetPathBetweenVerticesFields(IsolateThread thread, ObjectHandle handle,
+			PointerBase sourcePtr, PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle, WordPointer res) {
+		ShortestPathAlgorithm<ExternalRef, ?> alg = globalHandles.get(handle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
+		GraphPath<ExternalRef, ?> path = alg.getPath(source, target);
 		if (res.isNonNull()) {
 			if (path != null) {
 				res.write(globalHandles.create(path));
@@ -318,7 +446,7 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_allpairs_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int allPairsGetSingleSourceFromVertex(IsolateThread thread, ObjectHandle handle, long source,
@@ -331,10 +459,24 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_allpairs_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int allPairsGetSingleSourceFromVertex(IsolateThread thread, ObjectHandle handle,
+			PointerBase sourcePtr, ObjectHandle hashEqualsResolverHandle, WordPointer res) {
+		ShortestPathAlgorithm<ExternalRef, ?> alg = globalHandles.get(handle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		SingleSourcePaths<ExternalRef, ?> paths = alg.getPaths(source);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(paths));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeAStarBetween(IsolateThread thread, ObjectHandle graphHandle, int source, int target,
-			AStarHeuristicFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
+			IIToDFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
 		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 
 		AStarShortestPath<Integer, ?> alg = new AStarShortestPath<>(g, (a, b) -> {
@@ -351,11 +493,11 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeAStarBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
-			AStarHeuristicLLFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
+			LLToDFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 
 		AStarShortestPath<Long, ?> alg = new AStarShortestPath<>(g, (a, b) -> {
@@ -373,10 +515,35 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeAStarBetween(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
+			PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle,
+			PPToDFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
+
+		AStarShortestPath<ExternalRef, ?> alg = new AStarShortestPath<>(g, (a, b) -> {
+			return admissibleHeuristicFunctionPointer.invoke(a.getPtr(), b.getPtr());
+		});
+
+		GraphPath<ExternalRef, ?> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_bidirectional_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBidirectionalAStarBetween(IsolateThread thread, ObjectHandle graphHandle, int source,
-			int target, AStarHeuristicFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
+			int target, IIToDFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
 		Graph<Integer, Long> g = globalHandles.get(graphHandle);
 
 		BidirectionalAStarShortestPath<Integer, Long> alg = new BidirectionalAStarShortestPath<>(g, (a, b) -> {
@@ -393,11 +560,11 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_bidirectional_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBidirectionalAStarBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
-			long target, AStarHeuristicLLFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
+			long target, LLToDFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 
 		BidirectionalAStarShortestPath<Long, ?> alg = new BidirectionalAStarShortestPath<>(g, (a, b) -> {
@@ -415,6 +582,31 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_bidirectional_astar_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBidirectionalAStarBetween(IsolateThread thread, ObjectHandle graphHandle,
+			PointerBase sourcePtr, PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle,
+			PPToDFunctionPointer admissibleHeuristicFunctionPointer, WordPointer pathRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
+
+		BidirectionalAStarShortestPath<ExternalRef, ?> alg = new BidirectionalAStarShortestPath<>(g, (a, b) -> {
+			return admissibleHeuristicFunctionPointer.invoke(a.getPtr(), b.getPtr());
+		});
+
+		GraphPath<ExternalRef, ?> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_astar_alt_heuristic_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle, int source,
@@ -422,8 +614,7 @@ public class ShortestPathApi {
 		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 		Set<Integer> landmarks = globalHandles.get(landmarksSet);
 
-		AStarShortestPath<Integer, ?> alg = new AStarShortestPath<>(g,
-				new ALTAdmissibleHeuristic<>(g, landmarks));
+		AStarShortestPath<Integer, ?> alg = new AStarShortestPath<>(g, new ALTAdmissibleHeuristic<>(g, landmarks));
 
 		GraphPath<Integer, ?> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
@@ -435,7 +626,7 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_astar_alt_heuristic_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
@@ -443,10 +634,33 @@ public class ShortestPathApi {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 		Set<Long> landmarks = globalHandles.get(landmarksSet);
 
-		AStarShortestPath<Long, ?> alg = new AStarShortestPath<>(g,
-				new ALTAdmissibleHeuristic<>(g, landmarks));
+		AStarShortestPath<Long, ?> alg = new AStarShortestPath<>(g, new ALTAdmissibleHeuristic<>(g, landmarks));
 
 		GraphPath<Long, ?> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_astar_alt_heuristic_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle,
+			PointerBase sourcePtr, PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle,
+			ObjectHandle landmarksSet, WordPointer pathRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		Set<ExternalRef> landmarks = globalHandles.get(landmarksSet);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
+
+		AStarShortestPath<ExternalRef, ?> alg = new AStarShortestPath<>(g, new ALTAdmissibleHeuristic<>(g, landmarks));
+
+		GraphPath<ExternalRef, ?> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
 				pathRes.write(globalHandles.create(path));
@@ -477,7 +691,7 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBidirectionalAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle,
@@ -489,6 +703,31 @@ public class ShortestPathApi {
 				new ALTAdmissibleHeuristic<>(g, landmarks));
 
 		GraphPath<Long, ?> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_bidirectional_astar_alt_heuristic_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBidirectionalAStarWithAltHeuristicBetween(IsolateThread thread, ObjectHandle graphHandle,
+			PointerBase sourcePtr, PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle,
+			ObjectHandle landmarksSet, WordPointer pathRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		Set<ExternalRef> landmarks = globalHandles.get(landmarksSet);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
+
+		BidirectionalAStarShortestPath<ExternalRef, ?> alg = new BidirectionalAStarShortestPath<>(g,
+				new ALTAdmissibleHeuristic<>(g, landmarks));
+
+		GraphPath<ExternalRef, ?> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
 				pathRes.write(globalHandles.create(path));
@@ -513,7 +752,7 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_yen_get_k_loopless_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeYenBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target, int k,
@@ -521,6 +760,24 @@ public class ShortestPathApi {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 
 		YenKShortestPath<Long, ?> alg = new YenKShortestPath<>(g);
+		List<?> paths = alg.getPaths(source, target, k);
+
+		if (pathIteratorRes.isNonNull()) {
+			pathIteratorRes.write(globalHandles.create(paths.iterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_yen_get_k_loopless_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeYenBetween(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
+			PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle, int k, WordPointer pathIteratorRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
+
+		YenKShortestPath<ExternalRef, ?> alg = new YenKShortestPath<>(g);
 		List<?> paths = alg.getPaths(source, target, k);
 
 		if (pathIteratorRes.isNonNull()) {
@@ -543,7 +800,7 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_eppstein_get_k_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeEppsteinBetween(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
@@ -551,6 +808,24 @@ public class ShortestPathApi {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 
 		EppsteinKShortestPath<Long, ?> alg = new EppsteinKShortestPath<>(g);
+		List<?> paths = alg.getPaths(source, target, k);
+
+		if (pathIteratorRes.isNonNull()) {
+			pathIteratorRes.write(globalHandles.create(paths.iterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_eppstein_get_k_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeEppsteinBetween(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
+			PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle, int k, WordPointer pathIteratorRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
+
+		EppsteinKShortestPath<ExternalRef, ?> alg = new EppsteinKShortestPath<>(g);
 		List<?> paths = alg.getPaths(source, target, k);
 
 		if (pathIteratorRes.isNonNull()) {
@@ -577,7 +852,7 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_delta_stepping_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDeltaSteppingBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
@@ -587,6 +862,29 @@ public class ShortestPathApi {
 		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
 		ShortestPathAlgorithm<Long, ?> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
 		GraphPath<Long, ?> path = alg.getPath(source, target);
+		if (pathRes.isNonNull()) {
+			if (path != null) {
+				pathRes.write(globalHandles.create(path));
+			} else {
+				pathRes.write(WordFactory.nullPointer());
+			}
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_delta_stepping_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeDeltaSteppingBetween(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
+			PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle, double delta, int parallelism,
+			WordPointer pathRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
+
+		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ShortestPathAlgorithm<ExternalRef, ?> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
+		GraphPath<ExternalRef, ?> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
 			if (path != null) {
 				pathRes.write(globalHandles.create(path));
@@ -611,16 +909,33 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_delta_stepping_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeDeltaSteppingFrom(IsolateThread thread, ObjectHandle graphHandle, long source, double delta,
-			int parallelism, WordPointer pathsRes) {
+	public static int executeDeltaSteppingFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
+			double delta, int parallelism, WordPointer pathsRes) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 
 		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
 		ShortestPathAlgorithm<Long, ?> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
 		SingleSourcePaths<Long, ?> paths = alg.getPaths(source);
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "sp_exec_delta_stepping_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeDeltaSteppingFrom(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
+			ObjectHandle hashEqualsResolverHandle, double delta, int parallelism, WordPointer pathsRes) {
+		Graph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+
+		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ShortestPathAlgorithm<ExternalRef, ?> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
+		SingleSourcePaths<ExternalRef, ?> paths = alg.getPaths(source);
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
 		}
@@ -643,7 +958,7 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "multisp_exec_martin_get_multiobjectivesinglesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeMartin(IsolateThread thread, ObjectHandle graphHandle, long source,
@@ -654,6 +969,27 @@ public class ShortestPathApi {
 
 		MultiObjectiveShortestPathAlgorithm<Long, Long> alg = new MartinShortestPath<>(g, edgeWeightFunction);
 		MultiObjectiveSingleSourcePaths<Long, Long> paths = alg.getPaths(source);
+
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+			+ "multisp_exec_martin_get_multiobjectivesinglesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeMartin(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
+			ObjectHandle hashEqualsResolverHandle, PToCDoublePointerFunctionPointer edgeWeightFunctionPointer, int dim,
+			WordPointer pathsRes) {
+		Graph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+
+		Function<ExternalRef, double[]> edgeWeightFunction = cacheEdgeWeightFunction(g, edgeWeightFunctionPointer, dim);
+
+		MultiObjectiveShortestPathAlgorithm<ExternalRef, ExternalRef> alg = new MartinShortestPath<>(g,
+				edgeWeightFunction);
+		MultiObjectiveSingleSourcePaths<ExternalRef, ExternalRef> paths = alg.getPaths(source);
 
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths));
@@ -684,7 +1020,7 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "multisp_exec_martin_get_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeMartin(IsolateThread thread, ObjectHandle graphHandle, long source, long target,
@@ -709,6 +1045,35 @@ public class ShortestPathApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+			+ "multisp_exec_martin_get_paths_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeMartin(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
+			PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle,
+			PToCDoublePointerFunctionPointer edgeWeightFunctionPointer, int dim, WordPointer pathsRes) {
+		Graph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
+
+		if (dim <= 0) {
+			throw new IllegalArgumentException("Weight function dimension must be positive");
+		}
+		if (edgeWeightFunctionPointer.isNull()) {
+			throw new IllegalArgumentException("Weight function cannot be null");
+		}
+
+		Function<ExternalRef, double[]> edgeWeightFunction = cacheEdgeWeightFunction(g, edgeWeightFunctionPointer, dim);
+
+		MultiObjectiveShortestPathAlgorithm<ExternalRef, ExternalRef> alg = new MartinShortestPath<>(g,
+				edgeWeightFunction);
+		List<GraphPath<ExternalRef, ExternalRef>> paths = alg.getPaths(source, target);
+
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths.iterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "multisp_multiobjectivesinglesource_get_paths_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int multiObjectiveSingleSourceGetPathToVertex(IsolateThread thread, ObjectHandle sourceHandle,
@@ -720,12 +1085,26 @@ public class ShortestPathApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "multisp_multiobjectivesinglesource_get_paths_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int multiObjectiveSingleSourceGetPathToVertex(IsolateThread thread, ObjectHandle sourceHandle,
 			long target, WordPointer pathsRes) {
 		MultiObjectiveSingleSourcePaths<Long, ?> source = globalHandles.get(sourceHandle);
+		List<?> paths = source.getPaths(target);
+		if (pathsRes.isNonNull()) {
+			pathsRes.write(globalHandles.create(paths.iterator()));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "multisp_multiobjectivesinglesource_get_paths_to_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int multiObjectiveSingleSourceGetPathToVertex(IsolateThread thread, ObjectHandle sourceHandle,
+			PointerBase targetPtr, ObjectHandle hashEqualsResolverHandle, WordPointer pathsRes) {
+		MultiObjectiveSingleSourcePaths<ExternalRef, ?> source = globalHandles.get(sourceHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef target = resolver.toExternalRef(targetPtr);
 		List<?> paths = source.getPaths(target);
 		if (pathsRes.isNonNull()) {
 			pathsRes.write(globalHandles.create(paths.iterator()));
@@ -747,13 +1126,28 @@ public class ShortestPathApi {
 		}
 		return e -> edgeWeightMap.get(e);
 	}
-	
+
 	private static Function<Long, double[]> cacheEdgeWeightFunction(Graph<Long, Long> g,
 			LongToCDoublePointerFunctionPointer edgeWeightFunctionPointer, int dim) {
 		// cache all function values
 		Map<Long, double[]> edgeWeightMap = new HashMap<>();
 		for (Long e : g.edgeSet()) {
 			CDoublePointer base = edgeWeightFunctionPointer.invoke(e);
+			double[] v = new double[dim];
+			for (int i = 0; i < dim; i++) {
+				v[i] = base.read(i);
+			}
+			edgeWeightMap.put(e, v);
+		}
+		return e -> edgeWeightMap.get(e);
+	}
+
+	private static Function<ExternalRef, double[]> cacheEdgeWeightFunction(Graph<ExternalRef, ExternalRef> g,
+			PToCDoublePointerFunctionPointer edgeWeightFunctionPointer, int dim) {
+		// cache all function values
+		Map<ExternalRef, double[]> edgeWeightMap = new HashMap<>();
+		for (ExternalRef e : g.edgeSet()) {
+			CDoublePointer base = edgeWeightFunctionPointer.invoke(e.getPtr());
 			double[] v = new double[dim];
 			for (int i = 0; i < dim; i++) {
 				v[i] = base.read(i);

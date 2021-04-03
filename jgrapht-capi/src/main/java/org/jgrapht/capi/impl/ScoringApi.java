@@ -40,8 +40,8 @@ import org.jgrapht.alg.scoring.HarmonicCentrality;
 import org.jgrapht.alg.scoring.KatzCentrality;
 import org.jgrapht.alg.scoring.PageRank;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.JGraphTContext.IntegerToDoubleFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.LongToDoubleFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.IToDFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.LToDFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.PToDFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
@@ -98,7 +98,7 @@ public class ScoringApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "scoring_exec_custom_katz_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeKatzCentrality(IsolateThread thread, ObjectHandle graphHandle, double dampingFactor,
-			IntegerToDoubleFunctionPointer exogenousFactorFunctionPointer, int maxIterations, double tolerance,
+			IToDFunctionPointer exogenousFactorFunctionPointer, int maxIterations, double tolerance,
 			WordPointer res) {
 		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 
@@ -122,7 +122,7 @@ public class ScoringApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "scoring_exec_custom_katz_centrality", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeKatzCentrality(IsolateThread thread, ObjectHandle graphHandle, double dampingFactor,
-			LongToDoubleFunctionPointer exogenousFactorFunctionPointer, int maxIterations, double tolerance,
+			LToDFunctionPointer exogenousFactorFunctionPointer, int maxIterations, double tolerance,
 			WordPointer res) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 

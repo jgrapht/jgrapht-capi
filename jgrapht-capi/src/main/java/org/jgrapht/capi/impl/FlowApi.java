@@ -23,8 +23,8 @@ import org.jgrapht.alg.flow.mincost.MinimumCostFlowProblem.MinimumCostFlowProble
 import org.jgrapht.alg.interfaces.MaximumFlowAlgorithm.MaximumFlow;
 import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm.MinimumCostFlow;
 import org.jgrapht.capi.Constants;
-import org.jgrapht.capi.JGraphTContext.IntegerToIntegerFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.LongToIntegerFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.IToIFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.LToIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.JGraphTContext.VoidToLongFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
@@ -103,9 +103,9 @@ public class FlowApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "mincostflow_exec_capacity_scaling", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCapacityScaling(IsolateThread thread, ObjectHandle graphHandle,
-			IntegerToIntegerFunctionPointer nodeSupplyFunction,
-			IntegerToIntegerFunctionPointer arcCapacityLowerBoundsFunction,
-			IntegerToIntegerFunctionPointer arcCapacityUpperBoundsFunction, int scalingFactor, CDoublePointer valueRes,
+			IToIFunctionPointer nodeSupplyFunction,
+			IToIFunctionPointer arcCapacityLowerBoundsFunction,
+			IToIFunctionPointer arcCapacityUpperBoundsFunction, int scalingFactor, CDoublePointer valueRes,
 			WordPointer flowRes, WordPointer dualSolutionRes) {
 
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
@@ -143,9 +143,9 @@ public class FlowApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "mincostflow_exec_capacity_scaling", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCapacityScaling(IsolateThread thread, ObjectHandle graphHandle,
-			LongToIntegerFunctionPointer nodeSupplyFunction,
-			LongToIntegerFunctionPointer arcCapacityLowerBoundsFunction,
-			LongToIntegerFunctionPointer arcCapacityUpperBoundsFunction, int scalingFactor, CDoublePointer valueRes,
+			LToIFunctionPointer nodeSupplyFunction,
+			LToIFunctionPointer arcCapacityLowerBoundsFunction,
+			LToIFunctionPointer arcCapacityUpperBoundsFunction, int scalingFactor, CDoublePointer valueRes,
 			WordPointer flowRes, WordPointer dualSolutionRes) {
 
 		Graph<Long, Long> g = globalHandles.get(graphHandle);

@@ -35,10 +35,10 @@ import org.jgrapht.capi.JGraphTContext.CCharPointerToLongFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.IFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.ImporterExporterCSVFormat;
 import org.jgrapht.capi.JGraphTContext.IntegerIdNotifyAttributeFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.IntegerToIntegerFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.IToIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LongIdNotifyAttributeFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.LongToLongFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.LToLFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.custom.io.CustomDIMACSImporter;
 import org.jgrapht.capi.StringUtils;
@@ -61,7 +61,7 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer, IFunctionPointer notifyVertexFunctionPointer,
+			IToIFunctionPointer importIdFunctionPointer, IFunctionPointer notifyVertexFunctionPointer,
 			IFunctionPointer notifyEdgeFunctionPointer) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
@@ -79,7 +79,7 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			LongToLongFunctionPointer importIdFunctionPointer, LFunctionPointer notifyVertexFunctionPointer,
+			LToLFunctionPointer importIdFunctionPointer, LFunctionPointer notifyVertexFunctionPointer,
 			LFunctionPointer notifyEdgeFunctionPointer) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
@@ -97,7 +97,7 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer, IFunctionPointer notifyVertexFunctionPointer,
+			IToIFunctionPointer importIdFunctionPointer, IFunctionPointer notifyVertexFunctionPointer,
 			IFunctionPointer notifyEdgeFunctionPointer) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
@@ -118,7 +118,7 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
-			LongToLongFunctionPointer importIdFunctionPointer, LFunctionPointer notifyVertexFunctionPointer,
+			LToLFunctionPointer importIdFunctionPointer, LFunctionPointer notifyVertexFunctionPointer,
 			LFunctionPointer notifyEdgeFunctionPointer) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
@@ -139,7 +139,7 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer,
+			IToIFunctionPointer importIdFunctionPointer,
 			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, IFunctionPointer notifyVertexFunctionPointer,
 			IFunctionPointer notifyEdgeFunctionPointer) {
@@ -161,7 +161,7 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
-			LongToLongFunctionPointer importIdFunctionPointer,
+			LToLFunctionPointer importIdFunctionPointer,
 			LongIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, LFunctionPointer notifyVertexFunctionPointer,
 			LFunctionPointer notifyEdgeFunctionPointer) {
@@ -183,7 +183,7 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "import_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
-			IntegerToIntegerFunctionPointer importIdFunctionPointer,
+			IToIFunctionPointer importIdFunctionPointer,
 			IntegerIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			IntegerIdNotifyAttributeFunctionPointer edgeAttributeFunction, IFunctionPointer notifyVertexFunctionPointer,
 			IFunctionPointer notifyEdgeFunctionPointer) {
@@ -208,7 +208,7 @@ public class ImporterApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "import_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importGmlFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
-			LongToLongFunctionPointer importIdFunctionPointer,
+			LToLFunctionPointer importIdFunctionPointer,
 			LongIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			LongIdNotifyAttributeFunctionPointer edgeAttributeFunction, LFunctionPointer notifyVertexFunctionPointer,
 			LFunctionPointer notifyEdgeFunctionPointer) {

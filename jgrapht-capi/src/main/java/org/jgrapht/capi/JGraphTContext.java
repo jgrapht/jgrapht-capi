@@ -184,34 +184,14 @@ public class JGraphTContext {
 
 	}
 
-	/*
-	 * Function pointer for A* heuristic functions.
-	 */
-	public interface AStarHeuristicFunctionPointer extends CFunctionPointer {
-
-		@InvokeCFunctionPointer
-		double invoke(int source, int target);
-
-	}
-
-	/*
-	 * Function pointer for A* heuristic functions.
-	 */
-	public interface AStarHeuristicLLFunctionPointer extends CFunctionPointer {
-
-		@InvokeCFunctionPointer
-		double invoke(long source, long target);
-
-	}
-
-	public interface IntegerToIntegerFunctionPointer extends CFunctionPointer {
+	public interface IToIFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
 		int invoke(int key);
 
 	}
 
-	public interface IntegerToDoubleFunctionPointer extends CFunctionPointer {
+	public interface IToDFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
 		double invoke(int key);
@@ -239,21 +219,28 @@ public class JGraphTContext {
 
 	}
 
-	public interface LongToIntegerFunctionPointer extends CFunctionPointer {
+	public interface PToCDoublePointerFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		CDoublePointer invoke(PointerBase key);
+
+	}
+
+	public interface LToIFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
 		int invoke(long key);
 
 	}
 
-	public interface LongToLongFunctionPointer extends CFunctionPointer {
+	public interface LToLFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
 		long invoke(long key);
 
 	}
 
-	public interface LongToDoubleFunctionPointer extends CFunctionPointer {
+	public interface LToDFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
 		double invoke(long key);
@@ -302,10 +289,24 @@ public class JGraphTContext {
 
 	}
 
+	public interface IIToDFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		double invoke(int d1, int d2);
+
+	}
+
 	public interface LLToIFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
 		int invoke(long d1, long d2);
+
+	}
+
+	public interface LLToDFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		double invoke(long d1, long d2);
 
 	}
 
@@ -329,7 +330,7 @@ public class JGraphTContext {
 		long invoke(PointerBase p1);
 
 	}
-	
+
 	public interface PToDFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
@@ -355,6 +356,13 @@ public class JGraphTContext {
 
 		@InvokeCFunctionPointer
 		int invoke(PointerBase p1, PointerBase p2);
+
+	}
+
+	public interface PPToDFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		double invoke(PointerBase p1, PointerBase p2);
 
 	}
 
