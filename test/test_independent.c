@@ -57,11 +57,11 @@ int main() {
     int hasnext;
     int v;
     while(1) { 
-        jgrapht_capi_it_hasnext(thread, vit, &hasnext);
+        jgrapht_capi_x_it_hasnext(thread, vit, &hasnext);
         if (!hasnext) 
             break;
         elem++;
-        jgrapht_capi_it_next_int(thread, vit, &v);
+        jgrapht_capi_i_it_next(thread, vit, &v);
     }
     jgrapht_capi_handles_destroy(thread, vit);
     jgrapht_capi_handles_destroy(thread, ind);

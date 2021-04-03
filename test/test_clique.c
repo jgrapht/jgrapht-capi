@@ -51,40 +51,40 @@ int main() {
     jgrapht_capi_xx_clique_exec_bron_kerbosch(thread, g, 0, &cliqueit);
 
     int hasnext = 0;
-    jgrapht_capi_it_hasnext(thread, cliqueit, &hasnext);
+    jgrapht_capi_x_it_hasnext(thread, cliqueit, &hasnext);
     assert(hasnext == 1);
 
     // clique is a Set<Long>
     void *clique;
-    jgrapht_capi_it_next_object(thread, cliqueit, &clique);
+    jgrapht_capi_x_it_next(thread, cliqueit, &clique);
     void *vit;
     jgrapht_capi_x_set_it_create(thread, clique, &vit);
     while(1) { 
-        jgrapht_capi_it_hasnext(thread, vit, &hasnext);
+        jgrapht_capi_x_it_hasnext(thread, vit, &hasnext);
         if (!hasnext) 
             break;
-        jgrapht_capi_it_next_int(thread, vit, &v);
+        jgrapht_capi_i_it_next(thread, vit, &v);
     }
     jgrapht_capi_handles_destroy(thread, vit);
     jgrapht_capi_handles_destroy(thread, clique);
     //printf("\n");
 
-    jgrapht_capi_it_hasnext(thread, cliqueit, &hasnext);
+    jgrapht_capi_x_it_hasnext(thread, cliqueit, &hasnext);
     assert(hasnext == 1);
 
     // clique is a Set<Long>
-    jgrapht_capi_it_next_object(thread, cliqueit, &clique);
+    jgrapht_capi_x_it_next(thread, cliqueit, &clique);
     jgrapht_capi_x_set_it_create(thread, clique, &vit);
     while(1) { 
-        jgrapht_capi_it_hasnext(thread, vit, &hasnext);
+        jgrapht_capi_x_it_hasnext(thread, vit, &hasnext);
         if (!hasnext) 
             break;
-        jgrapht_capi_it_next_int(thread, vit, &v);
+        jgrapht_capi_i_it_next(thread, vit, &v);
     }
     jgrapht_capi_handles_destroy(thread, vit);
     jgrapht_capi_handles_destroy(thread, clique);
 
-    jgrapht_capi_it_hasnext(thread, cliqueit, &hasnext);
+    jgrapht_capi_x_it_hasnext(thread, cliqueit, &hasnext);
     assert(hasnext == 1);
 
     // more cliques present
@@ -118,11 +118,11 @@ int main() {
     jgrapht_capi_x_set_it_create(thread, clique, &vit);
     int elem = 0;
     while(1) { 
-        jgrapht_capi_it_hasnext(thread, vit, &hasnext);
+        jgrapht_capi_x_it_hasnext(thread, vit, &hasnext);
         if (!hasnext) 
             break;
         elem++;
-        jgrapht_capi_it_next_int(thread, vit, &v);
+        jgrapht_capi_i_it_next(thread, vit, &v);
     }
     jgrapht_capi_handles_destroy(thread, vit);
     jgrapht_capi_handles_destroy(thread, clique);

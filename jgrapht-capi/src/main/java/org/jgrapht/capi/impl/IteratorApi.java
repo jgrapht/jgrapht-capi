@@ -33,6 +33,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.Types;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.ExternalRef;
 
@@ -40,7 +41,8 @@ public class IteratorApi {
 
 	private static ObjectHandles globalHandles = ObjectHandles.getGlobal();
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_int", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT
+			+ "it_next", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorNextInt(IsolateThread thread, ObjectHandle itHandle, CIntPointer res) {
 		Iterator<Integer> it = globalHandles.get(itHandle);
 		if (res.isNonNull()) {
@@ -49,7 +51,8 @@ public class IteratorApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_long", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG
+			+ "it_next", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorNextLong(IsolateThread thread, ObjectHandle itHandle, CLongPointer res) {
 		Iterator<Long> it = globalHandles.get(itHandle);
 		if (res.isNonNull()) {
@@ -58,7 +61,8 @@ public class IteratorApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_double", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DOUBLE
+			+ "it_next", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorNextDouble(IsolateThread thread, ObjectHandle itHandle, CDoublePointer res) {
 		Iterator<Double> it = globalHandles.get(itHandle);
 		if (res.isNonNull()) {
@@ -67,8 +71,8 @@ public class IteratorApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "it_next_int_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_INT_DOUBLE_TRIPLE
+			+ "it_next", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorNextEdgeTriple(IsolateThread thread, ObjectHandle itHandle, CIntPointer source,
 			CIntPointer target, CDoublePointer weight) {
 		Iterator<Triple<Integer, Integer, Double>> it = globalHandles.get(itHandle);
@@ -89,8 +93,8 @@ public class IteratorApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "it_next_long_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_LONG_DOUBLE_TRIPLE
+			+ "it_next", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorNextLongEdgeTriple(IsolateThread thread, ObjectHandle itHandle, CLongPointer source,
 			CLongPointer target, CDoublePointer weight) {
 		Iterator<Triple<Long, Long, Double>> it = globalHandles.get(itHandle);
@@ -111,8 +115,8 @@ public class IteratorApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX
-			+ "it_next_str_edge_triple", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.STRING_STRING_DOUBLE_TRIPLE
+			+ "it_next", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorNextStrEdgeTriple(IsolateThread thread, ObjectHandle itHandle, CCharPointerPointer source,
 			CCharPointerPointer target, CDoublePointer weight) {
 		Iterator<Triple<CCharPointerHolder, CCharPointerHolder, Double>> it = globalHandles.get(itHandle);
@@ -136,39 +140,35 @@ public class IteratorApi {
 	/**
 	 * Get the next external reference.
 	 * 
-	 * @param thread        the isolate thread
-	 * @param itHandle      the iterator handle
-	 * @param create_handle whether to create a handle for the external reference or
-	 *                      simply return its address (deference in one step)
-	 * @param res           the handle to the reference or its address
+	 * @param thread   the isolate thread
+	 * @param itHandle the iterator handle
+	 * @param res      its address
 	 * @return
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_ref", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int iteratorNextRef(IsolateThread thread, ObjectHandle itHandle, boolean create_handle,
-			WordPointer res) {
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF
+			+ "it_next", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int iteratorNextRef(IsolateThread thread, ObjectHandle itHandle, WordPointer res) {
 		Iterator<ExternalRef> it = globalHandles.get(itHandle);
 		ExternalRef o = it.next();
 		if (res.isNonNull()) {
-			if (create_handle) {
-				res.write(globalHandles.create(o));
-			} else {
-				res.write(o.getPtr());
-			}
+			res.write(o.getPtr());
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "it_next_object", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int iteratorNextObject(IsolateThread thread, ObjectHandle itHandle, WordPointer res) {
-		Iterator<?> it = globalHandles.get(itHandle);
-		Object o = it.next();
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
+			+ "it_next", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <V> int iteratorNextObject(IsolateThread thread, ObjectHandle itHandle, WordPointer res) {
+		Iterator<V> it = globalHandles.get(itHandle);
+		V o = it.next();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(o));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + "it_hasnext", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
+			+ "it_hasnext", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int iteratorHasNext(IsolateThread thread, ObjectHandle itHandle, CIntPointer res) {
 		Iterator<?> it = globalHandles.get(itHandle);
 		if (res.isNonNull()) {

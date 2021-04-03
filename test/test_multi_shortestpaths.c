@@ -79,12 +79,12 @@ int main() {
     void *gp;
     int hasnext; 
     while(1) { 
-        jgrapht_capi_it_hasnext(thread, paths_it, &hasnext);
+        jgrapht_capi_x_it_hasnext(thread, paths_it, &hasnext);
         if (!hasnext) { 
             break;
         }
         paths++;
-        jgrapht_capi_it_next_object(thread, paths_it, &gp);
+        jgrapht_capi_x_it_next(thread, paths_it, &gp);
         jgrapht_capi_ix_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
         jgrapht_capi_handles_destroy(thread, gp);
     }
@@ -99,12 +99,12 @@ int main() {
 
     paths = 0;
     while(1) { 
-        jgrapht_capi_it_hasnext(thread, paths_it, &hasnext);
+        jgrapht_capi_x_it_hasnext(thread, paths_it, &hasnext);
         if (!hasnext) { 
             break;
         }
         paths++;
-        jgrapht_capi_it_next_object(thread, paths_it, &gp);
+        jgrapht_capi_x_it_next(thread, paths_it, &gp);
         jgrapht_capi_ix_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
         jgrapht_capi_handles_destroy(thread, gp);
     }
@@ -120,12 +120,12 @@ int main() {
     jgrapht_capi_ix_multisp_multiobjectivesinglesource_get_paths_to_vertex(thread, multi, 4, &paths_it);
     paths = 0;
     while(1) { 
-        jgrapht_capi_it_hasnext(thread, paths_it, &hasnext);
+        jgrapht_capi_x_it_hasnext(thread, paths_it, &hasnext);
         if (!hasnext) { 
             break;
         }
         paths++;
-        jgrapht_capi_it_next_object(thread, paths_it, &gp);
+        jgrapht_capi_x_it_next(thread, paths_it, &gp);
         jgrapht_capi_ix_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
         jgrapht_capi_handles_destroy(thread, gp);
     }

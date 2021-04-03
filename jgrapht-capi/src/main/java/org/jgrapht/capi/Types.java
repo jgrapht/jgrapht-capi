@@ -27,11 +27,11 @@ public class Types {
 	public static final String LONG = "l_";
 	public static final String DOUBLE = "d_";
 	public static final String DREF = "r_";
-	public static final String REF = "R_";
-
+	
 	public static final String INT_INT_PAIR = "ii_p_";
 	public static final String LONG_LONG_PAIR = "ll_p_";
 	public static final String INT_INT_DOUBLE_TRIPLE = "iid_t_";
 	public static final String LONG_LONG_DOUBLE_TRIPLE = "lld_t_";
+	public static final String STRING_STRING_DOUBLE_TRIPLE = "ssd_t_";
 
 }

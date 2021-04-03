@@ -60,9 +60,9 @@ int main() {
     // 1st cycle
     void *cycle;
     int hasnext;
-    jgrapht_capi_it_hasnext(thread, cycleit, &hasnext);
+    jgrapht_capi_x_it_hasnext(thread, cycleit, &hasnext);
     assert(hasnext==1);
-    jgrapht_capi_it_next_object(thread, cycleit, &cycle);
+    jgrapht_capi_x_it_next(thread, cycleit, &cycle);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     // cycle is a List<Integer> where each int is a vertex 
@@ -73,12 +73,12 @@ int main() {
     char result[100];
     result[0] = '\0';
     while(1) { 
-        jgrapht_capi_it_hasnext(thread, vit, &hasnext);
+        jgrapht_capi_x_it_hasnext(thread, vit, &hasnext);
         if (!hasnext) { 
             break;
         }
         int v;
-        jgrapht_capi_it_next_int(thread, vit, &v);
+        jgrapht_capi_i_it_next(thread, vit, &v);
         char vastext[100];
         sprintf(vastext, "%d", v);
         strcat(result, vastext);
@@ -90,20 +90,20 @@ int main() {
 
 
     // 2nd cycle
-    jgrapht_capi_it_hasnext(thread, cycleit, &hasnext);
+    jgrapht_capi_x_it_hasnext(thread, cycleit, &hasnext);
     assert(hasnext==1);
-    jgrapht_capi_it_next_object(thread, cycleit, &cycle);
+    jgrapht_capi_x_it_next(thread, cycleit, &cycle);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     jgrapht_capi_x_list_it_create(thread, cycle, &vit);
 
     result[0] = '\0';
     while(1) { 
-        jgrapht_capi_it_hasnext(thread, vit, &hasnext);
+        jgrapht_capi_x_it_hasnext(thread, vit, &hasnext);
         if (!hasnext) { 
             break;
         }
         int v;
-        jgrapht_capi_it_next_int(thread, vit, &v);
+        jgrapht_capi_i_it_next(thread, vit, &v);
         char vastext[100];
         sprintf(vastext, "%d", v);
         strcat(result, vastext);
@@ -113,7 +113,7 @@ int main() {
     jgrapht_capi_handles_destroy(thread, vit);
     jgrapht_capi_handles_destroy(thread, cycle);
 
-    jgrapht_capi_it_hasnext(thread, cycleit, &hasnext);
+    jgrapht_capi_x_it_hasnext(thread, cycleit, &hasnext);
     assert(hasnext==0);
 
     jgrapht_capi_handles_destroy(thread, cycleit);

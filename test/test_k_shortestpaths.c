@@ -65,9 +65,9 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);    
 
     int hasnext = 0;
-    jgrapht_capi_it_hasnext(thread, gpit, &hasnext);
+    jgrapht_capi_x_it_hasnext(thread, gpit, &hasnext);
     assert(hasnext==1);
-    jgrapht_capi_it_next_object(thread, gpit, &gp);
+    jgrapht_capi_x_it_next(thread, gpit, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);    
 
     jgrapht_capi_ix_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
@@ -77,9 +77,9 @@ int main() {
     jgrapht_capi_handles_destroy(thread, gp);
 
     // 2nd path
-    jgrapht_capi_it_hasnext(thread, gpit, &hasnext);
+    jgrapht_capi_x_it_hasnext(thread, gpit, &hasnext);
     assert(hasnext==1);
-    jgrapht_capi_it_next_object(thread, gpit, &gp);
+    jgrapht_capi_x_it_next(thread, gpit, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_ix_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
@@ -95,9 +95,9 @@ int main() {
     jgrapht_capi_ix_sp_exec_eppstein_get_k_paths_between_vertices(thread, g, 0, 4, 2, &gpit);
     assert(jgrapht_capi_error_get_errno(thread) == 0);    
 
-    jgrapht_capi_it_hasnext(thread, gpit, &hasnext);
+    jgrapht_capi_x_it_hasnext(thread, gpit, &hasnext);
     assert(hasnext==1);
-    jgrapht_capi_it_next_object(thread, gpit, &gp);
+    jgrapht_capi_x_it_next(thread, gpit, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);    
 
     jgrapht_capi_ix_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);
@@ -107,9 +107,9 @@ int main() {
     jgrapht_capi_handles_destroy(thread, gp);
 
     // 2nd path
-    jgrapht_capi_it_hasnext(thread, gpit, &hasnext);
+    jgrapht_capi_x_it_hasnext(thread, gpit, &hasnext);
     assert(hasnext==1);
-    jgrapht_capi_it_next_object(thread, gpit, &gp);
+    jgrapht_capi_x_it_next(thread, gpit, &gp);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
     jgrapht_capi_ix_handles_get_graphpath(thread, gp, &weight, &start_vertex, &end_vertex, NULL);

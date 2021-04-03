@@ -58,14 +58,14 @@ int main() {
     jgrapht_capi_ix_planarity_embedding_edges_around_vertex(thread, embedding, 0, &it);
 
     int e;
-    jgrapht_capi_it_next_int(thread, it, &e);
+    jgrapht_capi_i_it_next(thread, it, &e);
     assert (e == 5);
-    jgrapht_capi_it_next_int(thread, it, &e);
+    jgrapht_capi_i_it_next(thread, it, &e);
     assert (e == 0);
-    jgrapht_capi_it_next_int(thread, it, &e);
+    jgrapht_capi_i_it_next(thread, it, &e);
     assert (e == 4);
     int has_next = 1;
-    jgrapht_capi_it_hasnext(thread, it, &has_next);
+    jgrapht_capi_x_it_hasnext(thread, it, &has_next);
     assert (has_next == 0);
 
     assert(jgrapht_capi_error_get_errno(thread) == 0);

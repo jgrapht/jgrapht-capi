@@ -110,11 +110,12 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Types.REF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
 			+ "set_add", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int setRefAdd(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle, CIntPointer res) {
-		Set<ExternalRef> set = globalHandles.get(handle);
-		ExternalRef ref = globalHandles.get(refHandle);
+	public static <V> int setRefAdd(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
+			CIntPointer res) {
+		Set<V> set = globalHandles.get(handle);
+		V ref = globalHandles.get(refHandle);
 		boolean result = set.add(ref);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
@@ -169,11 +170,12 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Types.REF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
 			+ "set_remove", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int setRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle, CIntPointer res) {
-		Set<ExternalRef> set = globalHandles.get(handle);
-		ExternalRef ref = globalHandles.get(refHandle);
+	public static <V> int setRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
+			CIntPointer res) {
+		Set<V> set = globalHandles.get(handle);
+		V ref = globalHandles.get(refHandle);
 		boolean result = set.remove(ref);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
@@ -228,12 +230,12 @@ public class SetApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Types.REF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
 			+ "set_contains", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int setRefContains(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
+	public static <V> int setRefContains(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
 			CIntPointer res) {
-		Set<ExternalRef> set = globalHandles.get(handle);
-		ExternalRef ref = globalHandles.get(refHandle);
+		Set<V> set = globalHandles.get(handle);
+		V ref = globalHandles.get(refHandle);
 		boolean result = set.contains(ref);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);

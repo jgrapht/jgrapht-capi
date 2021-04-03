@@ -59,7 +59,7 @@ int main() {
     assert(is_connected == 1);
 
     void *set;
-    jgrapht_capi_it_next_object(thread, setsit, &set);
+    jgrapht_capi_x_it_next(thread, setsit, &set);
 
     int size = 0;
     jgrapht_capi_x_set_size(thread, set, &size);

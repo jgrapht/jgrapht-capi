@@ -97,17 +97,17 @@ int main() {
     void *it;
     int v;
     jgrapht_capi_xx_graph_dag_topological_it(thread, g, &it);
-    jgrapht_capi_it_next_int(thread, it, &v);
+    jgrapht_capi_i_it_next(thread, it, &v);
     assert(v == 0);
-    jgrapht_capi_it_next_int(thread, it, &v);
+    jgrapht_capi_i_it_next(thread, it, &v);
     assert(v == 1);
-    jgrapht_capi_it_next_int(thread, it, &v);
+    jgrapht_capi_i_it_next(thread, it, &v);
     assert(v == 2);
-    jgrapht_capi_it_next_int(thread, it, &v);
+    jgrapht_capi_i_it_next(thread, it, &v);
     assert(v == 3);
-    jgrapht_capi_it_next_int(thread, it, &v);
+    jgrapht_capi_i_it_next(thread, it, &v);
     assert(v == 4);
-    jgrapht_capi_it_next_int(thread, it, &v);
+    jgrapht_capi_i_it_next(thread, it, &v);
     assert(v == 5);
     jgrapht_capi_handles_destroy(thread, it);
 

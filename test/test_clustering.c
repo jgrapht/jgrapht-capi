@@ -77,29 +77,29 @@ int main() {
 
     void *vit;
     jgrapht_capi_xx_clustering_ith_cluster_vit(thread, c, 0, &vit);
-    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, vit, &v) == 0);
     assert(v == 0);
-    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, vit, &v) == 0);
     assert(v == 1);
-    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, vit, &v) == 0);
     assert(v == 2);
-    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, vit, &v) == 0);
     assert(v == 3);
     int hasnext;
-    assert(jgrapht_capi_it_hasnext(thread, vit, &hasnext) == 0);
+    assert(jgrapht_capi_x_it_hasnext(thread, vit, &hasnext) == 0);
     assert(hasnext == 0);
     jgrapht_capi_handles_destroy(thread, vit);
 
     jgrapht_capi_xx_clustering_ith_cluster_vit(thread, c, 1, &vit);
-    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, vit, &v) == 0);
     assert(v == 4);
-    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, vit, &v) == 0);
     assert(v == 5);
-    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, vit, &v) == 0);
     assert(v == 6);
-    assert(jgrapht_capi_it_next_int(thread, vit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, vit, &v) == 0);
     assert(v == 7);
-    assert(!jgrapht_capi_it_hasnext(thread, vit, &hasnext));
+    assert(!jgrapht_capi_x_it_hasnext(thread, vit, &hasnext));
     assert(hasnext == 0);
     jgrapht_capi_handles_destroy(thread, vit);
 

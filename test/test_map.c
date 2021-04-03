@@ -72,12 +72,12 @@ int main() {
     jgrapht_capi_map_keys_it_create(thread, map, &kit);
     int hasnext;
     while(1) { 
-        jgrapht_capi_it_hasnext(thread, kit, &hasnext);
+        jgrapht_capi_x_it_hasnext(thread, kit, &hasnext);
         if (!hasnext) { 
             break;
         }
         int k;
-        jgrapht_capi_it_next_int(thread, kit, &k);
+        jgrapht_capi_i_it_next(thread, kit, &k);
         assert(k == n);
         n++;
     }
@@ -86,12 +86,12 @@ int main() {
     n = 0;
     jgrapht_capi_map_values_it_create(thread, map, &kit);
     while(1) { 
-        jgrapht_capi_it_hasnext(thread, kit, &hasnext);
+        jgrapht_capi_x_it_hasnext(thread, kit, &hasnext);
         if (!hasnext) { 
             break;
         }
         double v;
-        jgrapht_capi_it_next_double(thread, kit, &v);
+        jgrapht_capi_d_it_next(thread, kit, &v);
         assert(v == 1000+n);
         n++;
     }

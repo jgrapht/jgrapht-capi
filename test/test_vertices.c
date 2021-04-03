@@ -90,11 +90,11 @@ int main() {
     long x = 0;
     int value;
     while(1) { 
-        jgrapht_capi_it_hasnext(thread,  vit, &flag);
+        jgrapht_capi_x_it_hasnext(thread,  vit, &flag);
         if (!flag) { 
             break;
         }
-        jgrapht_capi_it_next_int(thread,  vit, &value);
+        jgrapht_capi_i_it_next(thread,  vit, &value);
         assert(value == x++);
     }
     assert(jgrapht_capi_error_get_errno(thread) == 0);
@@ -107,7 +107,7 @@ int main() {
     x = 0;
     while(1) { 
         int ret;
-        jgrapht_capi_it_next_int(thread,  vit, &ret);
+        jgrapht_capi_i_it_next(thread,  vit, &ret);
         if (x < 1000) { 
             assert(ret == x);
             assert(jgrapht_capi_error_get_errno(thread) == 0);

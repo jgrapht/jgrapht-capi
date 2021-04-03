@@ -102,11 +102,12 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Types.REF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
 			+ "list_add", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int listRefAdd(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle, CIntPointer res) {
-		List<ExternalRef> list = globalHandles.get(handle);
-		ExternalRef ref = globalHandles.get(refHandle);
+	public static <V> int listRefAdd(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
+			CIntPointer res) {
+		List<V> list = globalHandles.get(handle);
+		V ref = globalHandles.get(refHandle);
 		boolean result = list.add(ref);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);
@@ -202,11 +203,11 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Types.REF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
 			+ "list_remove", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int listRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle) {
-		List<ExternalRef> list = globalHandles.get(handle);
-		ExternalRef ref = globalHandles.get(refHandle);
+	public static <V> int listRefRemove(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle) {
+		List<V> list = globalHandles.get(handle);
+		V ref = globalHandles.get(refHandle);
 		list.remove(ref);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -255,12 +256,12 @@ public class ListApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Types.REF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY
 			+ "list_contains", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int listRefContains(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
+	public static <V> int listRefContains(IsolateThread thread, ObjectHandle handle, ObjectHandle refHandle,
 			CIntPointer res) {
-		List<ExternalRef> list = globalHandles.get(handle);
-		ExternalRef ref = globalHandles.get(refHandle);
+		List<V> list = globalHandles.get(handle);
+		V ref = globalHandles.get(refHandle);
 		boolean result = list.contains(ref);
 		if (res.isNonNull()) {
 			res.write(result ? 1 : 0);

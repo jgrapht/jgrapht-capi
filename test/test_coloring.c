@@ -14,12 +14,12 @@ void assert_coloring(graal_isolatethread_t *thread, void *g, void *map) {
     jgrapht_capi_xx_graph_create_all_eit(thread, g, &eit);
     int has_next;
     while(1) { 
-        jgrapht_capi_it_hasnext(thread, eit, &has_next);
+        jgrapht_capi_x_it_hasnext(thread, eit, &has_next);
         if (!has_next) { 
             break;
         }
         int e;
-        jgrapht_capi_it_next_int(thread, eit, &e);
+        jgrapht_capi_i_it_next(thread, eit, &e);
         int s; 
         jgrapht_capi_ii_graph_edge_source(thread, g, e, &s);
         int t;

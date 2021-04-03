@@ -111,20 +111,20 @@ int main() {
 
     void *eit;
     jgrapht_capi_xx_graph_create_all_eit(thread, g, &eit);
-    assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, eit, &v) == 0);
     assert(v == 0);
-    assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, eit, &v) == 0);
     assert(v == 1);
-    assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, eit, &v) == 0);
     assert(v == 2);
-    assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, eit, &v) == 0);
     assert(v == 3);
-    assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, eit, &v) == 0);
     assert(v == 4);
-    assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, eit, &v) == 0);
     assert(v == 5);
     int hasnext;
-    assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
+    assert(jgrapht_capi_x_it_hasnext(thread, eit, &hasnext) == 0);
     assert(hasnext == 0);
 
     jgrapht_capi_handles_destroy(thread, eit);
@@ -149,13 +149,13 @@ int main() {
     assert(!flag);
 
     jgrapht_capi_ix_graph_create_between_eit(thread, g, 1 , 2, &eit);
-    assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, eit, &v) == 0);
     assert(v == 3);
-    assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, eit, &v) == 0);
     assert(v == 4);
-    assert(jgrapht_capi_it_next_int(thread, eit, &v) == 0);
+    assert(jgrapht_capi_i_it_next(thread, eit, &v) == 0);
     assert(v == 5);
-    assert(jgrapht_capi_it_hasnext(thread, eit, &hasnext) == 0);
+    assert(jgrapht_capi_x_it_hasnext(thread, eit, &hasnext) == 0);
     assert(hasnext == 0);
     jgrapht_capi_handles_destroy(thread, eit);
 

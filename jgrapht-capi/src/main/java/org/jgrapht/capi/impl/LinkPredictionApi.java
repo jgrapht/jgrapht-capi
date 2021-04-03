@@ -70,11 +70,11 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "link_prediction_exec_adamic_adar_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeAdamicAdarIndex(IsolateThread thread, ObjectHandle graphHandle, PointerBase u,
 			PointerBase v, CDoublePointer res) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef uRef = g.toExternalRef(u);
 		ExternalRef vRef = g.toExternalRef(v);
 
@@ -111,11 +111,11 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "link_prediction_exec_common_neighbors", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCommonNeighbors(IsolateThread thread, ObjectHandle graphHandle, PointerBase u,
 			PointerBase v, CDoublePointer res) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef uRef = g.toExternalRef(u);
 		ExternalRef vRef = g.toExternalRef(v);
 
@@ -152,11 +152,11 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "link_prediction_exec_hub_depressed_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeexecuteHubDepressedIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			PointerBase u, PointerBase v, CDoublePointer res) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef uRef = g.toExternalRef(u);
 		ExternalRef vRef = g.toExternalRef(v);
 
@@ -193,11 +193,11 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "link_prediction_exec_hub_promoted_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeexecuteHubPromotedIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			PointerBase u, PointerBase v, CDoublePointer res) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef uRef = g.toExternalRef(u);
 		ExternalRef vRef = g.toExternalRef(v);
 
@@ -234,11 +234,11 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "link_prediction_exec_jaccard_coefficient", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeJaccardCoefficientLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			PointerBase u, PointerBase v, CDoublePointer res) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef uRef = g.toExternalRef(u);
 		ExternalRef vRef = g.toExternalRef(v);
 
@@ -275,11 +275,11 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "link_prediction_exec_leicht_holme_newman_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeLeichtHolmeNewmanIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			PointerBase u, PointerBase v, CDoublePointer res) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef uRef = g.toExternalRef(u);
 		ExternalRef vRef = g.toExternalRef(v);
 
@@ -316,11 +316,11 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "link_prediction_exec_preferential_attachment", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executePreferentialAttachmentLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			PointerBase u, PointerBase v, CDoublePointer res) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef uRef = g.toExternalRef(u);
 		ExternalRef vRef = g.toExternalRef(v);
 
@@ -357,11 +357,11 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "link_prediction_exec_resource_allocation_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeResourceAllocationIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle,
 			PointerBase u, PointerBase v, CDoublePointer res) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef uRef = g.toExternalRef(u);
 		ExternalRef vRef = g.toExternalRef(v);
 
@@ -398,11 +398,11 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "link_prediction_exec_salton_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeSaltonIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, PointerBase u,
 			PointerBase v, CDoublePointer res) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef uRef = g.toExternalRef(u);
 		ExternalRef vRef = g.toExternalRef(v);
 
@@ -439,11 +439,11 @@ public class LinkPredictionApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "link_prediction_exec_sorensen_index", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeSørensenIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, PointerBase u,
 			PointerBase v, CDoublePointer res) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef uRef = g.toExternalRef(u);
 		ExternalRef vRef = g.toExternalRef(v);
 

@@ -71,12 +71,12 @@ int main() {
     void * it;
     int elem;
     jgrapht_capi_x_list_it_create(thread, list, &it);
-    jgrapht_capi_it_next_int(thread, it, &elem);
+    jgrapht_capi_i_it_next(thread, it, &elem);
     assert(elem == 4);
-    jgrapht_capi_it_next_int(thread, it, &elem);
+    jgrapht_capi_i_it_next(thread, it, &elem);
     assert(elem == 100);
     int hasnext;
-    jgrapht_capi_it_hasnext(thread, it, &hasnext);
+    jgrapht_capi_x_it_hasnext(thread, it, &hasnext);
     assert(hasnext == 0);
     jgrapht_capi_handles_destroy(thread, it);
 
