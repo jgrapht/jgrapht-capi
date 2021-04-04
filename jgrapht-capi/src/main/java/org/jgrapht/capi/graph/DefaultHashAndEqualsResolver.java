@@ -14,14 +14,12 @@ public class DefaultHashAndEqualsResolver implements HashAndEqualsResolver {
 	 * references. Otherwise null.
 	 */
 	private PtrToHashFunctionPointer hashLookup;
-	private PToLFunctionPointer cachedHashLookup;
 
 	/**
 	 * Method to lookup the equals function in case the graph contains external
 	 * references. Otherwise null.
 	 */
 	private PtrToEqualsFunctionPointer equalsLookup;
-	private PPToIFunctionPointer cachedEqualsLookup;
 
 	public DefaultHashAndEqualsResolver(PtrToHashFunctionPointer hashLookup, PtrToEqualsFunctionPointer equalsLookup) {
 		this.hashLookup = hashLookup;
@@ -45,25 +43,17 @@ public class DefaultHashAndEqualsResolver implements HashAndEqualsResolver {
 	}
 
 	protected PToLFunctionPointer resolveHashFunction(PointerBase ptr) {
-		if (cachedHashLookup == null) {
-			if (hashLookup.isNull()) {
-				cachedHashLookup = WordFactory.nullPointer();
-			} else {
-				cachedHashLookup = hashLookup.invoke(ptr);
-			}
+		if (hashLookup.isNull()) {
+			return WordFactory.nullPointer();
 		}
-		return cachedHashLookup;
+		return hashLookup.invoke(ptr);
 	}
 
 	protected PPToIFunctionPointer resolveEqualsFunction(PointerBase ptr) {
-		if (cachedEqualsLookup == null) {
-			if (equalsLookup.isNull()) {
-				cachedEqualsLookup = WordFactory.nullPointer();
-			} else {
-				cachedEqualsLookup = equalsLookup.invoke(ptr);
-			}
+		if (equalsLookup.isNull()) {
+			return WordFactory.nullPointer();
 		}
-		return cachedEqualsLookup;
+		return equalsLookup.invoke(ptr);
 	}
 
 	@Override
