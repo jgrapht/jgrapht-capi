@@ -139,9 +139,9 @@ int main() {
 
     void *attr_store;
     jgrapht_capi_xx_attributes_store_create(thread, &attr_store);
-    jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 0, "cost", 5.4);
-    jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 1, "cost", 6.5);
-    jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 2, "cost", 9.2);
+    jgrapht_capi_id_attributes_store_put(thread, attr_store, 0, "cost", 5.4);
+    jgrapht_capi_id_attributes_store_put(thread, attr_store, 1, "cost", 6.5);
+    jgrapht_capi_id_attributes_store_put(thread, attr_store, 2, "cost", 9.2);
 
     jgrapht_capi_xx_export_file_gexf(thread, g, "dummy.gexf.out", attrs_registry, NULL, attr_store, NULL, NULL, 0, 0, 0, 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);

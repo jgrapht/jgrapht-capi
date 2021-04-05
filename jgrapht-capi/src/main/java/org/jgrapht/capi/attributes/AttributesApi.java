@@ -12,6 +12,7 @@ import org.graalvm.nativeimage.c.type.WordPointer;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.StringUtils;
+import org.jgrapht.capi.Types;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.nio.DefaultAttribute;
 
@@ -29,9 +30,9 @@ public class AttributesApi {
 	 * @param res    Pointer to store the result
 	 * @return return code
 	 */
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_ANY
 			+ "attributes_store_create", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int createIntStore(IsolateThread thread, WordPointer res) {
+	public static int createStore(IsolateThread thread, WordPointer res) {
 		AttributesStore<?> store = new AttributesStore<>();
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(store));
@@ -39,8 +40,8 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
-			+ "attributes_store_put_boolean_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_BOOLEAN
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putBooleanAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, boolean value) {
 		AttributesStore<Integer> store = globalHandles.get(storeHandle);
@@ -49,18 +50,8 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
-			+ "attributes_store_put_boolean_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int putBooleanAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
-			CCharPointer namePtr, boolean value) {
-		AttributesStore<Long> store = globalHandles.get(storeHandle);
-		String name = StringUtils.toJavaStringFromUtf8(namePtr);
-		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
-		return Status.STATUS_SUCCESS.getCValue();
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
-			+ "attributes_store_put_int_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_INT
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putIntAttribute(IsolateThread thread, ObjectHandle storeHandle, int element, CCharPointer namePtr,
 			int value) {
 		AttributesStore<Integer> store = globalHandles.get(storeHandle);
@@ -69,18 +60,8 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
-			+ "attributes_store_put_int_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int putIntAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
-			CCharPointer namePtr, int value) {
-		AttributesStore<Long> store = globalHandles.get(storeHandle);
-		String name = StringUtils.toJavaStringFromUtf8(namePtr);
-		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
-		return Status.STATUS_SUCCESS.getCValue();
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
-			+ "attributes_store_put_long_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_LONG
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putLongAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, long value) {
 		AttributesStore<Integer> store = globalHandles.get(storeHandle);
@@ -89,18 +70,8 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
-			+ "attributes_store_put_long_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int putLongAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
-			CCharPointer namePtr, long value) {
-		AttributesStore<Long> store = globalHandles.get(storeHandle);
-		String name = StringUtils.toJavaStringFromUtf8(namePtr);
-		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
-		return Status.STATUS_SUCCESS.getCValue();
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
-			+ "attributes_store_put_double_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_DOUBLE
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putDoubleAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, double value) {
 		AttributesStore<Integer> store = globalHandles.get(storeHandle);
@@ -109,18 +80,8 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
-			+ "attributes_store_put_double_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int putDoubleAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
-			CCharPointer namePtr, double value) {
-		AttributesStore<Long> store = globalHandles.get(storeHandle);
-		String name = StringUtils.toJavaStringFromUtf8(namePtr);
-		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
-		return Status.STATUS_SUCCESS.getCValue();
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
-			+ "attributes_store_put_string_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_STRING
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putStringAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr, CCharPointer valuePtr) {
 		AttributesStore<Integer> store = globalHandles.get(storeHandle);
@@ -130,7 +91,47 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_BOOLEAN
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putBooleanAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
+			CCharPointer namePtr, boolean value) {
+		AttributesStore<Long> store = globalHandles.get(storeHandle);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_INT
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putIntAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
+			CCharPointer namePtr, int value) {
+		AttributesStore<Long> store = globalHandles.get(storeHandle);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_LONG
+			+ "attributes_store_put_long_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putLongAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
+			CCharPointer namePtr, long value) {
+		AttributesStore<Long> store = globalHandles.get(storeHandle);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_DOUBLE
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putDoubleAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
+			CCharPointer namePtr, double value) {
+		AttributesStore<Long> store = globalHandles.get(storeHandle);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_STRING
 			+ "attributes_store_put_string_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putStringAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr, CCharPointer valuePtr) {
@@ -141,8 +142,8 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
-			+ "attributes_store_remove_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_STRING
+			+ "attributes_store_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr) {
 		AttributesStore<Integer> store = globalHandles.get(storeHandle);
@@ -151,8 +152,8 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
-			+ "attributes_store_remove_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_STRING
+			+ "attributes_store_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr) {
 		AttributesStore<Long> store = globalHandles.get(storeHandle);

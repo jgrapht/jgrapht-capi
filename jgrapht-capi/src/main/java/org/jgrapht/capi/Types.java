@@ -28,13 +28,17 @@ public class Types {
 	public static final String DOUBLE = "d_";
 	public static final String DREF = "r_";
 
+	public static final String INT_BOOLEAN = "iz_";
 	public static final String INT_INT = "ii_";
+	public static final String INT_LONG = "il_";
 	public static final String INT_DOUBLE = "id_";
 	public static final String INT_STRING = "is_";
 	public static final String INT_DREF = "ir_";
 	public static final String INT_ANY = "ix_";
 
+	public static final String LONG_BOOLEAN = "lz_";
 	public static final String LONG_INT = "li_";
+	public static final String LONG_LONG = "ll_";
 	public static final String LONG_DOUBLE = "ld_";
 	public static final String LONG_STRING = "ls_";
 	public static final String LONG_DREF = "lr_";

@@ -92,10 +92,10 @@ int main() {
     // test with extra attributes
     void *attr_store;
     jgrapht_capi_xx_attributes_store_create(thread, &attr_store);
-    jgrapht_capi_ii_attributes_store_put_string_attribute(thread, attr_store, 0, "label", "label 0");
-    jgrapht_capi_ii_attributes_store_put_string_attribute(thread, attr_store, 1, "label", "label 1");
-    jgrapht_capi_ii_attributes_store_put_string_attribute(thread, attr_store, 2, "label", "label 2");
-    jgrapht_capi_ii_attributes_store_put_double_attribute(thread, attr_store, 0, "cost", 100.5);
+    jgrapht_capi_is_attributes_store_put(thread, attr_store, 0, "label", "label 0");
+    jgrapht_capi_is_attributes_store_put(thread, attr_store, 1, "label", "label 1");
+    jgrapht_capi_is_attributes_store_put(thread, attr_store, 2, "label", "label 2");
+    jgrapht_capi_id_attributes_store_put(thread, attr_store, 0, "cost", 100.5);
 
     jgrapht_capi_xx_export_file_json(thread, g, "dummy.edgelist.json.out", attr_store, NULL, NULL);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
