@@ -10,7 +10,7 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CDoublePointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
-import org.graalvm.word.WordFactory;
+import org.graalvm.word.PointerBase;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.flow.BoykovKolmogorovMFImpl;
 import org.jgrapht.alg.flow.DinicMFImpl;
@@ -25,10 +25,15 @@ import org.jgrapht.alg.interfaces.MinimumCostFlowAlgorithm.MinimumCostFlow;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.IToIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.LToIFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PToIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.JGraphTContext.VToPFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.VoidToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.VoidToLongFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.DefaultCapiGraph;
+import org.jgrapht.capi.graph.ExternalRef;
+import org.jgrapht.capi.graph.HashAndEqualsResolver;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
@@ -52,6 +57,14 @@ public class FlowApi {
 				cutSourcePartitionRes);
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "maxflow_exec_push_relabel", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executePushRelabel(IsolateThread thread, ObjectHandle graphHandle, PointerBase source,
+			PointerBase sink, CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
+		return doRunMaxFlow(thread, graphHandle, PushRelabelMFImpl::new, source, sink, valueRes, flowRes,
+				cutSourcePartitionRes);
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "maxflow_exec_dinic", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDinic(IsolateThread thread, ObjectHandle graphHandle, int source, int sink,
@@ -65,6 +78,14 @@ public class FlowApi {
 	public static int executeDinic(IsolateThread thread, ObjectHandle graphHandle, long source, long sink,
 			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
 		return doRunLongMaxFlow(thread, graphHandle, DinicMFImpl::new, source, sink, valueRes, flowRes,
+				cutSourcePartitionRes);
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "maxflow_exec_dinic", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeDinic(IsolateThread thread, ObjectHandle graphHandle, PointerBase source, PointerBase sink,
+			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
+		return doRunMaxFlow(thread, graphHandle, DinicMFImpl::new, source, sink, valueRes, flowRes,
 				cutSourcePartitionRes);
 	}
 
@@ -84,6 +105,14 @@ public class FlowApi {
 				cutSourcePartitionRes);
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "maxflow_exec_edmonds_karp", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeEdmondsKarp(IsolateThread thread, ObjectHandle graphHandle, PointerBase source,
+			PointerBase sink, CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
+		return doRunMaxFlow(thread, graphHandle, EdmondsKarpMFImpl::new, source, sink, valueRes, flowRes,
+				cutSourcePartitionRes);
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "maxflow_exec_boykov_kolmogorov", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeBoykovKolmogorov(IsolateThread thread, ObjectHandle graphHandle, int source, int sink,
@@ -100,11 +129,18 @@ public class FlowApi {
 				cutSourcePartitionRes);
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "maxflow_exec_boykov_kolmogorov", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeBoykovKolmogorov(IsolateThread thread, ObjectHandle graphHandle, PointerBase source,
+			PointerBase sink, CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
+		return doRunMaxFlow(thread, graphHandle, BoykovKolmogorovMFImpl::new, source, sink, valueRes, flowRes,
+				cutSourcePartitionRes);
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "mincostflow_exec_capacity_scaling", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCapacityScaling(IsolateThread thread, ObjectHandle graphHandle,
-			IToIFunctionPointer nodeSupplyFunction,
-			IToIFunctionPointer arcCapacityLowerBoundsFunction,
+			IToIFunctionPointer nodeSupplyFunction, IToIFunctionPointer arcCapacityLowerBoundsFunction,
 			IToIFunctionPointer arcCapacityUpperBoundsFunction, int scalingFactor, CDoublePointer valueRes,
 			WordPointer flowRes, WordPointer dualSolutionRes) {
 
@@ -143,8 +179,7 @@ public class FlowApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
 			+ "mincostflow_exec_capacity_scaling", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeCapacityScaling(IsolateThread thread, ObjectHandle graphHandle,
-			LToIFunctionPointer nodeSupplyFunction,
-			LToIFunctionPointer arcCapacityLowerBoundsFunction,
+			LToIFunctionPointer nodeSupplyFunction, LToIFunctionPointer arcCapacityLowerBoundsFunction,
 			LToIFunctionPointer arcCapacityUpperBoundsFunction, int scalingFactor, CDoublePointer valueRes,
 			WordPointer flowRes, WordPointer dualSolutionRes) {
 
@@ -167,6 +202,46 @@ public class FlowApi {
 		double flowCost = flow.getCost();
 		Map<Long, Double> flowMap = flow.getFlowMap();
 		Map<Long, Double> dualMap = alg.getDualSolution();
+
+		if (valueRes.isNonNull()) {
+			valueRes.write(flowCost);
+		}
+		if (flowRes.isNonNull()) {
+			flowRes.write(globalHandles.create(flowMap));
+		}
+		if (dualSolutionRes.isNonNull()) {
+			dualSolutionRes.write(globalHandles.create(dualMap));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+			+ "mincostflow_exec_capacity_scaling", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int executeCapacityScaling(IsolateThread thread, ObjectHandle graphHandle,
+			PToIFunctionPointer nodeSupplyFunction, PToIFunctionPointer arcCapacityLowerBoundsFunction,
+			PToIFunctionPointer arcCapacityUpperBoundsFunction, int scalingFactor, CDoublePointer valueRes,
+			WordPointer flowRes, WordPointer dualSolutionRes) {
+
+		Graph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+
+		Function<ExternalRef, Integer> nodeSupplies = v -> nodeSupplyFunction.invoke(v.getPtr());
+		Function<ExternalRef, Integer> arcCapacityUpperBounds = e -> arcCapacityUpperBoundsFunction.invoke(e.getPtr());
+		Function<ExternalRef, Integer> arcCapacityLowerBounds;
+		if (arcCapacityLowerBoundsFunction.isNonNull()) {
+			arcCapacityLowerBounds = e -> arcCapacityLowerBoundsFunction.invoke(e.getPtr());
+		} else {
+			arcCapacityLowerBounds = e -> 0;
+		}
+
+		MinimumCostFlowProblemImpl<ExternalRef, ExternalRef> problem = new MinimumCostFlowProblemImpl<>(g, nodeSupplies,
+				arcCapacityUpperBounds, arcCapacityLowerBounds);
+		CapacityScalingMinimumCostFlow<ExternalRef, ExternalRef> alg = new CapacityScalingMinimumCostFlow<>(
+				scalingFactor);
+
+		MinimumCostFlow<ExternalRef> flow = alg.getMinimumCostFlow(problem);
+		double flowCost = flow.getCost();
+		Map<ExternalRef, Double> flowMap = flow.getFlowMap();
+		Map<ExternalRef, Double> dualMap = alg.getDualSolution();
 
 		if (valueRes.isNonNull()) {
 			valueRes.write(flowCost);
@@ -215,15 +290,31 @@ public class FlowApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "equivalentflowtree_max_st_flow", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <E> int eftMaxSTFlow(IsolateThread thread, ObjectHandle eft, PointerBase sourcePtr,
+			PointerBase sinkPtr, ObjectHandle hashEqualsResolverHandle, CDoublePointer valueRes) {
+		GusfieldEquivalentFlowTree<ExternalRef, E> alg = globalHandles.get(eft);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef source = resolver.toExternalRef(sourcePtr);
+		ExternalRef sink = resolver.toExternalRef(sinkPtr);
+
+		double flowValue = alg.getMaximumFlowValue(source, sink);
+		if (valueRes.isNonNull()) {
+			valueRes.write(flowValue);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_INT
 			+ "equivalentflowtree_tree", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int eftGetTree(IsolateThread thread, ObjectHandle eft, WordPointer treeRes) {
+	public static int eftGetTree(IsolateThread thread, ObjectHandle eft, VoidToIntegerFunctionPointer vertexSupplier,
+			VoidToIntegerFunctionPointer edgeSupplier, WordPointer treeRes) {
 		GusfieldEquivalentFlowTree<Integer, Integer> alg = globalHandles.get(eft);
 		SimpleWeightedGraph<Integer, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
 
 		// convert to integer vertices/edges
-		Graph<Integer, Integer> tree = GraphApi.createGraph(false, false, false, true, WordFactory.nullPointer(),
-				WordFactory.nullPointer());
+		Graph<Integer, Integer> tree = GraphApi.createGraph(false, false, false, true, vertexSupplier, edgeSupplier);
 		tree = new DefaultCapiGraph<Integer, Integer>(tree);
 
 		for (Integer v : origTree.vertexSet()) {
@@ -244,35 +335,7 @@ public class FlowApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
-			+ "equivalentflowtree_tree", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int llEftGetTree(IsolateThread thread, ObjectHandle eft, WordPointer treeRes) {
-		GusfieldEquivalentFlowTree<Long, Long> alg = globalHandles.get(eft);
-		SimpleWeightedGraph<Long, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
-
-		// convert to integer vertices/edges
-		Graph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true, WordFactory.nullPointer(),
-				WordFactory.nullPointer());
-		tree = new DefaultCapiGraph<Long, Long>(tree);
-
-		for (Long v : origTree.vertexSet()) {
-			tree.addVertex(v);
-		}
-		for (DefaultWeightedEdge e : origTree.edgeSet()) {
-			long s = origTree.getEdgeSource(e);
-			long t = origTree.getEdgeTarget(e);
-			double w = origTree.getEdgeWeight(e);
-			tree.setEdgeWeight(tree.addEdge(s, t), w);
-		}
-
-		// write result
-		if (treeRes.isNonNull()) {
-			treeRes.write(globalHandles.create(tree));
-		}
-		return Status.STATUS_SUCCESS.getCValue();
-	}
-
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_LONG
-			+ "equivalentflowtree_tree_with_suppliers", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
+			+ "equivalentflowtree_tree", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
 					"Given an instance of the equivalent flow tree from Gusfield's algorithm, compute",
 					"the actual tree as a graph. The new graph will reuse the vertex set from the original graph",
 					"but will have new edges which will be constructed by the provided edge supplier." })
@@ -302,9 +365,42 @@ public class FlowApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+			+ "equivalentflowtree_tree", exceptionHandler = StatusReturnExceptionHandler.class, documentation = {
+					"Given an instance of the equivalent flow tree from Gusfield's algorithm, compute",
+					"the actual tree as a graph. The new graph will reuse the vertex set from the original graph",
+					"but will have new edges which will be constructed by the provided edge supplier." })
+	public static int llEftGetTree(IsolateThread thread, ObjectHandle eft, VToPFunctionPointer vertexSupplier,
+			VToPFunctionPointer edgeSupplier, ObjectHandle hashEqualsResolverHandle, WordPointer treeRes) {
+
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		GusfieldEquivalentFlowTree<ExternalRef, ?> alg = globalHandles.get(eft);
+		SimpleWeightedGraph<ExternalRef, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
+
+		// convert to integer vertices/edges
+		DefaultCapiGraph<ExternalRef, ExternalRef> tree = RefGraphApi.createRefGraph(false, false, false, true,
+				vertexSupplier, edgeSupplier, resolver);
+
+		for (ExternalRef v : origTree.vertexSet()) {
+			tree.addVertex(v);
+		}
+		for (DefaultWeightedEdge e : origTree.edgeSet()) {
+			ExternalRef s = origTree.getEdgeSource(e);
+			ExternalRef t = origTree.getEdgeTarget(e);
+			double w = origTree.getEdgeWeight(e);
+			tree.setEdgeWeight(tree.addEdge(s, t), w);
+		}
+
+		// write result
+		if (treeRes.isNonNull()) {
+			treeRes.write(globalHandles.create(tree));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	private static <E> int doRunMaxFlow(IsolateThread thread, ObjectHandle graphHandle,
-			Function<Graph<Integer, E>, MaximumFlowAlgorithmBase<Integer, E>> algProvider, int source,
-			int sink, CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
+			Function<Graph<Integer, E>, MaximumFlowAlgorithmBase<Integer, E>> algProvider, int source, int sink,
+			CDoublePointer valueRes, WordPointer flowRes, WordPointer cutSourcePartitionRes) {
 		Graph<Integer, E> g = globalHandles.get(graphHandle);
 		MaximumFlowAlgorithmBase<Integer, E> alg = algProvider.apply(g);
 		MaximumFlow<E> maximumFlow = alg.getMaximumFlow(source, sink);
@@ -331,6 +427,30 @@ public class FlowApi {
 		MaximumFlow<E> maximumFlow = alg.getMaximumFlow(source, sink);
 		Map<E, Double> flowMap = maximumFlow.getFlowMap();
 		Set<Long> cutSourcePartition = alg.getSourcePartition();
+		double flowValue = maximumFlow.getValue();
+		if (valueRes.isNonNull()) {
+			valueRes.write(flowValue);
+		}
+		if (flowRes.isNonNull()) {
+			flowRes.write(globalHandles.create(flowMap));
+		}
+		if (cutSourcePartitionRes.isNonNull()) {
+			cutSourcePartitionRes.write(globalHandles.create(cutSourcePartition));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	private static <E> int doRunMaxFlow(IsolateThread thread, ObjectHandle graphHandle,
+			Function<Graph<ExternalRef, E>, MaximumFlowAlgorithmBase<ExternalRef, E>> algProvider,
+			PointerBase sourcePtr, PointerBase sinkPtr, CDoublePointer valueRes, WordPointer flowRes,
+			WordPointer cutSourcePartitionRes) {
+		DefaultCapiGraph<ExternalRef, E> g = globalHandles.get(graphHandle);
+		MaximumFlowAlgorithmBase<ExternalRef, E> alg = algProvider.apply(g);
+		ExternalRef source = g.toExternalRef(sourcePtr);
+		ExternalRef sink = g.toExternalRef(sinkPtr);
+		MaximumFlow<E> maximumFlow = alg.getMaximumFlow(source, sink);
+		Map<E, Double> flowMap = maximumFlow.getFlowMap();
+		Set<ExternalRef> cutSourcePartition = alg.getSourcePartition();
 		double flowValue = maximumFlow.getValue();
 		if (valueRes.isNonNull()) {
 			valueRes.write(flowValue);

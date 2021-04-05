@@ -66,7 +66,7 @@ int main() {
 
     // tree
     void *tree;
-    jgrapht_capi_ii_equivalentflowtree_tree(thread, eft, &tree);
+    jgrapht_capi_ii_equivalentflowtree_tree(thread, eft, NULL, NULL, &tree);
     int count;
     jgrapht_capi_ix_graph_vertices_count(thread, tree, &count);
     assert (count == 4);
