@@ -155,6 +155,16 @@ public class JGraphTContext {
 		void invoke(CCharPointer element, CCharPointer key, CCharPointer value);
 	}
 
+	public interface PIdNotifyAttributeFunctionPointer extends CFunctionPointer {
+
+		/*
+		 * Invocation of the function pointer. A call to the function is replaced with
+		 * an indirect call of the function pointer.
+		 */
+		@InvokeCFunctionPointer
+		void invoke(PointerBase element, CCharPointer key, CCharPointer value);
+	}
+
 	/*
 	 * Function pointer for importers which give the user control on how to convert
 	 * the input identifier of a vertex or edge into an integer.
@@ -174,6 +184,13 @@ public class JGraphTContext {
 
 		@InvokeCFunctionPointer
 		long invoke(CCharPointer id);
+
+	}
+
+	public interface CCharPointerToPFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		PointerBase invoke(CCharPointer id);
 
 	}
 
@@ -247,6 +264,13 @@ public class JGraphTContext {
 
 	}
 
+	public interface LToPFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		PointerBase invoke(long key);
+
+	}
+
 	public interface LongToBooleanFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
@@ -265,6 +289,13 @@ public class JGraphTContext {
 
 		@InvokeCFunctionPointer
 		void invoke(long key);
+
+	}
+
+	public interface PFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		void invoke(PointerBase key);
 
 	}
 

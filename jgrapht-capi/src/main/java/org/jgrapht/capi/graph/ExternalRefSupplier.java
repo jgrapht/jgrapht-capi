@@ -8,19 +8,19 @@ import org.jgrapht.capi.JGraphTContext.VToPFunctionPointer;
 public class ExternalRefSupplier implements Supplier<ExternalRef> {
 
 	private VToPFunctionPointer supplier;
-	private DefaultCapiGraph<ExternalRef, ExternalRef> graph;
+	private HashAndEqualsResolver resolver;
 
-	public ExternalRefSupplier(VToPFunctionPointer supplier, DefaultCapiGraph<ExternalRef, ExternalRef> graph) {
+	public ExternalRefSupplier(VToPFunctionPointer supplier, HashAndEqualsResolver resolver) {
 		this.supplier = supplier;
-		this.graph = graph;
+		this.resolver = resolver;
 	}
 
-	public DefaultCapiGraph<ExternalRef, ExternalRef> getGraph() {
-		return graph;
+	public HashAndEqualsResolver getResolver() {
+		return resolver;
 	}
 
-	public void setGraph(DefaultCapiGraph<ExternalRef, ExternalRef> graph) {
-		this.graph = graph;
+	public void setResolver(HashAndEqualsResolver resolver) {
+		this.resolver = resolver;
 	}
 
 	public VToPFunctionPointer getSupplier() {
@@ -37,7 +37,7 @@ public class ExternalRefSupplier implements Supplier<ExternalRef> {
 		if (ptr.isNull()) {
 			throw new IllegalArgumentException("Supplier must return valid values");
 		}
-		return graph.toExternalRef(ptr);
+		return resolver.toExternalRef(ptr);
 	}
 
 }

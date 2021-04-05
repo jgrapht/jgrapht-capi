@@ -27,7 +27,21 @@ public class Types {
 	public static final String LONG = "l_";
 	public static final String DOUBLE = "d_";
 	public static final String DREF = "r_";
+
+	public static final String INT_INT = "ii_";
+	public static final String INT_DOUBLE = "id_";
+	public static final String INT_STRING = "is_";
+	public static final String INT_DREF = "ir_";
+	public static final String INT_ANY = "ix_";
+
+	public static final String LONG_INT = "li_";
+	public static final String LONG_DOUBLE = "ld_";
+	public static final String LONG_STRING = "ls_";
+	public static final String LONG_DREF = "lr_";
+	public static final String LONG_ANY = "lx_";
 	
+	public static final String ANY_ANY = "xx_";
+
 	public static final String INT_INT_PAIR = "ii_p_";
 	public static final String LONG_LONG_PAIR = "ll_p_";
 	public static final String INT_INT_DOUBLE_TRIPLE = "iid_t_";

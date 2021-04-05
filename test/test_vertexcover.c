@@ -75,14 +75,14 @@ int main() {
     jgrapht_capi_handles_destroy(thread, vc);
 
     void * map;
-    jgrapht_capi_map_linked_create(thread, &map);
-    jgrapht_capi_map_int_double_put(thread, map, 0, 1000.0);
-    jgrapht_capi_map_int_double_put(thread, map, 1, 2.0);
-    jgrapht_capi_map_int_double_put(thread, map, 2, 2.0);
-    jgrapht_capi_map_int_double_put(thread, map, 3, 2.0);
-    jgrapht_capi_map_int_double_put(thread, map, 4, 2.0);
-    jgrapht_capi_map_int_double_put(thread, map, 5, 2.0);
-    jgrapht_capi_map_int_double_put(thread, map, 6, 2.0);
+    jgrapht_capi_xx_map_linked_create(thread, &map);
+    jgrapht_capi_id_map_put(thread, map, 0, 1000.0);
+    jgrapht_capi_id_map_put(thread, map, 1, 2.0);
+    jgrapht_capi_id_map_put(thread, map, 2, 2.0);
+    jgrapht_capi_id_map_put(thread, map, 3, 2.0);
+    jgrapht_capi_id_map_put(thread, map, 4, 2.0);
+    jgrapht_capi_id_map_put(thread, map, 5, 2.0);
+    jgrapht_capi_id_map_put(thread, map, 6, 2.0);
 
     jgrapht_capi_xx_vertexcover_exec_greedy_weighted(thread, g, map, &vc_w, &vc);
     assert(vc_w == 12.0);

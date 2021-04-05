@@ -25,8 +25,8 @@ void assert_coloring(graal_isolatethread_t *thread, void *g, void *map) {
         int t;
         jgrapht_capi_ii_graph_edge_target(thread, g, e, &t);
         int source_color, target_color;
-        jgrapht_capi_map_int_int_get(thread, map, s, &source_color);
-        jgrapht_capi_map_int_int_get(thread, map, t, &target_color);
+        jgrapht_capi_ii_map_get(thread, map, s, &source_color);
+        jgrapht_capi_ii_map_get(thread, map, t, &target_color);
         assert(source_color != target_color);
     }
     jgrapht_capi_handles_destroy(thread, eit);

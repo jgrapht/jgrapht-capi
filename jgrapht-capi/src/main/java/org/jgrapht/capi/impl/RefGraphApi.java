@@ -97,13 +97,9 @@ public class RefGraphApi {
 		DefaultCapiGraph<ExternalRef, ExternalRef> wrappedGraph = new DefaultCapiGraph<>(graph);
 
 		// replace default hash and equals resolver
-		if (hashEqualsResolver != null) {
-			wrappedGraph.setHashAndEqualsResolver(hashEqualsResolver);
-		}
-
-		// provide graph in order to perform the hash and equals lookup
-		vSupplier.setGraph(wrappedGraph);
-		eSupplier.setGraph(wrappedGraph);
+		wrappedGraph.setHashAndEqualsResolver(hashEqualsResolver);
+		vSupplier.setResolver(hashEqualsResolver);
+		eSupplier.setResolver(hashEqualsResolver);
 
 		return wrappedGraph;
 	}

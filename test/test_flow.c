@@ -61,7 +61,7 @@ int main() {
     assert(flow_value == 30.0);
 
     double e2_flow;
-    jgrapht_capi_map_int_double_get(thread, flow, 2, &e2_flow);
+    jgrapht_capi_id_map_get(thread, flow, 2, &e2_flow);
     assert(e2_flow == 10.0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
@@ -84,7 +84,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     assert(flow_value == 30.0);
 
-    jgrapht_capi_map_int_double_get(thread, flow, 2, &e2_flow);
+    jgrapht_capi_id_map_get(thread, flow, 2, &e2_flow);
     assert(e2_flow == 10.0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
@@ -106,7 +106,7 @@ int main() {
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     assert(flow_value == 30.0);
 
-    jgrapht_capi_map_int_double_get(thread, flow, 2, &e2_flow);
+    jgrapht_capi_id_map_get(thread, flow, 2, &e2_flow);
     assert(e2_flow == 10.0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
