@@ -28,10 +28,14 @@ import org.graalvm.nativeimage.c.type.CIntPointer;
 import org.graalvm.nativeimage.c.type.CLongPointer;
 import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.word.PointerBase;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.StringUtils;
+import org.jgrapht.capi.Types;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.DefaultCapiGraph;
+import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.capi.graph.GraphWithAttributes;
 import org.jgrapht.nio.Attribute;
 import org.jgrapht.nio.DefaultAttribute;
@@ -45,8 +49,8 @@ public class GraphWithAttributesApi {
 
 	// ---------------- GET ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
-			+ "graph_attrs_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_ANY_LONG
+			+ "graph_attrs_get", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int getLongAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr,
 			CLongPointer res) {
 		GraphWithAttributes<V, E> graph = globalHandles.get(graphHandle);
@@ -62,8 +66,8 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
-			+ "graph_attrs_vertex_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_ANY_LONG
+			+ "graph_attrs_vertex_get", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getLongVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr, CLongPointer res) {
 		GraphWithAttributes<Integer, ?> graph = globalHandles.get(graphHandle);
@@ -79,8 +83,8 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
-			+ "graph_attrs_vertex_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_ANY_LONG
+			+ "graph_attrs_vertex_get", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getLongVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr, CLongPointer res) {
 		GraphWithAttributes<Long, ?> graph = globalHandles.get(graphHandle);
@@ -96,8 +100,26 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
-			+ "graph_attrs_edge_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_ANY_LONG
+			+ "graph_attrs_vertex_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getLongVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
+			CCharPointer namePtr, CLongPointer res) {
+		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		Attribute attr = graph.getVertexAttribute(element, name);
+		if (attr == null) {
+			throw new IllegalArgumentException("Key " + name + " not found");
+		}
+		Long valueAsLong = Long.parseLong(attr.getValue());
+		if (res.isNonNull()) {
+			res.write(valueAsLong);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_INT_LONG
+			+ "graph_attrs_edge_get", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getLongEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr, CLongPointer res) {
 		GraphWithAttributes<?, Integer> graph = globalHandles.get(graphHandle);
@@ -113,8 +135,8 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
-			+ "graph_attrs_edge_get_long", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_LONG_LONG
+			+ "graph_attrs_edge_get", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getLongEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr, CLongPointer res) {
 		GraphWithAttributes<?, Long> graph = globalHandles.get(graphHandle);
@@ -130,20 +152,38 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_DREF_LONG
+			+ "graph_attrs_edge_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getLongEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
+			CCharPointer namePtr, CLongPointer res) {
+		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		Attribute attr = graph.getEdgeAttribute(element, name);
+		if (attr == null) {
+			throw new IllegalArgumentException("Key " + name + " not found");
+		}
+		Long valueAsLong = Long.parseLong(attr.getValue());
+		if (res.isNonNull()) {
+			res.write(valueAsLong);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	// ---------------- STORE ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
-			+ "graph_attrs_put_long", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_ANY_LONG
+			+ "graph_attrs_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putLongAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr,
 			long value) {
-		GraphWithAttributes<Integer, Integer> graph = globalHandles.get(graphHandle);
+		GraphWithAttributes<?, ?> graph = globalHandles.get(graphHandle);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		graph.putGraphAttribute(name, DefaultAttribute.createAttribute(value));
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
-			+ "graph_attrs_vertex_put_long", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_ANY_LONG
+			+ "graph_attrs_vertex_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putVertexLongAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr, long value) {
 		GraphWithAttributes<Integer, ?> graph = globalHandles.get(graphHandle);
@@ -152,8 +192,8 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
-			+ "graph_attrs_vertex_put_long", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_ANY_LONG
+			+ "graph_attrs_vertex_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putVertexLongAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr, long value) {
 		GraphWithAttributes<Long, ?> graph = globalHandles.get(graphHandle);
@@ -162,8 +202,19 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
-			+ "graph_attrs_edge_put_long", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_ANY_LONG
+			+ "graph_attrs_vertex_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putVertexLongAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
+			CCharPointer namePtr, long value) {
+		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		graph.putVertexAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_INT_LONG
+			+ "graph_attrs_edge_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putEdgeLongAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr, long value) {
 		GraphWithAttributes<?, Integer> graph = globalHandles.get(graphHandle);
@@ -172,8 +223,8 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
-			+ "graph_attrs_edge_put_long", exceptionHandler = StatusReturnExceptionHandler.class)
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_LONG_LONG
+			+ "graph_attrs_edge_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putEdgeLongAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr, long value) {
 		GraphWithAttributes<?, Long> graph = globalHandles.get(graphHandle);
@@ -182,9 +233,20 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_DREF_LONG
+			+ "graph_attrs_edge_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putEdgeLongAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
+			CCharPointer namePtr, long value) {
+		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		graph.putEdgeAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
 	// ---------------- REMOVE ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_ANY_ANY
 			+ "graph_attrs_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr) {
 		GraphWithAttributes<?, ?> graph = globalHandles.get(graphHandle);
@@ -193,7 +255,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_ANY_ANY
 			+ "graph_attrs_vertex_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr) {
@@ -203,7 +265,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_ANY_ANY
 			+ "graph_attrs_vertex_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr) {
@@ -213,7 +275,18 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_ANY_ANY
+			+ "graph_attrs_vertex_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int removeVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
+			CCharPointer namePtr) {
+		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		graph.removeVertexAttribute(element, name);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_INT_ANY
 			+ "graph_attrs_edge_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr) {
@@ -223,7 +296,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_LONG_ANY
 			+ "graph_attrs_edge_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr) {
@@ -233,9 +306,20 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_DREF_ANY
+			+ "graph_attrs_edge_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int removeEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
+			CCharPointer namePtr) {
+		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		graph.removeEdgeAttribute(element, name);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
 	// ---------------- CONTAINS ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_ANY_ANY
 			+ "graph_attrs_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsAttribute(IsolateThread thread, ObjectHandle graphHandle, CCharPointer namePtr,
 			CIntPointer res) {
@@ -248,7 +332,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_ANY_ANY
 			+ "graph_attrs_vertex_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr, CIntPointer res) {
@@ -261,7 +345,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_ANY_ANY
 			+ "graph_attrs_vertex_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr, CIntPointer res) {
@@ -274,7 +358,21 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_ANY_ANY
+			+ "graph_attrs_vertex_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int containsVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
+			CCharPointer namePtr, CIntPointer res) {
+		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		boolean contains = graph.getVertexAttribute(element, name) != null;
+		if (res.isNonNull()) {
+			res.write(contains ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_INT_ANY
 			+ "graph_attrs_edge_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CCharPointer namePtr, CIntPointer res) {
@@ -287,7 +385,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_LONG_ANY
 			+ "graph_attrs_edge_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CCharPointer namePtr, CIntPointer res) {
@@ -301,9 +399,23 @@ public class GraphWithAttributesApi {
 
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_DREF_ANY
+			+ "graph_attrs_edge_contains", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int containsEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
+			CCharPointer namePtr, CIntPointer res) {
+		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);		
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		boolean contains = graph.getEdgeAttribute(element, name) != null;
+		if (res.isNonNull()) {
+			res.write(contains ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
 	// ---------------- ITERATOR ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_ANY_ANY
 			+ "graph_attrs_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int graphAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		GraphWithAttributes<V, E> graph = globalHandles.get(graphHandle);
@@ -314,7 +426,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_ANY_ANY
 			+ "graph_attrs_vertex_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int vertexAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, int element,
 			WordPointer res) {
@@ -325,7 +437,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_ANY_ANY
 			+ "graph_attrs_vertex_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int vertexAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, long element,
 			WordPointer res) {
@@ -336,7 +448,19 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_ANY_ANY
+			+ "graph_attrs_vertex_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int vertexAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
+			WordPointer res) {
+		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph.vertexAttributesKeysIterator(element)));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_INT_ANY
 			+ "graph_attrs_edge_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgeAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, int element,
 			WordPointer res) {
@@ -347,7 +471,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_LONG_ANY
 			+ "graph_attrs_edge_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgeAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, long element,
 			WordPointer res) {
@@ -358,9 +482,21 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_DREF_ANY
+			+ "graph_attrs_edge_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int edgeAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
+			WordPointer res) {
+		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(graph.edgeAttributesKeysIterator(element)));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
 	// ---------------- LENGTH ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_ANY_ANY
 			+ "graph_attrs_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphAttributesSize(IsolateThread thread, ObjectHandle graphHandle, CIntPointer res) {
 		GraphWithAttributes<?, ?> graph = globalHandles.get(graphHandle);
@@ -370,7 +506,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_ANY_ANY
 			+ "graph_attrs_vertex_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphVertexAttributesSize(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CIntPointer res) {
@@ -381,7 +517,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_ANY_ANY
 			+ "graph_attrs_vertex_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphVertexAttributesSize(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CIntPointer res) {
@@ -391,8 +527,20 @@ public class GraphWithAttributesApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
+	
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_ANY_ANY
+			+ "graph_attrs_vertex_size", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int graphVertexAttributesSize(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
+			CIntPointer res) {
+		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);
+		if (res.isNonNull()) {
+			res.write(graph.getVertexAttributesSize(element));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_INT
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_INT_ANY
 			+ "graph_attrs_edge_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphEdgeAttributesSize(IsolateThread thread, ObjectHandle graphHandle, int element,
 			CIntPointer res) {
@@ -403,7 +551,7 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_LONG
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_LONG_ANY
 			+ "graph_attrs_edge_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphEdgeAttributesSize(IsolateThread thread, ObjectHandle graphHandle, long element,
 			CIntPointer res) {
@@ -414,4 +562,16 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_DREF_ANY
+			+ "graph_attrs_edge_size", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int graphEdgeAttributesSize(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
+			CIntPointer res) {
+		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);	
+		if (res.isNonNull()) {
+			res.write(graph.getEdgeAttributesSize(element));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+	
 }

@@ -28,6 +28,8 @@ public class Types {
 	public static final String DOUBLE = "d_";
 	public static final String DREF = "r_";
 
+	public static final String ANY_ANY = "xx_";
+	
 	public static final String INT_BOOLEAN = "iz_";
 	public static final String INT_INT = "ii_";
 	public static final String INT_LONG = "il_";
@@ -44,7 +46,20 @@ public class Types {
 	public static final String LONG_DREF = "lr_";
 	public static final String LONG_ANY = "lx_";
 	
-	public static final String ANY_ANY = "xx_";
+	public static final String ANY_ANY_ANY = "xxx_";
+	public static final String ANY_ANY_LONG = "xxl_";
+	public static final String ANY_INT_ANY = "xix_";
+	public static final String ANY_INT_LONG = "xil_";
+	public static final String ANY_LONG_ANY = "xlx_";
+	public static final String ANY_LONG_LONG = "xll_";
+	public static final String ANY_DREF_ANY = "xrx_";
+	public static final String ANY_DREF_LONG = "xrl_";
+	public static final String INT_ANY_LONG = "ixl_";
+	public static final String INT_ANY_ANY = "ixx_";
+	public static final String LONG_ANY_LONG = "lxl_";
+	public static final String LONG_ANY_ANY = "lxx_";
+	public static final String DREF_ANY_ANY = "rxx_";
+	public static final String DREF_ANY_LONG = "rxl_";
 
 	public static final String INT_INT_PAIR = "ii_p_";
 	public static final String LONG_LONG_PAIR = "ll_p_";
