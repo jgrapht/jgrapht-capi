@@ -47,7 +47,7 @@ import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.StringUtils;
 import org.jgrapht.capi.custom.io.CustomDIMACSImporter;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
-import org.jgrapht.capi.graph.DefaultCapiGraph;
+import org.jgrapht.capi.graph.CapiGraph;
 import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.nio.BaseEventDrivenImporter;
 import org.jgrapht.nio.csv.CSVFormat;
@@ -105,7 +105,7 @@ public class ImporterApi {
 	public static int importDIMACSFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			LToPFunctionPointer importIdFunctionPointer, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		CustomDIMACSImporter<ExternalRef, ExternalRef> importer = new CustomDIMACSImporter<>();
 		if (importIdFunctionPointer.isNonNull()) {
@@ -165,7 +165,7 @@ public class ImporterApi {
 	public static int importDIMACSFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			LToPFunctionPointer importIdFunctionPointer, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		CustomDIMACSImporter<ExternalRef, ExternalRef> importer = new CustomDIMACSImporter<>();
 		if (importIdFunctionPointer.isNonNull()) {
@@ -230,7 +230,7 @@ public class ImporterApi {
 			LToPFunctionPointer importIdFunctionPointer, PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		GmlImporter<ExternalRef, ExternalRef> importer = new GmlImporter<>();
 		if (importIdFunctionPointer.isNonNull()) {
@@ -300,7 +300,7 @@ public class ImporterApi {
 			LToPFunctionPointer importIdFunctionPointer, PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		GmlImporter<ExternalRef, ExternalRef> importer = new GmlImporter<>();
 		if (importIdFunctionPointer.isNonNull()) {
@@ -379,7 +379,7 @@ public class ImporterApi {
 			PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		JSONImporter<ExternalRef, ExternalRef> importer = new JSONImporter<>();
 
@@ -464,7 +464,7 @@ public class ImporterApi {
 			PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		JSONImporter<ExternalRef, ExternalRef> importer = new JSONImporter<>();
 
@@ -570,7 +570,7 @@ public class ImporterApi {
 			CCharPointerToPFunctionPointer importIdFunctionPointer, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer, ImporterExporterCSVFormat format, boolean import_edge_weights,
 			boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		CSVFormat actualFormat = null;
 		switch (format) {
@@ -697,7 +697,7 @@ public class ImporterApi {
 			CCharPointerToPFunctionPointer importIdFunctionPointer, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer, ImporterExporterCSVFormat format, boolean import_edge_weights,
 			boolean matrix_format_nodeid, boolean matrix_format_zero_when_no_edge) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		CSVFormat actualFormat = null;
 		switch (format) {
@@ -798,7 +798,7 @@ public class ImporterApi {
 			PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		SimpleGEXFImporter<ExternalRef, ExternalRef> importer = new SimpleGEXFImporter<>();
 
@@ -888,7 +888,7 @@ public class ImporterApi {
 			PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		SimpleGEXFImporter<ExternalRef, ExternalRef> importer = new SimpleGEXFImporter<>();
 
@@ -975,7 +975,7 @@ public class ImporterApi {
 			PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		SimpleGraphMLImporter<ExternalRef, ExternalRef> importer = new SimpleGraphMLImporter<>();
 
@@ -1065,7 +1065,7 @@ public class ImporterApi {
 			PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		SimpleGraphMLImporter<ExternalRef, ExternalRef> importer = new SimpleGraphMLImporter<>();
 
@@ -1152,7 +1152,7 @@ public class ImporterApi {
 			PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		GraphMLImporter<ExternalRef, ExternalRef> importer = new GraphMLImporter<>();
 
@@ -1242,7 +1242,7 @@ public class ImporterApi {
 			PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		GraphMLImporter<ExternalRef, ExternalRef> importer = new GraphMLImporter<>();
 
@@ -1325,7 +1325,7 @@ public class ImporterApi {
 			PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		DOTImporter<ExternalRef, ExternalRef> importer = new DOTImporter<>();
 
@@ -1409,7 +1409,7 @@ public class ImporterApi {
 			PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		DOTImporter<ExternalRef, ExternalRef> importer = new DOTImporter<>();
 
@@ -1492,7 +1492,7 @@ public class ImporterApi {
 			PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		Graph6Sparse6Importer<ExternalRef, ExternalRef> importer = new Graph6Sparse6Importer<>();
 
@@ -1579,7 +1579,7 @@ public class ImporterApi {
 			PIdNotifyAttributeFunctionPointer vertexAttributeFunction,
 			PIdNotifyAttributeFunctionPointer edgeAttributeFunction, PFunctionPointer notifyVertexFunctionPointer,
 			PFunctionPointer notifyEdgeFunctionPointer) {
-		DefaultCapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		Graph6Sparse6Importer<ExternalRef, ExternalRef> importer = new Graph6Sparse6Importer<>();
 

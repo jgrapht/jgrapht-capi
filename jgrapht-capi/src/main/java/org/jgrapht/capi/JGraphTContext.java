@@ -222,6 +222,13 @@ public class JGraphTContext {
 
 	}
 
+	public interface PToBFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		boolean invoke(PointerBase key);
+
+	}
+
 	public interface IntegerToCDoublePointerFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer

@@ -42,7 +42,7 @@ import org.jgrapht.capi.CapiUtils;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
-import org.jgrapht.capi.graph.DefaultCapiGraph;
+import org.jgrapht.capi.graph.CapiGraph;
 import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.capi.graph.HashAndEqualsResolver;
 import org.jgrapht.util.ConcurrencyUtil;
@@ -269,7 +269,7 @@ public class ShortestPathCHApi {
 	public static int executeCHBiDirectionalDijkstraBetween(IsolateThread thread, ObjectHandle chHandle,
 			PointerBase sourcePtr, PointerBase targetPtr, double radius, WordPointer pathRes) {
 		ContractionHierarchy<ExternalRef, ?> ch = globalHandles.get(chHandle);
-		DefaultCapiGraph<ExternalRef, ?> g = CapiUtils.unsafeCast(ch.getGraph());
+		CapiGraph<ExternalRef, ?> g = CapiUtils.unsafeCast(ch.getGraph());
 		ContractionHierarchyBidirectionalDijkstra<ExternalRef, ?> alg = new ContractionHierarchyBidirectionalDijkstra<>(
 				ch, radius, PairingHeap::new);
 		ExternalRef source = g.toExternalRef(sourcePtr);

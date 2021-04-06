@@ -36,7 +36,7 @@ import org.jgrapht.capi.JGraphTContext.VToPFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.VoidToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.VoidToLongFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
-import org.jgrapht.capi.graph.DefaultCapiGraph;
+import org.jgrapht.capi.graph.CapiGraph;
 import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.capi.graph.HashAndEqualsResolver;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -157,7 +157,7 @@ public class CutApi {
 		SimpleWeightedGraph<Integer, DefaultWeightedEdge> origTree = alg.getGomoryHuTree();
 
 		// convert to integer vertices/edges
-		DefaultCapiGraph<Integer, Integer> tree = GraphApi.createGraph(false, false, false, true, vertexSupplier,
+		CapiGraph<Integer, Integer> tree = GraphApi.createGraph(false, false, false, true, vertexSupplier,
 				edgeSupplier);
 
 		for (Integer v : origTree.vertexSet()) {
@@ -188,7 +188,7 @@ public class CutApi {
 		SimpleWeightedGraph<Long, DefaultWeightedEdge> origTree = alg.getGomoryHuTree();
 
 		// convert to integer vertices/edges
-		DefaultCapiGraph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true, vertexSupplier,
+		CapiGraph<Long, Long> tree = GraphApi.createLongGraph(false, false, false, true, vertexSupplier,
 				edgeSupplier);
 
 		for (Long v : origTree.vertexSet()) {
@@ -221,7 +221,7 @@ public class CutApi {
 		SimpleWeightedGraph<ExternalRef, DefaultWeightedEdge> origTree = alg.getGomoryHuTree();
 
 		// convert to ref vertices/edges
-		DefaultCapiGraph<ExternalRef, ExternalRef> tree = RefGraphApi.createRefGraph(false, false, false, true,
+		CapiGraph<ExternalRef, ExternalRef> tree = RefGraphApi.createRefGraph(false, false, false, true,
 				vertexSupplier, edgeSupplier, resolver);
 
 		for (ExternalRef v : origTree.vertexSet()) {

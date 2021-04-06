@@ -34,7 +34,7 @@ import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.StringUtils;
 import org.jgrapht.capi.Types;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
-import org.jgrapht.capi.graph.DefaultCapiGraph;
+import org.jgrapht.capi.graph.CapiGraph;
 import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.capi.graph.GraphWithAttributes;
 import org.jgrapht.nio.Attribute;
@@ -104,7 +104,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_vertex_get", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getLongVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
 			CCharPointer namePtr, CLongPointer res) {
-		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
 		ExternalRef element = graph.toExternalRef(elementPtr);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		Attribute attr = graph.getVertexAttribute(element, name);
@@ -156,7 +156,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_edge_get", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getLongEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
 			CCharPointer namePtr, CLongPointer res) {
-		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		CapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
 		ExternalRef element = graph.toExternalRef(elementPtr);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		Attribute attr = graph.getEdgeAttribute(element, name);
@@ -206,7 +206,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_vertex_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putVertexLongAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
 			CCharPointer namePtr, long value) {
-		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
 		ExternalRef element = graph.toExternalRef(elementPtr);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		graph.putVertexAttribute(element, name, DefaultAttribute.createAttribute(value));
@@ -237,7 +237,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_edge_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putEdgeLongAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
 			CCharPointer namePtr, long value) {
-		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		CapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
 		ExternalRef element = graph.toExternalRef(elementPtr);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		graph.putEdgeAttribute(element, name, DefaultAttribute.createAttribute(value));
@@ -279,7 +279,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_vertex_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
 			CCharPointer namePtr) {
-		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
 		ExternalRef element = graph.toExternalRef(elementPtr);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		graph.removeVertexAttribute(element, name);
@@ -310,7 +310,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_edge_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
 			CCharPointer namePtr) {
-		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		CapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
 		ExternalRef element = graph.toExternalRef(elementPtr);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		graph.removeEdgeAttribute(element, name);
@@ -362,7 +362,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_vertex_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsVertexAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
 			CCharPointer namePtr, CIntPointer res) {
-		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
 		ExternalRef element = graph.toExternalRef(elementPtr);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		boolean contains = graph.getVertexAttribute(element, name) != null;
@@ -403,7 +403,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_edge_contains", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int containsEdgeAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
 			CCharPointer namePtr, CIntPointer res) {
-		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		CapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
 		ExternalRef element = graph.toExternalRef(elementPtr);		
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		boolean contains = graph.getEdgeAttribute(element, name) != null;
@@ -452,7 +452,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_vertex_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int vertexAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
 			WordPointer res) {
-		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
 		ExternalRef element = graph.toExternalRef(elementPtr);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph.vertexAttributesKeysIterator(element)));
@@ -486,7 +486,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_edge_keys_iterator", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int edgeAttributesIterator(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
 			WordPointer res) {
-		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		CapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
 		ExternalRef element = graph.toExternalRef(elementPtr);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph.edgeAttributesKeysIterator(element)));
@@ -532,7 +532,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_vertex_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphVertexAttributesSize(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
 			CIntPointer res) {
-		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
 		ExternalRef element = graph.toExternalRef(elementPtr);
 		if (res.isNonNull()) {
 			res.write(graph.getVertexAttributesSize(element));
@@ -566,7 +566,7 @@ public class GraphWithAttributesApi {
 			+ "graph_attrs_edge_size", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int graphEdgeAttributesSize(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr,
 			CIntPointer res) {
-		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		CapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
 		ExternalRef element = graph.toExternalRef(elementPtr);	
 		if (res.isNonNull()) {
 			res.write(graph.getEdgeAttributesSize(element));

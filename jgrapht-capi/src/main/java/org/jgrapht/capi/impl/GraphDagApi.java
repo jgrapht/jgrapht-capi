@@ -194,7 +194,7 @@ public class GraphDagApi {
 			+ "graph_dag_vertex_descendants", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (ref-ref) dag and a vertex returns its descendants.")
 	public static int createVertexDescendants(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertexPtr,
 			WordPointer res) {
-		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
 		ExternalRef vertex = graph.toExternalRef(vertexPtr);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph.getDescendants(vertex)));
@@ -228,7 +228,7 @@ public class GraphDagApi {
 			+ "graph_dag_vertex_ancestors", exceptionHandler = StatusReturnExceptionHandler.class, documentation = "Given a (ref-ref) dag and a vertex returns its ancestors.")
 	public static int createVertexAncestors(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertexPtr,
 			WordPointer res) {
-		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
 		ExternalRef vertex = graph.toExternalRef(vertexPtr);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(graph.getAncestors(vertex)));

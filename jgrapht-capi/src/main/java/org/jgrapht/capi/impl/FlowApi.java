@@ -31,6 +31,7 @@ import org.jgrapht.capi.JGraphTContext.VToPFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.VoidToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.VoidToLongFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.CapiGraph;
 import org.jgrapht.capi.graph.DefaultCapiGraph;
 import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.capi.graph.HashAndEqualsResolver;
@@ -378,7 +379,7 @@ public class FlowApi {
 		SimpleWeightedGraph<ExternalRef, DefaultWeightedEdge> origTree = alg.getEquivalentFlowTree();
 
 		// convert to integer vertices/edges
-		DefaultCapiGraph<ExternalRef, ExternalRef> tree = RefGraphApi.createRefGraph(false, false, false, true,
+		CapiGraph<ExternalRef, ExternalRef> tree = RefGraphApi.createRefGraph(false, false, false, true,
 				vertexSupplier, edgeSupplier, resolver);
 
 		for (ExternalRef v : origTree.vertexSet()) {
@@ -444,7 +445,7 @@ public class FlowApi {
 			Function<Graph<ExternalRef, E>, MaximumFlowAlgorithmBase<ExternalRef, E>> algProvider,
 			PointerBase sourcePtr, PointerBase sinkPtr, CDoublePointer valueRes, WordPointer flowRes,
 			WordPointer cutSourcePartitionRes) {
-		DefaultCapiGraph<ExternalRef, E> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, E> g = globalHandles.get(graphHandle);
 		MaximumFlowAlgorithmBase<ExternalRef, E> alg = algProvider.apply(g);
 		ExternalRef source = g.toExternalRef(sourcePtr);
 		ExternalRef sink = g.toExternalRef(sinkPtr);

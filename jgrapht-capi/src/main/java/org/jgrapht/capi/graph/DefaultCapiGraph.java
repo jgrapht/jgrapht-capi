@@ -29,7 +29,7 @@ import org.jgrapht.event.VertexSetListener;
 import org.jgrapht.graph.DirectedAcyclicGraph;
 import org.jgrapht.graph.GraphDelegator;
 
-public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements CapiGraph<V, E>, HashAndEqualsResolver {
+public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements CapiGraph<V, E> {
 
 	private static final long serialVersionUID = 1L;
 

@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import org.graalvm.word.PointerBase;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
 import org.jgrapht.capi.attributes.GraphAttributesStore;
@@ -305,6 +306,11 @@ public class CapiGraphDelegator<V, E> extends AbstractGraph<V, E> implements Cap
 	@Override
 	public Iterator<V> iterator() {
 		return delegate.iterator();
+	}
+
+	@Override
+	public ExternalRef toExternalRef(PointerBase ptr) {
+		return delegate.toExternalRef(ptr);
 	}
 
 }

@@ -30,7 +30,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
-import org.jgrapht.capi.graph.DefaultCapiGraph;
+import org.jgrapht.capi.graph.CapiGraph;
 import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.traverse.BreadthFirstIterator;
 import org.jgrapht.traverse.ClosestFirstIterator;
@@ -82,7 +82,7 @@ public class TraverseApi {
 			+ "traverse_create_bfs_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int bfsFromVertex(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertexPtr,
 			WordPointer res) {
-		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef vertex = g.toExternalRef(vertexPtr);
 
 		Iterator<ExternalRef> it = new BreadthFirstIterator<>(g, vertex);
@@ -140,7 +140,7 @@ public class TraverseApi {
 			+ "traverse_create_dfs_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int dfsFromVertex(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertexPtr,
 			WordPointer res) {
-		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef vertex = g.toExternalRef(vertexPtr);
 		Iterator<ExternalRef> it = new DepthFirstIterator<>(g, vertex);
 		if (res.isNonNull()) {
@@ -188,7 +188,7 @@ public class TraverseApi {
 			+ "traverse_create_random_walk_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int randomWalkFromVertex(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertexPtr,
 			WordPointer res) {
-		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef vertex = g.toExternalRef(vertexPtr);
 		Iterator<?> it = new RandomWalkVertexIterator<>(g, vertex);
 		if (res.isNonNull()) {
@@ -225,7 +225,7 @@ public class TraverseApi {
 			+ "traverse_create_custom_random_walk_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int customRandomWalkFromVertex(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertexPtr,
 			boolean weighted, long maxSteps, long seed, WordPointer res) {
-		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef vertex = g.toExternalRef(vertexPtr);
 		Iterator<?> it = new RandomWalkVertexIterator<>(g, vertex, maxSteps, weighted, new Random(seed));
 		if (res.isNonNull()) {
@@ -282,7 +282,7 @@ public class TraverseApi {
 			+ "traverse_create_closest_first_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int closestFirst(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertexPtr,
 			WordPointer res) {
-		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef vertex = g.toExternalRef(vertexPtr);
 		Iterator<?> it = new ClosestFirstIterator<>(g, vertex);
 		if (res.isNonNull()) {
@@ -319,7 +319,7 @@ public class TraverseApi {
 			+ "traverse_create_custom_closest_first_from_vertex_vit", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int customClosestFirst(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertexPtr,
 			double radius, WordPointer res) {
-		DefaultCapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef vertex = g.toExternalRef(vertexPtr);
 		Iterator<?> it = new ClosestFirstIterator<>(g, vertex, radius);
 		if (res.isNonNull()) {
