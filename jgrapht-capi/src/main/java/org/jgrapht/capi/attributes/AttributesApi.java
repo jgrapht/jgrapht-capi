@@ -112,7 +112,7 @@ public class AttributesApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_LONG
-			+ "attributes_store_put_long_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putLongAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr, long value) {
 		AttributesStore<Long> store = globalHandles.get(storeHandle);
@@ -132,7 +132,7 @@ public class AttributesApi {
 	}
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_STRING
-			+ "attributes_store_put_string_attribute", exceptionHandler = StatusReturnExceptionHandler.class)
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int putStringAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr, CCharPointer valuePtr) {
 		AttributesStore<Long> store = globalHandles.get(storeHandle);
