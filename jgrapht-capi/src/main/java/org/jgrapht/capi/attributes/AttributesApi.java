@@ -142,7 +142,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_STRING
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_ANY
 			+ "attributes_store_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
 			CCharPointer namePtr) {
@@ -152,7 +152,7 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_STRING
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_ANY
 			+ "attributes_store_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr) {
