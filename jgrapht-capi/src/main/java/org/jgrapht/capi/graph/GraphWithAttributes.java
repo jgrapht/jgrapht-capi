@@ -21,7 +21,7 @@ import java.util.Iterator;
 
 import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.jgrapht.Graph;
-import org.jgrapht.capi.attributes.GraphAttributesStore;
+import org.jgrapht.capi.attributes.GraphStringAttributeStore;
 import org.jgrapht.nio.Attribute;
 
 /**
@@ -29,7 +29,7 @@ import org.jgrapht.nio.Attribute;
  */
 public interface GraphWithAttributes<V, E> extends Graph<V, E> {
 
-	abstract GraphAttributesStore<V, E> getStore();
+	abstract GraphStringAttributeStore<V, E> getStore();
 
 	default int getGraphAttributesSize() { 
 		return getStore().getGraphAttributesSize();

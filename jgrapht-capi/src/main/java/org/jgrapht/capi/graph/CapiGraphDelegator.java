@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 import org.graalvm.word.PointerBase;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphType;
-import org.jgrapht.capi.attributes.GraphAttributesStore;
+import org.jgrapht.capi.attributes.GraphStringAttributeStore;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.VertexSetListener;
 import org.jgrapht.graph.AbstractGraph;
@@ -269,7 +269,7 @@ public class CapiGraphDelegator<V, E> extends AbstractGraph<V, E> implements Cap
 	}
 
 	@Override
-	public GraphAttributesStore<V, E> getStore() {
+	public GraphStringAttributeStore<V, E> getStore() {
 		return delegate.getStore();
 	}
 

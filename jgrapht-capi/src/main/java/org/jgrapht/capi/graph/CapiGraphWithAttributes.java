@@ -1,7 +1,7 @@
 package org.jgrapht.capi.graph;
 
 import org.jgrapht.Graph;
-import org.jgrapht.capi.attributes.GraphAttributesStore;
+import org.jgrapht.capi.attributes.GraphStringAttributeStore;
 import org.jgrapht.graph.GraphDelegator;
 
 public class CapiGraphWithAttributes<V, E> extends GraphDelegator<V, E> implements GraphWithAttributes<V, E>, CapiGraphWrapper<V, E> {
@@ -9,16 +9,16 @@ public class CapiGraphWithAttributes<V, E> extends GraphDelegator<V, E> implemen
 	private static final long serialVersionUID = 1L;
 
 	protected Graph<V, E> delegate;
-	protected GraphAttributesStore<V, E> store;
+	protected GraphStringAttributeStore<V, E> store;
 
 	public CapiGraphWithAttributes(Graph<V, E> graph) {
 		super(graph);
 		this.delegate = graph;
-		this.store = new GraphAttributesStore<>();
+		this.store = new GraphStringAttributeStore<>();
 	}
 
 	@Override
-	public GraphAttributesStore<V, E> getStore() {
+	public GraphStringAttributeStore<V, E> getStore() {
 		return store;
 	}
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -23,7 +23,7 @@ import java.util.Set;
 import org.graalvm.word.PointerBase;
 import org.jgrapht.Graph;
 import org.jgrapht.ListenableGraph;
-import org.jgrapht.capi.attributes.GraphAttributesStore;
+import org.jgrapht.capi.attributes.GraphStringAttributeStore;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.VertexSetListener;
 import org.jgrapht.graph.DirectedAcyclicGraph;
@@ -34,7 +34,7 @@ public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements Capi
 	private static final long serialVersionUID = 1L;
 
 	protected Graph<V, E> graph;
-	protected GraphAttributesStore<V, E> store;
+	protected GraphStringAttributeStore<V, E> store;
 	protected HashAndEqualsResolver hashAndEqualsResolver;
 
 	/**
@@ -45,11 +45,11 @@ public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements Capi
 	public DefaultCapiGraph(Graph<V, E> graph) {
 		super(graph);
 		this.graph = graph;
-		this.store = new GraphAttributesStore<>();
+		this.store = new GraphStringAttributeStore<>();
 	}
 
 	@Override
-	public GraphAttributesStore<V, E> getStore() {
+	public GraphStringAttributeStore<V, E> getStore() {
 		return store;
 	}
 

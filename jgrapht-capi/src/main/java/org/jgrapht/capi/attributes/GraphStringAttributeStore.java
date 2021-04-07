@@ -10,15 +10,15 @@ import org.jgrapht.capi.StringUtils;
 import org.jgrapht.nio.Attribute;
 
 /**
- * Class for storing vertex, edge and graph attributes.
+ * Class for storing vertex, edge and graph attributes with string keys.
  */
-public class GraphAttributesStore<V, E> {
+public class GraphStringAttributeStore<V, E> {
 
 	private Map<V, Map<String, Attribute>> vertexAttributes;
 	private Map<E, Map<String, Attribute>> edgeAttributes;
 	private Map<String, Attribute> graphAttributes;
 
-	public GraphAttributesStore() {
+	public GraphStringAttributeStore() {
 		this.vertexAttributes = new HashMap<>();
 		this.edgeAttributes = new HashMap<>();
 		this.graphAttributes = new HashMap<>();
