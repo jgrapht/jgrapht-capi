@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -44,6 +44,7 @@ import org.jgrapht.capi.StringUtils;
 import org.jgrapht.capi.attributes.AttributesStore;
 import org.jgrapht.capi.attributes.RegisteredAttribute;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.nio.AttributeType;
 import org.jgrapht.nio.BaseExporter;
 import org.jgrapht.nio.ExportException;
@@ -90,7 +91,7 @@ public class ExporterApi {
 		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "export_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <E> int llExportDIMACSToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
@@ -116,10 +117,35 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "export_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <E> int drefExportDIMACSToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+			ExporterDIMACSFormat format, boolean exportEdgeWeights, ObjectHandle vertexIdStore) {
+		Graph<ExternalRef, E> g = globalHandles.get(graphHandle);
+
+		DIMACSFormat actualFormat = null;
+		switch (format) {
+		case DIMACS_FORMAT_COLORING:
+			actualFormat = DIMACSFormat.COLORING;
+			break;
+		case DIMACS_FORMAT_MAX_CLIQUE:
+			actualFormat = DIMACSFormat.MAX_CLIQUE;
+			break;
+		default:
+			actualFormat = DIMACSFormat.SHORTEST_PATH;
+			break;
+		}
+		DIMACSExporter<ExternalRef, E> exporter = new DIMACSExporter<>(createExternalRefIdProvider(vertexIdStore),
+				actualFormat);
+		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
+		exportToFile(g, exporter, filename);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "export_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <E> int exportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle, ExporterDIMACSFormat format,
-			boolean exportEdgeWeights, ObjectHandle vertexIdStore, WordPointer res) {
+	public static <E> int exportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle,
+			ExporterDIMACSFormat format, boolean exportEdgeWeights, ObjectHandle vertexIdStore, WordPointer res) {
 		Graph<Integer, E> g = globalHandles.get(graphHandle);
 
 		DIMACSFormat actualFormat = null;
@@ -145,11 +171,11 @@ public class ExporterApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "export_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <E> int llExportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle, ExporterDIMACSFormat format,
-			boolean exportEdgeWeights, ObjectHandle vertexIdStore, WordPointer res) {
+	public static <E> int llExportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle,
+			ExporterDIMACSFormat format, boolean exportEdgeWeights, ObjectHandle vertexIdStore, WordPointer res) {
 		Graph<Long, E> g = globalHandles.get(graphHandle);
 
 		DIMACSFormat actualFormat = null;
@@ -176,9 +202,39 @@ public class ExporterApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
+			+ "export_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <E> int drefExportDIMACSToString(IsolateThread thread, ObjectHandle graphHandle,
+			ExporterDIMACSFormat format, boolean exportEdgeWeights, ObjectHandle vertexIdStore, WordPointer res) {
+		Graph<ExternalRef, E> g = globalHandles.get(graphHandle);
+
+		DIMACSFormat actualFormat = null;
+		switch (format) {
+		case DIMACS_FORMAT_COLORING:
+			actualFormat = DIMACSFormat.COLORING;
+			break;
+		case DIMACS_FORMAT_MAX_CLIQUE:
+			actualFormat = DIMACSFormat.MAX_CLIQUE;
+			break;
+		default:
+			actualFormat = DIMACSFormat.SHORTEST_PATH;
+			break;
+		}
+
+		DIMACSExporter<ExternalRef, E> exporter = new DIMACSExporter<>(createExternalRefIdProvider(vertexIdStore),
+				actualFormat);
+		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
+
+		CCharPointerHolder cString = exportToCString(g, exporter);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(cString));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_gml", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportGmlFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+	public static <V, E> int exportGmlFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			boolean exportEdgeWeights, boolean exportVertexLabels, boolean exportEdgeLabels,
 			ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore, ObjectHandle vertexIdStore) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -196,10 +252,10 @@ public class ExporterApi {
 		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_gml", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportGmlString(IsolateThread thread, ObjectHandle graphHandle, boolean exportEdgeWeights,
+	public static <V, E> int exportGmlString(IsolateThread thread, ObjectHandle graphHandle, boolean exportEdgeWeights,
 			boolean exportVertexLabels, boolean exportEdgeLabels, ObjectHandle vertexLabelsStore,
 			ObjectHandle edgeLabelsStore, ObjectHandle vertexIdStore, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -223,7 +279,7 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_json", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportJsonFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+	public static <V, E> int exportJsonFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore, ObjectHandle vertexIdStore) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
@@ -237,8 +293,8 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_json", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportJsonString(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle vertexLabelsStore,
-			ObjectHandle edgeLabelsStore, ObjectHandle vertexIdStore, WordPointer res) {
+	public static <V, E> int exportJsonString(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle vertexLabelsStore, ObjectHandle edgeLabelsStore, ObjectHandle vertexIdStore, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
 		JSONExporter<V, E> exporter = new JSONExporter<>(createIdProvider(vertexIdStore));
@@ -254,7 +310,7 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_lemon", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportLemonToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+	public static <V, E> int exportLemonToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			boolean exportEdgeWeights, boolean escapeStringsAsJava, ObjectHandle vertexIdStore) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
@@ -268,8 +324,8 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_lemon", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportLemonToString(IsolateThread thread, ObjectHandle graphHandle, boolean exportEdgeWeights,
-			boolean escapeStringsAsJava, ObjectHandle vertexIdStore, WordPointer res) {
+	public static <V, E> int exportLemonToString(IsolateThread thread, ObjectHandle graphHandle,
+			boolean exportEdgeWeights, boolean escapeStringsAsJava, ObjectHandle vertexIdStore, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
 		LemonExporter<V, E> exporter = new LemonExporter<>(createIdProvider(vertexIdStore));
@@ -285,7 +341,7 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_csv", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportCSVToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+	public static <V, E> int exportCSVToFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ImporterExporterCSVFormat format, boolean exportEdgeWeights, boolean matrix_format_nodeid,
 			boolean matrix_format_zero_when_no_edge, ObjectHandle vertexIdStore) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -311,7 +367,7 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_csv", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportCSVToString(IsolateThread thread, ObjectHandle graphHandle,
+	public static <V, E> int exportCSVToString(IsolateThread thread, ObjectHandle graphHandle,
 			ImporterExporterCSVFormat format, boolean exportEdgeWeights, boolean matrix_format_nodeid,
 			boolean matrix_format_zero_when_no_edge, ObjectHandle vertexIdStore, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -357,7 +413,7 @@ public class ExporterApi {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportGexfFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+	public static <V, E> int exportGexfFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
 			ObjectHandle vertexIdStore, ObjectHandle edgeIdStore, boolean exportEdgeWeights, boolean exportEdgeLabels,
 			boolean exportEdgeTypes, boolean exportMeta) {
@@ -389,10 +445,10 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_gexf", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportGexfString(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle attributesRegistry,
-			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore, ObjectHandle vertexIdStore,
-			ObjectHandle edgeIdStore, boolean exportEdgeWeights, boolean exportEdgeLabels, boolean exportEdgeTypes,
-			boolean exportMeta, WordPointer res) {
+	public static <V, E> int exportGexfString(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
+			ObjectHandle vertexIdStore, ObjectHandle edgeIdStore, boolean exportEdgeWeights, boolean exportEdgeLabels,
+			boolean exportEdgeTypes, boolean exportMeta, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
 		GEXFExporter<V, E> exporter = new GEXFExporter<>(createIdProvider(vertexIdStore),
@@ -424,7 +480,7 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_dot", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportDotFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+	public static <V, E> int exportDotFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore, ObjectHandle vertexIdStore) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
@@ -438,7 +494,7 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_dot", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportDotString(IsolateThread thread, ObjectHandle graphHandle,
+	public static <V, E> int exportDotString(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore, ObjectHandle vertexIdStore,
 			WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
@@ -456,11 +512,10 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_graph6", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportGraph6File(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
+	public static <V, E> int exportGraph6File(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		Graph6Sparse6Exporter<V, E> exporter = new Graph6Sparse6Exporter<>(
-				Graph6Sparse6Exporter.Format.GRAPH6);
+		Graph6Sparse6Exporter<V, E> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.GRAPH6);
 
 		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
@@ -468,11 +523,10 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_graph6", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportGraph6String(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+	public static <V, E> int exportGraph6String(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		Graph6Sparse6Exporter<V, E> exporter = new Graph6Sparse6Exporter<>(
-				Graph6Sparse6Exporter.Format.GRAPH6);
+		Graph6Sparse6Exporter<V, E> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.GRAPH6);
 
 		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {
@@ -483,11 +537,10 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportSparse6File(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
+	public static <V, E> int exportSparse6File(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		Graph6Sparse6Exporter<V, E> exporter = new Graph6Sparse6Exporter<>(
-				Graph6Sparse6Exporter.Format.SPARSE6);
+		Graph6Sparse6Exporter<V, E> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.SPARSE6);
 
 		exportToFile(g, exporter, filename);
 		return Status.STATUS_SUCCESS.getCValue();
@@ -495,11 +548,10 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_sparse6", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportSparse6String(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
+	public static <V, E> int exportSparse6String(IsolateThread thread, ObjectHandle graphHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		Graph6Sparse6Exporter<V, E> exporter = new Graph6Sparse6Exporter<>(
-				Graph6Sparse6Exporter.Format.SPARSE6);
+		Graph6Sparse6Exporter<V, E> exporter = new Graph6Sparse6Exporter<>(Graph6Sparse6Exporter.Format.SPARSE6);
 
 		CCharPointerHolder cString = exportToCString(g, exporter);
 		if (res.isNonNull()) {
@@ -510,7 +562,7 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_file_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportGraphMLFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
+	public static <V, E> int exportGraphMLFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
 			ObjectHandle vertexIdStore, boolean exportEdgeWeights, boolean exportVertexLabels,
 			boolean exportEdgeLabels) {
@@ -540,7 +592,7 @@ public class ExporterApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "export_string_graphml", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V,E> int exportGraphMLString(IsolateThread thread, ObjectHandle graphHandle,
+	public static <V, E> int exportGraphMLString(IsolateThread thread, ObjectHandle graphHandle,
 			ObjectHandle attributesRegistry, ObjectHandle vertexAttributesStore, ObjectHandle edgeAttributesStore,
 			ObjectHandle vertexIdStore, boolean exportEdgeWeights, boolean exportVertexLabels, boolean exportEdgeLabels,
 			WordPointer res) {
@@ -585,6 +637,14 @@ public class ExporterApi {
 			};
 		}
 		return x -> String.valueOf(x);
+	}
+
+	private static Function<ExternalRef, String> createExternalRefIdProvider(ObjectHandle idStore) {
+		Map<ExternalRef, String> vIdStore = globalHandles.get(idStore);
+		if (vIdStore != null) {
+			return x -> vIdStore.getOrDefault(x, String.valueOf(x.getPtr().rawValue()));
+		}
+		return x -> String.valueOf(x.getPtr().rawValue());
 	}
 
 	private static Function<Integer, String> createIntegerIdProviderDimacs(ObjectHandle idStore) {

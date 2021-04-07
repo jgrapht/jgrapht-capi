@@ -182,6 +182,64 @@ public class MapApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_DOUBLE
+			+ "map_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapPut(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, double value) {
+		Map<ExternalRef, Double> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		map.put(key, value);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_INT
+			+ "map_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapPut(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, int value) {
+		Map<ExternalRef, Integer> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		map.put(key, value);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_STRING
+			+ "map_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapPut(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, CCharPointer valuePtr) {
+		Map<ExternalRef, String> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		String value = StringUtils.toJavaStringFromUtf8(valuePtr);
+		map.put(key, value);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_ANY
+			+ "map_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <V> int mapLongRefPut(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, ObjectHandle refHandle) {
+		Map<ExternalRef, V> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		V ref = globalHandles.get(refHandle);
+		map.put(key, ref);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_DREF
+			+ "map_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongRefPut(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			PointerBase refPtr, ObjectHandle hashEqualsResolverHandle) {
+		Map<ExternalRef, ExternalRef> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		ExternalRef ref = resolver.toExternalRef(refPtr);
+		map.put(key, ref);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_DOUBLE
 			+ "map_get", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int mapIntDoubleGet(IsolateThread thread, ObjectHandle mapHandle, int key, CDoublePointer res) {
@@ -324,6 +382,92 @@ public class MapApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_DOUBLE
+			+ "map_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongDoubleGet(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, CDoublePointer res) {
+		Map<ExternalRef, Double> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		Double value = map.get(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(value);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_INT
+			+ "map_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongIntegerGet(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
+		Map<ExternalRef, Integer> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		Integer value = map.get(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(value);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_STRING
+			+ "map_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongStringGet(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, WordPointer res) {
+		Map<ExternalRef, String> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		String value = map.get(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		CCharPointerHolder cString = StringUtils.toCStringInUtf8(value);
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(cString));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_ANY
+			+ "map_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <V> int mapObjectGet(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, WordPointer res) {
+		Map<ExternalRef, V> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		V value = map.get(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(value));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_DREF
+			+ "map_get", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapGet(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, WordPointer res) {
+		Map<ExternalRef, ExternalRef> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		ExternalRef value = map.get(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(value.getPtr());
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_ANY
 			+ "map_contains_key", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int mapIntContains(IsolateThread thread, ObjectHandle mapHandle, int key, CIntPointer res) {
@@ -338,6 +482,19 @@ public class MapApi {
 			+ "map_contains_key", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int mapLongContains(IsolateThread thread, ObjectHandle mapHandle, long key, CIntPointer res) {
 		Map<Long, ?> map = globalHandles.get(mapHandle);
+		if (res.isNonNull()) {
+			res.write(map.containsKey(key) ? 1 : 0);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_ANY
+			+ "map_contains_key", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapContains(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
+		Map<ExternalRef, ?> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
 		if (res.isNonNull()) {
 			res.write(map.containsKey(key) ? 1 : 0);
 		}
@@ -477,6 +634,92 @@ public class MapApi {
 			+ "map_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int mapLongRefRemoveDirect(IsolateThread thread, ObjectHandle mapHandle, long key, WordPointer res) {
 		Map<Long, ExternalRef> map = globalHandles.get(mapHandle);
+		ExternalRef value = map.remove(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(value.getPtr());
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_DOUBLE
+			+ "map_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongDoubleRemove(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, CDoublePointer res) {
+		Map<ExternalRef, Double> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		Double value = map.remove(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(value);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_INT
+			+ "map_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongIntegerRemove(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, CIntPointer res) {
+		Map<ExternalRef, Integer> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		Integer value = map.remove(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(value);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_STRING
+			+ "map_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongStringRemove(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, WordPointer res) {
+		Map<ExternalRef, String> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		String value = map.remove(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			CCharPointerHolder cString = StringUtils.toCStringInUtf8(value);
+			res.write(globalHandles.create(cString));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_ANY
+			+ "map_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static <V> int mapLongObjRemove(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, WordPointer res) {
+		Map<ExternalRef, V> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
+		V value = map.remove(key);
+		if (value == null) {
+			throw new IllegalArgumentException("Key " + key + " not in map");
+		}
+		if (res.isNonNull()) {
+			res.write(globalHandles.create(value));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_DREF
+			+ "map_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int mapLongRefRemoveDirect(IsolateThread thread, ObjectHandle mapHandle, PointerBase keyPtr,
+			ObjectHandle hashEqualsResolverHandle, WordPointer res) {
+		Map<ExternalRef, ExternalRef> map = globalHandles.get(mapHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef key = resolver.toExternalRef(keyPtr);
 		ExternalRef value = map.remove(key);
 		if (value == null) {
 			throw new IllegalArgumentException("Key " + key + " not in map");

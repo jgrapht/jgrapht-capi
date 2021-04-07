@@ -46,6 +46,14 @@ public class Types {
 	public static final String LONG_DREF = "lr_";
 	public static final String LONG_ANY = "lx_";
 	
+	public static final String DREF_BOOLEAN = "rz_";
+	public static final String DREF_INT = "ri_";
+	public static final String DREF_LONG = "rl_";
+	public static final String DREF_DOUBLE = "rd_";
+	public static final String DREF_STRING = "rs_";
+	public static final String DREF_DREF = "rr_";
+	public static final String DREF_ANY = "rx_";
+	
 	public static final String ANY_ANY_ANY = "xxx_";
 	public static final String ANY_ANY_LONG = "xxl_";
 	public static final String ANY_INT_ANY = "xix_";

@@ -9,11 +9,14 @@ import org.graalvm.nativeimage.ObjectHandles;
 import org.graalvm.nativeimage.c.function.CEntryPoint;
 import org.graalvm.nativeimage.c.type.CCharPointer;
 import org.graalvm.nativeimage.c.type.WordPointer;
+import org.graalvm.word.PointerBase;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.StringUtils;
 import org.jgrapht.capi.Types;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
+import org.jgrapht.capi.graph.ExternalRef;
+import org.jgrapht.capi.graph.HashAndEqualsResolver;
 import org.jgrapht.nio.DefaultAttribute;
 
 /**
@@ -142,6 +145,67 @@ public class AttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_BOOLEAN
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putBooleanAttribute(IsolateThread thread, ObjectHandle storeHandle, PointerBase elementPtr,
+			ObjectHandle hashEqualsResolverHandle, CCharPointer namePtr, boolean value) {
+		AttributesStore<ExternalRef> store = globalHandles.get(storeHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef element = resolver.toExternalRef(elementPtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_INT
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putIntAttribute(IsolateThread thread, ObjectHandle storeHandle, PointerBase elementPtr,
+			ObjectHandle hashEqualsResolverHandle, CCharPointer namePtr, int value) {
+		AttributesStore<ExternalRef> store = globalHandles.get(storeHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef element = resolver.toExternalRef(elementPtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_LONG
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putLongAttribute(IsolateThread thread, ObjectHandle storeHandle, PointerBase elementPtr,
+			ObjectHandle hashEqualsResolverHandle, CCharPointer namePtr, long value) {
+		AttributesStore<ExternalRef> store = globalHandles.get(storeHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef element = resolver.toExternalRef(elementPtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_DOUBLE
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putDoubleAttribute(IsolateThread thread, ObjectHandle storeHandle, PointerBase elementPtr,
+			ObjectHandle hashEqualsResolverHandle, CCharPointer namePtr, double value) {
+		AttributesStore<ExternalRef> store = globalHandles.get(storeHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef element = resolver.toExternalRef(elementPtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_STRING
+			+ "attributes_store_put", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int putStringAttribute(IsolateThread thread, ObjectHandle storeHandle, PointerBase elementPtr,
+			ObjectHandle hashEqualsResolverHandle, CCharPointer namePtr, CCharPointer valuePtr) {
+		AttributesStore<ExternalRef> store = globalHandles.get(storeHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef element = resolver.toExternalRef(elementPtr);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		String value = StringUtils.toJavaStringFromUtf8(valuePtr);
+		store.putAttribute(element, name, DefaultAttribute.createAttribute(value));
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_ANY
 			+ "attributes_store_remove", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int removeAttribute(IsolateThread thread, ObjectHandle storeHandle, int element,
@@ -157,6 +221,18 @@ public class AttributesApi {
 	public static int removeAttribute(IsolateThread thread, ObjectHandle storeHandle, long element,
 			CCharPointer namePtr) {
 		AttributesStore<Long> store = globalHandles.get(storeHandle);
+		String name = StringUtils.toJavaStringFromUtf8(namePtr);
+		store.removeAttribute(element, name);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_ANY
+			+ "attributes_store_remove", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int removeAttribute(IsolateThread thread, ObjectHandle storeHandle, PointerBase elementPtr,
+			ObjectHandle hashEqualsResolverHandle, CCharPointer namePtr) {
+		AttributesStore<ExternalRef> store = globalHandles.get(storeHandle);
+		HashAndEqualsResolver resolver = globalHandles.get(hashEqualsResolverHandle);
+		ExternalRef element = resolver.toExternalRef(elementPtr);
 		String name = StringUtils.toJavaStringFromUtf8(namePtr);
 		store.removeAttribute(element, name);
 		return Status.STATUS_SUCCESS.getCValue();
