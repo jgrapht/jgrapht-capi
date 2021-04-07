@@ -23,7 +23,7 @@ import java.util.Set;
 import org.graalvm.word.PointerBase;
 import org.jgrapht.Graph;
 import org.jgrapht.ListenableGraph;
-import org.jgrapht.capi.attributes.GraphStringAttributeStore;
+import org.jgrapht.capi.attributes.GraphAnyStore;
 import org.jgrapht.event.GraphListener;
 import org.jgrapht.event.VertexSetListener;
 import org.jgrapht.graph.DirectedAcyclicGraph;
@@ -34,7 +34,7 @@ public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements Capi
 	private static final long serialVersionUID = 1L;
 
 	protected Graph<V, E> graph;
-	protected GraphStringAttributeStore<V, E> store;
+	protected GraphAnyStore<V, E> store;
 	protected HashAndEqualsResolver hashAndEqualsResolver;
 
 	/**
@@ -45,11 +45,11 @@ public class DefaultCapiGraph<V, E> extends GraphDelegator<V, E> implements Capi
 	public DefaultCapiGraph(Graph<V, E> graph) {
 		super(graph);
 		this.graph = graph;
-		this.store = new GraphStringAttributeStore<>();
+		this.store = new GraphAnyStore<>();
 	}
 
 	@Override
-	public GraphStringAttributeStore<V, E> getStore() {
+	public GraphAnyStore<V, E> getStore() {
 		return store;
 	}
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2020, by Dimitrios Michail.
+ * (C) Copyright 2020-2021, by Dimitrios Michail.
  *
  * JGraphT C-API
  *
@@ -19,106 +19,104 @@ package org.jgrapht.capi.graph;
 
 import java.util.Iterator;
 
-import org.graalvm.nativeimage.c.type.CTypeConversion.CCharPointerHolder;
 import org.jgrapht.Graph;
-import org.jgrapht.capi.attributes.GraphStringAttributeStore;
-import org.jgrapht.nio.Attribute;
+import org.jgrapht.capi.attributes.GraphAnyStore;
 
 /**
- * A graph which also has attributes.
+ * A graph which also has ExternalRefs.
  */
-public interface GraphWithAttributes<V, E> extends Graph<V, E> {
+public interface GraphWithAnyStore<V, E> extends Graph<V, E> {
 
-	abstract GraphStringAttributeStore<V, E> getStore();
+	abstract GraphAnyStore<V, E> getStore();
 
-	default int getGraphAttributesSize() { 
+	default int getGraphAttributesSize() {
 		return getStore().getGraphAttributesSize();
 	}
-	
-	default int getVertexAttributesSize(V element) { 
+
+	default int getVertexAttributesSize(V element) {
 		if (!containsVertex(element)) {
 			throw new IllegalArgumentException("no such vertex in graph: " + element.toString());
 		}
 		return getStore().getVertexAttributesSize(element);
 	}
-	
-	default int getEdgeAttributesSize(E element) { 
+
+	default int getEdgeAttributesSize(E element) {
 		if (!containsEdge(element)) {
 			throw new IllegalArgumentException("no such edge in graph: " + element.toString());
 		}
 		return getStore().getEdgeAttributesSize(element);
 	}
-	
-	default Iterator<CCharPointerHolder> graphAttributesKeysIterator() { 
+
+	default Iterator<ExternalRef> graphAttributesKeysIterator() {
 		return getStore().graphAttributesKeysIterator();
 	}
-	
-	default Iterator<CCharPointerHolder> vertexAttributesKeysIterator(V element) {
+
+	default Iterator<ExternalRef> vertexAttributesKeysIterator(V element) {
 		if (!containsVertex(element)) {
 			throw new IllegalArgumentException("no such vertex in graph: " + element.toString());
-		}		
+		}
 		return getStore().vertexAttributesKeysIterator(element);
 	}
-	
-	default Iterator<CCharPointerHolder> edgeAttributesKeysIterator(E element) {
+
+	default Iterator<ExternalRef> edgeAttributesKeysIterator(E element) {
 		if (!containsEdge(element)) {
 			throw new IllegalArgumentException("no such edge in graph: " + element.toString());
-		}		
+		}
 		return getStore().edgeAttributesKeysIterator(element);
 	}
-	
-	default Attribute getVertexAttribute(V element, String name) {
+
+	default ExternalRef getVertexAttribute(V element, ExternalRef key) {
 		if (!containsVertex(element)) {
 			throw new IllegalArgumentException("no such vertex in graph: " + element.toString());
 		}
-		return getStore().getVertexAttribute(element, name);
+		return getStore().getVertexAttribute(element, key);
 	}
 
-	default Attribute getEdgeAttribute(E element, String name) {
+	default ExternalRef getEdgeAttribute(E element, ExternalRef key) {
 		if (!containsEdge(element)) {
 			throw new IllegalArgumentException("no such edge in graph: " + element.toString());
 		}
-		return getStore().getEdgeAttribute(element, name);
+		return getStore().getEdgeAttribute(element, key);
 	}
 
-	default Attribute getGraphAttribute(String name) {
-		return getStore().getGraphAttribute(name);
+	default ExternalRef getGraphAttribute(ExternalRef key) {
+		return getStore().getGraphAttribute(key);
 	}
 
-	default void putVertexAttribute(V element, String name, Attribute value) {
+	default ExternalRef putVertexAttribute(V element, ExternalRef key, ExternalRef value) {
 		if (!containsVertex(element)) {
 			throw new IllegalArgumentException("no such vertex in graph: " + element.toString());
 		}
-		getStore().putVertexAttribute(element, name, value);
+		return getStore().putVertexAttribute(element, key, value);
 	}
 
-	default void putEdgeAttribute(E element, String name, Attribute value) {
+	default ExternalRef putEdgeAttribute(E element, ExternalRef key, ExternalRef value) {
 		if (!containsEdge(element)) {
 			throw new IllegalArgumentException("no such edge in graph: " + element.toString());
 		}
-		getStore().putEdgeAttribute(element, name, value);
+		return getStore().putEdgeAttribute(element, key, value);
 	}
 
-	default void putGraphAttribute(String name, Attribute value) {
-		getStore().putGraphAttribute(name, value);
+	default ExternalRef putGraphAttribute(ExternalRef key, ExternalRef value) {
+		return getStore().putGraphAttribute(key, value);
 	}
 
-	default void removeVertexAttribute(V element, String name) {
+	default ExternalRef removeVertexAttribute(V element, ExternalRef key) {
 		if (!containsVertex(element)) {
 			throw new IllegalArgumentException("no such vertex in graph: " + element.toString());
 		}
-		getStore().removeVertexAttribute(element, name);
+		return getStore().removeVertexAttribute(element, key);
 	}
 
-	default void removeEdgeAttribute(E element, String name) {
+	default ExternalRef removeEdgeAttribute(E element, ExternalRef key) {
 		if (!containsEdge(element)) {
 			throw new IllegalArgumentException("no such edge in graph: " + element.toString());
 		}
-		getStore().removeEdgeAttribute(element, name);
+		return getStore().removeEdgeAttribute(element, key);
 	}
 
-	default void removeGraphAttribute(String name) {
-		getStore().removeGraphAttribute(name);
+	default ExternalRef removeGraphAttribute(ExternalRef key) {
+		return getStore().removeGraphAttribute(key);
 	}
 
 	default void clearVertexAttributes(V vertex) {

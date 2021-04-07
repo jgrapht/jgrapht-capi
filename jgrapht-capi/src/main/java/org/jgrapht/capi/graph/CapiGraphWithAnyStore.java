@@ -1,24 +1,25 @@
 package org.jgrapht.capi.graph;
 
 import org.jgrapht.Graph;
-import org.jgrapht.capi.attributes.GraphStringAttributeStore;
+import org.jgrapht.capi.attributes.GraphAnyStore;
 import org.jgrapht.graph.GraphDelegator;
 
-public class CapiGraphWithAttributes<V, E> extends GraphDelegator<V, E> implements GraphWithAttributes<V, E>, CapiGraphWrapper<V, E> {
+public class CapiGraphWithAnyStore<V, E> extends GraphDelegator<V, E>
+		implements GraphWithAnyStore<V, E>, CapiGraphWrapper<V, E> {
 
 	private static final long serialVersionUID = 1L;
 
 	protected Graph<V, E> delegate;
-	protected GraphStringAttributeStore<V, E> store;
+	protected GraphAnyStore<V, E> store;
 
-	public CapiGraphWithAttributes(Graph<V, E> graph) {
+	public CapiGraphWithAnyStore(Graph<V, E> graph) {
 		super(graph);
 		this.delegate = graph;
-		this.store = new GraphStringAttributeStore<>();
+		this.store = new GraphAnyStore<>();
 	}
 
 	@Override
-	public GraphStringAttributeStore<V, E> getStore() {
+	public GraphAnyStore<V, E> getStore() {
 		return store;
 	}
 
