@@ -43,9 +43,9 @@ import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.CapiGraph;
 import org.jgrapht.capi.graph.CapiGraphAsMaskSubgraph;
 import org.jgrapht.capi.graph.CapiGraphAsWeightedGraph;
-import org.jgrapht.capi.graph.DefaultCapiGraph;
 import org.jgrapht.capi.graph.DefaultHashAndEqualsResolver;
 import org.jgrapht.capi.graph.ExternalRef;
+import org.jgrapht.capi.graph.ExternalRefCapiGraph;
 import org.jgrapht.capi.graph.ExternalRefSupplier;
 import org.jgrapht.capi.graph.HashAndEqualsResolver;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
@@ -101,7 +101,7 @@ public class RefGraphApi {
 		}
 
 		// wrap in order to support all methods
-		DefaultCapiGraph<ExternalRef, ExternalRef> wrappedGraph = new DefaultCapiGraph<>(graph);
+		ExternalRefCapiGraph wrappedGraph = new ExternalRefCapiGraph(graph);
 
 		// replace default hash and equals resolver
 		wrappedGraph.setHashAndEqualsResolver(hashEqualsResolver);
@@ -111,6 +111,9 @@ public class RefGraphApi {
 		return wrappedGraph;
 	}
 
+	/**
+	 * Create a hash equals resolver.
+	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
 			+ "graph_hash_equals_resolver_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createHashEqualsResolver(IsolateThread thread, PtrToHashFunctionPointer hashLookup,
@@ -118,6 +121,42 @@ public class RefGraphApi {
 		HashAndEqualsResolver resolver = new DefaultHashAndEqualsResolver(hashLookup, equalsLookup);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(resolver));
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * Get the original vertex address. Since vertices can override equals, it is
+	 * important to be able to distinguish the original vertex address that was used
+	 * when the vertex was first added in the graph.
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+			+ "graph_vertex_get_ptr", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getVertexAddress(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertexPtr,
+			WordPointer res) {
+		ExternalRefCapiGraph g = globalHandles.get(graphHandle);
+		ExternalRef vertex = g.toExternalRef(vertexPtr);
+		PointerBase ptr = g.getVertexAddress(vertex);
+		if (res.isNonNull()) {
+			res.write(ptr);
+		}
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	/**
+	 * Get the original edge address. Since edges can override equals, it is
+	 * important to be able to distinguish the original edge address that was used
+	 * when the edge was first added in the graph.
+	 */
+	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
+			+ "graph_edge_get_ptr", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int getEdgeAddress(IsolateThread thread, ObjectHandle graphHandle, PointerBase edgePtr,
+			WordPointer res) {
+		ExternalRefCapiGraph g = globalHandles.get(graphHandle);
+		ExternalRef edge = g.toExternalRef(edgePtr);
+		PointerBase ptr = g.getEdgeAddress(edge);
+		if (res.isNonNull()) {
+			res.write(ptr);
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
@@ -429,8 +468,8 @@ public class RefGraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
 			+ "graph_as_masked_subgraph", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int asMaskedSubgraph(IsolateThread thread, ObjectHandle graphHandle,
-			PToBFunctionPointer vertexMaskFunctionPointer,
-			PToBFunctionPointer edgeMaskFunctionPointer, WordPointer res) {
+			PToBFunctionPointer vertexMaskFunctionPointer, PToBFunctionPointer edgeMaskFunctionPointer,
+			WordPointer res) {
 		CapiGraph<ExternalRef, ExternalRef> gIn = globalHandles.get(graphHandle);
 
 		Predicate<ExternalRef> vertexMask = x -> {
@@ -452,5 +491,5 @@ public class RefGraphApi {
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
-	
+
 }
