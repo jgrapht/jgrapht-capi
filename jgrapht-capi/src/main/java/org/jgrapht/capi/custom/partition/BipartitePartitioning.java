@@ -23,7 +23,6 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Deque;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -95,7 +94,7 @@ public class BipartitePartitioning<V, E> implements PartitioningAlgorithm<V> {
 		}
 
 		Set<V> unknown = new LinkedHashSet<>(graph.vertexSet());
-		Set<V> odd = new HashSet<>();
+		Set<V> odd = new LinkedHashSet<>();
 		Deque<V> queue = new ArrayDeque<>();
 
 		while (!unknown.isEmpty()) {
