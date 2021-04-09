@@ -152,7 +152,7 @@ public class GraphDagApi {
 		eSupplier.setResolver(hashEqualsResolver);
 
 		if (res.isNonNull()) {
-			res.write(globalHandles.create(graph));
+			res.write(globalHandles.create(wrappedGraph));
 		}
 		return Status.STATUS_SUCCESS.getCValue();
 	}
