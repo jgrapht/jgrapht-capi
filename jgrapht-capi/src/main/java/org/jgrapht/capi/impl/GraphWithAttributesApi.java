@@ -675,7 +675,7 @@ public class GraphWithAttributesApi {
 
 	// ---------------- CLEAR ----------------
 
-	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_ANY_DREF_DREF
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_ANY_ANY_ANY
 			+ "graph_attrs_clear", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int clearGraphAttribute(IsolateThread thread, ObjectHandle graphHandle) {
 		DefaultCapiGraph<V, E> graph = globalHandles.get(graphHandle);
