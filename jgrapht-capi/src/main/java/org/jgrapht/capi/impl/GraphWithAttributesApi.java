@@ -683,4 +683,55 @@ public class GraphWithAttributesApi {
 		return Status.STATUS_SUCCESS.getCValue();
 	}
 
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.INT_ANY_ANY_ANY
+			+ "graph_attrs_vertex_clear", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int clearVertexGraphAttribute(IsolateThread thread, ObjectHandle graphHandle, int element) {
+		DefaultCapiGraph<Integer, ?> graph = globalHandles.get(graphHandle);
+		graph.clearVertexAttributes(element);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.LONG_ANY_ANY_ANY
+			+ "graph_attrs_vertex_clear", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int clearVertexGraphAttribute(IsolateThread thread, ObjectHandle graphHandle, long element) {
+		DefaultCapiGraph<Long, ?> graph = globalHandles.get(graphHandle);
+		graph.clearVertexAttributes(element);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.DREF_ANY_ANY_ANY
+			+ "graph_attrs_vertex_clear", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int clearVertexGraphAttribute(IsolateThread thread, ObjectHandle graphHandle,
+			PointerBase elementPtr) {
+		DefaultCapiGraph<ExternalRef, ?> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);
+		graph.clearVertexAttributes(element);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_INT_ANY_ANY
+			+ "graph_attrs_edge_clear", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int clearEdgeGraphAttribute(IsolateThread thread, ObjectHandle graphHandle, int element) {
+		DefaultCapiGraph<?, Integer> graph = globalHandles.get(graphHandle);
+		graph.clearEdgeAttributes(element);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_LONG_ANY_ANY
+			+ "graph_attrs_edge_clear", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int clearEdgeGraphAttribute(IsolateThread thread, ObjectHandle graphHandle, long element) {
+		DefaultCapiGraph<?, Long> graph = globalHandles.get(graphHandle);
+		graph.clearEdgeAttributes(element);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
+	@CEntryPoint(name = Constants.LIB_PREFIX + Types.ANY_DREF_ANY_ANY
+			+ "graph_attrs_edge_clear", exceptionHandler = StatusReturnExceptionHandler.class)
+	public static int clearEdgeGraphAttribute(IsolateThread thread, ObjectHandle graphHandle, PointerBase elementPtr) {
+		DefaultCapiGraph<?, ExternalRef> graph = globalHandles.get(graphHandle);
+		ExternalRef element = graph.toExternalRef(elementPtr);
+		graph.clearEdgeAttributes(element);
+		return Status.STATUS_SUCCESS.getCValue();
+	}
+
 }
