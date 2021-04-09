@@ -166,7 +166,7 @@ public class LexBreadthFirstIterator<V, E> extends AbstractGraphIterator<V, E> {
 	 *         iterator.
 	 */
 	private Set<V> getUnvisitedNeighbours(V vertex) {
-		Set<V> unmapped = new HashSet<>();
+		Set<V> unmapped = new LinkedHashSet<>();
 		Set<E> edges = graph.edgesOf(vertex);
 		for (E edge : edges) {
 			V oppositeVertex = Graphs.getOppositeVertex(graph, edge, vertex);
@@ -205,7 +205,7 @@ public class LexBreadthFirstIterator<V, E> extends AbstractGraphIterator<V, E> {
 		 */
 		BucketList(Collection<V> vertices) {
 			head = new Bucket(vertices);
-			bucketMap = CollectionUtil.newHashMapWithExpectedSize(vertices.size());
+			bucketMap = CollectionUtil.newLinkedHashMapWithExpectedSize(vertices.size());
 			for (V vertex : vertices) {
 				bucketMap.put(vertex, head);
 			}
