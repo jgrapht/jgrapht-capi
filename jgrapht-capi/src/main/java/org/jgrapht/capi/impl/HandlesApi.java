@@ -34,6 +34,7 @@ import org.jgrapht.alg.util.Triple;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.PPToIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.PToLFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PToSFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.ExternalRef;
@@ -68,8 +69,8 @@ public class HandlesApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX
 			+ "handles_put2_ref", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int put2RefHandle(IsolateThread thread, PointerBase refPtr, PToLFunctionPointer hashPtr,
-			PPToIFunctionPointer equalsPtr, WordPointer res) {
-		ExternalRef ref = new ExternalRef(refPtr, equalsPtr, hashPtr);
+			PPToIFunctionPointer equalsPtr, PToSFunctionPointer strPtr, WordPointer res) {
+		ExternalRef ref = new ExternalRef(refPtr, equalsPtr, hashPtr, strPtr);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(ref));
 		}

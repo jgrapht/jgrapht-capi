@@ -37,6 +37,7 @@ import org.jgrapht.capi.JGraphTContext.PToBFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.PToDFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.PtrToEqualsFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.PtrToHashFunctionPointer;
+import org.jgrapht.capi.JGraphTContext.PtrToStringFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.Status;
 import org.jgrapht.capi.JGraphTContext.VToPFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
@@ -117,8 +118,8 @@ public class RefGraphApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_DREF
 			+ "graph_hash_equals_resolver_create", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int createHashEqualsResolver(IsolateThread thread, PtrToHashFunctionPointer hashLookup,
-			PtrToEqualsFunctionPointer equalsLookup, WordPointer res) {
-		HashAndEqualsResolver resolver = new DefaultHashAndEqualsResolver(hashLookup, equalsLookup);
+			PtrToEqualsFunctionPointer equalsLookup, PtrToStringFunctionPointer stringLookup, WordPointer res) {
+		HashAndEqualsResolver resolver = new DefaultHashAndEqualsResolver(hashLookup, equalsLookup, stringLookup);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(resolver));
 		}

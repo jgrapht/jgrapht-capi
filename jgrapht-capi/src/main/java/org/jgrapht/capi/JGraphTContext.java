@@ -390,6 +390,13 @@ public class JGraphTContext {
 
 	}
 
+	public interface PToSFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		CCharPointer invoke(PointerBase p1);
+
+	}
+
 	public interface VToPFunctionPointer extends CFunctionPointer {
 
 		@InvokeCFunctionPointer
@@ -422,6 +429,13 @@ public class JGraphTContext {
 
 		@InvokeCFunctionPointer
 		PPToIFunctionPointer invoke(PointerBase p1);
+
+	}
+	
+	public interface PtrToStringFunctionPointer extends CFunctionPointer {
+
+		@InvokeCFunctionPointer
+		PToSFunctionPointer invoke(PointerBase p1);
 
 	}
 
