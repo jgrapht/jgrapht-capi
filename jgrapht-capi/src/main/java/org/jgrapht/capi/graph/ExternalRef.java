@@ -3,8 +3,6 @@ package org.jgrapht.capi.graph;
 import org.graalvm.word.PointerBase;
 import org.jgrapht.capi.JGraphTContext.PPToIFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.PToLFunctionPointer;
-import org.jgrapht.capi.JGraphTContext.PToSFunctionPointer;
-import org.jgrapht.capi.StringUtils;
 
 /**
  * A reference to an external object.
@@ -14,14 +12,11 @@ public class ExternalRef {
 	private final PointerBase ptr;
 	private final PPToIFunctionPointer equalsPtr;
 	private final PToLFunctionPointer hashPtr;
-	private final PToSFunctionPointer strPtr;
 
-	public ExternalRef(PointerBase ptr, PPToIFunctionPointer equalsPtr, PToLFunctionPointer hashPtr,
-			PToSFunctionPointer strPtr) {
+	public ExternalRef(PointerBase ptr, PPToIFunctionPointer equalsPtr, PToLFunctionPointer hashPtr) {
 		this.ptr = ptr;
 		this.equalsPtr = equalsPtr;
 		this.hashPtr = hashPtr;
-		this.strPtr = strPtr;
 	}
 
 	public PointerBase getPtr() {
@@ -34,10 +29,6 @@ public class ExternalRef {
 
 	public PToLFunctionPointer getHashPtr() {
 		return hashPtr;
-	}
-
-	public PToSFunctionPointer getStrPtr() {
-		return strPtr;
 	}
 
 	@Override
@@ -71,10 +62,8 @@ public class ExternalRef {
 
 	@Override
 	public String toString() {
-		if (strPtr.isNonNull()) {
-			return StringUtils.toJavaStringFromUtf8(strPtr.invoke(ptr));
-		}
-		return String.valueOf(ptr.rawValue());
+		return "Ref(ptr=" + ptr.rawValue() + ", equalsPtr=" + equalsPtr.rawValue() + ", hashPtr=" + hashPtr.rawValue()
+				+ ")";
 	}
 
 }
