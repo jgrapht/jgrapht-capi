@@ -45,7 +45,6 @@ import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.CapiGraph;
 import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.capi.graph.HashAndEqualsResolver;
-import org.jgrapht.util.ConcurrencyUtil;
 import org.jheaps.tree.PairingHeap;
 
 /**
@@ -149,15 +148,11 @@ public class ShortestPathCHApi {
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "sp_exec_contraction_hierarchy", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V, E> int executeCH(IsolateThread thread, ObjectHandle graphHandle, int parallelism, long seed,
-			WordPointer res) {
+	public static <V, E> int executeCH(IsolateThread thread, ObjectHandle graphHandle, ObjectHandle executorHandle,
+			long seed, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		if (parallelism < 1) {
-			throw new IllegalArgumentException("Parallelism must be positive");
-		}
-
-		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ThreadPoolExecutor executor = globalHandles.get(executorHandle);
 		ContractionHierarchyPrecomputation<V, E> chp = new ContractionHierarchyPrecomputation<>(g,
 				new SingleRandomToManySupplier(seed), executor);
 		ContractionHierarchy<V, E> ch = chp.computeContractionHierarchy();
@@ -257,11 +252,11 @@ public class ShortestPathCHApi {
 	 * Given a contraction hierarchy get a {@link GraphPath} using bidirectional
 	 * dijkstra.
 	 * 
-	 * @param thread                   the thread
-	 * @param chHandle                 the contraction hierarchy handle
-	 * @param sourcePtr                the source vertex
-	 * @param targetPtr                the target vertex
-	 * @param res                      handle to a {@link GraphPath}.
+	 * @param thread    the thread
+	 * @param chHandle  the contraction hierarchy handle
+	 * @param sourcePtr the source vertex
+	 * @param targetPtr the target vertex
+	 * @param res       handle to a {@link GraphPath}.
 	 * @return status
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
@@ -290,21 +285,16 @@ public class ShortestPathCHApi {
 	 * 
 	 * @param thread      thread
 	 * @param graphHandle the graph handle
-	 * @param parallelism how many thread to use
 	 * @param res         the {@link TransitNodeRoutingShortestPath} handle
 	 * @return status
 	 */
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.ANY_ANY
 			+ "sp_exec_transit_node_routing", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <V, E> int executeTransitNodeRouting(IsolateThread thread, ObjectHandle graphHandle, int parallelism,
-			WordPointer res) {
+	public static <V, E> int executeTransitNodeRouting(IsolateThread thread, ObjectHandle graphHandle,
+			ObjectHandle executorHandle, WordPointer res) {
 		Graph<V, E> g = globalHandles.get(graphHandle);
 
-		if (parallelism < 1) {
-			throw new IllegalArgumentException("Parallelism must be positive");
-		}
-
-		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ThreadPoolExecutor executor = globalHandles.get(executorHandle);
 		TransitNodeRoutingShortestPath<V, E> tnr = new TransitNodeRoutingShortestPath<V, E>(g, executor);
 		tnr.performPrecomputation();
 

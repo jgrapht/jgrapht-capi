@@ -67,12 +67,22 @@ int main() {
     jgrapht_capi_ii_graph_add_edge(thread, g, 5, 6, NULL);
     jgrapht_capi_xi_graph_set_edge_weight(thread, g, 10, 100.0);
 
+
+    // create thread pool
+    void *tp;
+    jgrapht_capi_executor_thread_pool_create(thread, 2, &tp);
     
     // create CH
     void *ch;
-    jgrapht_capi_xx_sp_exec_contraction_hierarchy(thread, g, 1, 17, &ch);
-
+    jgrapht_capi_xx_sp_exec_contraction_hierarchy(thread, g, tp, 17, &ch);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
+
+    // destroy thread pool
+    jgrapht_capi_executor_thread_pool_shutdown(thread, tp, 10000);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    jgrapht_capi_handles_destroy(thread, tp);
+    assert(jgrapht_capi_error_get_errno(thread) == 0);
+    
 
     // test bidirectional dijkstra
     void *gp;
