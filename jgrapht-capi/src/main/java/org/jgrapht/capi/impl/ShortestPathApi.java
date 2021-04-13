@@ -65,7 +65,6 @@ import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.CapiGraph;
 import org.jgrapht.capi.graph.ExternalRef;
 import org.jgrapht.capi.graph.HashAndEqualsResolver;
-import org.jgrapht.util.ConcurrencyUtil;
 
 /**
  * Shortest paths API
@@ -825,10 +824,10 @@ public class ShortestPathApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_delta_stepping_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDeltaSteppingBetween(IsolateThread thread, ObjectHandle graphHandle, int source,
-			int target, double delta, int parallelism, WordPointer pathRes) {
+			int target, double delta, ObjectHandle executorHandle, WordPointer pathRes) {
 		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 
-		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ThreadPoolExecutor executor = globalHandles.get(executorHandle);
 		ShortestPathAlgorithm<Integer, ?> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
 		GraphPath<Integer, ?> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
@@ -844,10 +843,10 @@ public class ShortestPathApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_delta_stepping_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDeltaSteppingBetween(IsolateThread thread, ObjectHandle graphHandle, long source,
-			long target, double delta, int parallelism, WordPointer pathRes) {
+			long target, double delta, ObjectHandle executorHandle, WordPointer pathRes) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 
-		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ThreadPoolExecutor executor = globalHandles.get(executorHandle);
 		ShortestPathAlgorithm<Long, ?> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
 		GraphPath<Long, ?> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
@@ -863,12 +862,12 @@ public class ShortestPathApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "sp_exec_delta_stepping_get_path_between_vertices", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDeltaSteppingBetween(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
-			PointerBase targetPtr, double delta, int parallelism, WordPointer pathRes) {
+			PointerBase targetPtr, double delta, ObjectHandle executorHandle, WordPointer pathRes) {
 		CapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef source = g.toExternalRef(sourcePtr);
 		ExternalRef target = g.toExternalRef(targetPtr);
 
-		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ThreadPoolExecutor executor = globalHandles.get(executorHandle);
 		ShortestPathAlgorithm<ExternalRef, ?> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
 		GraphPath<ExternalRef, ?> path = alg.getPath(source, target);
 		if (pathRes.isNonNull()) {
@@ -884,10 +883,10 @@ public class ShortestPathApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "sp_exec_delta_stepping_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDeltaSteppingFrom(IsolateThread thread, ObjectHandle graphHandle, int source, double delta,
-			int parallelism, WordPointer pathsRes) {
+			ObjectHandle executorHandle, WordPointer pathsRes) {
 		Graph<Integer, ?> g = globalHandles.get(graphHandle);
 
-		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ThreadPoolExecutor executor = globalHandles.get(executorHandle);
 		ShortestPathAlgorithm<Integer, ?> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
 		SingleSourcePaths<Integer, ?> paths = alg.getPaths(source);
 		if (pathsRes.isNonNull()) {
@@ -899,10 +898,10 @@ public class ShortestPathApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "sp_exec_delta_stepping_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDeltaSteppingFrom(IsolateThread thread, ObjectHandle graphHandle, long source,
-			double delta, int parallelism, WordPointer pathsRes) {
+			double delta, ObjectHandle executorHandle, WordPointer pathsRes) {
 		Graph<Long, ?> g = globalHandles.get(graphHandle);
 
-		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ThreadPoolExecutor executor = globalHandles.get(executorHandle);
 		ShortestPathAlgorithm<Long, ?> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
 		SingleSourcePaths<Long, ?> paths = alg.getPaths(source);
 		if (pathsRes.isNonNull()) {
@@ -914,11 +913,11 @@ public class ShortestPathApi {
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "sp_exec_delta_stepping_get_singlesource_from_vertex", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int executeDeltaSteppingFrom(IsolateThread thread, ObjectHandle graphHandle, PointerBase sourcePtr,
-			double delta, int parallelism, WordPointer pathsRes) {
+			double delta, ObjectHandle executorHandle, WordPointer pathsRes) {
 		CapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef source = g.toExternalRef(sourcePtr);
 
-		ThreadPoolExecutor executor = ConcurrencyUtil.createThreadPoolExecutor(parallelism);
+		ThreadPoolExecutor executor = globalHandles.get(executorHandle);
 		ShortestPathAlgorithm<ExternalRef, ?> alg = new DeltaSteppingShortestPath<>(g, delta, executor);
 		SingleSourcePaths<ExternalRef, ?> paths = alg.getPaths(source);
 		if (pathsRes.isNonNull()) {
