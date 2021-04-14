@@ -68,10 +68,11 @@ public class ImporterApi {
 			+ "import_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			IToIFunctionPointer importIdFunctionPointer, IFunctionPointer notifyVertexFunctionPointer,
-			IFunctionPointer notifyEdgeFunctionPointer) {
+			IFunctionPointer notifyEdgeFunctionPointer, boolean subtractOneFromVertices) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		CustomDIMACSImporter<Integer, Integer> importer = new CustomDIMACSImporter<>();
+		importer.substractOneFromVertices(subtractOneFromVertices);
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
 		}
@@ -86,10 +87,11 @@ public class ImporterApi {
 			+ "import_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			LToLFunctionPointer importIdFunctionPointer, LFunctionPointer notifyVertexFunctionPointer,
-			LFunctionPointer notifyEdgeFunctionPointer) {
+			LFunctionPointer notifyEdgeFunctionPointer, boolean subtractOneFromVertices) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
 		CustomDIMACSImporter<Long, Long> importer = new CustomDIMACSImporter<>();
+		importer.substractOneFromVertices(subtractOneFromVertices);		
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
 		}
@@ -104,10 +106,11 @@ public class ImporterApi {
 			+ "import_file_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromFile(IsolateThread thread, ObjectHandle graphHandle, CCharPointer filename,
 			LToPFunctionPointer importIdFunctionPointer, PFunctionPointer notifyVertexFunctionPointer,
-			PFunctionPointer notifyEdgeFunctionPointer) {
+			PFunctionPointer notifyEdgeFunctionPointer, boolean subtractOneFromVertices) {
 		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		CustomDIMACSImporter<ExternalRef, ExternalRef> importer = new CustomDIMACSImporter<>();
+		importer.substractOneFromVertices(subtractOneFromVertices);		
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> g.toExternalRef(importIdFunctionPointer.invoke(x)));
 		}
@@ -122,10 +125,11 @@ public class ImporterApi {
 			+ "import_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			IToIFunctionPointer importIdFunctionPointer, IFunctionPointer notifyVertexFunctionPointer,
-			IFunctionPointer notifyEdgeFunctionPointer) {
+			IFunctionPointer notifyEdgeFunctionPointer, boolean subtractOneFromVertices) {
 		Graph<Integer, Integer> g = globalHandles.get(graphHandle);
 
 		CustomDIMACSImporter<Integer, Integer> importer = new CustomDIMACSImporter<>();
+		importer.substractOneFromVertices(subtractOneFromVertices);		
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
 		}
@@ -143,10 +147,11 @@ public class ImporterApi {
 			+ "import_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			LToLFunctionPointer importIdFunctionPointer, LFunctionPointer notifyVertexFunctionPointer,
-			LFunctionPointer notifyEdgeFunctionPointer) {
+			LFunctionPointer notifyEdgeFunctionPointer, boolean subtractOneFromVertices) {
 		Graph<Long, Long> g = globalHandles.get(graphHandle);
 
 		CustomDIMACSImporter<Long, Long> importer = new CustomDIMACSImporter<>();
+		importer.substractOneFromVertices(subtractOneFromVertices);		
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> importIdFunctionPointer.invoke(x));
 		}
@@ -164,10 +169,11 @@ public class ImporterApi {
 			+ "import_string_dimacs", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int importDIMACSFromString(IsolateThread thread, ObjectHandle graphHandle, CCharPointer input,
 			LToPFunctionPointer importIdFunctionPointer, PFunctionPointer notifyVertexFunctionPointer,
-			PFunctionPointer notifyEdgeFunctionPointer) {
+			PFunctionPointer notifyEdgeFunctionPointer, boolean subtractOneFromVertices) {
 		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 
 		CustomDIMACSImporter<ExternalRef, ExternalRef> importer = new CustomDIMACSImporter<>();
+		importer.substractOneFromVertices(subtractOneFromVertices);		
 		if (importIdFunctionPointer.isNonNull()) {
 			importer.setVertexFactory(x -> g.toExternalRef(importIdFunctionPointer.invoke(x)));
 		}

@@ -87,6 +87,7 @@ public class CustomDIMACSImporter<V, E> extends BaseEventDrivenImporter<V, E> im
 
 	private Function<Integer, V> vertexFactory;
 	private final double defaultWeight;
+	private boolean substractOneFromVertices = false;
 
 	/**
 	 * Construct a new DIMACSImporter
@@ -103,6 +104,20 @@ public class CustomDIMACSImporter<V, E> extends BaseEventDrivenImporter<V, E> im
 	 */
 	public CustomDIMACSImporter() {
 		this(Graph.DEFAULT_EDGE_WEIGHT);
+	}
+
+	/**
+	 * Set whether to subtract one from all vertices.
+	 * 
+	 * The DIMACS format by default starts vertices numbering from one. If true then
+	 * we will use zero-based numbering. Default to true.
+	 * 
+	 * @param substractOneFromVertices whether to subtract one from vertices
+	 * @return the importer
+	 */
+	public CustomDIMACSImporter<V,E> substractOneFromVertices(boolean substractOneFromVertices) {
+		this.substractOneFromVertices = substractOneFromVertices;
+		return this;
 	}
 
 	/**
@@ -149,7 +164,7 @@ public class CustomDIMACSImporter<V, E> extends BaseEventDrivenImporter<V, E> im
 	@Override
 	public void importGraph(Graph<V, E> graph, Reader input) throws ImportException {
 		DIMACSEventDrivenImporter genericImporter = new DIMACSEventDrivenImporter().renumberVertices(false)
-				.zeroBasedNumbering(true);
+				.zeroBasedNumbering(substractOneFromVertices);
 		Consumers consumers = new Consumers(graph);
 		genericImporter.addVertexCountConsumer(consumers.nodeCountConsumer);
 		genericImporter.addEdgeConsumer(consumers.edgeConsumer);

@@ -11,9 +11,9 @@
 #include <jgrapht_capi.h>
 
 #ifdef _WIN32
-char *expected="c\r\nc SOURCE: Generated using the JGraphT library\r\nc\r\np edge 4 4\r\ne 1 2\r\ne 2 3\r\ne 3 4\r\ne 4 1\r\n";
+char *expected="c\r\nc SOURCE: Generated using the JGraphT library\r\nc\r\np edge 4 4\r\ne 0 1\r\ne 1 2\r\ne 2 3\r\ne 3 0\r\n";
 #else 
-char *expected="c\nc SOURCE: Generated using the JGraphT library\nc\np edge 4 4\ne 1 2\ne 2 3\ne 3 4\ne 4 1\n";
+char *expected="c\nc SOURCE: Generated using the JGraphT library\nc\np edge 4 4\ne 0 1\ne 1 2\ne 2 3\ne 3 0\n";
 #endif
 
 int preserveid(int x) { 
@@ -65,7 +65,7 @@ int main() {
     jgrapht_capi_ii_graph_create(thread, 0, 0, 0, 0, NULL, NULL, &g);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
 
-    jgrapht_capi_ii_import_file_dimacs(thread, g, "dummy.dimacs.out", preserveid, NULL, NULL);
+    jgrapht_capi_ii_import_file_dimacs(thread, g, "dummy.dimacs.out", preserveid, NULL, NULL, 0);
     assert(jgrapht_capi_error_get_errno(thread) == 0);
     
     assert(jgrapht_capi_error_get_errno(thread) == 0);

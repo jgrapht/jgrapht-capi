@@ -85,7 +85,7 @@ public class ExporterApi {
 			actualFormat = DIMACSFormat.SHORTEST_PATH;
 			break;
 		}
-		DIMACSExporter<Integer, E> exporter = new DIMACSExporter<>(createIntegerIdProviderDimacs(vertexIdStore),
+		DIMACSExporter<Integer, E> exporter = new DIMACSExporter<>(createIdProvider(vertexIdStore),
 				actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exportToFile(g, exporter, filename);
@@ -110,7 +110,7 @@ public class ExporterApi {
 			actualFormat = DIMACSFormat.SHORTEST_PATH;
 			break;
 		}
-		DIMACSExporter<Long, E> exporter = new DIMACSExporter<>(createLongIdProviderDimacs(vertexIdStore),
+		DIMACSExporter<Long, E> exporter = new DIMACSExporter<>(createIdProvider(vertexIdStore),
 				actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 		exportToFile(g, exporter, filename);
@@ -161,7 +161,7 @@ public class ExporterApi {
 			break;
 		}
 
-		DIMACSExporter<Integer, E> exporter = new DIMACSExporter<>(createIntegerIdProviderDimacs(vertexIdStore),
+		DIMACSExporter<Integer, E> exporter = new DIMACSExporter<>(createIdProvider(vertexIdStore),
 				actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 
@@ -191,7 +191,7 @@ public class ExporterApi {
 			break;
 		}
 
-		DIMACSExporter<Long, E> exporter = new DIMACSExporter<>(createLongIdProviderDimacs(vertexIdStore),
+		DIMACSExporter<Long, E> exporter = new DIMACSExporter<>(createIdProvider(vertexIdStore),
 				actualFormat);
 		exporter.setParameter(DIMACSExporter.Parameter.EXPORT_EDGE_WEIGHTS, exportEdgeWeights);
 
@@ -645,34 +645,6 @@ public class ExporterApi {
 			return x -> vIdStore.getOrDefault(x, String.valueOf(x.getPtr().rawValue()));
 		}
 		return x -> String.valueOf(x.getPtr().rawValue());
-	}
-
-	private static Function<Integer, String> createIntegerIdProviderDimacs(ObjectHandle idStore) {
-		Map<Integer, String> vIdStore = globalHandles.get(idStore);
-		if (vIdStore != null) {
-			return x -> {
-				String id = vIdStore.get(x);
-				if (id == null) {
-					return String.valueOf(x + 1);
-				}
-				return id;
-			};
-		}
-		return x -> String.valueOf(x + 1);
-	}
-
-	private static Function<Long, String> createLongIdProviderDimacs(ObjectHandle idStore) {
-		Map<Long, String> vIdStore = globalHandles.get(idStore);
-		if (vIdStore != null) {
-			return x -> {
-				String id = vIdStore.get(x);
-				if (id == null) {
-					return String.valueOf(x + 1);
-				}
-				return id;
-			};
-		}
-		return x -> String.valueOf(x + 1);
 	}
 
 	private static <V, E> void setupAttributeStores(BaseExporter<V, E> exporter, ObjectHandle vertexAttributesStore,
