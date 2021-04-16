@@ -233,7 +233,7 @@ public class FRLayoutAlgorithm2D<V, E>
                     .add(repulsiveDisp.get(v), attractiveDisp.getOrDefault(v, Point2D.of(0d, 0d)));
                 
                 if (comparator.compare(vDisp.getX(), 0d) != 0
-                        && comparator.compare(vDisp.getY(), 0d) != 0) {
+                        || comparator.compare(vDisp.getY(), 0d) != 0) {
                 	double vDispLen = Points.length(vDisp);
                 	Point2D vPos = Points
                 			.add(
