@@ -37,20 +37,22 @@ public class ExternalRefCapiGraph extends DefaultCapiGraph<ExternalRef, External
 		this.edgeRefs = new HashMap<>();
 	}
 
+	@Override
 	public PointerBase getVertexAddress(ExternalRef v) {
 		Long address = vertexRefs.get(v);
-		if (address == null) { 
+		if (address == null) {
 			return WordFactory.nullPointer();
-		} else { 
+		} else {
 			return WordFactory.pointer(address);
 		}
 	}
 
+	@Override
 	public PointerBase getEdgeAddress(ExternalRef e) {
 		Long address = edgeRefs.get(e);
-		if (address == null) { 
+		if (address == null) {
 			return WordFactory.nullPointer();
-		} else { 
+		} else {
 			return WordFactory.pointer(address);
 		}
 	}

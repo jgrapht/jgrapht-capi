@@ -9,7 +9,8 @@ import org.jgrapht.ListenableGraph;
  * One interface which incorporates all possible JGraphT interfaces. If
  * something is not supported, we throw an UnsupportedOperationException.
  */
-public interface CapiGraph<V, E> extends GraphWithAnyStore<V, E>, ListenableGraph<V, E>, HashAndEqualsResolver {
+public interface CapiGraph<V, E>
+		extends GraphWithAnyStore<V, E>, ListenableGraph<V, E>, HashAndEqualsResolver, PointerGraph {
 
 	Set<V> getAncestors(V vertex);
 

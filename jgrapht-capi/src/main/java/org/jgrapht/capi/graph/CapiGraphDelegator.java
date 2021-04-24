@@ -33,6 +33,16 @@ public class CapiGraphDelegator<V, E> extends AbstractGraph<V, E> implements Cap
 		this.delegate = Objects.requireNonNull(graph, "graph must not be null");
 	}
 
+	@Override
+	public PointerBase getVertexAddress(ExternalRef v) {
+		return delegate.getVertexAddress(v);
+	}
+
+	@Override
+	public PointerBase getEdgeAddress(ExternalRef v) {
+		return delegate.getEdgeAddress(v);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 * 

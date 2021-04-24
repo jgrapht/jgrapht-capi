@@ -134,7 +134,7 @@ public class RefGraphApi {
 			+ "graph_vertex_get_ptr", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getVertexAddress(IsolateThread thread, ObjectHandle graphHandle, PointerBase vertexPtr,
 			WordPointer res) {
-		ExternalRefCapiGraph g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 		ExternalRef vertex = g.toExternalRef(vertexPtr);
 		PointerBase ptr = g.getVertexAddress(vertex);
 		if (res.isNonNull()) {
@@ -152,7 +152,7 @@ public class RefGraphApi {
 			+ "graph_edge_get_ptr", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static int getEdgeAddress(IsolateThread thread, ObjectHandle graphHandle, PointerBase edgePtr,
 			WordPointer res) {
-		ExternalRefCapiGraph g = globalHandles.get(graphHandle);
+		CapiGraph<ExternalRef, ExternalRef> g = globalHandles.get(graphHandle);
 		ExternalRef edge = g.toExternalRef(edgePtr);
 		PointerBase ptr = g.getEdgeAddress(edge);
 		if (res.isNonNull()) {

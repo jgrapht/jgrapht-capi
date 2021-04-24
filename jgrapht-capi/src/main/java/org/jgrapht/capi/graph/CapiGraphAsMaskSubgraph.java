@@ -61,65 +61,41 @@ public class CapiGraphAsMaskSubgraph<V, E> extends CapiGraphDelegator<V, E> impl
 		this.edges = new MaskEdgeSet<>(base, base.edgeSet(), vertexMask, edgeMask);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public E addEdge(V sourceVertex, V targetVertex) {
 		throw new UnsupportedOperationException(UNMODIFIABLE);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean addEdge(V sourceVertex, V targetVertex, E edge) {
 		throw new UnsupportedOperationException(UNMODIFIABLE);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public V addVertex() {
 		throw new UnsupportedOperationException(UNMODIFIABLE);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean addVertex(V v) {
 		throw new UnsupportedOperationException(UNMODIFIABLE);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean containsEdge(E e) {
 		return edgeSet().contains(e);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean containsVertex(V v) {
 		return vertexSet().contains(v);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Set<E> edgeSet() {
 		return edges;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Set<E> edgesOf(V vertex) {
 		assertVertexExist(vertex);
@@ -152,9 +128,6 @@ public class CapiGraphAsMaskSubgraph<V, E> extends CapiGraphDelegator<V, E> impl
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Set<E> incomingEdgesOf(V vertex) {
 		assertVertexExist(vertex);
@@ -162,9 +135,6 @@ public class CapiGraphAsMaskSubgraph<V, E> extends CapiGraphDelegator<V, E> impl
 		return new MaskEdgeSet<>(base, base.incomingEdgesOf(vertex), vertexMask, edgeMask);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int inDegreeOf(V vertex) {
 		if (baseType.isUndirected()) {
@@ -174,9 +144,6 @@ public class CapiGraphAsMaskSubgraph<V, E> extends CapiGraphDelegator<V, E> impl
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Set<E> outgoingEdgesOf(V vertex) {
 		assertVertexExist(vertex);
@@ -184,9 +151,6 @@ public class CapiGraphAsMaskSubgraph<V, E> extends CapiGraphDelegator<V, E> impl
 		return new MaskEdgeSet<>(base, base.outgoingEdgesOf(vertex), vertexMask, edgeMask);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int outDegreeOf(V vertex) {
 		if (baseType.isUndirected()) {
@@ -196,9 +160,6 @@ public class CapiGraphAsMaskSubgraph<V, E> extends CapiGraphDelegator<V, E> impl
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Set<E> getAllEdges(V sourceVertex, V targetVertex) {
 		if (containsVertex(sourceVertex) && containsVertex(targetVertex)) {
@@ -207,9 +168,6 @@ public class CapiGraphAsMaskSubgraph<V, E> extends CapiGraphDelegator<V, E> impl
 			return null;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public E getEdge(V sourceVertex, V targetVertex) {
 		Set<E> edges = getAllEdges(sourceVertex, targetVertex);
@@ -221,25 +179,16 @@ public class CapiGraphAsMaskSubgraph<V, E> extends CapiGraphDelegator<V, E> impl
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Supplier<V> getVertexSupplier() {
 		return base.getVertexSupplier();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Supplier<E> getEdgeSupplier() {
 		return base.getEdgeSupplier();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public V getEdgeSource(E edge) {
 		assert (edgeSet().contains(edge));
@@ -247,9 +196,6 @@ public class CapiGraphAsMaskSubgraph<V, E> extends CapiGraphDelegator<V, E> impl
 		return base.getEdgeSource(edge);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public V getEdgeTarget(E edge) {
 		assert (edgeSet().contains(edge));
@@ -257,17 +203,11 @@ public class CapiGraphAsMaskSubgraph<V, E> extends CapiGraphDelegator<V, E> impl
 		return base.getEdgeTarget(edge);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public GraphType getType() {
 		return baseType.asUnmodifiable();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public double getEdgeWeight(E edge) {
 		assert (edgeSet().contains(edge));
@@ -275,9 +215,6 @@ public class CapiGraphAsMaskSubgraph<V, E> extends CapiGraphDelegator<V, E> impl
 		return base.getEdgeWeight(edge);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setEdgeWeight(E edge, double weight) {
 		assert (edgeSet().contains(edge));
@@ -285,57 +222,36 @@ public class CapiGraphAsMaskSubgraph<V, E> extends CapiGraphDelegator<V, E> impl
 		base.setEdgeWeight(edge, weight);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean removeAllEdges(Collection<? extends E> edges) {
 		throw new UnsupportedOperationException(UNMODIFIABLE);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Set<E> removeAllEdges(V sourceVertex, V targetVertex) {
 		throw new UnsupportedOperationException(UNMODIFIABLE);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean removeAllVertices(Collection<? extends V> vertices) {
 		throw new UnsupportedOperationException(UNMODIFIABLE);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean removeEdge(E e) {
 		throw new UnsupportedOperationException(UNMODIFIABLE);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public E removeEdge(V sourceVertex, V targetVertex) {
 		throw new UnsupportedOperationException(UNMODIFIABLE);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean removeVertex(V v) {
 		throw new UnsupportedOperationException(UNMODIFIABLE);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Set<V> vertexSet() {
 		return vertices;

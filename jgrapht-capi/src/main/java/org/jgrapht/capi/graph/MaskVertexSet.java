@@ -66,7 +66,13 @@ class MaskVertexSet<V> extends AbstractSet<V> implements Serializable {
 	 */
 	@Override
 	public int size() {
-		return (int) vertexSet.stream().filter(mask.negate()).count();
+		int count = 0;
+		for (V v : vertexSet) {
+			if (!mask.test(v)) {
+				count++;
+			}
+		}
+		return count;
 	}
 
 	/**
