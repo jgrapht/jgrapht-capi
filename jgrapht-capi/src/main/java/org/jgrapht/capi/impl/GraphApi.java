@@ -48,6 +48,7 @@ import org.jgrapht.capi.JGraphTContext.VoidToIntegerFunctionPointer;
 import org.jgrapht.capi.JGraphTContext.VoidToLongFunctionPointer;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.CapiGraph;
+import org.jgrapht.capi.graph.CapiGraphAsGraphUnion;
 import org.jgrapht.capi.graph.CapiGraphAsMaskSubgraph;
 import org.jgrapht.capi.graph.CapiGraphAsSubgraph;
 import org.jgrapht.capi.graph.CapiGraphAsUndirectedGraph;
@@ -60,7 +61,6 @@ import org.jgrapht.capi.graph.SafeEdgeSupplier;
 import org.jgrapht.capi.graph.SafeLongEdgeSupplier;
 import org.jgrapht.capi.graph.SafeLongVertexSupplier;
 import org.jgrapht.capi.graph.SafeVertexSupplier;
-import org.jgrapht.graph.AsGraphUnion;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 import org.jgrapht.opt.graph.sparse.SparseIntDirectedGraph;
 import org.jgrapht.opt.graph.sparse.SparseIntDirectedWeightedGraph;
@@ -1084,8 +1084,8 @@ public class GraphApi {
 			+ "graph_as_graph_union", exceptionHandler = StatusReturnExceptionHandler.class)
 	public static <V, E> int asGraphUnion(IsolateThread thread, ObjectHandle graph1Handle, ObjectHandle graph2Handle,
 			DDToDFunctionPointer weightCombinerFunctionPointer, WordPointer res) {
-		Graph<V, E> g1 = globalHandles.get(graph1Handle);
-		Graph<V, E> g2 = globalHandles.get(graph2Handle);
+		CapiGraph<V, E> g1 = globalHandles.get(graph1Handle);
+		CapiGraph<V, E> g2 = globalHandles.get(graph2Handle);
 
 		GraphType type1 = g1.getType();
 		GraphType type2 = g2.getType();
@@ -1103,7 +1103,7 @@ public class GraphApi {
 			weightFunction = (d1, d2) -> d1 + d2;
 		}
 
-		Graph<V, E> union = new AsGraphUnion<>(g1, g2, weightFunction);
+		CapiGraph<V, E> union = new CapiGraphAsGraphUnion<>(g1, g2, weightFunction);
 		if (res.isNonNull()) {
 			res.write(globalHandles.create(union));
 		}
