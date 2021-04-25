@@ -33,9 +33,9 @@ import org.jgrapht.alg.linkprediction.LeichtHolmeNewmanIndexLinkPrediction;
 import org.jgrapht.alg.linkprediction.PreferentialAttachmentLinkPrediction;
 import org.jgrapht.alg.linkprediction.ResourceAllocationIndexLinkPrediction;
 import org.jgrapht.alg.linkprediction.SaltonIndexLinkPrediction;
-import org.jgrapht.alg.linkprediction.SørensenIndexLinkPrediction;
 import org.jgrapht.capi.Constants;
 import org.jgrapht.capi.JGraphTContext.Status;
+import org.jgrapht.capi.custom.linkprediction.SorensenIndexLinkPrediction;
 import org.jgrapht.capi.error.StatusReturnExceptionHandler;
 import org.jgrapht.capi.graph.CapiGraph;
 import org.jgrapht.capi.graph.ExternalRef;
@@ -415,11 +415,11 @@ public class LinkPredictionApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.INT_ANY
 			+ "link_prediction_exec_sorensen_index", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <E> int executeSørensenIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u,
+	public static <E> int executeSorensenIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, int u,
 			int v, CDoublePointer res) {
 		Graph<Integer, E> g = globalHandles.get(graphHandle);
 
-		double score = new SørensenIndexLinkPrediction<>(g).predict(u, v);
+		double score = new SorensenIndexLinkPrediction<>(g).predict(u, v);
 		if (res.isNonNull()) {
 			res.write(score);
 		}
@@ -428,11 +428,11 @@ public class LinkPredictionApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.LONG_ANY
 			+ "link_prediction_exec_sorensen_index", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static <E> int executeSørensenIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, long u,
+	public static <E> int executeSorensenIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, long u,
 			long v, CDoublePointer res) {
 		Graph<Long, E> g = globalHandles.get(graphHandle);
 
-		double score = new SørensenIndexLinkPrediction<>(g).predict(u, v);
+		double score = new SorensenIndexLinkPrediction<>(g).predict(u, v);
 		if (res.isNonNull()) {
 			res.write(score);
 		}
@@ -441,13 +441,13 @@ public class LinkPredictionApi {
 
 	@CEntryPoint(name = Constants.LIB_PREFIX + Constants.DREF_ANY
 			+ "link_prediction_exec_sorensen_index", exceptionHandler = StatusReturnExceptionHandler.class)
-	public static int executeSørensenIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, PointerBase u,
+	public static int executeSorensenIndexLinkPrediction(IsolateThread thread, ObjectHandle graphHandle, PointerBase u,
 			PointerBase v, CDoublePointer res) {
 		CapiGraph<ExternalRef, ?> g = globalHandles.get(graphHandle);
 		ExternalRef uRef = g.toExternalRef(u);
 		ExternalRef vRef = g.toExternalRef(v);
 
-		double score = new SørensenIndexLinkPrediction<>(g).predict(uRef, vRef);
+		double score = new SorensenIndexLinkPrediction<>(g).predict(uRef, vRef);
 		if (res.isNonNull()) {
 			res.write(score);
 		}
